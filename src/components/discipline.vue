@@ -1,6 +1,7 @@
 <template>
   <div class="page-discipline">
     <div class="selectbox">
+      <span>目标学科</span>
       <el-select v-model="subjectTarget" placeholder="请选择">
         <el-option
           v-for="item in categorysOptions"
@@ -9,11 +10,11 @@
           :value="item.value">
         </el-option>
       </el-select>
+      <span>相关学科</span>
       <el-select
         v-model="subjectRelevances"
         multiple
         collapse-tags
-        style="margin-left: 20px;"
         placeholder="请选择">
         <el-option
           v-for="item in categorysOptions"
@@ -24,7 +25,7 @@
       </el-select>
       <el-button type="primary" @click="getData">确定</el-button>
     </div>
-    <div class="echartsBox">
+    <div class="echartsBox" id="subjectChart" v-loading="loading">
 
     </div>
   </div>
@@ -54,7 +55,8 @@ export default {
         'Engineering disciplines'
       ],
       subjectTarget: '',
-      subjectRelevances: []
+      subjectRelevances: [],
+      loading: false
     }
   },
   computed: {
@@ -69,6 +71,11 @@ export default {
   },
   methods: {
     async getData () {
+      if (!this.subjectTarget || this.subjectRelevances.length === 0) {
+        this.$message.error('请选择完整')
+        return false
+      }
+      this.loading = true
       let opt = {
         strA: this.subjectTarget,
         strB: this.subjectRelevances.join(','),
@@ -76,11 +83,98 @@ export default {
         level: '0'
       }
       let _data = await getData(opt)
-      console.log(_data)
+      this.drawChart(_data.data.data)
+    },
+    drawChart (data) {
+      let myChart = this.$echarts.init(document.getElementById('subjectChart'))
+      let options = this.setOptions(data)
+      myChart.setOption(options)
+      this.loading = false
+    },
+    setOptions (data) {
+      let _opt = {
+        title: {
+          text: data.title,
+          left: '10%'
+        },
+        tooltip: {
+          trigger: 'axis',
+          textStyle: {
+            align: 'left'
+          },
+          formatter: function (params) {
+            let showHtm = ` ${params[0].name}<br>`
+            for (let i = 0; i < params.length; i++) {
+              let _text = params[i].seriesName
+              let _data = params[i].data.toFixed(6)
+              let _marker = params[i].marker
+              showHtm += `${_marker}${_text}：${_data}<br>`
+            }
+            return showHtm
+          }
+        },
+        legend: {
+          data: data.legend,
+          right: '5%',
+          top: '10%',
+          orient: 'vertical'
+        },
+        grid: {
+          left: '8%',
+          right: '20%',
+          bottom: '5%',
+          containLabel: true
+        },
+        toolbox: {
+          right: '20%',
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: data.x
+        },
+        yAxis: {
+          type: 'value',
+          max: 1
+        },
+        series: data.y.map((item, index) => {
+          return {
+            name: data.legend[index],
+            type: 'line',
+            smooth: true,
+            data: item
+          }
+        })
+      }
+      return _opt
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
+.page-discipline{
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  padding: 40px;
+  box-sizing: border-box;
+}
+.selectbox{
+  padding: 20px 0;
+  >.el-select{
+    margin-right: 30px;
+  }
+}
+.echartsBox{
+  width: 100%;
+  flex: 1;
+}
 </style>
