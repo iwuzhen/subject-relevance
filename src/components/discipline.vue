@@ -23,6 +23,15 @@
           :value="item.value">
         </el-option>
       </el-select>
+      <span>level</span>
+      <el-select v-model="subjectLevel" placeholder="请选择">
+        <el-option
+          v-for="item in levelOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
       <el-button type="primary" @click="getData">确定</el-button>
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading">
@@ -56,6 +65,17 @@ export default {
       ],
       subjectTarget: '',
       subjectRelevances: [],
+      subjectLevel: '0',
+      levelOptions: [{
+        value: '0',
+        label: '0'
+      }, {
+        value: '1',
+        label: '1'
+      }, {
+        value: '2',
+        label: '2'
+      }],
       loading: false
     }
   },
@@ -80,7 +100,7 @@ export default {
         strA: this.subjectTarget,
         strB: this.subjectRelevances.join(','),
         method: 'linksin',
-        level: '0'
+        level: this.subjectLevel
       }
       let _data = await getData(opt)
       this.drawChart(_data.data.data)
