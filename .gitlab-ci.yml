@@ -53,7 +53,7 @@ deploy_master:
     - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - rsync -rav -e 'ssh -p 579' --delete dist/ ider@192.168.1.223:/home/ider/docker-compose/nginx/webroot/wiki.knogen.com
+    - rsync -rav --delete dist/ ider@192.168.1.223:/home/ider/docker-compose/nginx/webroot/wiki.knogen.com
 
 deploy_dev:
   image: alpine
@@ -69,4 +69,4 @@ deploy_dev:
     - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - rsync -rav -e 'ssh -p 579' --delete dist/ ider@192.168.1.223:/home/ider/docker-compose/nginx/webroot/wiki.knogen.com
+    - rsync -rav --delete dist/ ider@192.168.1.223:/home/ider/docker-compose/nginx/webroot/wiki.knogen.com
