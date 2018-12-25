@@ -7,21 +7,17 @@
           v-for="item in categorysOptions"
           :key="item.value"
           :label="item.label"
-          :value="item.value">
-        </el-option>
+          :value="item.value"
+        ></el-option>
       </el-select>
       <span>相关学科</span>
-      <el-select
-        v-model="subjectRelevances"
-        multiple
-        collapse-tags
-        placeholder="请选择">
+      <el-select v-model="subjectRelevances" multiple collapse-tags placeholder="请选择">
         <el-option
           v-for="item in categorysOptions"
           :key="item.value"
           :label="item.label"
-          :value="item.value">
-        </el-option>
+          :value="item.value"
+        ></el-option>
       </el-select>
       <span>level</span>
       <el-select v-model="subjectLevel" placeholder="请选择">
@@ -29,14 +25,12 @@
           v-for="item in levelOptions"
           :key="item.value"
           :label="item.label"
-          :value="item.value">
-        </el-option>
+          :value="item.value"
+        ></el-option>
       </el-select>
       <el-button type="primary" @click="getData">确定</el-button>
     </div>
-    <div class="echartsBox" id="subjectChart" v-loading="loading">
-
-    </div>
+    <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
   </div>
 </template>
 
@@ -66,16 +60,20 @@ export default {
       subjectTarget: '',
       subjectRelevances: [],
       subjectLevel: '0',
-      levelOptions: [{
-        value: '0',
-        label: '0'
-      }, {
-        value: '1',
-        label: '1'
-      }, {
-        value: '2',
-        label: '2'
-      }],
+      levelOptions: [
+        {
+          value: '0',
+          label: '0'
+        },
+        {
+          value: '1',
+          label: '1'
+        },
+        {
+          value: '2',
+          label: '2'
+        }
+      ],
       loading: false
     }
   },
@@ -108,7 +106,7 @@ export default {
     drawChart (data) {
       let myChart = this.$echarts.init(document.getElementById('subjectChart'))
       let options = this.setOptions(data)
-      myChart.setOption(options)
+      myChart.setOption(options, true)
       this.loading = false
     },
     setOptions (data) {
@@ -176,7 +174,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.page-discipline{
+.page-discipline {
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -187,13 +185,13 @@ export default {
   padding: 40px;
   box-sizing: border-box;
 }
-.selectbox{
+.selectbox {
   padding: 20px 0;
-  >.el-select{
+  > .el-select {
     margin-right: 30px;
   }
 }
-.echartsBox{
+.echartsBox {
   width: 100%;
   flex: 1;
 }
