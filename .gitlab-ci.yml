@@ -28,9 +28,11 @@ build:
     - builder
     
   script:
-   - npm install wepy-cli -g
-   - npm install
-   - npm run build
+   - npm install -g cnpm --registry=https://registry.npm.taobao.org
+   - cnpm -v
+   - cnpm install wepy-cli -g
+   - cnpm install
+   - cnpm run build
    
   artifacts:
     expire_in: 1 week
