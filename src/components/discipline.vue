@@ -11,7 +11,13 @@
         ></el-option>
       </el-select>
       <span>相关学科</span>
-      <el-select v-model="subjectRelevances" multiple collapse-tags placeholder="请选择">
+      <el-select
+        v-model="subjectRelevances"
+        class="subjectRelevances"
+        multiple
+        collapse-tags
+        placeholder="请选择"
+      >
         <el-option
           v-for="item in categorysOptions"
           :key="item.value"
@@ -20,7 +26,7 @@
         ></el-option>
       </el-select>
       <span>level</span>
-      <el-select v-model="subjectLevel" placeholder="请选择">
+      <el-select v-model="subjectLevel" class="subjectLevel" placeholder="请选择">
         <el-option
           v-for="item in levelOptions"
           :key="item.value"
@@ -41,21 +47,39 @@ export default {
   data () {
     return {
       categorys: [
-        'Artificial intelligence',
-        'Philosophy',
         'Logic',
+        'Philosophy',
         'Mathematics',
         'Physics',
         'Chemistry',
         'Biology',
-        'Computer science',
-        'Psychology',
-        'Linguistics',
         'Sociology',
-        'History',
         'Economics',
         'Political science',
-        'Engineering disciplines'
+        'Psychology',
+        'Linguistics',
+        'History',
+        'Computer science',
+        'Artificial intelligence',
+        'Engineering disciplines',
+        'Chemical engineering',
+        'Civil engineering',
+        'Electrical engineering',
+        'Mechanical engineering',
+        'Biological engineering',
+        'Computer engineering',
+        'Industrial engineering',
+        'Environmental engineering'
+      ],
+      enginerringChildren: [
+        'Chemical engineering',
+        'Civil engineering',
+        'Electrical engineering',
+        'Mechanical engineering',
+        'Biological engineering',
+        'Computer engineering',
+        'Industrial engineering',
+        'Environmental engineering'
       ],
       subjectTarget: '',
       subjectRelevances: [],
@@ -79,12 +103,26 @@ export default {
   },
   computed: {
     categorysOptions: function () {
-      return this.categorys.map(item => {
+      let that = this
+      let _data = that.categorys.map(item => {
+        // if (item === 'Engineering disciplines') {
+        //   return {
+        //     value: item,
+        //     label: item,
+        //     children: that.enginerringChildren.map(item => {
+        //       return {
+        //         value: item,
+        //         label: item
+        //       }
+        //     })
+        //   }
+        // }
         return {
           value: item,
           label: item
         }
       })
+      return _data
     }
   },
   methods: {
@@ -190,6 +228,12 @@ export default {
   > .el-select {
     margin-right: 30px;
   }
+}
+.subjectRelevances {
+  width: 300px;
+}
+.subjectLevel {
+  width: 100px;
 }
 .echartsBox {
   width: 100%;
