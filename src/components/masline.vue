@@ -1,51 +1,48 @@
 <template>
-  <div class="page-discipline">
+  <div class="page-masline">
     <div class="selectbox">
-      <span>目标学科</span>
-      <el-select v-model="subjectTarget" placeholder="请选择">
-        <el-option
-          v-for="item in categorysOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <span>相关学科</span>
-      <el-select
-        v-model="subjectRelevances"
-        class="subjectRelevances"
-        multiple
-        collapse-tags
-        placeholder="请选择"
-      >
-        <el-option
-          v-for="item in categorysOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <span>条件</span>
-      <el-select v-model="methodValue" class="methodSelect" placeholder="请选择">
-        <el-option
-          v-for="item in methodOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <span>level</span>
-      <el-select v-model="subjectLevel" class="subjectLevel" placeholder="请选择">
-        <el-option
-          v-for="item in levelOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <el-button type="primary" @click="getData">确定</el-button>
+      <el-row type="flex">
+        <span class="title">目标学科</span>
+        <el-select v-model="subjectTarget" placeholder="请选择">
+          <el-option
+            v-for="item in categorysOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+        <span class="title">相关学科</span>
+        <el-select
+          v-model="subjectRelevances"
+          class="subjectRelevances"
+          multiple
+          collapse-tags
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in categorysOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+        <span class="title">条件</span>
+        <el-select v-model="methodValue" placeholder="请选择">
+          <el-option
+            v-for="item in methodOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-row>
+      <el-row type="flex">
+        <span class="title">年份范围</span>
+        <el-slider v-model="years" range :min="1950" :max="2019"></el-slider>
+        <el-button type="primary" @click="getData">确定</el-button>
+      </el-row>
     </div>
-    <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
+    <div class="echartsBox" id="masChart" v-loading="loading"></div>
   </div>
 </template>
 
@@ -58,41 +55,22 @@ export default {
       subjectTarget: '',
       subjectRelevances: [],
       methodValue: 'linksin',
-      subjectLevel: '0',
+      years: [1950, 2019],
       categorys: [
-        'Logic',
-        'Philosophy',
-        'Mathematics',
-        'Physics',
-        'Chemistry',
-        'Biology',
-        'Sociology',
-        'Economics',
-        'Political science',
-        'Psychology',
-        'Linguistics',
-        'History',
-        'Computer science',
-        'Artificial intelligence',
-        'Engineering disciplines',
-        'Chemical engineering',
-        'Civil engineering',
-        'Electrical engineering',
-        'Mechanical engineering',
-        'Biological engineering',
-        'Computer engineering',
-        'Industrial engineering',
-        'Environmental engineering'
-      ],
-      enginerringChildren: [
-        'Chemical engineering',
-        'Civil engineering',
-        'Electrical engineering',
-        'Mechanical engineering',
-        'Biological engineering',
-        'Computer engineering',
-        'Industrial engineering',
-        'Environmental engineering'
+        'biology',
+        'chemistry',
+        'computer science',
+        'economics',
+        'history',
+        'linguistics',
+        'literature',
+        'logic',
+        'mathematics',
+        'philosophy',
+        'physics',
+        'political science',
+        'psychology',
+        'sociology'
       ],
       methodOptions: [
         {
@@ -102,20 +80,6 @@ export default {
         {
           value: 'linksout',
           label: 'linksout'
-        }
-      ],
-      levelOptions: [
-        {
-          value: '0',
-          label: '0'
-        },
-        {
-          value: '1',
-          label: '1'
-        },
-        {
-          value: '2',
-          label: '2'
         }
       ],
       loading: false
@@ -144,7 +108,8 @@ export default {
         strA: this.subjectTarget,
         strB: this.subjectRelevances.join(','),
         method: this.methodValue,
-        level: this.subjectLevel
+        from: this.years[0],
+        to: this.years[1]
       }
       getData(opt)
         .then(res => {
@@ -162,7 +127,7 @@ export default {
         })
     },
     drawChart (data) {
-      let myChart = this.$echarts.init(document.getElementById('subjectChart'))
+      let myChart = this.$echarts.init(document.getElementById('masChart'))
       let options = this.setOptions(data)
       myChart.setOption(options, true)
       this.loading = false
@@ -232,7 +197,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.page-discipline {
+.page-masline {
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -247,18 +212,27 @@ export default {
   padding: 20px 0;
   width: 1200px;
   margin: 0 auto;
-  > .el-select {
+  > .el-row {
+    & + .el-row {
+      margin-top: 10px;
+    }
+  }
+  .title {
+    display: block;
+    line-height: 40px;
+    margin-right: 5px;
+  }
+  .el-select {
     margin-right: 30px;
+  }
+  .el-slider {
+    width: 875px;
+    margin-left: 15px;
+    margin-right: 50px;
   }
 }
 .subjectRelevances {
   width: 300px;
-}
-.methodSelect {
-  width: 100px;
-}
-.subjectLevel {
-  width: 80px;
 }
 .echartsBox {
   width: 100%;
