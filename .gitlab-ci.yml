@@ -20,15 +20,15 @@ stages:
   - build
   - deploy
 
-    
 build:
-  image: node:alpine
+  image: node:lts-alpine
   stage: build
   tags: 
     - builder
     
   script:
    - npm install -g cnpm --registry=https://registry.npm.taobao.org
+   - cnpm -v
    - cnpm install wepy-cli -g
    - cnpm install
    - cnpm run build
