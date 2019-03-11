@@ -23,6 +23,7 @@
           :key="item.value"
           :label="item.label"
           :value="item.value"
+          :disabled="item.label === subjectTarget"
         ></el-option>
       </el-select>
       <span>条件</span>
@@ -50,7 +51,7 @@
 </template>
 
 <script>
-import { getData } from '@/api/index'
+import { getWikiData } from '@/api/index'
 export default {
   name: 'discipline',
   data () {
@@ -146,7 +147,7 @@ export default {
         method: this.methodValue,
         level: this.subjectLevel
       }
-      getData(opt)
+      getWikiData(opt)
         .then(res => {
           if (res.data.data) {
             this.drawChart(res.data.data)

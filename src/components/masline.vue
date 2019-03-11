@@ -24,6 +24,7 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
+            :disabled="item.label === subjectTarget"
           ></el-option>
         </el-select>
         <span class="title">条件</span>
@@ -47,7 +48,7 @@
 </template>
 
 <script>
-import { getData } from '@/api/index'
+import { getMasData } from '@/api/index'
 export default {
   name: 'discipline',
   data () {
@@ -111,7 +112,7 @@ export default {
         from: this.years[0],
         to: this.years[1]
       }
-      getData(opt)
+      getMasData(opt)
         .then(res => {
           if (res.data.data) {
             this.drawChart(res.data.data)
