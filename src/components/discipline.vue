@@ -2,7 +2,7 @@
   <div class="page-discipline">
     <div class="selectbox">
       <span>目标学科</span>
-      <el-select v-model="subjectTarget" placeholder="请选择">
+      <el-select v-model="subjectTarget" placeholder="请选择" @change="subjectChange">
         <el-option
           v-for="item in categorysOptions"
           :key="item.value"
@@ -227,6 +227,9 @@ export default {
         })
       }
       return _opt
+    },
+    subjectChange () {
+      this.subjectRelevances = []
     }
   }
 }
