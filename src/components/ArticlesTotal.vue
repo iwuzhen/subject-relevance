@@ -2,7 +2,7 @@
   <div class="page-discipline">
     <div class="selectbox">
       <span>目标学科</span>
-      <el-select v-model="subjectRelevances" placeholder="请选择" multiple>
+      <el-select v-model="subjectRelevances" placeholder="请选择" collapse-tags multiple>
         <el-option
           v-for="item in categorysOptions"
           :key="item.value"
