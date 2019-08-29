@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import IndexPage from '@/components/index'
 import Discipline from '@/components/discipline'
 import Masline from '@/components/masline'
+import wikiPageCount from '@/components/ArticlesTotal'
 
 Vue.use(Router)
 
@@ -20,5 +21,9 @@ export default new Router({
     path: '/masline',
     name: 'masline',
     component: Masline
+  }, {
+    path: '/ArticlesTotal',
+    name: 'ArticlesTotal',
+    component: wikiPageCount
   }]
 })

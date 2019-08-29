@@ -14,3 +14,11 @@ export function getMasData (params) {
     data: params
   })
 }
+
+export function getArticlesTotal (params) {
+  return request({
+    url: '/wiki/getArticlesTotal',
+    method: 'post',
+    data: params
+  })
+}
