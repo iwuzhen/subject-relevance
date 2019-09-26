@@ -22,3 +22,11 @@ export function getArticlesTotal (params) {
     data: params
   })
 }
+
+export function getDistanceByFile (params) {
+  return request({
+    url: '/wiki/getDistanceByFile',
+    method: 'post',
+    data: params
+  })
+}

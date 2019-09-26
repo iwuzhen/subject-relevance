@@ -4,6 +4,7 @@ import IndexPage from '@/components/index'
 import Discipline from '@/components/discipline'
 import Masline from '@/components/masline'
 import wikiPageCount from '@/components/ArticlesTotal'
+import SubDiscipline from '@/components/SubDiscipline'
 
 Vue.use(Router)
 
@@ -25,5 +26,9 @@ export default new Router({
     path: '/ArticlesTotal',
     name: 'ArticlesTotal',
     component: wikiPageCount
+  }, {
+    path: '/SubDiscipline',
+    name: 'SubDiscipline',
+    component: SubDiscipline
   }]
 })

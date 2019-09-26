@@ -2,6 +2,8 @@
   <div class="indexPage">
     <div class="enterButton">
       <router-link to="/discipline">wikipedia学科相关度</router-link>
+      <router-link to="/SubDiscipline">单个学科相关度</router-link>
+
       <router-link to="/masline">mas学科相关度</router-link>
       <router-link to="/ArticlesTotal">wiki文章数查询</router-link>
       <a href="http://192.168.1.224:10001/wikidb_web/first.jsp">分类层次</a>
