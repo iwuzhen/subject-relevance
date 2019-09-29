@@ -10,6 +10,15 @@
           :value="item.value"
         ></el-option>
       </el-select>
+      <span>是否统计子类数目</span>
+      <el-select v-model="subjecType" class="subjectLevel" placeholder="请选择">
+        <el-option
+          v-for="item in typeOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>
       <span>level</span>
       <el-select v-model="subjectLevel" class="subjectLevel" placeholder="请选择">
         <el-option
@@ -33,6 +42,7 @@ export default {
     return {
       subjectRelevances: [],
       subjectLevel: '0',
+      subjecType: '0',
       categorys: [
         'Logic',
         'Philosophy',
@@ -57,6 +67,16 @@ export default {
         'Computer engineering',
         'Industrial engineering',
         'Environmental engineering'
+      ],
+      typeOptions: [
+        {
+          value: '0',
+          label: '否'
+        },
+        {
+          value: '1',
+          label: '是'
+        }
       ],
       levelOptions: [
         {
@@ -93,10 +113,15 @@ export default {
         this.$message.error('请选择完整')
         return false
       }
+      if (this.subjectLevel === '0' && this.subjecType === '1') {
+        this.$message.error('0 层没有子类')
+        return false
+      }
       this.loading = true
       let opt = {
         subjects: this.subjectRelevances.join(','),
-        level: this.subjectLevel
+        level: this.subjectLevel,
+        type: this.subjecType
       }
       getArticlesTotal(opt)
         .then(res => {
