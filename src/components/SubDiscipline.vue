@@ -44,6 +44,10 @@ export default {
         {
           value: '2',
           label: '2'
+        },
+        {
+          value: 'mas',
+          label: 'mas'
         }
       ],
       loading: false
