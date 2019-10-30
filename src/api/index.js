@@ -30,3 +30,11 @@ export function getDistanceByFile (params) {
     data: params
   })
 }
+
+export function getMasArticlesTotal (params) {
+  return request({
+    url: '/wiki/getMasArticlesTotal',
+    method: 'post',
+    data: params
+  })
+}
