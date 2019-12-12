@@ -1,40 +1,40 @@
-import request from '@/utils/request'
-export function getWikiData (params) {
+import request from "@/utils/request";
+export function getWikiData(params) {
   return request({
-    url: '/wiki/getDistance',
-    method: 'post',
+    url: "/wiki/getDistance",
+    method: "post",
     data: params
-  })
+  });
 }
 
-export function getMasData (params) {
+export function getMasData(params) {
   return request({
-    url: '/wiki/getMasDistance',
-    method: 'post',
+    url: "/wiki/getMasDistance",
+    method: "post",
     data: params
-  })
+  });
 }
 
-export function getArticlesTotal (params) {
+export function getArticlesTotal(params) {
   return request({
-    url: '/wiki/getArticlesTotal',
-    method: 'post',
+    url: "/wiki/getArticlesTotal",
+    method: "post",
     data: params
-  })
+  });
 }
 
-export function getDistanceByFile (params) {
+export function getDistanceByFile(params) {
   return request({
-    url: '/wiki/getDistanceByFile',
-    method: 'post',
+    url: "/wiki/getDistanceByFile",
+    method: "post",
     data: params
-  })
+  });
 }
 
-export function getMasArticlesTotal (params) {
+export function getMasArticlesTotal(params) {
   return request({
-    url: '/wiki/getMasArticlesTotal',
-    method: 'post',
+    url: "/wiki/getMasArticlesTotal",
+    method: "post",
     data: params
-  })
+  });
 }

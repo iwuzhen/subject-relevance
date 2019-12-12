@@ -3,6 +3,7 @@
     <div class="enterButton">
       <router-link to="/discipline">wiki学科相关度</router-link>
       <router-link to="/SubDiscipline">单个学科相关度</router-link>
+      <router-link to="/powerlaw">幂律</router-link>
 
       <router-link to="/ArticlesTotal">wiki文章数查询</router-link>
       <router-link to="/masline">mas学科相关度</router-link>
@@ -13,7 +14,7 @@
 </template>
 
 <script>
-export default {}
+export default {};
 </script>
 
 <style lang="less">

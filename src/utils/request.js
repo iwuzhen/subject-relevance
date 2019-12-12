@@ -1,11 +1,11 @@
-import axios from 'axios'
+import axios from "axios";
 
 // 创建axios实例
 const service = axios.create({
   timeout: 150000000 // 请求超时时间
-})
+});
 
-service.defaults.baseURL = '/api'
+service.defaults.baseURL = "/api";
 
 // request拦截器
 // service.interceptors.request.use(
@@ -70,4 +70,4 @@ service.defaults.baseURL = '/api'
 //   }
 // )
 
-export default service
+export default service;
