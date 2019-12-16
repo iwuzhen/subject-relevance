@@ -7,6 +7,7 @@ import wikiPageCount from "@/components/ArticlesTotal";
 import SubDiscipline from "@/components/SubDiscipline";
 import MasArticlesTotal from "@/components/MasArticlesTotal";
 import PowerLaw from "@/components/powerLaw";
+import ViewAndEdits from "@/components/ViewAndEdits";
 
 Vue.use(Router);
 
@@ -47,6 +48,11 @@ export default new Router({
       path: "/powerlaw",
       name: "powerlaw",
       component: PowerLaw
+    },
+    {
+      path: "/viewandedits",
+      name: "viewandedits",
+      component: ViewAndEdits
     }
   ]
 });

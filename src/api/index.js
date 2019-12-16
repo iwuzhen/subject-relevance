@@ -38,3 +38,11 @@ export function getMasArticlesTotal(params) {
     data: params
   });
 }
+
+export function getViewAndEdits(params) {
+  return request({
+    url: "/wiki/getViewAndEdits",
+    method: "post",
+    data: params
+  });
+}

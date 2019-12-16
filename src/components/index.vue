@@ -4,6 +4,7 @@
       <router-link to="/discipline">wiki学科相关度</router-link>
       <router-link to="/SubDiscipline">单个学科相关度</router-link>
       <router-link to="/powerlaw">幂律</router-link>
+      <router-link to="/viewandedits">访问量&编辑量</router-link>
 
       <router-link to="/ArticlesTotal">wiki文章数查询</router-link>
       <router-link to="/masline">mas学科相关度</router-link>
@@ -28,7 +29,7 @@ export default {};
     a {
       display: block;
       height: 50px;
-      width: 12vw;
+      width: 8vw;
       padding: 0 5px;
       line-height: 50px;
       text-align: center;
