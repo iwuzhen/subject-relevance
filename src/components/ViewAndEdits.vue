@@ -41,16 +41,7 @@ export default {
   name: "discipline",
   data() {
     return {
-      subjectTarget: [
-        "Psychology",
-        "Logic",
-        "Philosophy",
-        "Mathematics",
-        "Physics",
-        "History",
-        "Computer science",
-        "Artificial intelligence"
-      ],
+      subjectTarget: [],
       subjectLevel: 0,
       categorys: [
         "Literature",
