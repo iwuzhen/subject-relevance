@@ -46,3 +46,11 @@ export function getViewAndEdits(params) {
     data: params
   });
 }
+
+export function getZipf(params) {
+  return request({
+    url: "/wiki/getZipf",
+    method: "post",
+    data: params
+  });
+}

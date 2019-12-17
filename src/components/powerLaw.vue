@@ -1,54 +1,232 @@
 <template>
   <div class="page-discipline">
+    <div class="selectbox">
+      <span>目标学科</span>
+      <el-select
+        v-model="subjectTarget"
+        placeholder="请选择"
+        multiple
+        collapse-tags
+        @change="subjectChange"
+      >
+        <el-option
+          v-for="item in categorysOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>
+      <span>年份</span>
+      <el-select
+        v-model="dataYear"
+        class="dataYear"
+        placeholder="请选择"
+        @change="yearChange"
+      >
+        <el-option
+          v-for="item in dataYearOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>
+
+      <el-button type="primary" @click="getData">确定</el-button>
+    </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
   </div>
 </template>
-
+6
 <script>
-import powerLawData from "../data/powerLaw.json";
+import { getZipf } from "@/api/index";
 import ecStat from "echarts-stat";
 
 export default {
   name: "powerLaw",
   data() {
     return {
+      subjectTarget: [],
+      categorys: [
+        "Literature",
+        "Psychology",
+        "Logic",
+        "Philosophy",
+        "Mathematics",
+        "Physics",
+        "Chemistry",
+        "Biology",
+        "Sociology",
+        "Economics",
+        "Political science",
+        "Linguistics",
+        "History",
+        "Computer science",
+        "Artificial intelligence",
+        "Engineering disciplines",
+        "Chemical engineering",
+        "Civil engineering",
+        "Electrical engineering",
+        "Mechanical engineering",
+        "Biological engineering",
+        "Computer engineering",
+        "Industrial engineering",
+        "Environmental engineering",
+        "Cognitive science",
+        "Machine learning",
+        "Blockchains",
+        "Deep learning",
+        "Theoretical computer science",
+        "Quantum computing",
+        "Genetic engineering",
+        "Genome editing",
+        "Anthropology",
+        "Neuroscience"
+      ],
+      dataYear: null,
+      dataYearopt: [
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019
+      ],
       loading: false
     };
   },
   mounted() {
-    this.drawChart();
+    // this.drawChart();
   },
   computed: {
-    chartData: function() {
-      let _data = [];
-      let tmpData = powerLawData.filter(item => {
-        return item[1] > 0;
+    categorysOptions: function() {
+      let that = this;
+      let _data = that.categorys.map(item => {
+        return {
+          value: item,
+          label: item
+        };
       });
-      for (let i = 0; i < tmpData.length; i++) {
-        // for (let i = 0; i < 2000; i++) {
-        _data.push([
-          Math.log(i + 1) / Math.log(10),
-          Math.log(tmpData[i][1]) / Math.log(10)
-          // tmpData[i][0]
-        ]);
-      }
       return _data;
     },
-    myRegression: function() {
-      return ecStat.regression("polynomial", this.chartData, 4);
+    dataYearOptions: function() {
+      let that = this;
+      let _data = that.dataYearopt.map(item => {
+        return {
+          value: item,
+          label: item
+        };
+      });
+      _data.push({
+        value: 1111,
+        label: "历年总和"
+      });
+      return _data;
     }
   },
   methods: {
-    drawChart() {
+    subjectChange() {
+      //   this.subjectRelevances = []
+      this.yearChange();
+    },
+    yearChange() {
+      if (this.dataYear === 1111 && this.subjectTarget.length > 1) {
+        this.subjectTarget = [];
+        this.$message.error("历年总和只能选择一个学科");
+      }
+    },
+    async getData() {
+      if (this.subjectTarget.length < 1 || !this.dataYear) {
+        this.$message.error("请选择完整");
+        return false;
+      }
+      this.loading = true;
+      let opt = {
+        str: this.subjectTarget.join(",")
+      };
+      if (this.dataYear !== 1111) {
+        opt["year"] = this.dataYear;
+      }
+
+      getZipf(opt)
+        .then(res => {
+          if (res.data.data) {
+            this.drawChart(res.data.data);
+          } else {
+            this.loading = false;
+            this.$message.error("请求失败");
+            return false;
+          }
+        })
+        .catch(rej => {
+          this.loading = false;
+          this.$message.error(`请求失败:${rej}`);
+        });
+    },
+    drawChart(data) {
       let myChart = this.$echarts.init(document.getElementById("subjectChart"));
-      let options = this.setOptions();
+      let options = this.setOptions(data);
       myChart.setOption(options, true);
       this.loading = false;
     },
-    setOptions() {
+    setOptions(data) {
+      // 设置
+      let seriesList = [];
+      for (let i = 0; i < data.y.length; i++) {
+        let dataItem = [];
+        for (let j = 0; j < data.y[i].length; j++) {
+          dataItem.push([data.x[j], data.y[i][j]]);
+        }
+        seriesList.push({
+          name: data.legend[i],
+          type: "scatter",
+          symbolSize: 5,
+          large: true,
+          data: dataItem
+        });
+      }
+      // 趋势线
+      let myRegression = ecStat.regression("linear", seriesList[0].data);
+      if (data.y.length === 1) {
+        seriesList.push({
+          name: "回归线",
+          type: "line",
+          showSymbol: false,
+          smooth: true,
+          data: myRegression.points,
+          markPoint: {
+            itemStyle: {
+              normal: {
+                color: "transparent"
+              }
+            },
+            label: {
+              normal: {
+                show: true,
+                position: "left",
+                formatter: myRegression.expression,
+                textStyle: {
+                  color: "#333",
+                  fontSize: 14
+                }
+              }
+            },
+            data: [
+              {
+                coord: myRegression.points[myRegression.points.length - 1]
+              }
+            ]
+          }
+        });
+      }
       let _opt = {
         title: {
-          text: "幂律分布",
+          text: data.title,
           left: "10%"
         },
         tooltip: {
@@ -56,89 +234,45 @@ export default {
           textStyle: {
             align: "left"
           },
-          formatter: function(datas) {
-            var res = "";
-            for (var i = 0, length = datas.length; i < length; i++) {
-              res +=
-                "article name: " +
-                datas[i].data[2] +
-                "<br/>" +
-                datas[i].seriesName +
-                "：" +
-                datas[i].data[1] +
-                "<br/>";
+          formatter: function(params) {
+            let showHtm = ` ${params[0].name}<br>`;
+            for (let i = 0; i < params.length; i++) {
+              let _text = params[i].seriesName;
+              let _data_x = params[i].data[0].toFixed(4);
+              let _data_y = params[i].data[1].toFixed(4);
+              let _marker = params[i].marker;
+              showHtm += `${_marker}${_text}： x=${_data_x} y=${_data_y}<br>`;
             }
-            return res;
+            return showHtm;
           }
         },
-
+        legend: {
+          data: data.legend,
+          right: "5%",
+          top: "10%",
+          orient: "vertical"
+        },
+        grid: {
+          left: "8%",
+          right: "20%",
+          bottom: "5%",
+          containLabel: true
+        },
+        toolbox: {
+          right: "20%",
+          feature: {
+            saveAsImage: {}
+          }
+        },
         xAxis: {
           type: "value",
-          splitLine: {
-            lineStyle: {
-              type: "dashed"
-            }
-          },
           max: "dataMax"
         },
         yAxis: {
           type: "value",
-          splitLine: {
-            lineStyle: {
-              type: "dashed"
-            }
-          },
           max: "dataMax"
         },
-        series: [
-          {
-            name: "links in count",
-            type: "scatter",
-            label: {
-              emphasis: {
-                show: true,
-                position: "left",
-                textStyle: {
-                  color: "blue",
-                  fontSize: 16
-                }
-              }
-            },
-            data: this.chartData
-          },
-          {
-            name: "line",
-            type: "line",
-            showSymbol: false,
-            smooth: true,
-            data: this.myRegression.points,
-            markPoint: {
-              itemStyle: {
-                normal: {
-                  color: "transparent"
-                }
-              },
-              label: {
-                normal: {
-                  show: true,
-                  position: "left",
-                  formatter: this.myRegression.expression,
-                  textStyle: {
-                    color: "#333",
-                    fontSize: 14
-                  }
-                }
-              },
-              data: [
-                {
-                  coord: this.myRegression.points[
-                    this.myRegression.points.length - 1
-                  ]
-                }
-              ]
-            }
-          }
-        ]
+        series: seriesList
       };
       return _opt;
     }
@@ -172,8 +306,8 @@ export default {
 .methodSelect {
   width: 100px;
 }
-.subjectLevel {
-  width: 80px;
+.dataYear {
+  width: 100px;
 }
 .echartsBox {
   width: 100%;
