@@ -16,7 +16,17 @@
           :value="item.value"
         ></el-option>
       </el-select>
-      <span>方法</span>
+      <span>数据类型</span>
+      <el-select v-model="dataType" class="dataType" placeholder="请选择">
+        <el-option
+          v-for="item in dataTypeOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>
+
+      <span>level</span>
       <el-select
         v-model="subjectLevel"
         class="subjectLevel"
@@ -82,6 +92,21 @@ export default {
       levelOptions: [
         {
           value: 0,
+          label: "0"
+        },
+        {
+          value: 1,
+          label: "1"
+        },
+        {
+          value: 2,
+          label: "2"
+        }
+      ],
+      dataType: 0,
+      dataTypeOptions: [
+        {
+          value: 0,
           label: "访问量"
         },
         {
@@ -116,14 +141,15 @@ export default {
   },
   methods: {
     async getData() {
-      if (!this.subjectTarget) {
+      if (this.subjectTarget.length < 1) {
         this.$message.error("请选择完整");
         return false;
       }
       this.loading = true;
       let opt = {
         str: this.subjectTarget.join(","),
-        type: this.subjectLevel
+        type: this.dataType,
+        level: this.subjectLevel
       };
       getViewAndEdits(opt)
         .then(res => {
@@ -253,11 +279,11 @@ export default {
 .subjectRelevances {
   width: 300px;
 }
-.methodSelect {
+.dataType {
   width: 100px;
 }
 .subjectLevel {
-  width: 120px;
+  width: 100px;
 }
 .echartsBox {
   width: 100%;
