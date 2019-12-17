@@ -6,7 +6,7 @@
 
 <script>
 import powerLawData from "../data/powerLaw.json";
-// import ecStat from "echarts-stat";
+import ecStat from "echarts-stat";
 
 export default {
   name: "powerLaw",
@@ -21,19 +21,22 @@ export default {
   computed: {
     chartData: function() {
       let _data = [];
-      let tmpData = powerLawData.filter(item =>{
-        return item[1] > 250;
-      })
-      // tmpData.reverse();
+      let tmpData = powerLawData.filter(item => {
+        return item[1] > 0;
+      });
       for (let i = 0; i < tmpData.length; i++) {
-      // for (let i = 0; i < 2000; i++) {
-        _data.push([i, tmpData[i][1], tmpData[i][0]]);
+        // for (let i = 0; i < 2000; i++) {
+        _data.push([
+          Math.log(i + 1) / Math.log(10),
+          Math.log(tmpData[i][1]) / Math.log(10)
+          // tmpData[i][0]
+        ]);
       }
       return _data;
     },
-    // myRegression: function() {
-    //   return ecStat.regression("logarithmic", this.chartData);
-    // }
+    myRegression: function() {
+      return ecStat.regression("polynomial", this.chartData, 4);
+    }
   },
   methods: {
     drawChart() {
@@ -53,15 +56,20 @@ export default {
           textStyle: {
             align: "left"
           },
-          formatter: function (datas) {
-            var res = ''
+          formatter: function(datas) {
+            var res = "";
             for (var i = 0, length = datas.length; i < length; i++) {
-                res += 'article name: ' + datas[i].data[2] +'<br/>'+ datas[i].seriesName + '：' 
-                    + datas[i].data[1] + '<br/>'
-              }
-              return res
+              res +=
+                "article name: " +
+                datas[i].data[2] +
+                "<br/>" +
+                datas[i].seriesName +
+                "：" +
+                datas[i].data[1] +
+                "<br/>";
             }
-
+            return res;
+          }
         },
 
         xAxis: {
@@ -71,7 +79,7 @@ export default {
               type: "dashed"
             }
           },
-          max:"dataMax"
+          max: "dataMax"
         },
         yAxis: {
           type: "value",
@@ -97,6 +105,38 @@ export default {
               }
             },
             data: this.chartData
+          },
+          {
+            name: "line",
+            type: "line",
+            showSymbol: false,
+            smooth: true,
+            data: this.myRegression.points,
+            markPoint: {
+              itemStyle: {
+                normal: {
+                  color: "transparent"
+                }
+              },
+              label: {
+                normal: {
+                  show: true,
+                  position: "left",
+                  formatter: this.myRegression.expression,
+                  textStyle: {
+                    color: "#333",
+                    fontSize: 14
+                  }
+                }
+              },
+              data: [
+                {
+                  coord: this.myRegression.points[
+                    this.myRegression.points.length - 1
+                  ]
+                }
+              ]
+            }
           }
         ]
       };
