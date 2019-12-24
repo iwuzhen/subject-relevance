@@ -21,6 +21,7 @@
         multiple
         collapse-tags
         placeholder="请选择"
+        @change="selectChange"
       >
         <el-option
           v-for="item in categorysOptions"
@@ -35,6 +36,7 @@
         v-model="methodValue"
         class="methodSelect"
         placeholder="请选择"
+        @change="selectChange"
       >
         <el-option
           v-for="item in methodOptions"
@@ -48,6 +50,7 @@
         v-model="subjectLevel"
         class="subjectLevel"
         placeholder="请选择"
+        @change="selectChange"
       >
         <el-option
           v-for="item in levelOptions"
@@ -191,7 +194,17 @@ export default {
           textStyle: {
             align: "left"
           },
+          axisPointer: {
+            type: "cross",
+            animation: true,
+            label: {
+              backgroundColor: "#505765"
+            }
+          },
           formatter: function(params) {
+            params.sort((x, y) => {
+              return y.data - x.data;
+            });
             let showHtm = ` ${params[0].name}<br>`;
             for (let i = 0; i < params.length; i++) {
               let _text = params[i].seriesName;
@@ -242,6 +255,9 @@ export default {
     },
     subjectChange() {
       this.subjectRelevances = [];
+    },
+    selectChange() {
+      this.getData();
     }
   }
 };

@@ -22,6 +22,7 @@
           multiple
           collapse-tags
           placeholder="请选择"
+          @change="getData"
         >
           <el-option
             v-for="item in categorysOptions"
@@ -32,7 +33,7 @@
           ></el-option>
         </el-select>
         <span class="title">条件</span>
-        <el-select v-model="methodValue" placeholder="请选择">
+        <el-select v-model="methodValue" @change="getData" placeholder="请选择">
           <el-option
             v-for="item in methodOptions"
             :key="item.value"
@@ -43,7 +44,13 @@
       </el-row>
       <el-row type="flex">
         <span class="title">年份范围</span>
-        <el-slider v-model="years" range :min="1950" :max="2019"></el-slider>
+        <el-slider
+          v-model="years"
+          range
+          :min="1950"
+          @change="getData"
+          :max="2019"
+        ></el-slider>
         <el-button type="primary" @click="getData">确定</el-button>
       </el-row>
     </div>
@@ -148,7 +155,17 @@ export default {
           textStyle: {
             align: "left"
           },
+          axisPointer: {
+            type: "cross",
+            animation: true,
+            label: {
+              backgroundColor: "#505765"
+            }
+          },
           formatter: function(params) {
+            params.sort((x, y) => {
+              return y.data - x.data;
+            });
             let showHtm = ` ${params[0].name}<br>`;
             for (let i = 0; i < params.length; i++) {
               let _text = params[i].seriesName;

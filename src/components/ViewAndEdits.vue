@@ -17,7 +17,12 @@
         ></el-option>
       </el-select>
       <span>数据类型</span>
-      <el-select v-model="dataType" class="dataType" placeholder="请选择">
+      <el-select
+        v-model="dataType"
+        class="dataType"
+        @change="subjectChange"
+        placeholder="请选择"
+      >
         <el-option
           v-for="item in dataTypeOptions"
           :key="item.value"
@@ -31,6 +36,7 @@
         v-model="subjectLevel"
         class="subjectLevel"
         placeholder="请选择"
+        @change="subjectChange"
       >
         <el-option
           v-for="item in levelOptions"
@@ -142,7 +148,7 @@ export default {
   methods: {
     async getData() {
       if (this.subjectTarget.length < 1) {
-        this.$message.error("请选择完整");
+        // this.$message.error("请选择完整");
         return false;
       }
       this.loading = true;
@@ -196,10 +202,21 @@ export default {
         },
         tooltip: {
           trigger: "axis",
+          axisPointer: {
+            type: "cross",
+            animation: true,
+            label: {
+              backgroundColor: "#505765"
+            }
+          },
+
           textStyle: {
             align: "left"
           },
           formatter: function(params) {
+            params.sort((x, y) => {
+              return y.data - x.data;
+            });
             let showHtm = ` ${params[0].name}<br>`;
             for (let i = 0; i < params.length; i++) {
               let _text = params[i].seriesName;
@@ -250,7 +267,7 @@ export default {
       return _opt;
     },
     subjectChange() {
-      //   this.subjectRelevances = []
+      this.getData();
     }
   }
 };

@@ -7,6 +7,7 @@
         placeholder="请选择"
         collapse-tags
         multiple
+        @change="subjectChange"
       >
         <el-option
           v-for="item in categorysOptions"
@@ -16,7 +17,12 @@
         ></el-option>
       </el-select>
       <span>是否统计子类数目</span>
-      <el-select v-model="subjecType" class="subjectLevel" placeholder="请选择">
+      <el-select
+        v-model="subjecType"
+        class="subjectLevel"
+        @change="subjectChange"
+        placeholder="请选择"
+      >
         <el-option
           v-for="item in typeOptions"
           :key="item.value"
@@ -29,6 +35,7 @@
         v-model="subjectLevel"
         class="subjectLevel"
         placeholder="请选择"
+        @change="subjectChange"
       >
         <el-option
           v-for="item in levelOptions"
@@ -119,7 +126,7 @@ export default {
   methods: {
     async getData() {
       if (this.subjectRelevances.length === 0) {
-        this.$message.error("请选择完整");
+        // this.$message.error("请选择完整");
         return false;
       }
       if (this.subjectLevel === "0" && this.subjecType === "1") {
@@ -166,7 +173,17 @@ export default {
           textStyle: {
             align: "left"
           },
+          axisPointer: {
+            type: "cross",
+            animation: true,
+            label: {
+              backgroundColor: "#505765"
+            }
+          },
           formatter: function(params) {
+            params.sort((x, y) => {
+              return y.data - x.data;
+            });
             let showHtm = ` ${params[0].name}<br>`;
             for (let i = 0; i < params.length; i++) {
               let _text = params[i].seriesName;
@@ -227,6 +244,9 @@ export default {
         })(data)
       };
       return _opt;
+    },
+    subjectChange() {
+      this.getData();
     }
   }
 };

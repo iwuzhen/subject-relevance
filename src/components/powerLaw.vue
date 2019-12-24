@@ -138,11 +138,13 @@ export default {
       if (this.dataYear === 1111 && this.subjectTarget.length > 1) {
         this.subjectTarget = [];
         this.$message.error("历年总和只能选择一个学科");
+        return;
       }
+      this.getData();
     },
     async getData() {
       if (this.subjectTarget.length < 1 || !this.dataYear) {
-        this.$message.error("请选择完整");
+        // this.$message.error("请选择完整");
         return false;
       }
       this.loading = true;
@@ -234,7 +236,17 @@ export default {
           textStyle: {
             align: "left"
           },
+          axisPointer: {
+            type: "cross",
+            animation: true,
+            label: {
+              backgroundColor: "#505765"
+            }
+          },
           formatter: function(params) {
+            params.sort((x, y) => {
+              return y.data[1] - x.data[1];
+            });
             let showHtm = ` ${params[0].name}<br>`;
             for (let i = 0; i < params.length; i++) {
               let _text = params[i].seriesName;
