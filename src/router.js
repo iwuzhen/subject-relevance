@@ -9,6 +9,7 @@ import MasArticlesTotal from "@/components/MasArticlesTotal";
 import PowerLaw from "@/components/powerLaw";
 import ViewAndEdits from "@/components/ViewAndEdits";
 import SmallWorldUndirected from "@/components/SmallWorldUndirected";
+import SmallWorldDirected from "@/components/SmallWorldDirected";
 
 Vue.use(Router);
 
@@ -59,6 +60,11 @@ export default new Router({
       path: "/SmallWorldUndirected",
       name: "SmallWorldUndirected",
       component: SmallWorldUndirected
+    },
+    {
+      path: "/SmallWorldDirected",
+      name: "SmallWorldDirected",
+      component: SmallWorldDirected
     }
   ]
 });
