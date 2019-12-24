@@ -9,6 +9,7 @@
       <router-link to="/ArticlesTotal">wiki文章数查询</router-link>
       <router-link to="/masline">mas学科相关度</router-link>
       <router-link to="/MasArticlesTotal">mas文章数</router-link>
+      <router-link to="/SmallWorldUndirected">小世界无向图</router-link>
       <a href="http://wikidb.lambdax.cn:5555/wikidb_web/first.jsp">分类层次</a>
     </div>
   </div>

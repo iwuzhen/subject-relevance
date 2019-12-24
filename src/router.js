@@ -8,6 +8,7 @@ import SubDiscipline from "@/components/SubDiscipline";
 import MasArticlesTotal from "@/components/MasArticlesTotal";
 import PowerLaw from "@/components/powerLaw";
 import ViewAndEdits from "@/components/ViewAndEdits";
+import SmallWorldUndirected from "@/components/SmallWorldUndirected";
 
 Vue.use(Router);
 
@@ -53,6 +54,11 @@ export default new Router({
       path: "/viewandedits",
       name: "viewandedits",
       component: ViewAndEdits
+    },
+    {
+      path: "/SmallWorldUndirected",
+      name: "SmallWorldUndirected",
+      component: SmallWorldUndirected
     }
   ]
 });
