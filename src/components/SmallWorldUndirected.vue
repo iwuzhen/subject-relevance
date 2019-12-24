@@ -22,6 +22,7 @@
         class="methodSelect"
         collapse-tags
         placeholder="请选择"
+        @change="subjectChange"
       >
         <el-option
           v-for="item in methods"
@@ -32,7 +33,7 @@
         ></el-option>
       </el-select>
 
-      <el-button type="primary" @click="getData">确定</el-button>
+      <!-- <el-button type="primary" @click="getData">确定</el-button> -->
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
   </div>
@@ -121,7 +122,7 @@ export default {
   methods: {
     async getData() {
       if (this.subjectTarget.length === 0 || this.methodOptions.length === 0) {
-        this.$message.error("请选择完整");
+        // this.$message.error("请选择完整");
         return false;
       }
       this.loading = true;
@@ -229,7 +230,7 @@ export default {
       return _opt;
     },
     subjectChange() {
-      this.subjectRelevances = [];
+      this.getData();
     }
   }
 };
