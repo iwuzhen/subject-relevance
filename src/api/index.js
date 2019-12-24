@@ -54,3 +54,11 @@ export function getZipf(params) {
     data: params
   });
 }
+
+export function getPagerankZipf(params) {
+  return request({
+    url: "/wiki/getPagerankZipf",
+    method: "post",
+    data: params
+  });
+}

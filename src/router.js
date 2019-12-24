@@ -10,6 +10,7 @@ import PowerLaw from "@/components/powerLaw";
 import ViewAndEdits from "@/components/ViewAndEdits";
 import SmallWorldUndirected from "@/components/SmallWorldUndirected";
 import SmallWorldDirected from "@/components/SmallWorldDirected";
+import powerLawPageRank from "@/components/powerLawPageRank";
 
 Vue.use(Router);
 
@@ -65,6 +66,11 @@ export default new Router({
       path: "/SmallWorldDirected",
       name: "SmallWorldDirected",
       component: SmallWorldDirected
+    },
+    {
+      path: "/powerLawPageRank",
+      name: "powerLawPageRank",
+      component: powerLawPageRank
     }
   ]
 });
