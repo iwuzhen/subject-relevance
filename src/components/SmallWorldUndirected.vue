@@ -97,11 +97,11 @@ export default {
         },
         {
           value: "num_vertices",
-          label: "边数"
+          label: "点数"
         },
         {
           value: "num_edges",
-          label: "点数"
+          label: "边数"
         }
       ],
       loading: false
