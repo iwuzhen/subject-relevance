@@ -1,7 +1,7 @@
 <template>
   <div class="page-discipline">
     <div class="selectbox">
-      <span>目标学科</span>
+      <span>目标学科 </span>
       <el-select
         v-model="subjectTarget"
         placeholder="请选择"
@@ -16,7 +16,7 @@
           :value="item.value"
         ></el-option>
       </el-select>
-      <span>数据类型</span>
+      <span>数据类型 </span>
       <el-select
         v-model="dataType"
         class="dataType"
@@ -31,7 +31,7 @@
         ></el-option>
       </el-select>
 
-      <span>level</span>
+      <span>level </span>
       <el-select
         v-model="subjectLevel"
         class="subjectLevel"
@@ -107,6 +107,10 @@ export default {
         {
           value: 2,
           label: "2"
+        },
+        {
+          value: "1000",
+          label: "top 1000"
         }
       ],
       dataType: 0,
@@ -147,7 +151,11 @@ export default {
   },
   methods: {
     async getData() {
-      if (this.subjectTarget.length < 1) {
+      if (
+        this.subjectTarget.length < 1 ||
+        this.dataType.length < 1 ||
+        this.subjectLevel.length < 1
+      ) {
         // this.$message.error("请选择完整");
         return false;
       }
@@ -300,7 +308,7 @@ export default {
   width: 100px;
 }
 .subjectLevel {
-  width: 100px;
+  width: 120px;
 }
 .echartsBox {
   width: 100%;
