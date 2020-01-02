@@ -330,6 +330,7 @@ export default {
           }
         },
         xAxis: {
+          name: "图谱节点数",
           type: "value",
           boundaryGap: false,
           max: "dataMax"
