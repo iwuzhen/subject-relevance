@@ -223,7 +223,7 @@ export default {
         for (let y of this.yearTarget) {
           for (let z of this.increaseTaeget) {
             let iName = "";
-            if (z === 0) iName = "随机";
+            if (z === 1) iName = "随机";
             else iName = "谷歌";
             let _id = `${x} - ${iName} - ${y}`;
             legend.add(_id);
@@ -243,7 +243,7 @@ export default {
           this.increaseTaeget.indexOf(row["t"]) > -1
         ) {
           let iName = "";
-          if (row["t"] === 0) iName = "随机";
+          if (row["t"] === 1) iName = "随机";
           else iName = "谷歌";
           let _id = `${row["n"]} - ${iName} - ${row["y"]}`;
           tmp_dict[_id]["data"].push([row["nv"], row[this.methodOptions]]);
