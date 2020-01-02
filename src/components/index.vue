@@ -22,8 +22,14 @@
     </div>
     <h1>小世界</h1>
     <div class="enterButton">
-      <router-link to="/SmallWorldUndirected">小世界无向图</router-link>
-      <router-link to="/SmallWorldDirected">小世界有向图</router-link>
+      <router-link to="/SmallWorldUndirectedLimit"
+        >无向图 扩大后趋势</router-link
+      >
+      <!-- <router-link to="/SmallWorldUndirectedLimitRandom"
+        >无向图 随机扩大</router-link
+      > -->
+      <router-link to="/SmallWorldUndirected">无向图</router-link>
+      <router-link to="/SmallWorldDirected">有向图</router-link>
     </div>
   </div>
 </template>

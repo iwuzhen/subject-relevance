@@ -9,6 +9,8 @@ import MasArticlesTotal from "@/components/MasArticlesTotal";
 import PowerLaw from "@/components/powerLaw";
 import ViewAndEdits from "@/components/ViewAndEdits";
 import SmallWorldUndirected from "@/components/SmallWorldUndirected";
+import SmallWorldUndirectedLimit from "@/components/SmallWorldUndirectedLimit";
+import SmallWorldUndirectedLimitRandom from "@/components/SmallWorldUndirectedLimitRandom";
 import SmallWorldDirected from "@/components/SmallWorldDirected";
 import powerLawPageRank from "@/components/powerLawPageRank";
 
@@ -71,6 +73,16 @@ export default new Router({
       path: "/powerLawPageRank",
       name: "powerLawPageRank",
       component: powerLawPageRank
+    },
+    {
+      path: "/SmallWorldUndirectedLimit",
+      name: "SmallWorldUndirectedLimit",
+      component: SmallWorldUndirectedLimit
+    },
+    {
+      path: "/SmallWorldUndirectedLimitRandom",
+      name: "SmallWorldUndirectedLimitRandom",
+      component: SmallWorldUndirectedLimitRandom
     }
   ]
 });
