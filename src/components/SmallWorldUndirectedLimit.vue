@@ -19,7 +19,7 @@
       <span>年份 </span>
       <el-select
         v-model="yearTarget"
-        class="methodSelect"
+        class="yearSelect"
         collapse-tags
         placeholder="请选择"
         multiple
@@ -65,7 +65,21 @@
           :disabled="item.label === subjectTarget"
         ></el-option>
       </el-select>
-
+      <span>图谱节点上限 </span>
+      <el-select
+        v-model="nodeCounttarget"
+        class="nodeCountSelect"
+        collapse-tags
+        placeholder="请选择"
+        @change="subjectChange"
+      >
+        <el-option
+          v-for="item in nodeCountOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        ></el-option>
+      </el-select>
       <!-- <el-button type="primary" @click="getData">确定</el-button> -->
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
@@ -82,6 +96,7 @@ export default {
       subjectRelevances: [],
       yearTarget: [],
       increaseTaeget: [],
+      nodeCounttarget: 2000,
       methodValue: "linksin",
       subjectLevel: "0",
       categorys: [
@@ -121,10 +136,52 @@ export default {
         "Neuroscience"
       ],
       methodOptions: "",
+      nodeCountOptions: [
+        {
+          value: 500,
+          label: 500
+        },
+        {
+          value: 1000,
+          label: 1000
+        },
+        {
+          value: 1500,
+          label: 1500
+        },
+        {
+          value: 2000,
+          label: 2000
+        },
+        {
+          value: 2500,
+          label: 2500
+        },
+        {
+          value: 3000,
+          label: 3000
+        },
+        {
+          value: 3500,
+          label: 3500
+        },
+        {
+          value: 4000,
+          label: 4000
+        },
+        {
+          value: 100000,
+          label: "不限制"
+        }
+      ],
       increaseOptions: [
         {
+          value: 2,
+          label: "三层类距离扩大图谱"
+        },
+        {
           value: 0,
-          label: "按谷歌距离排名扩大图谱"
+          label: "谷歌距离扩大图谱"
         },
         {
           value: 1,
@@ -224,6 +281,7 @@ export default {
           for (let z of this.increaseTaeget) {
             let iName = "";
             if (z === 1) iName = "随机";
+            else if (z === 2) iName = "三层类距离";
             else iName = "谷歌";
             let _id = `${x} - ${iName} - ${y}`;
             legend.add(_id);
@@ -240,10 +298,12 @@ export default {
         if (
           this.subjectTarget.indexOf(row["n"]) > -1 &&
           this.yearTarget.indexOf(row["y"]) > -1 &&
-          this.increaseTaeget.indexOf(row["t"]) > -1
+          this.increaseTaeget.indexOf(row["t"]) > -1 &&
+          this.nodeCounttarget > row["nv"]
         ) {
           let iName = "";
           if (row["t"] === 1) iName = "随机";
+          else if (row["t"] === 2) iName = "三层类距离";
           else iName = "谷歌";
           let _id = `${row["n"]} - ${iName} - ${row["y"]}`;
           tmp_dict[_id]["data"].push([row["nv"], row[this.methodOptions]]);
@@ -364,7 +424,7 @@ export default {
 }
 .selectbox {
   padding: 20px 0;
-  width: 1200px;
+  width: 1400px;
   margin: 0 auto;
   > .el-select {
     margin-right: 30px;
@@ -376,11 +436,17 @@ export default {
 .methodSelect {
   width: 150px;
 }
+.nodeCountSelect {
+  width: 100px;
+}
 .increaseSelect {
-  width: 250px;
+  width: 220px;
+}
+.yearSelect {
+  width: 100px;
 }
 .subjectLevel {
-  width: 80px;
+  width: 100px;
 }
 .echartsBox {
   width: 100%;
