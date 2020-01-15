@@ -1,65 +1,75 @@
 <template>
   <div class="page-discipline">
     <div class="selectbox">
-      <span>目标学科</span>
-      <el-select
-        v-model="subjectTarget"
-        placeholder="请选择"
-        @change="subjectChange"
+      <div class="selectitem">
+        <span>目标学科:</span>
+        <el-select
+          v-model="subjectTarget"
+          placeholder="请选择"
+          @change="subjectChange"
+        >
+          <el-option
+            v-for="item in categorysOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
+      <div class="selectitem">
+        <span>相关学科:</span>
+        <el-select
+          v-model="subjectRelevances"
+          class="subjectRelevances"
+          multiple
+          collapse-tags
+          placeholder="请选择"
+          @change="selectChange"
+        >
+          <el-option
+            v-for="item in categorysOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.label === subjectTarget"
+          ></el-option>
+        </el-select>
+      </div>
+      <div class="selectitem">
+        <span>条件:</span>
+        <el-select
+          v-model="methodValue"
+          class="methodSelect"
+          placeholder="请选择"
+          @change="selectChange"
+        >
+          <el-option
+            v-for="item in methodOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
+      <div class="selectitem">
+        <span>level:</span>
+        <el-select
+          v-model="subjectLevel"
+          class="subjectLevel"
+          placeholder="请选择"
+          @change="selectChange"
+        >
+          <el-option
+            v-for="item in levelOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
+      <el-button class="selectitem" type="primary" @click="getData"
+        >确定</el-button
       >
-        <el-option
-          v-for="item in categorysOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <span>相关学科</span>
-      <el-select
-        v-model="subjectRelevances"
-        class="subjectRelevances"
-        multiple
-        collapse-tags
-        placeholder="请选择"
-        @change="selectChange"
-      >
-        <el-option
-          v-for="item in categorysOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          :disabled="item.label === subjectTarget"
-        ></el-option>
-      </el-select>
-      <span>条件</span>
-      <el-select
-        v-model="methodValue"
-        class="methodSelect"
-        placeholder="请选择"
-        @change="selectChange"
-      >
-        <el-option
-          v-for="item in methodOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <span>level</span>
-      <el-select
-        v-model="subjectLevel"
-        class="subjectLevel"
-        placeholder="请选择"
-        @change="selectChange"
-      >
-        <el-option
-          v-for="item in levelOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <el-button type="primary" @click="getData">确定</el-button>
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
   </div>
@@ -264,25 +274,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.page-discipline {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  padding: 40px;
-  box-sizing: border-box;
-}
-.selectbox {
-  padding: 20px 0;
-  width: 1200px;
-  margin: 0 auto;
-  > .el-select {
-    margin-right: 30px;
-  }
-}
+@import url("../assets/style/common.less");
 .subjectRelevances {
   width: 300px;
 }
@@ -291,10 +283,5 @@ export default {
 }
 .subjectLevel {
   width: 80px;
-}
-.echartsBox {
-  width: 100%;
-  min-width: 1200px;
-  flex: 1;
 }
 </style>

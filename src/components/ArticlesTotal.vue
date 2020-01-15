@@ -1,6 +1,7 @@
 <template>
   <div class="page-discipline">
     <div class="selectbox">
+      <div class="selectitem">
       <span>目标学科</span>
       <el-select
         v-model="subjectRelevances"
@@ -16,6 +17,8 @@
           :value="item.value"
         ></el-option>
       </el-select>
+      </div>
+      <div class="selectitem">
       <span>是否统计子类数目</span>
       <el-select
         v-model="subjecType"
@@ -30,6 +33,8 @@
           :value="item.value"
         ></el-option>
       </el-select>
+      </div>
+      <div class="selectitem">
       <span>level</span>
       <el-select
         v-model="subjectLevel"
@@ -44,7 +49,8 @@
           :value="item.value"
         ></el-option>
       </el-select>
-      <el-button type="primary" @click="getData">确定</el-button>
+      </div>
+      <el-button class="selectitem" type="primary" @click="getData">确定</el-button>
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
   </div>
@@ -253,25 +259,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.page-discipline {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  padding: 40px;
-  box-sizing: border-box;
-}
-.selectbox {
-  padding: 20px 0;
-  width: 1200px;
-  margin: 0 auto;
-  > .el-select {
-    margin-right: 30px;
-  }
-}
+@import url("../assets/style/common.less");
 .subjectRelevances {
   width: 300px;
 }
@@ -280,10 +268,5 @@ export default {
 }
 .subjectLevel {
   width: 80px;
-}
-.echartsBox {
-  width: 100%;
-  min-width: 1200px;
-  flex: 1;
 }
 </style>

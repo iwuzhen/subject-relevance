@@ -1,85 +1,96 @@
 <template>
   <div class="page-discipline">
     <div class="selectbox">
-      <span>目标学科 </span>
-      <el-select
-        v-model="subjectTarget"
-        placeholder="请选择"
-        multiple
-        collapse-tags
-        @change="subjectChange"
-      >
-        <el-option
-          v-for="item in categorysOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <span>年份 </span>
-      <el-select
-        v-model="yearTarget"
-        class="yearSelect"
-        collapse-tags
-        placeholder="请选择"
-        multiple
-        @change="subjectChange"
-      >
-        <el-option
-          v-for="item in yearOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          :disabled="item.label === subjectTarget"
-        ></el-option> </el-select
-      ><span>图谱扩大方式 </span>
-      <el-select
-        v-model="increaseTaeget"
-        class="increaseSelect"
-        collapse-tags
-        placeholder="请选择"
-        multiple
-        @change="subjectChange"
-      >
-        <el-option
-          v-for="item in increaseOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          :disabled="item.label === subjectTarget"
-        ></el-option>
-      </el-select>
-      <span>小世界指标 </span>
-      <el-select
-        v-model="methodOptions"
-        class="methodSelect"
-        collapse-tags
-        placeholder="请选择"
-        @change="subjectChange"
-      >
-        <el-option
-          v-for="item in methods"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          :disabled="item.label === subjectTarget"
-        ></el-option>
-      </el-select>
-      <span>图谱节点上限 </span>
-      <el-select
-        v-model="nodeCounttarget"
-        class="nodeCountSelect"
-        collapse-tags
-        placeholder="请选择"
-        @change="subjectChange"
-      >
-        <el-option
-          v-for="item in nodeCountOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
+      <div class="selectitem">
+        <span>目标学科</span>
+        <el-select
+          v-model="subjectTarget"
+          placeholder="请选择"
+          multiple
+          collapse-tags
+          @change="subjectChange"
+        >
+          <el-option
+            v-for="item in categorysOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
+      <div class="selectitem">
+        <span>年份</span>
+        <el-select
+          v-model="yearTarget"
+          class="yearSelect"
+          collapse-tags
+          placeholder="请选择"
+          multiple
+          @change="subjectChange"
+        >
+          <el-option
+            v-for="item in yearOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.label === subjectTarget"
+          ></el-option>
+        </el-select>
+      </div>
+      <div class="selectitem">
+        <span>图谱扩大方式</span>
+        <el-select
+          v-model="increaseTaeget"
+          class="increaseSelect"
+          collapse-tags
+          placeholder="请选择"
+          multiple
+          @change="subjectChange"
+        >
+          <el-option
+            v-for="item in increaseOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.label === subjectTarget"
+          ></el-option>
+        </el-select>
+      </div>
+      <div class="selectitem">
+        <span>小世界指标</span>
+        <el-select
+          v-model="methodOptions"
+          class="methodSelect"
+          collapse-tags
+          placeholder="请选择"
+          @change="subjectChange"
+        >
+          <el-option
+            v-for="item in methods"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.label === subjectTarget"
+          ></el-option>
+        </el-select>
+      </div>
+      <div class="selectitem">
+        <span>图谱节点上限</span>
+        <el-select
+          v-model="nodeCounttarget"
+          class="nodeCountSelect"
+          collapse-tags
+          placeholder="请选择"
+          @change="subjectChange"
+        >
+          <el-option
+            v-for="item in nodeCountOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
       <!-- <el-button type="primary" @click="getData">确定</el-button> -->
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
@@ -397,7 +408,8 @@ export default {
         },
         yAxis: {
           type: "value",
-          max: "dataMax"
+          max: "dataMax",
+          min: "dataMin"
         },
         series: data.series
       };
@@ -411,25 +423,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.page-discipline {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  padding: 40px;
-  box-sizing: border-box;
-}
-.selectbox {
-  padding: 20px 0;
-  width: 1400px;
-  margin: 0 auto;
-  > .el-select {
-    margin-right: 30px;
-  }
-}
+@import url("../assets/style/common.less");
 .subjectRelevances {
   width: 300px;
 }
@@ -447,10 +441,5 @@ export default {
 }
 .subjectLevel {
   width: 100px;
-}
-.echartsBox {
-  width: 100%;
-  min-width: 1200px;
-  flex: 1;
 }
 </style>

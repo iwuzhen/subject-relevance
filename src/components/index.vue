@@ -22,9 +22,7 @@
     </div>
     <h1>小世界</h1>
     <div class="enterButton">
-      <router-link to="/SmallWorldUndirectedLimit"
-        >无向图 扩大后趋势</router-link
-      >
+      <router-link to="/SmallWorldUndirectedLimit">无向图趋势</router-link>
       <!-- <router-link to="/SmallWorldUndirectedLimitRandom"
         >无向图 随机扩大</router-link
       > -->

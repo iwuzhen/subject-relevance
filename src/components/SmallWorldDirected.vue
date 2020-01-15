@@ -1,54 +1,58 @@
 <template>
   <div class="page-discipline">
     <div class="selectbox">
-      <span>当前学科 </span>
-      <el-select
-        v-model="currentSubject"
-        placeholder="请选择"
-        class="methodSelect"
-        @change="currentSubjectChange"
-      >
-        <el-option
-          v-for="item in currentSubjectOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <span>目标学科 </span>
-      <el-select
-        v-model="targetSubject"
-        class="methodSelect"
-        collapse-tags
-        placeholder="请选择"
-        multiple
-        @change="subjectChange"
-      >
-        <el-option
-          v-for="item in targetSubjectOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          :disabled="item.label === currentSubject"
-        ></el-option>
-      </el-select>
-
-      <span>参数 </span>
-      <el-select
-        v-model="mathodOption"
-        class="methodSelect"
-        placeholder="请选择"
-        @change="subjectChange"
-      >
-        <el-option
-          v-for="item in mathodOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          :disabled="item.label === currentSubject"
-        ></el-option>
-      </el-select>
-
+      <div class="selectitem">
+        <span>当前学科:</span>
+        <el-select
+          v-model="currentSubject"
+          placeholder="请选择"
+          class="methodSelect"
+          @change="currentSubjectChange"
+        >
+          <el-option
+            v-for="item in currentSubjectOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
+      <div class="selectitem">
+        <span>目标学科 </span>
+        <el-select
+          v-model="targetSubject"
+          class="methodSelect"
+          collapse-tags
+          placeholder="请选择"
+          multiple
+          @change="subjectChange"
+        >
+          <el-option
+            v-for="item in targetSubjectOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.label === currentSubject"
+          ></el-option>
+        </el-select>
+      </div>
+      <div class="selectitem">
+        <span>参数 </span>
+        <el-select
+          v-model="mathodOption"
+          class="methodSelect"
+          placeholder="请选择"
+          @change="subjectChange"
+        >
+          <el-option
+            v-for="item in mathodOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.label === currentSubject"
+          ></el-option>
+        </el-select>
+      </div>
       <!-- <el-button type="primary" @click="getData">确定</el-button> -->
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
@@ -65,8 +69,12 @@ export default {
       targetSubject: [],
       methodValue: "linksin",
       subjectLevel: "0",
-      mathodOption: "",
+      mathodOption: "average_path",
       mathodOptions: [
+        {
+          value: "average_path",
+          label: "平均最短路径"
+        },
         {
           value: "sd",
           label: "最短路径和"
@@ -78,10 +86,6 @@ export default {
         {
           value: "md",
           label: "MAX(最短路径)"
-        },
-        {
-          value: "average_path",
-          label: "平均最短路径"
         }
       ],
 
@@ -90,30 +94,24 @@ export default {
   },
   computed: {
     currentSubjectOptions: function() {
-      let ts = new Set();
-      for (let row of smallworlddirect) {
-        ts.add(row["s"]);
+      let ret_data = [];
+      for (let key in smallworlddirect.source) {
+        ret_data.push({
+          value: smallworlddirect.source[key],
+          label: key
+        });
       }
-      let _data = Array.from(ts).map(item => {
-        return {
-          value: item,
-          label: item
-        };
-      });
-      return _data;
+      return ret_data;
     },
     targetSubjectOptions: function() {
-      let ts = new Set();
-      for (let row of smallworlddirect) {
-        ts.add(row["t"]);
+      let ret_data = [];
+      for (let key in smallworlddirect.target) {
+        ret_data.push({
+          value: smallworlddirect.target[key],
+          label: key
+        });
       }
-      let _data = Array.from(ts).map(item => {
-        return {
-          value: item,
-          label: item
-        };
-      });
-      return _data;
+      return ret_data;
     }
   },
 
@@ -129,34 +127,40 @@ export default {
       }
       this.loading = true;
       let data = {
-        x: [],
-        legend: this.targetSubject,
-        title: `小世界有向图: 当前学科到目标学科的 2007 年统计分布`
+        y: [],
+        x: smallworlddirect.year,
+        legend: this.targetSubject.map(value => {
+          for (let key in smallworlddirect.target) {
+            if (smallworlddirect.target[key] === value) return key;
+          }
+        }),
+        title: `小世界有向图`
       };
-      let ts = new Set();
-      let legend = {};
+
+      let ydata = {};
       for (let sbj of this.targetSubject) {
-        legend[sbj] = [];
+        ydata[sbj] = [];
       }
-      for (let row of smallworlddirect) {
-        ts.add(row["y"]);
-      }
-      data["x"] = Array.from(ts).sort((x, y) => {
-        return x - y;
-      });
-      for (let row of smallworlddirect) {
-        if (
-          this.currentSubject === row["s"] &&
-          this.targetSubject.indexOf(row["t"]) > -1
-        ) {
-          if (this.mathodOption === "average_path") {
-            data["x"][this.targetSubject.indexOf(row["t"])] =
-              row["sd"] / row["sp"];
-          } else {
-            data["x"][this.targetSubject.indexOf(row["t"])] =
-              row[this.mathodOption];
+
+      for (let data of smallworlddirect.data) {
+        for (let sbj of this.targetSubject) {
+          if (this.currentSubject === data.s && sbj === data.t) {
+            ydata[sbj][smallworlddirect.year.indexOf(data.y)] =
+              data[this.mathodOption];
+            if (this.mathodOption === "average_path") {
+              ydata[sbj][smallworlddirect.year.indexOf(data.y)] = Number(
+                (data["sd"] / data["sp"]).toFixed(4)
+              );
+            } else {
+              ydata[sbj][smallworlddirect.year.indexOf(data.y)] =
+                data[this.mathodOption];
+            }
           }
         }
+      }
+
+      for (let sbj of this.targetSubject) {
+        data["y"].push(ydata[sbj]);
       }
 
       console.log(data);
@@ -180,9 +184,20 @@ export default {
           textStyle: {
             align: "left"
           },
+          axisPointer: {
+            type: "cross",
+            animation: true,
+            label: {
+              backgroundColor: "#505765"
+            }
+          },
           formatter: function(params) {
+            params.sort((x, y) => {
+              return y.data - x.data;
+            });
             let showHtm = ` ${params[0].name}<br>`;
             for (let i = 0; i < params.length; i++) {
+              let _text = params[i].seriesName;
               let _data;
               if (params[i].data) {
                 _data = parseFloat(params[i].data.toFixed(6));
@@ -190,17 +205,18 @@ export default {
                 _data = null;
               }
 
-              showHtm += `${_data}<br>`;
+              let _marker = params[i].marker;
+              showHtm += `${_marker}${_text}：${_data}<br>`;
             }
             return showHtm;
           }
         },
-        // legend: {
-        //   data: data.legend,
-        //   right: "5%",
-        //   top: "10%",
-        //   orient: "vertical"
-        // },
+        legend: {
+          data: data.legend,
+          right: "5%",
+          top: "10%",
+          orient: "vertical"
+        },
         grid: {
           left: "8%",
           right: "20%",
@@ -215,45 +231,22 @@ export default {
         },
         xAxis: {
           type: "category",
-          silent: true,
-          splitLine: {
-            show: true
-          },
-          data: data.legend
+          boundaryGap: false,
+          data: data.x
         },
         yAxis: {
-          axisLine: {
-            show: true
-          },
-          axisTick: {
-            show: true
-          },
-          axisLabel: {
-            textStyle: {
-              color: "#999"
-            }
-          }
+          type: "value",
+          max: "dataMax",
+          min: "dataMin"
         },
-        series: {
-          type: "bar",
-          itemStyle: {
-            normal: {
-              color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: "#83bff6" },
-                { offset: 0.5, color: "#188df0" },
-                { offset: 1, color: "#188df0" }
-              ])
-            },
-            emphasis: {
-              color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: "#2378f7" },
-                { offset: 0.7, color: "#2378f7" },
-                { offset: 1, color: "#83bff6" }
-              ])
-            }
-          },
-          data: data.x
-        }
+        series: data.y.map((item, index) => {
+          return {
+            name: data.legend[index],
+            type: "line",
+            smooth: true,
+            data: item
+          };
+        })
       };
       return _opt;
     },
@@ -261,11 +254,11 @@ export default {
       this.getData();
     },
     currentSubjectChange() {
-      this.targetSubject = [];
-      for (let each of this.targetSubjectOptions) {
-        if (each.label !== this.currentSubject)
-          this.targetSubject.push(each.value);
-      }
+      // this.targetSubject = [];
+      // for (let each of this.targetSubjectOptions) {
+      //   if (each.label !== this.currentSubject)
+      //     this.targetSubject.push(each.value);
+      // }
       this.getData();
     }
   }
@@ -273,37 +266,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.page-discipline {
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  padding: 40px;
-  box-sizing: border-box;
-}
-.selectbox {
-  padding: 20px 0;
-  width: 1200px;
-  margin: 0 auto;
-  > .el-select {
-    margin-right: 30px;
-  }
-}
-.subjectRelevances {
-  width: 300px;
-}
+@import url("../assets/style/common.less");
 .methodSelect {
-  width: 280px;
-}
-.subjectLevel {
-  width: 80px;
-}
-.echartsBox {
-  width: 100%;
-  min-width: 1200px;
-  flex: 1;
+  width: 200px;
 }
 </style>
