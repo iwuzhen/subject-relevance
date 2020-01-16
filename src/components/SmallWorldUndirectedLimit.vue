@@ -91,6 +91,24 @@
           ></el-option>
         </el-select>
       </div>
+      <div class="selectitem">
+        <span>除以 log(N)/log(log(N))</span>
+        <el-select
+          v-model="devOption"
+          class="methodSelect"
+          collapse-tags
+          placeholder="请选择"
+          @change="subjectChange"
+        >
+          <el-option
+            v-for="item in devOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.label === subjectTarget"
+          ></el-option>
+        </el-select>
+      </div>
       <!-- <el-button type="primary" @click="getData">确定</el-button> -->
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
@@ -145,6 +163,17 @@ export default {
         "Genome editing",
         "Anthropology",
         "Neuroscience"
+      ],
+      devOption: 0,
+      devOptions: [
+        {
+          value: 0,
+          label: "否"
+        },
+        {
+          value: 1,
+          label: "是"
+        }
       ],
       methodOptions: "",
       nodeCountOptions: [
@@ -317,7 +346,17 @@ export default {
           else if (row["t"] === 2) iName = "三层类距离";
           else iName = "谷歌";
           let _id = `${row["n"]} - ${iName} - ${row["y"]}`;
-          tmp_dict[_id]["data"].push([row["nv"], row[this.methodOptions]]);
+          if (this.devOption === 1) {
+            tmp_dict[_id]["data"].push([
+              row["nv"],
+              row[this.methodOptions] /
+                (Math.log10(row["nv"]) / Math.log10(Math.log10(row["nv"])))
+            ]);
+            console.log(
+              Math.log10(row["nv"]) / Math.log10(Math.log10(row["nv"]))
+            );
+          } else
+            tmp_dict[_id]["data"].push([row["nv"], row[this.methodOptions]]);
         }
       }
 
@@ -431,15 +470,15 @@ export default {
   width: 150px;
 }
 .nodeCountSelect {
-  width: 100px;
+  width: 120px;
 }
 .increaseSelect {
-  width: 220px;
+  width: 240px;
 }
 .yearSelect {
-  width: 100px;
+  width: 140px;
 }
 .subjectLevel {
-  width: 100px;
+  width: 120px;
 }
 </style>
