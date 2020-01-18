@@ -107,12 +107,12 @@ export default {
       subjectRelevances: [],
       yearTarget: [],
       increaseTaeget: [],
-      nodeCounttarget: 2000,
+      nodeCounttarget: 4000,
       methodValue: "linksin",
       subjectLevel: "0",
       categorys: [
-        "Literature",
         "Psychology",
+        "Literature",
         "Logic",
         "Philosophy",
         "Mathematics",
@@ -146,7 +146,7 @@ export default {
         "Anthropology",
         "Neuroscience"
       ],
-      methodOptions: "",
+      methodOptions: "ad",
       nodeCountOptions: [
         {
           value: 500,

@@ -6,6 +6,7 @@
       <router-link to="/discipline">wiki学科相关度</router-link>
       <router-link to="/SubDiscipline">单个学科相关度</router-link>
       <router-link to="/powerlaw">幂律</router-link>
+      <router-link to="/DegreeDistribution">度分布</router-link>
       <router-link to="/powerLawPageRank">PageRank幂律</router-link>
       <router-link to="/viewandedits">访问量&编辑量</router-link>
       <router-link to="/ArticlesTotal">wiki文章数查询</router-link>

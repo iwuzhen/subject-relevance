@@ -12,6 +12,7 @@ import SmallWorldUndirected from "@/components/SmallWorldUndirected";
 import SmallWorldUndirectedLimit from "@/components/SmallWorldUndirectedLimit";
 import SmallWorldDirected from "@/components/SmallWorldDirected";
 import powerLawPageRank from "@/components/powerLawPageRank";
+import DegreeDistribution from "@/components/DegreeDistribution";
 
 Vue.use(Router);
 
@@ -77,6 +78,11 @@ export default new Router({
       path: "/SmallWorldUndirectedLimit",
       name: "SmallWorldUndirectedLimit",
       component: SmallWorldUndirectedLimit
+    },
+    {
+      path: "/DegreeDistribution",
+      name: "DegreeDistribution",
+      component: DegreeDistribution
     }
   ]
 });

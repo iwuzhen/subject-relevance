@@ -62,3 +62,12 @@ export function getPagerankZipf(params) {
     data: params
   });
 }
+
+
+export function getDfb(params) {
+  return request({
+    url: "/wiki/getDfb",
+    method: "post",
+    data: params
+  });
+}
