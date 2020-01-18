@@ -2,55 +2,57 @@
   <div class="page-discipline">
     <div class="selectbox">
       <div class="selectitem">
-      <span>目标学科</span>
-      <el-select
-        v-model="subjectRelevances"
-        placeholder="请选择"
-        collapse-tags
-        multiple
-        @change="subjectChange"
-      >
-        <el-option
-          v-for="item in categorysOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
+        <span>目标学科</span>
+        <el-select
+          v-model="subjectRelevances"
+          placeholder="请选择"
+          collapse-tags
+          multiple
+          @change="subjectChange"
+        >
+          <el-option
+            v-for="item in categorysOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
       </div>
       <div class="selectitem">
-      <span>是否统计子类数目</span>
-      <el-select
-        v-model="subjecType"
-        class="subjectLevel"
-        @change="subjectChange"
-        placeholder="请选择"
-      >
-        <el-option
-          v-for="item in typeOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
+        <span>是否统计子类数目</span>
+        <el-select
+          v-model="subjecType"
+          class="subjectLevel"
+          @change="subjectChange"
+          placeholder="请选择"
+        >
+          <el-option
+            v-for="item in typeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
       </div>
       <div class="selectitem">
-      <span>level</span>
-      <el-select
-        v-model="subjectLevel"
-        class="subjectLevel"
-        placeholder="请选择"
-        @change="subjectChange"
-      >
-        <el-option
-          v-for="item in levelOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
+        <span>level</span>
+        <el-select
+          v-model="subjectLevel"
+          class="subjectLevel"
+          placeholder="请选择"
+          @change="subjectChange"
+        >
+          <el-option
+            v-for="item in levelOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
       </div>
-      <el-button class="selectitem" type="primary" @click="getData">确定</el-button>
+      <el-button class="selectitem" type="primary" @click="getData"
+        >确定</el-button
+      >
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
   </div>
