@@ -92,7 +92,7 @@
         </el-select>
       </div>
       <div class="selectitem">
-        <span>除以 log(N)/log(log(N))</span>
+        <span>log(N)/log(log(N))</span>
         <el-select
           v-model="devOption"
           class="methodSelect"
@@ -124,7 +124,7 @@ export default {
       subjectTarget: [],
       subjectRelevances: [],
       yearTarget: [],
-      increaseTaeget: [],
+      increaseTaeget: [0,],
       nodeCounttarget: 4000,
       methodValue: "linksin",
       subjectLevel: "0",
@@ -182,32 +182,16 @@ export default {
           label: 500
         },
         {
-          value: 1000,
-          label: 1000
-        },
-        {
-          value: 1500,
-          label: 1500
-        },
-        {
           value: 2000,
           label: 2000
         },
         {
-          value: 2500,
-          label: 2500
-        },
-        {
-          value: 3000,
-          label: 3000
-        },
-        {
-          value: 3500,
-          label: 3500
-        },
-        {
           value: 4000,
           label: 4000
+        },
+        {
+          value: 6000,
+          label: 6000
         },
         {
           value: 100000,

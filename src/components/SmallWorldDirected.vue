@@ -32,7 +32,7 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
-            :disabled="item.label === currentSubject"
+            :disabled="item.value === currentSubject"
           ></el-option>
         </el-select>
       </div>
@@ -53,6 +53,23 @@
           ></el-option>
         </el-select>
       </div>
+
+      <div class="selectitem">
+        <span>反向 </span>
+        <el-select
+          v-model="reverseOption"
+          class="methodSelect"
+          placeholder="请选择"
+          @change="subjectChange"
+        >
+          <el-option
+            v-for="item in reverseOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
       <!-- <el-button type="primary" @click="getData">确定</el-button> -->
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
@@ -69,6 +86,17 @@ export default {
       targetSubject: [],
       methodValue: "linksin",
       subjectLevel: "0",
+      reverseOption: 0,
+      reverseOptions: [
+        {
+          value: 0,
+          label: "否"
+        },
+        {
+          value: 1,
+          label: "是"
+        }
+      ],
       mathodOption: "average_path",
       mathodOptions: [
         {
@@ -105,24 +133,26 @@ export default {
     },
     targetSubjectOptions: function() {
       let ret_data = [];
-      for (let key in smallworlddirect.target) {
+      for (let key in smallworlddirect.source) {
         ret_data.push({
-          value: smallworlddirect.target[key],
+          value: smallworlddirect.source[key],
           label: key
         });
       }
       return ret_data;
+    },
+    myChart: function() {
+      return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
-
+  mounted() {
+    window.onresize = () => {
+      this.myChart.resize();
+    };
+  },
   methods: {
     async getData() {
-      if (
-        this.currentSubject.length === 0 ||
-        this.targetSubject.length === 0 ||
-        this.mathodOption.length === 0
-      ) {
-        // this.$message.error("请选择完整");
+      if (this.currentSubject.length === 0 || this.targetSubject.length === 0) {
         return false;
       }
       this.loading = true;
@@ -130,8 +160,8 @@ export default {
         y: [],
         x: smallworlddirect.year,
         legend: this.targetSubject.map(value => {
-          for (let key in smallworlddirect.target) {
-            if (smallworlddirect.target[key] === value) return key;
+          for (let key in smallworlddirect.source) {
+            if (smallworlddirect.source[key] === value) return key;
           }
         }),
         title: `小世界有向图`
@@ -168,9 +198,8 @@ export default {
       this.drawChart(data);
     },
     drawChart(data) {
-      let myChart = this.$echarts.init(document.getElementById("subjectChart"));
       let options = this.setOptions(data);
-      myChart.setOption(options, true);
+      this.myChart.setOption(options, true);
       this.loading = false;
     },
     setOptions(data) {

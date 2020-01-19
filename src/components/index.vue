@@ -3,32 +3,32 @@
     <div class="page-container page-component"></div>
     <h1>wikipedia</h1>
     <div class="enterButton">
-      <router-link to="/discipline">wiki学科相关度</router-link>
-      <router-link to="/SubDiscipline">单个学科相关度</router-link>
-      <router-link to="/powerlaw">幂律</router-link>
-      <router-link to="/DegreeDistribution">度分布</router-link>
+      <router-link to="/discipline">学科相关度</router-link>
+      <router-link to="/SubDiscipline">单学科相关度</router-link>
+      <router-link to="/powerlaw">Zipf 幂律</router-link>
+      <router-link to="/DegreeDistribution">幂律度分布</router-link>
       <router-link to="/powerLawPageRank">PageRank幂律</router-link>
       <router-link to="/viewandedits">访问量&编辑量</router-link>
-      <router-link to="/ArticlesTotal">wiki文章数查询</router-link>
+      <router-link to="/ArticlesTotal">文章数查询</router-link>
     </div>
 
     <h1>MAS</h1>
     <div class="enterButton">
-      <router-link to="/masline">mas学科相关度</router-link>
-      <router-link to="/MasArticlesTotal">mas文章数</router-link>
+      <router-link to="/masline">学科相关度</router-link>
+      <router-link to="/MasArticlesTotal">文章数</router-link>
     </div>
     <h1>wikipedia 分类层次</h1>
     <div class="enterButton">
       <a href="http://wikidb.lambdax.cn:5555/wikidb_web/first.jsp">分类层次</a>
     </div>
-    <h1>小世界</h1>
+    <h1>小世界无向图</h1>
     <div class="enterButton">
-      <router-link to="/SmallWorldUndirectedLimit">无向图趋势</router-link>
-      <!-- <router-link to="/SmallWorldUndirectedLimitRandom"
-        >无向图 随机扩大</router-link
-      > -->
-      <router-link to="/SmallWorldUndirected">无向图</router-link>
-      <router-link to="/SmallWorldDirected">有向图</router-link>
+      <router-link to="/SmallWorldUndirectedLimit">规模趋势</router-link>
+      <router-link to="/SmallWorldUndirected">逐年趋势</router-link>
+    </div>
+    <h1>小世界有向图</h1>
+    <div class="enterButton">
+      <router-link to="/SmallWorldDirected">学科间趋势</router-link>
     </div>
   </div>
 </template>

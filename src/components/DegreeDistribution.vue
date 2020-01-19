@@ -33,7 +33,8 @@
             :value="item.value"
           ></el-option>
         </el-select>
-      </div><div class="selectitem">
+      </div>
+      <div class="selectitem">
         <span>节点数</span>
         <el-select
           v-model="nodeCount"
@@ -116,7 +117,7 @@ export default {
         2018,
         2019
       ],
-      nodeCount:10000,
+      nodeCount: 10000,
       loading: false
     };
   },
@@ -124,15 +125,15 @@ export default {
     // this.drawChart();
   },
   computed: {
-    nodeCountOptions: function(){
-      let ret_list = []
-      for (let i =1000;i<=10000;i+=1000){
+    nodeCountOptions: function() {
+      let ret_list = [];
+      for (let i = 1000; i <= 10000; i += 1000) {
         ret_list.push({
-                    value: i,
-                  label: i
-        })
+          value: i,
+          label: i
+        });
       }
-      return ret_list
+      return ret_list;
     },
     categorysOptions: function() {
       let that = this;
@@ -277,12 +278,12 @@ export default {
         xAxis: {
           type: "value",
           max: "dataMax",
-          name:"度数 log"
+          name: "度数 log"
         },
         yAxis: {
           type: "value",
           max: "dataMax",
-          name:"数量 log"
+          name: "数量 log"
         },
         series: seriesList
       };

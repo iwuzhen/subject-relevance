@@ -89,7 +89,7 @@ export default {
         "Anthropology",
         "Neuroscience"
       ],
-      methodOptions: "",
+      methodOptions: "avg_path",
       methods: [
         {
           value: "avg_path",
