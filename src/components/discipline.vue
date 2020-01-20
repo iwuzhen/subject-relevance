@@ -133,15 +133,19 @@ export default {
       levelOptions: [
         {
           value: "0",
-          label: "0"
+          label: "0 层"
         },
         {
           value: "1",
-          label: "1"
+          label: "1 层"
         },
         {
           value: "2",
-          label: "2"
+          label: " 2层"
+        },
+        {
+          value: "5000",
+          label: "top 5000 文章"
         }
       ],
       loading: false

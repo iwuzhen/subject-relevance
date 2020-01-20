@@ -261,7 +261,8 @@ export default {
           {
             top: "50%",
             left: "center",
-            text: "学科之间依赖性"
+            text:
+              "学科间依赖，正值：目标学科依赖当前学科，负值：当前学科依赖目标学科"
           }
         ],
         tooltip: {
