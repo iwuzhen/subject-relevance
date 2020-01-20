@@ -124,7 +124,7 @@ export default {
       subjectTarget: [],
       subjectRelevances: [],
       yearTarget: [],
-      increaseTaeget: [0,],
+      increaseTaeget: [0],
       nodeCounttarget: 4000,
       methodValue: "linksin",
       subjectLevel: "0",

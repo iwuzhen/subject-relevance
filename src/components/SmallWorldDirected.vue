@@ -54,22 +54,6 @@
         </el-select>
       </div>
 
-      <div class="selectitem">
-        <span>反向 </span>
-        <el-select
-          v-model="reverseOption"
-          class="methodSelect"
-          placeholder="请选择"
-          @change="subjectChange"
-        >
-          <el-option
-            v-for="item in reverseOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
       <!-- <el-button type="primary" @click="getData">确定</el-button> -->
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
@@ -116,14 +100,49 @@ export default {
           label: "MAX(最短路径)"
         }
       ],
-
+      subjRank: [
+        "Literature",
+        "Psychology",
+        "Logic",
+        "Philosophy",
+        "Mathematics",
+        "Physics",
+        "Chemistry",
+        "Biology",
+        "Sociology",
+        "Economics",
+        "Political science",
+        "Linguistics",
+        "History",
+        "Computer science",
+        "Artificial intelligence",
+        "Engineering disciplines",
+        "Chemical engineering",
+        "Civil engineering",
+        "Electrical engineering",
+        "Mechanical engineering",
+        "Biological engineering",
+        "Computer engineering",
+        "Industrial engineering",
+        "Environmental engineering",
+        "Cognitive science",
+        "Machine learning",
+        "Blockchains",
+        "Deep learning",
+        "Theoretical computer science",
+        "Quantum computing",
+        "Genetic engineering",
+        "Genome editing",
+        "Anthropology",
+        "Neuroscience"
+      ],
       loading: false
     };
   },
   computed: {
     currentSubjectOptions: function() {
       let ret_data = [];
-      for (let key in smallworlddirect.source) {
+      for (let key of this.subjRank) {
         ret_data.push({
           value: smallworlddirect.source[key],
           label: key
@@ -133,7 +152,7 @@ export default {
     },
     targetSubjectOptions: function() {
       let ret_data = [];
-      for (let key in smallworlddirect.source) {
+      for (let key of this.subjRank) {
         ret_data.push({
           value: smallworlddirect.source[key],
           label: key
@@ -158,20 +177,19 @@ export default {
       this.loading = true;
       let data = {
         y: [],
+        b: [],
         x: smallworlddirect.year,
         legend: this.targetSubject.map(value => {
           for (let key in smallworlddirect.source) {
             if (smallworlddirect.source[key] === value) return key;
           }
-        }),
-        title: `小世界有向图`
+        })
       };
 
       let ydata = {};
       for (let sbj of this.targetSubject) {
         ydata[sbj] = [];
       }
-
       for (let data of smallworlddirect.data) {
         for (let sbj of this.targetSubject) {
           if (this.currentSubject === data.s && sbj === data.t) {
@@ -189,8 +207,39 @@ export default {
         }
       }
 
+      let subdata = {};
+      for (let sbj of this.targetSubject) {
+        subdata[sbj] = [];
+      }
+      for (let data of smallworlddirect.data) {
+        for (let sbj of this.targetSubject) {
+          if (this.currentSubject === data.t && sbj === data.s) {
+            subdata[sbj][smallworlddirect.year.indexOf(data.y)] =
+              data[this.mathodOption];
+            if (this.mathodOption === "average_path") {
+              subdata[sbj][smallworlddirect.year.indexOf(data.y)] = Number(
+                (data["sd"] / data["sp"]).toFixed(4)
+              );
+            } else {
+              subdata[sbj][smallworlddirect.year.indexOf(data.y)] =
+                data[this.mathodOption];
+            }
+          }
+        }
+      }
+      let barDate = {};
+      for (let sbj of this.targetSubject) {
+        barDate[sbj] = [];
+        for (let i = 0; i < ydata[sbj].length; i++) {
+          barDate[sbj].push(
+            parseFloat((ydata[sbj][i] - subdata[sbj][i]).toFixed(6))
+          );
+        }
+      }
+
       for (let sbj of this.targetSubject) {
         data["y"].push(ydata[sbj]);
+        data.b.push(barDate[sbj]);
       }
 
       console.log(data);
@@ -204,10 +253,17 @@ export default {
     },
     setOptions(data) {
       let _opt = {
-        title: {
-          text: data.title,
-          left: "10%"
-        },
+        title: [
+          {
+            text: "当前学科 到 目标学科",
+            left: "center"
+          },
+          {
+            top: "50%",
+            left: "center",
+            text: "学科之间依赖性"
+          }
+        ],
         tooltip: {
           trigger: "axis",
           textStyle: {
@@ -215,7 +271,7 @@ export default {
           },
           axisPointer: {
             type: "cross",
-            animation: true,
+            animation: false,
             label: {
               backgroundColor: "#505765"
             }
@@ -224,7 +280,8 @@ export default {
             params.sort((x, y) => {
               return y.data - x.data;
             });
-            let showHtm = ` ${params[0].name}<br>`;
+            let flag = 0;
+            let showHtm = `${params[0].name}<br>`;
             for (let i = 0; i < params.length; i++) {
               let _text = params[i].seriesName;
               let _data;
@@ -235,6 +292,10 @@ export default {
               }
 
               let _marker = params[i].marker;
+              if (flag == 0 && params[i].axisIndex == 1) {
+                showHtm += `<br><br>学科之间依赖性<br>`;
+                flag = 1;
+              }
               showHtm += `${_marker}${_text}：${_data}<br>`;
             }
             return showHtm;
@@ -246,36 +307,94 @@ export default {
           top: "10%",
           orient: "vertical"
         },
-        grid: {
-          left: "8%",
-          right: "20%",
-          bottom: "5%",
-          containLabel: true
-        },
+        grid: [
+          {
+            height: "38%",
+            left: "8%",
+            right: "20%",
+            containLabel: true
+          },
+          {
+            top: "55%",
+            left: "8%",
+            right: "20%",
+            height: "38%",
+            containLabel: true
+          }
+        ],
         toolbox: {
           right: "20%",
+          trigger: "axis",
           feature: {
             saveAsImage: {}
           }
         },
-        xAxis: {
-          type: "category",
-          boundaryGap: false,
-          data: data.x
+        xAxis: [
+          {
+            type: "category",
+            boundaryGap: false,
+            gridIndex: 0,
+            data: data.x,
+            name: "年"
+          },
+          {
+            type: "category",
+            boundaryGap: false,
+            gridIndex: 1,
+            data: data.x,
+            name: "年",
+            position: "top"
+          }
+        ],
+        yAxis: [
+          {
+            type: "value",
+            max: "dataMax",
+            gridIndex: 0,
+            min: "dataMin",
+            name: "指标"
+          },
+          {
+            nameLocation: "start",
+            name: "距离之差",
+            type: "value",
+            max: function(value) {
+              return Math.max(Math.abs(value.min), Math.abs(value.max));
+            },
+            gridIndex: 1,
+            min: function(value) {
+              return -Math.max(Math.abs(value.min), Math.abs(value.max));
+            }
+          }
+        ],
+        axisPointer: {
+          link: { xAxisIndex: "all" }
         },
-        yAxis: {
-          type: "value",
-          max: "dataMax",
-          min: "dataMin"
-        },
-        series: data.y.map((item, index) => {
-          return {
-            name: data.legend[index],
-            type: "line",
-            smooth: true,
-            data: item
-          };
-        })
+        series: (data => {
+          let ee = data.b.map((item, index) => {
+            return {
+              name: data.legend[index],
+              type: "line",
+              smooth: true,
+              xAxisIndex: 1,
+              yAxisIndex: 1,
+              data: item
+            };
+          });
+          ee.push(
+            ...data.y.map((item, index) => {
+              return {
+                name: data.legend[index],
+                type: "line",
+                smooth: true,
+                data: item,
+                xAxisIndex: 0,
+                yAxisIndex: 0
+              };
+            })
+          );
+          return ee;
+        })(data)
       };
       return _opt;
     },
