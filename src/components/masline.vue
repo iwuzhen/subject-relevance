@@ -82,8 +82,7 @@ export default {
         "physics",
         "political science",
         "psychology",
-        "sociology",
-        "medicine"
+        "sociology"
       ],
       methodOptions: [
         {
