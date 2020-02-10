@@ -93,8 +93,8 @@ export default {
         "Chemistry",
         "Biology",
         "Sociology",
-        "Economics",,
-        "Medicine"
+        "Economics",
+        "Medicine",
         "Political science",
         "Psychology",
         "Linguistics",
