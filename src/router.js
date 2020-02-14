@@ -13,6 +13,7 @@ import SmallWorldUndirectedLimit from "@/components/SmallWorldUndirectedLimit";
 import SmallWorldDirected from "@/components/SmallWorldDirected";
 import powerLawPageRank from "@/components/powerLawPageRank";
 import DegreeDistribution from "@/components/DegreeDistribution";
+import ZipfByNodes from "@/components/ZipfByNodes";
 
 Vue.use(Router);
 
@@ -83,6 +84,11 @@ export default new Router({
       path: "/DegreeDistribution",
       name: "DegreeDistribution",
       component: DegreeDistribution
+    },
+    {
+      path: "/ZipfByNodes",
+      name: "ZipfByNodes",
+      component: ZipfByNodes
     }
   ]
 });

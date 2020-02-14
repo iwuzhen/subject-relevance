@@ -55,6 +55,14 @@ export function getZipf(params) {
   });
 }
 
+export function getZipfByNodes(params) {
+  return request({
+    url: "/wiki/getZipfByNodes",
+    method: "post",
+    data: params
+  });
+}
+
 export function getPagerankZipf(params) {
   return request({
     url: "/wiki/getPagerankZipf",

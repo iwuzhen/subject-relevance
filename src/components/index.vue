@@ -6,6 +6,8 @@
       <router-link to="/discipline">学科相关度</router-link>
       <router-link to="/SubDiscipline">单学科相关度</router-link>
       <router-link to="/powerlaw">Zipf 幂律</router-link>
+      <router-link to="/ZipfByNodes">Zipf 幂律斜率</router-link>
+
       <router-link to="/DegreeDistribution">幂律度分布</router-link>
       <router-link to="/powerLawPageRank">PageRank幂律</router-link>
       <router-link to="/viewandedits">访问量&编辑量</router-link>
