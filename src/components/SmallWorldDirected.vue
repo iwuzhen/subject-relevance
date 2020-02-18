@@ -175,15 +175,18 @@ export default {
         return false;
       }
       this.loading = true;
-      let data = {
-        y: [],
-        b: [],
+      let ret_data = {
+        y: [], //正向数据
+        b: [], //正反向之差
+        c: [], //反向数据
         x: smallworlddirect.year,
         legend: this.targetSubject.map(value => {
           for (let key in smallworlddirect.source) {
             if (smallworlddirect.source[key] === value) return key;
           }
-        })
+        }),
+        ymax: 0,
+        ymin: 0
       };
 
       let ydata = {};
@@ -238,13 +241,21 @@ export default {
       }
 
       for (let sbj of this.targetSubject) {
-        data["y"].push(ydata[sbj]);
-        data.b.push(barDate[sbj]);
+        ret_data.y.push(ydata[sbj]);
+        ret_data.c.push(subdata[sbj]);
+        ret_data.b.push(barDate[sbj]);
       }
 
-      console.log(data);
-
-      this.drawChart(data);
+      ret_data.ymax = Math.max(
+        ...[].concat(...ret_data.y),
+        ...[].concat(...ret_data.c)
+      );
+      ret_data.ymin = Math.min(
+        ...[].concat(...ret_data.y),
+        ...[].concat(...ret_data.c)
+      );
+      console.log(ret_data);
+      this.drawChart(ret_data);
     },
     drawChart(data) {
       let options = this.setOptions(data);
@@ -252,13 +263,32 @@ export default {
       this.loading = false;
     },
     setOptions(data) {
+      var gridWidth = "35%";
+      var gridHeight = "35%";
+      // var gridLeft = 80;
+      var gridRight = 50;
+      var gridTop = 50;
+      // var gridBottom = 80;
       let _opt = {
         title: [
           {
+            textStyle: {
+              fontSize: 15
+            },
             text: "当前学科 到 目标学科",
-            left: "center"
+            left: "10%"
           },
           {
+            textStyle: {
+              fontSize: 15
+            },
+            text: "目标学科 到 当前学科",
+            left: "60%"
+          },
+          {
+            textStyle: {
+              fontSize: 15
+            },
             top: "50%",
             left: "center",
             text:
@@ -268,7 +298,14 @@ export default {
         tooltip: {
           trigger: "axis",
           textStyle: {
-            align: "left"
+            align: "left",
+            fontSize: 18
+          },
+          position: function(pos, params, el, elRect, size) {
+            var obj = {};
+            obj[["left", "right"][+(pos[0] < size.viewSize[0] / 2)]] = 60;
+            obj[["top", "bottom"][+(pos[1] < size.viewSize[1] / 2)]] = 20;
+            return obj;
           },
           axisPointer: {
             type: "cross",
@@ -278,11 +315,10 @@ export default {
             }
           },
           formatter: function(params) {
-            params.sort((x, y) => {
-              return y.data - x.data;
-            });
-            let flag = 0;
             let showHtm = `${params[0].name}<br>`;
+            let zhenxiang = [];
+            let nixiang = [];
+            let chazhi = [];
             for (let i = 0; i < params.length; i++) {
               let _text = params[i].seriesName;
               let _data;
@@ -293,26 +329,58 @@ export default {
               }
 
               let _marker = params[i].marker;
-              if (flag == 0 && params[i].axisIndex == 1) {
-                showHtm += `<br><br>学科之间依赖性<br>`;
-                flag = 1;
+              if (params[i].axisIndex == 0) {
+                zhenxiang.push([_marker, _text, _data]);
+              } else if (params[i].axisIndex == 1) {
+                nixiang.push([_marker, _text, _data]);
+              } else if (params[i].axisIndex == 2) {
+                chazhi.push([_marker, _text, _data]);
               }
-              showHtm += `${_marker}${_text}：${_data}<br>`;
+            }
+            zhenxiang.sort((x, y) => {
+              return y[2] - x[2];
+            });
+            nixiang.sort((x, y) => {
+              return y[2] - x[2];
+            });
+            chazhi.sort((x, y) => {
+              return y[2] - x[2];
+            });
+            showHtm += "当前学科到目标学科<br>";
+            for (let row of zhenxiang) {
+              showHtm += `${row[0]} ${row[1]}：${row[2]}<br>`;
+            }
+            showHtm += "目标学科到当前学科<br>";
+            for (let row of nixiang) {
+              showHtm += `${row[0]} ${row[1]}：${row[2]}<br>`;
+            }
+            showHtm += "差值图<br>";
+            for (let row of chazhi) {
+              showHtm += `${row[0]} ${row[1]}：${row[2]}<br>`;
             }
             return showHtm;
           }
         },
         legend: {
           data: data.legend,
-          right: "5%",
-          top: "10%",
+          // right: "5%",
+          right: gridRight,
+          top: "50%",
           orient: "vertical"
         },
         grid: [
           {
-            height: "38%",
+            top: gridTop,
+            width: gridWidth,
+            height: gridHeight,
             left: "8%",
-            right: "20%",
+            containLabel: true
+          },
+          {
+            top: gridTop,
+            width: gridWidth,
+            height: gridHeight,
+            right: gridRight,
             containLabel: true
           },
           {
@@ -343,6 +411,13 @@ export default {
             boundaryGap: false,
             gridIndex: 1,
             data: data.x,
+            name: "年"
+          },
+          {
+            type: "category",
+            boundaryGap: false,
+            gridIndex: 2,
+            data: data.x,
             name: "年",
             position: "top"
           }
@@ -350,9 +425,16 @@ export default {
         yAxis: [
           {
             type: "value",
-            max: "dataMax",
+            max: data.ymax,
             gridIndex: 0,
-            min: "dataMin",
+            min: data.ymin,
+            name: "指标"
+          },
+          {
+            type: "value",
+            max: data.ymax,
+            gridIndex: 1,
+            min: data.ymin,
             name: "指标"
           },
           {
@@ -362,7 +444,7 @@ export default {
             max: function(value) {
               return Math.max(Math.abs(value.min), Math.abs(value.max));
             },
-            gridIndex: 1,
+            gridIndex: 2,
             min: function(value) {
               return -Math.max(Math.abs(value.min), Math.abs(value.max));
             }
@@ -377,8 +459,8 @@ export default {
               name: data.legend[index],
               type: "line",
               smooth: true,
-              xAxisIndex: 1,
-              yAxisIndex: 1,
+              xAxisIndex: 2,
+              yAxisIndex: 2,
               data: item
             };
           });
@@ -394,6 +476,18 @@ export default {
               };
             })
           );
+          ee.push(
+            ...data.c.map((item, index) => {
+              return {
+                name: data.legend[index],
+                type: "line",
+                smooth: true,
+                data: item,
+                xAxisIndex: 1,
+                yAxisIndex: 1
+              };
+            })
+          );
           return ee;
         })(data)
       };
@@ -403,11 +497,6 @@ export default {
       this.getData();
     },
     currentSubjectChange() {
-      // this.targetSubject = [];
-      // for (let each of this.targetSubjectOptions) {
-      //   if (each.label !== this.currentSubject)
-      //     this.targetSubject.push(each.value);
-      // }
       this.getData();
     }
   }
@@ -418,5 +507,8 @@ export default {
 @import url("../assets/style/common.less");
 .methodSelect {
   width: 200px;
+}
+.echartsBox {
+  height: 120vh;
 }
 </style>
