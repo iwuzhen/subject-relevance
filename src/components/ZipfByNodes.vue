@@ -8,7 +8,6 @@
           placeholder="请选择"
           multiple
           collapse-tags
-          @change="subjectChange"
         >
           <el-option
             v-for="item in categorysOptions"
@@ -25,6 +24,7 @@
           class="dataYear"
           placeholder="请选择"
           @change="yearChange"
+          :disabled="chartType === 0"
         >
           <el-option
             v-for="item in dataYearOptions"
@@ -39,6 +39,7 @@
         <el-select
           v-model="nodeCount"
           class="dataYear"
+          disabled
           placeholder="请选择"
           @change="yearChange"
         >
@@ -50,21 +51,34 @@
           ></el-option>
         </el-select>
       </div>
+      <div class="selectitem">
+        <span>图表类型</span>
+        <el-select v-model="chartType" class="chartType" placeholder="请选择">
+          <el-option
+            v-for="item in chartTypeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
+      <div class="selectitem">
+        <el-button class="selectitem" type="primary" @click="getData"
+          >确定</el-button
+        >
+      </div>
       <div id="slider" class="selectitem">
         <el-row type="flex">
-          <span class="title">斜率点数范围</span>
+          <span class="title">点数计算范围</span>
           <el-slider
             v-model="nodeRange"
             range
             :min="0"
-            @change="getData"
             :max="nodeCount"
+            @change="getData"
           ></el-slider>
         </el-row>
       </div>
-      <!-- <el-button class="selectitem" type="primary" @click="getData"
-        >确定</el-button
-      > -->
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
   </div>
@@ -74,13 +88,25 @@
 import { getZipfByNodes } from "@/api/index";
 import ecStat from "echarts-stat";
 
+var dataCache = {};
 export default {
   name: "powerLaw",
   data() {
     return {
+      chartType: 0,
+      chartTypeOptions: [
+        {
+          value: 0,
+          label: "斜率趋势"
+        },
+        {
+          value: 1,
+          label: "zipf 点图"
+        }
+      ],
       subjectTarget: [],
       nodeCount: 10000,
-      nodeRange: [1000, 2000],
+      nodeRange: [0, 10000],
       categorys: [
         "Literature",
         "Psychology",
@@ -117,7 +143,7 @@ export default {
         "Anthropology",
         "Neuroscience"
       ],
-      dataYear: null,
+      dataYear: 2007,
       dataYearopt: [
         2007,
         2008,
@@ -176,21 +202,59 @@ export default {
     }
   },
   methods: {
-    subjectChange() {
-      //   this.subjectRelevances = []
-      this.yearChange();
+    getData() {
+      if (this.chartType === 0) {
+        this.yearChange();
+      } else {
+        this.calZipf();
+      }
     },
     yearChange() {
-      if (this.dataYear === 1111 && this.subjectTarget.length > 1) {
-        this.subjectTarget = [];
-        this.$message.error("历年总和只能选择一个学科");
+      /**
+       * @description: 多个学科的斜率历年趋势
+       */
+      if (this.subjectTarget.length < 1) {
+        this.$message.error("请选择一个学科");
         return;
       }
-      this.getData();
+      // this.getData();
+      this.calMulitYear();
     },
-    async getData() {
+    async calMulitYear() {
+      let resList = [];
+      this.loading = true;
+      for (let subject of this.subjectTarget) {
+        let opt = {
+          str: subject,
+          N: 10000
+        };
+        // 缓存
+        let res = dataCache[JSON.stringify(opt)];
+        if (!res) {
+          let response = await getZipfByNodes(opt);
+          if (response.data.data) {
+            res = response.data.data;
+            dataCache[JSON.stringify(opt)] = res;
+          } else {
+            this.loading = false;
+            this.$message.error("请求失败");
+            return false;
+          }
+        }
+        resList.push(res);
+      }
+      let options = this.setOptions_slope(resList);
+      let myChart = this.$echarts.init(document.getElementById("subjectChart"));
+      myChart.setOption(options, true);
+      this.loading = false;
+    },
+    async calZipf() {
       if (this.subjectTarget.length < 1 || !this.dataYear) {
-        // this.$message.error("请选择完整");
+        this.$message.error("请选择完整");
+        return false;
+      }
+      if (this.subjectTarget.length > 1 && !this.dataYear === 1111) {
+        this.$message.error("历年全部只能选择一个学科");
         return false;
       }
       this.loading = true;
@@ -201,8 +265,6 @@ export default {
       if (this.dataYear !== 1111) {
         opt["year"] = this.dataYear;
       }
-      // opt["from"] = 1500;
-      // opt["to"] = 1600;
 
       getZipfByNodes(opt)
         .then(res => {
@@ -221,11 +283,105 @@ export default {
     },
     drawChart(data) {
       let myChart = this.$echarts.init(document.getElementById("subjectChart"));
-      let options = this.setOptions(data);
+      let options = this.setOptions_zipf(data);
       myChart.setOption(options, true);
       this.loading = false;
     },
-    setOptions(data) {
+
+    setOptions_slope(dataList) {
+      // 原始线
+      let seriesList = [];
+      let lengnds = [];
+      for (let data of dataList) {
+        let gradientList = [];
+        for (let i = 0; i < data.y.length; i++) {
+          let dataItem = [];
+          for (let j = 0; j < data.y[i].length; j++) {
+            dataItem.push([data.x[j], data.y[i][j]]);
+          }
+
+          let myRegression = ecStat.regression(
+            "linear",
+            dataItem.slice(this.nodeRange[0], this.nodeRange[1])
+          );
+
+          gradientList.push(myRegression.parameter.gradient.toFixed(4));
+        }
+        seriesList.push({
+          name: data.title,
+          type: "line",
+          smooth: true,
+          data: gradientList
+        });
+        lengnds.push(data.title);
+      }
+
+      let _opt = {
+        title: {
+          text: "斜率趋势",
+          left: "10%"
+        },
+        tooltip: {
+          trigger: "axis",
+          textStyle: {
+            align: "left"
+          },
+          axisPointer: {
+            type: "cross",
+            animation: true,
+            label: {
+              backgroundColor: "#505765"
+            }
+          },
+          formatter: function(params) {
+            params.sort((x, y) => {
+              return y.data - x.data;
+            });
+            let showHtm = ` ${params[0].name}<br>`;
+            for (let i = 0; i < params.length; i++) {
+              // console.log(params);
+              let _text = params[i].seriesName;
+              let _data_y = params[i].data;
+              let _marker = params[i].marker;
+              showHtm += `${_marker}${_text}：${_data_y}<br>`;
+            }
+            return showHtm;
+          }
+        },
+        legend: {
+          data: lengnds,
+          right: "5%",
+          top: "10%",
+          orient: "vertical"
+        },
+        grid: {
+          left: "8%",
+          right: "20%",
+          bottom: "5%",
+          containLabel: true
+        },
+        toolbox: {
+          right: "20%",
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        xAxis: {
+          type: "category",
+          name: "年",
+          data: this.dataYearopt
+        },
+        yAxis: {
+          type: "value",
+          max: "dataMax",
+          name: "斜率",
+          min: "dataMin"
+        },
+        series: seriesList
+      };
+      return _opt;
+    },
+    setOptions_zipf(data) {
       // 设置
       let seriesList = [];
       for (let i = 0; i < data.y.length; i++) {
@@ -359,6 +515,9 @@ export default {
 }
 .dataYear {
   width: 100px;
+}
+.chartType {
+  width: 130px;
 }
 #slider {
   width: 80vw;
