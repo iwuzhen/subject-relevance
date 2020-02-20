@@ -88,11 +88,11 @@
 import { getZipfByNodes } from "@/api/index";
 import ecStat from "echarts-stat";
 
-var dataCache = {};
 export default {
   name: "powerLaw",
   data() {
     return {
+      dataCache: {},
       chartType: 0,
       chartTypeOptions: [
         {
@@ -229,12 +229,12 @@ export default {
           N: 10000
         };
         // 缓存
-        let res = dataCache[JSON.stringify(opt)];
+        let res = this.dataCache[JSON.stringify(opt)];
         if (!res) {
           let response = await getZipfByNodes(opt);
           if (response.data.data) {
             res = response.data.data;
-            dataCache[JSON.stringify(opt)] = res;
+            this.dataCache[JSON.stringify(opt)] = res;
           } else {
             this.loading = false;
             this.$message.error("请求失败");
