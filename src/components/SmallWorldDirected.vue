@@ -6,7 +6,7 @@
         <el-select
           v-model="currentSubject"
           placeholder="请选择"
-          class="methodSelect"
+          class="selectsubjectmax"
           @change="currentSubjectChange"
         >
           <el-option
@@ -18,10 +18,10 @@
         </el-select>
       </div>
       <div class="selectitem">
-        <span>目标学科 </span>
+        <span>目标学科:</span>
         <el-select
           v-model="targetSubject"
-          class="methodSelect"
+          class="selectsubjectmax"
           collapse-tags
           placeholder="请选择"
           multiple
@@ -37,10 +37,10 @@
         </el-select>
       </div>
       <div class="selectitem">
-        <span>参数 </span>
+        <span>参数:</span>
         <el-select
           v-model="mathodOption"
-          class="methodSelect"
+          class="selectsubjectmiddle"
           placeholder="请选择"
           @change="subjectChange"
         >
@@ -63,7 +63,7 @@
 <script>
 import smallworlddirect from "../data/smallworlddirect.json";
 export default {
-  name: "SmallWorldUndirected",
+  name: "SmallWorld有向图学科间趋势",
   data() {
     return {
       currentSubject: "",
@@ -168,6 +168,7 @@ export default {
     window.onresize = () => {
       this.myChart.resize();
     };
+    this.$store.commit("changeCurentPath", this.$options.name);
   },
   methods: {
     async getData() {
@@ -505,10 +506,4 @@ export default {
 
 <style lang="less" scoped>
 @import url("../assets/style/common.less");
-.methodSelect {
-  width: 200px;
-}
-.echartsBox {
-  height: 120vh;
-}
 </style>

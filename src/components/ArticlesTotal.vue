@@ -5,6 +5,7 @@
         <span>目标学科</span>
         <el-select
           v-model="subjectRelevances"
+          class="selectsubjectmax"
           placeholder="请选择"
           collapse-tags
           multiple
@@ -22,7 +23,6 @@
         <span>是否统计子类数目</span>
         <el-select
           v-model="subjecType"
-          class="subjectLevel"
           @change="subjectChange"
           placeholder="请选择"
         >
@@ -38,7 +38,6 @@
         <span>level</span>
         <el-select
           v-model="subjectLevel"
-          class="subjectLevel"
           placeholder="请选择"
           @change="subjectChange"
         >
@@ -50,9 +49,6 @@
           ></el-option>
         </el-select>
       </div>
-      <el-button class="selectitem" type="primary" @click="getData"
-        >确定</el-button
-      >
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
   </div>
@@ -61,7 +57,7 @@
 <script>
 import { getArticlesTotal } from "@/api/index";
 export default {
-  name: "discipline",
+  name: "ArticleTotal",
   data() {
     return {
       subjectRelevances: [],
@@ -129,7 +125,16 @@ export default {
         };
       });
       return _data;
+    },
+    myChart: function() {
+      return this.$echarts.init(document.getElementById("subjectChart"));
     }
+  },
+  mounted() {
+    window.onresize = () => {
+      this.myChart.resize();
+    };
+    this.$store.commit("changeCurentPath", this.$options.name);
   },
   methods: {
     async getData() {
@@ -163,10 +168,8 @@ export default {
         });
     },
     drawChart(data) {
-      console.log(this.subjectRelevances);
-      let myChart = this.$echarts.init(document.getElementById("subjectChart"));
       let options = this.setOptions(data);
-      myChart.setOption(options, true);
+      this.myChart.setOption(options, true);
       this.loading = false;
     },
     setOptions(data) {

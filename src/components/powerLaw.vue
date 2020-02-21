@@ -5,6 +5,7 @@
         <span>目标学科</span>
         <el-select
           v-model="subjectTarget"
+          class="selectsubjectmax"
           placeholder="请选择"
           multiple
           collapse-tags
@@ -34,9 +35,10 @@
           ></el-option>
         </el-select>
       </div>
-      <el-button class="selectitem" type="primary" @click="getData"
+      <div class="selectitem"></div>
+      <!-- <el-button class="selectitem" type="primary" @click="getData"
         >确定</el-button
-      >
+      > -->
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
   </div>
@@ -47,7 +49,7 @@ import { getZipf } from "@/api/index";
 import ecStat from "echarts-stat";
 
 export default {
-  name: "powerLaw",
+  name: "zipf幂律",
   data() {
     return {
       subjectTarget: [],
@@ -106,7 +108,10 @@ export default {
     };
   },
   mounted() {
-    // this.drawChart();
+    window.onresize = () => {
+      this.myChart.resize();
+    };
+    this.$store.commit("changeCurentPath", this.$options.name);
   },
   computed: {
     categorysOptions: function() {
@@ -132,6 +137,9 @@ export default {
         label: "历年总和"
       });
       return _data;
+    },
+    myChart: function() {
+      return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
   methods: {
@@ -176,9 +184,8 @@ export default {
         });
     },
     drawChart(data) {
-      let myChart = this.$echarts.init(document.getElementById("subjectChart"));
       let options = this.setOptions(data);
-      myChart.setOption(options, true);
+      this.myChart.setOption(options, true);
       this.loading = false;
     },
     setOptions(data) {
@@ -299,13 +306,4 @@ export default {
 
 <style lang="less" scoped>
 @import url("../assets/style/common.less");
-.subjectRelevances {
-  width: 300px;
-}
-.methodSelect {
-  width: 100px;
-}
-.dataYear {
-  width: 100px;
-}
 </style>

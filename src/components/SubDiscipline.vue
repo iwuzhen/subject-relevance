@@ -5,6 +5,7 @@
         <span>目标学科</span>
         <el-select
           v-model="subjectTarget"
+          class="selectsubjectmax"
           placeholder="请选择"
           multiple
           @change="subjectChange"
@@ -21,7 +22,6 @@
         <span>level</span>
         <el-select
           v-model="subjectLevel"
-          class="subjectLevel"
           placeholder="请选择"
           @change="subjectChange"
         >
@@ -33,9 +33,9 @@
           ></el-option>
         </el-select>
       </div>
-      <el-button class="selectitem" type="primary" @click="getData"
+      <!-- <el-button class="selectitem" type="primary" @click="getData"
         >确定</el-button
-      >
+      > -->
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
   </div>
@@ -44,7 +44,7 @@
 <script>
 import { getDistanceByFile } from "@/api/index";
 export default {
-  name: "discipline",
+  name: "Cognitive_science相关度",
   data() {
     return {
       subjectTarget: ["Cognitive science"],
@@ -87,10 +87,17 @@ export default {
         };
       });
       return _data;
+    },
+    myChart: function() {
+      return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
   mounted() {
     this.getData();
+    this.$store.commit("changeCurentPath", this.$options.name);
+    window.onresize = () => {
+      this.myChart.resize();
+    };
   },
   methods: {
     async getData() {
@@ -106,22 +113,6 @@ export default {
       getDistanceByFile(opt)
         .then(res => {
           if (res.data.data) {
-            // let keyIndex = []
-            // let newLegend = []
-            // let newY = []
-            // console.log(this.subjectTarget)
-            // for (let key of this.subjectTarget) {
-            //   if (res.data.data['legend'].indexOf(key) >= 0) {
-            //     keyIndex.push(res.data.data['legend'].indexOf(key))
-            //     newLegend.push(key)
-            //   }
-            // }
-            // for (let key of keyIndex) {
-            //   newY.push(res.data.data['y'][key])
-            // }
-            // res.data.data['legend'] = newLegend
-            // res.data.data['y'] = newY
-            // console.log(res.data.data)
             this.drawChart(res.data.data);
           } else {
             this.loading = false;
@@ -135,9 +126,8 @@ export default {
         });
     },
     drawChart(data) {
-      let myChart = this.$echarts.init(document.getElementById("subjectChart"));
       let options = this.setOptions(data);
-      myChart.setOption(options, true);
+      this.myChart.setOption(options, true);
       this.loading = false;
     },
     setOptions(data) {
@@ -219,13 +209,4 @@ export default {
 
 <style lang="less" scoped>
 @import url("../assets/style/common.less");
-.subjectRelevances {
-  width: 300px;
-}
-.methodSelect {
-  width: 100px;
-}
-.subjectLevel {
-  width: 80px;
-}
 </style>

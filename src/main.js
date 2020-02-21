@@ -7,7 +7,7 @@ import echarts from "echarts";
 // import ecStat from "echarts-stat";
 import elementui from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
-
+import store from "./store.js";
 Vue.use(echarts);
 // Vue.use(ecStat);
 Vue.use(elementui);
@@ -16,5 +16,6 @@ Vue.config.productionTip = false;
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount("#app");

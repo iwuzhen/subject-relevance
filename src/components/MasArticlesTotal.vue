@@ -5,6 +5,7 @@
         <span>目标学科</span>
         <el-select
           v-model="subjectRelevances"
+          class="selectsubjectmax"
           placeholder="请选择"
           @change="getData"
           collapse-tags
@@ -26,7 +27,7 @@
 <script>
 import { getMasArticlesTotal } from "@/api/index";
 export default {
-  name: "discipline",
+  name: "mas文章数",
   data() {
     return {
       subjectRelevances: [],
@@ -96,7 +97,16 @@ export default {
         };
       });
       return _data;
+    },
+    myChart: function() {
+      return this.$echarts.init(document.getElementById("subjectChart"));
     }
+  },
+  mounted() {
+    window.onresize = () => {
+      this.myChart.resize();
+    };
+    this.$store.commit("changeCurentPath", this.$options.name);
   },
   methods: {
     async getData() {
@@ -125,9 +135,8 @@ export default {
     },
     drawChart(data) {
       console.log(this.subjectRelevances);
-      let myChart = this.$echarts.init(document.getElementById("subjectChart"));
       let options = this.setOptions(data);
-      myChart.setOption(options, true);
+      this.myChart.setOption(options, true);
       this.loading = false;
     },
     setOptions(data) {
@@ -220,13 +229,4 @@ export default {
 
 <style lang="less" scoped>
 @import url("../assets/style/common.less");
-.subjectRelevances {
-  width: 300px;
-}
-.methodSelect {
-  width: 100px;
-}
-.subjectLevel {
-  width: 80px;
-}
 </style>

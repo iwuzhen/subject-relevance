@@ -5,6 +5,7 @@
         <span>目标学科</span>
         <el-select
           v-model="subjectTarget"
+          class="selectsubjectmax"
           placeholder="请选择"
           multiple
           collapse-tags
@@ -34,9 +35,9 @@
           ></el-option>
         </el-select>
       </div>
-      <el-button class="selectitem" type="primary" @click="getData"
+      <!-- <el-button class="selectitem" type="primary" @click="getData"
         >确定</el-button
-      >
+      > -->
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
   </div>
@@ -47,7 +48,7 @@ import { getPagerankZipf } from "@/api/index";
 import ecStat from "echarts-stat";
 
 export default {
-  name: "powerLawPageRank",
+  name: "PageRank幂律分布",
   data() {
     return {
       subjectTarget: [],
@@ -105,7 +106,10 @@ export default {
     };
   },
   mounted() {
-    // this.drawChart();
+    window.onresize = () => {
+      this.myChart.resize();
+    };
+    this.$store.commit("changeCurentPath", this.$options.name);
   },
   computed: {
     categorysOptions: function() {
@@ -131,6 +135,9 @@ export default {
         label: "历年总和"
       });
       return _data;
+    },
+    myChart: function() {
+      return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
   methods: {
@@ -175,9 +182,8 @@ export default {
         });
     },
     drawChart(data) {
-      let myChart = this.$echarts.init(document.getElementById("subjectChart"));
       let options = this.setOptions(data);
-      myChart.setOption(options, true);
+      this.myChart.setOption(options, true);
       this.loading = false;
     },
     setOptions(data) {

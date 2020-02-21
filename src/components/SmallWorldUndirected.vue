@@ -2,9 +2,10 @@
   <div class="page-discipline">
     <div class="selectbox">
       <div class="selectitem">
-        <span>目标学科 </span>
+        <span>目标学科</span>
         <el-select
           v-model="subjectTarget"
+          class="selectsubjectmax"
           placeholder="请选择"
           multiple
           collapse-tags
@@ -19,10 +20,10 @@
         </el-select>
       </div>
       <div class="selectitem">
-        <span>参数 </span>
+        <span>参数</span>
         <el-select
           v-model="methodOptions"
-          class="methodSelect"
+          class="selectsubjectmiddle"
           collapse-tags
           placeholder="请选择"
           @change="subjectChange"
@@ -46,7 +47,7 @@
 <script>
 import smallworldundirect from "../data/smallworldundirect.json";
 export default {
-  name: "SmallWorldUndirected",
+  name: "SmallWorld无向图逐年趋势",
   data() {
     return {
       subjectTarget: [],
@@ -121,7 +122,16 @@ export default {
         };
       });
       return _data;
+    },
+    myChart: function() {
+      return this.$echarts.init(document.getElementById("subjectChart"));
     }
+  },
+  mounted() {
+    window.onresize = () => {
+      this.myChart.resize();
+    };
+    this.$store.commit("changeCurentPath", this.$options.name);
   },
   methods: {
     async getData() {
@@ -162,9 +172,8 @@ export default {
       this.drawChart(data);
     },
     drawChart(data) {
-      let myChart = this.$echarts.init(document.getElementById("subjectChart"));
       let options = this.setOptions(data);
-      myChart.setOption(options, true);
+      this.myChart.setOption(options, true);
       this.loading = false;
     },
     setOptions(data) {

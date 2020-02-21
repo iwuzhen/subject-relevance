@@ -5,6 +5,7 @@
         <span>目标学科 </span>
         <el-select
           v-model="subjectTarget"
+          class="selectsubjectmax"
           placeholder="请选择"
           multiple
           collapse-tags
@@ -22,7 +23,6 @@
         <span>数据类型 </span>
         <el-select
           v-model="dataType"
-          class="dataType"
           @change="subjectChange"
           placeholder="请选择"
         >
@@ -38,7 +38,6 @@
         <span>level </span>
         <el-select
           v-model="subjectLevel"
-          class="subjectLevel"
           placeholder="请选择"
           @change="subjectChange"
         >
@@ -61,7 +60,7 @@
 <script>
 import { getViewAndEdits } from "@/api/index";
 export default {
-  name: "discipline",
+  name: "view_edit",
   data() {
     return {
       subjectTarget: [],
@@ -154,7 +153,16 @@ export default {
         };
       });
       return _data;
+    },
+    myChart: function() {
+      return this.$echarts.init(document.getElementById("subjectChart"));
     }
+  },
+  mounted() {
+    window.onresize = () => {
+      this.myChart.resize();
+    };
+    this.$store.commit("changeCurentPath", this.$options.name);
   },
   methods: {
     async getData() {
@@ -204,9 +212,8 @@ export default {
         });
     },
     drawChart(data) {
-      let myChart = this.$echarts.init(document.getElementById("subjectChart"));
       let options = this.setOptions(data);
-      myChart.setOption(options, true);
+      this.myChart.setOption(options, true);
       this.loading = false;
     },
     setOptions(data) {

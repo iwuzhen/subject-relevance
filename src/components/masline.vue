@@ -1,10 +1,11 @@
 <template>
-  <div class="page-masline">
+  <div class="page-discipline">
     <div class="selectbox">
-      <el-row type="flex">
+      <div class="selectitem">
         <span class="title">目标学科</span>
         <el-select
           v-model="subjectTarget"
+          class="selectsubjectmax"
           placeholder="请选择"
           @change="subjectChange"
         >
@@ -15,10 +16,13 @@
             :value="item.value"
           ></el-option>
         </el-select>
+      </div>
+
+      <div class="selectitem">
         <span class="title">相关学科</span>
         <el-select
           v-model="subjectRelevances"
-          class="subjectRelevances"
+          class="selectsubjectmax"
           multiple
           collapse-tags
           placeholder="请选择"
@@ -32,6 +36,9 @@
             :disabled="item.label === subjectTarget"
           ></el-option>
         </el-select>
+      </div>
+
+      <div class="selectitem">
         <span class="title">条件</span>
         <el-select v-model="methodValue" @change="getData" placeholder="请选择">
           <el-option
@@ -41,18 +48,22 @@
             :value="item.value"
           ></el-option>
         </el-select>
-      </el-row>
-      <el-row type="flex">
-        <span class="title">年份范围</span>
-        <el-slider
-          v-model="years"
-          range
-          :min="1950"
-          @change="getData"
-          :max="2019"
-        ></el-slider>
-        <el-button type="primary" @click="getData">确定</el-button>
-      </el-row>
+      </div>
+      <div id="slider" class="selectitem">
+        <el-row type="flex">
+          <span class="title">年份范围</span>
+          <el-slider
+            v-model="years"
+            range
+            :min="1950"
+            @change="getData"
+            :max="2019"
+          ></el-slider>
+        </el-row>
+      </div>
+      <el-button type="primary" class="selectitem" @click="getData"
+        >确定</el-button
+      >
     </div>
     <div class="echartsBox" id="masChart" v-loading="loading"></div>
   </div>
@@ -61,7 +72,7 @@
 <script>
 import { getMasData } from "@/api/index";
 export default {
-  name: "discipline",
+  name: "mas学科相关度",
   data() {
     return {
       subjectTarget: "",
@@ -97,6 +108,12 @@ export default {
       loading: false
     };
   },
+  mounted() {
+    window.onresize = () => {
+      this.myChart.resize();
+    };
+    this.$store.commit("changeCurentPath", this.$options.name);
+  },
   computed: {
     categorysOptions: function() {
       let that = this;
@@ -107,6 +124,9 @@ export default {
         };
       });
       return _data;
+    },
+    myChart: function() {
+      return this.$echarts.init(document.getElementById("masChart"));
     }
   },
   methods: {
@@ -222,46 +242,20 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.page-masline {
-  position: fixed;
+@import url("../assets/style/common.less");
+#slider {
   display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  padding: 40px;
-  box-sizing: border-box;
-}
-.selectbox {
-  padding: 20px 0;
-  width: 1200px;
-  margin: 0 auto;
-  > .el-row {
-    & + .el-row {
-      margin-top: 10px;
+  width: 20rem;
+  .el-row {
+    display: flex;
+    // margin: 0 auto;
+    align-items: center;
+    .el-slider {
+      margin-left: 15px;
+      display: block;
+      position: relative;
+      width: 12rem;
     }
   }
-  .title {
-    display: block;
-    line-height: 40px;
-    margin-right: 5px;
-  }
-  .el-select {
-    margin-right: 30px;
-  }
-  .el-slider {
-    width: 875px;
-    margin-left: 15px;
-    margin-right: 50px;
-  }
-}
-.subjectRelevances {
-  width: 300px;
-}
-.echartsBox {
-  width: 100%;
-  min-width: 1200px;
-  flex: 1;
 }
 </style>

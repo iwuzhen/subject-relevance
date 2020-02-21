@@ -5,6 +5,7 @@
         <span>目标学科</span>
         <el-select
           v-model="subjectTarget"
+          class="selectsubjectmax"
           placeholder="请选择"
           multiple
           collapse-tags
@@ -41,7 +42,7 @@
         <span>图谱扩大方式</span>
         <el-select
           v-model="increaseTaeget"
-          class="increaseSelect"
+          class="selectsubjectmax"
           collapse-tags
           placeholder="请选择"
           multiple
@@ -60,7 +61,7 @@
         <span>小世界指标</span>
         <el-select
           v-model="methodOptions"
-          class="methodSelect"
+          class="selectsubjectmiddle"
           collapse-tags
           placeholder="请选择"
           @change="subjectChange"
@@ -91,7 +92,7 @@
           ></el-option>
         </el-select>
       </div>
-      <div class="selectitem">
+      <!-- <div class="selectitem">
         <span>log(N)/log(log(N))</span>
         <el-select
           v-model="devOption"
@@ -108,7 +109,7 @@
             :disabled="item.label === subjectTarget"
           ></el-option>
         </el-select>
-      </div>
+      </div> -->
       <!-- <el-button type="primary" @click="getData">确定</el-button> -->
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
@@ -118,7 +119,7 @@
 <script>
 import smallworldundirectLimter from "../data/smallworldundirectLimter.json";
 export default {
-  name: "SmallWorldUndirected",
+  name: "SmallWorld无向图规模趋势",
   data() {
     return {
       subjectTarget: [],
@@ -271,6 +272,12 @@ export default {
       loading: false
     };
   },
+  mounted() {
+    window.onresize = () => {
+      this.myChart.resize();
+    };
+    this.$store.commit("changeCurentPath", this.$options.name);
+  },
   computed: {
     categorysOptions: function() {
       let that = this;
@@ -281,6 +288,9 @@ export default {
         };
       });
       return _data;
+    },
+    myChart: function() {
+      return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
   methods: {
@@ -367,9 +377,8 @@ export default {
       this.drawChart(data);
     },
     drawChart(data) {
-      let myChart = this.$echarts.init(document.getElementById("subjectChart"));
       let options = this.setOptions(data);
-      myChart.setOption(options, true);
+      this.myChart.setOption(options, true);
       this.loading = false;
     },
     setOptions(data) {
