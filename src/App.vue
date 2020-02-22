@@ -20,14 +20,15 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  &:before {
-    content: "";
-    background-color: #f4f4f4;
-    opacity: 0.4;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-  }
+  background-color: #f4f4f4;
+  // &:before {
+  //   content: "";
+  //   background-color: #f4f4f4;
+  //   opacity: 0.4;
+  //   position: absolute;
+  //   width: 100%;
+  //   height: 100%;
+  //   z-index: -1;
+  // }
 }
 </style>
