@@ -300,7 +300,7 @@ export default {
           trigger: "axis",
           textStyle: {
             align: "left",
-            fontSize: 18
+            fontSize: 25
           },
           position: function(pos, params, el, elRect, size) {
             var obj = {};
