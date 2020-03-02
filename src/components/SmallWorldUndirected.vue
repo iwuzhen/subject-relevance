@@ -293,7 +293,9 @@ export default {
     subjectChange() {
       this.getData();
     },
-    sourceChange() {}
+    sourceChange() {
+      this.getData();
+    }
   }
 };
 </script>
