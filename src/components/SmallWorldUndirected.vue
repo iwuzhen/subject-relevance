@@ -23,7 +23,7 @@
         <span>参数</span>
         <el-select
           v-model="methodOptions"
-          class="selectsubjectmiddle"
+          class="selectsubjectmax"
           collapse-tags
           placeholder="请选择"
           @change="subjectChange"
@@ -37,7 +37,22 @@
           ></el-option>
         </el-select>
       </div>
-
+      <div class="selectitem">
+        <span>数据源</span>
+        <el-select
+          v-model="sourceOption"
+          class="selectsubjectmax"
+          placeholder="请选择"
+          @change="sourceChange"
+        >
+          <el-option
+            v-for="item in sourceOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
       <!-- <el-button type="primary" @click="getData">确定</el-button> -->
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
@@ -90,23 +105,38 @@ export default {
         "Anthropology",
         "Neuroscience"
       ],
-      methodOptions: "avg_path",
+      methodOptions: "a",
       methods: [
         {
-          value: "avg_path",
+          value: "a",
           label: "平均最小距离"
         },
         {
-          value: "clustering_coefficient",
+          value: "c",
           label: "聚集系数"
         },
         {
-          value: "num_vertices",
+          value: "nv",
           label: "点数"
         },
         {
-          value: "num_edges",
+          value: "ne",
           label: "边数"
+        }
+      ],
+      sourceOption: "w2",
+      sourceOptions: [
+        {
+          value: "w2",
+          label: "wikipedia level 2"
+        },
+        {
+          value: "w3",
+          label: "wikipedia level 3"
+        },
+        {
+          value: "m",
+          label: "Mas"
         }
       ],
       loading: false
@@ -114,13 +144,14 @@ export default {
   },
   computed: {
     categorysOptions: function() {
-      let that = this;
-      let _data = that.categorys.map(item => {
+      let _data;
+      _data = this.categorys.map(item => {
         return {
           value: item,
           label: item
         };
       });
+
       return _data;
     },
     myChart: function() {
@@ -146,24 +177,31 @@ export default {
         legend: this.subjectTarget,
         title: `小世界无向图逐年分布`
       };
+      let selectSubjectIds = [];
+      for (let selectSubjectName of this.subjectTarget) {
+        selectSubjectIds.push(smallworldundirect["n"][selectSubjectName]);
+      }
       let ts = new Set();
       let legend = {};
-      for (let sbj of this.subjectTarget) {
+      for (let sbj of selectSubjectIds) {
         legend[sbj] = [];
       }
-      for (let row of smallworldundirect) {
-        ts.add(row["year"]);
+
+      let dataItem = smallworldundirect[this.sourceOption];
+      for (let row of dataItem) {
+        ts.add(row["y"]);
       }
       data["x"] = Array.from(ts).sort((x, y) => {
         return x - y;
       });
-      for (let row of smallworldundirect) {
-        if (this.subjectTarget.indexOf(row["category_name"]) > -1) {
-          legend[row["category_name"]][data["x"].indexOf(row["year"])] =
+
+      for (let row of dataItem) {
+        if (selectSubjectIds.indexOf(row["n"]) > -1) {
+          legend[row["n"]][data["x"].indexOf(row["y"])] =
             row[this.methodOptions];
         }
       }
-      for (let sbj of this.subjectTarget) {
+      for (let sbj of selectSubjectIds) {
         data["y"].push(legend[sbj]);
       }
 
@@ -254,7 +292,8 @@ export default {
     },
     subjectChange() {
       this.getData();
-    }
+    },
+    sourceChange() {}
   }
 };
 </script>
