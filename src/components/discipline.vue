@@ -146,6 +146,22 @@ export default {
           label: " 2层"
         },
         {
+          value: "1000",
+          label: "top 1000 文章"
+        },
+        {
+          value: "2000",
+          label: "top 2000 文章"
+        },
+        {
+          value: "3000",
+          label: "top 3000 文章"
+        },
+        {
+          value: "4000",
+          label: "top 4000 文章"
+        },
+        {
           value: "5000",
           label: "top 5000 文章"
         }
