@@ -136,7 +136,7 @@ export default {
         },
         {
           value: "m",
-          label: "Mas"
+          label: "Mas (尚未完整)"
         }
       ],
       loading: false

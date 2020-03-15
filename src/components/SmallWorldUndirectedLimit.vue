@@ -166,17 +166,6 @@ export default {
         "Neuroscience"
       ],
       methodOptions: "ad",
-      devOption: 0,
-      devOptions: [
-        {
-          value: 0,
-          label: "否"
-        },
-        {
-          value: 1,
-          label: "是"
-        }
-      ],
       nodeCountOptions: [
         {
           value: 500,
@@ -267,6 +256,10 @@ export default {
         {
           value: 2019,
           label: 2019
+        },
+        {
+          value: 2020,
+          label: 2020
         }
       ],
       loading: false
@@ -324,35 +317,42 @@ export default {
               y: y,
               data: []
             };
+            for (let row of smallworldundirectLimter[x][y][z]) {
+              if (this.nodeCounttarget > row["nv"]) {
+                tmp_dict[_id].data.push([row["nv"], row[this.methodOptions]]);
+              }
+            }
           }
         }
       }
 
-      for (let row of smallworldundirectLimter) {
-        if (
-          this.subjectTarget.indexOf(row["n"]) > -1 &&
-          this.yearTarget.indexOf(row["y"]) > -1 &&
-          this.increaseTaeget.indexOf(row["t"]) > -1 &&
-          this.nodeCounttarget > row["nv"]
-        ) {
-          let iName = "";
-          if (row["t"] === 1) iName = "随机";
-          else if (row["t"] === 2) iName = "三层类距离";
-          else iName = "谷歌";
-          let _id = `${row["n"]} - ${iName} - ${row["y"]}`;
-          if (this.devOption === 1) {
-            tmp_dict[_id]["data"].push([
-              row["nv"],
-              row[this.methodOptions] /
-                (Math.log10(row["nv"]) / Math.log10(Math.log10(row["nv"])))
-            ]);
-            console.log(
-              Math.log10(row["nv"]) / Math.log10(Math.log10(row["nv"]))
-            );
-          } else
-            tmp_dict[_id]["data"].push([row["nv"], row[this.methodOptions]]);
-        }
-      }
+      // for (let row of smallworldundirectLimter.data) {
+      //   console.log(row["n"]);
+      //   let current_name = smallworldundirectLimter.schema[row["n"]];
+      //   if (
+      //     this.subjectTarget.indexOf(current_name) > -1 &&
+      //     this.yearTarget.indexOf(row["y"]) > -1 &&
+      //     this.increaseTaeget.indexOf(row["t"]) > -1 &&
+      //     this.nodeCounttarget > row["nv"]
+      //   ) {
+      //     let iName = "";
+      //     if (row["t"] === 1) iName = "随机";
+      //     else if (row["t"] === 2) iName = "三层类距离";
+      //     else iName = "谷歌";
+      //     let _id = `${current_name} - ${iName} - ${row["y"]}`;
+      //     if (this.devOption === 1) {
+      //       tmp_dict[_id]["data"].push([
+      //         row["nv"],
+      //         row[this.methodOptions] /
+      //           (Math.log10(row["nv"]) / Math.log10(Math.log10(row["nv"])))
+      //       ]);
+      //       console.log(
+      //         Math.log10(row["nv"]) / Math.log10(Math.log10(row["nv"]))
+      //       );
+      //     } else
+      //       tmp_dict[_id]["data"].push([row["nv"], row[this.methodOptions]]);
+      //   }
+      // }
 
       let ret_seriest = [];
       for (let _id in tmp_dict) {
