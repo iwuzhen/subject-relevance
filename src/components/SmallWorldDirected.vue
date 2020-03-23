@@ -32,7 +32,6 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
-            :disabled="item.value === currentSubject"
           ></el-option>
         </el-select>
       </div>
