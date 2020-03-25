@@ -39,7 +39,7 @@
         </el-select>
       </div>
       <div class="selectitem">
-        <span>图谱扩大方式</span>
+        <span>网络扩大方式</span>
         <el-select
           v-model="increaseTaeget"
           class="selectsubjectmax"
@@ -76,7 +76,7 @@
         </el-select>
       </div>
       <div class="selectitem">
-        <span>图谱节点上限</span>
+        <span>网络节点上限</span>
         <el-select
           v-model="nodeCounttarget"
           class="nodeCountSelect"
@@ -91,6 +91,9 @@
             :value="item.value"
           ></el-option>
         </el-select>
+      </div>
+            <div class="selectitem">
+      <el-button type="primary" @click="helpMessage">参数说明</el-button>
       </div>
       <!-- <div class="selectitem">
         <span>log(N)/log(log(N))</span>
@@ -191,25 +194,25 @@ export default {
       increaseOptions: [
         {
           value: 2,
-          label: "三层类距离扩大图谱"
+          label: "三层类距离"
         },
         {
           value: 0,
-          label: "谷歌距离扩大图谱"
+          label: "谷歌距离"
         },
         {
           value: 1,
-          label: "随机扩大图谱"
+          label: "随机排序"
         }
       ],
       methods: [
         {
           value: "ad",
-          label: "平均最小距离"
+          label: "平均路径长度"
         },
         {
           value: "cc",
-          label: "聚集系数"
+          label: "集聚系数"
         }
       ],
       yearOptions: [
@@ -287,6 +290,17 @@ export default {
     }
   },
   methods: {
+    helpMessage(){        
+      this.$notify({
+        dangerouslyUseHTMLString:true,
+        title: '参数说明',
+      message: '<b>网络扩大方式</b>：	<br>按照 Wikipedia 三层类距离为顺序，不同规模下的网络的小世界属性<br>\
+					<br>按照 google 距离距离为顺序，不同规模下的网络的小世界属性<br>\
+					<br>随机顺序，不同规模下的网络的小世界属性<br>\
+<b>小世界指标</b>：		<br>小世界网络指标有两个指标，平均路径长度，集聚系数。<br>\
+<b>节点上限</b>：		<br>图表中展示的节点的最大数量<br>',
+      position: 'top-left'
+    });},
     async getData() {
       if (
         this.subjectTarget.length === 0 ||
