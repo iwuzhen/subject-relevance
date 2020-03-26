@@ -396,6 +396,25 @@ export default {
       this.loading = false;
     },
     setOptions(data) {
+            // 获取 y 轴的最大最小值
+      var yMax = null, yMin  = null;
+      for(let series_t of data.series){
+        let gradientList = []
+        for (let row of series_t.data){
+          gradientList.push(row[1])
+        }
+        let tmp = (Math.floor(Math.max(...gradientList) * 10) + 1) / 10;
+        if (yMax === null)
+          yMax = tmp
+        else if (yMax < tmp)
+          yMax = tmp
+        tmp = (Math.ceil(Math.min(...gradientList) * 10) - 1) / 10;
+        if (yMin === null)
+          yMin = tmp
+        else if (yMin > tmp)
+          yMin = tmp
+      }
+
       let _opt = {
         title: {
           text: data.title,
@@ -454,8 +473,8 @@ export default {
         },
         yAxis: {
           type: "value",
-          max: "dataMax",
-          min: "dataMin"
+          max: yMax,
+          min: yMin
         },
         series: data.series
       };

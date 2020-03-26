@@ -299,6 +299,7 @@ export default {
       // 原始线
       let seriesList = [];
       let lengnds = [];
+      var yMax=null,yMin=null
       for (let data of dataList) {
         let gradientList = [];
         for (let i = 0; i < data.y.length; i++) {
@@ -314,6 +315,17 @@ export default {
 
           gradientList.push(myRegression.parameter.gradient.toFixed(4));
         }
+        let tmp = (Math.floor(Math.max(...gradientList) * 10) + 1) / 10;
+        if (yMax === null)
+          yMax = tmp
+        else if (yMax < tmp)
+          yMax = tmp
+        tmp = (Math.ceil(Math.min(...gradientList) * 10) - 1) / 10;
+        if (yMin === null)
+          yMin = tmp
+        else if (yMin > tmp)
+          yMin = tmp
+
         seriesList.push({
           name: data.title,
           type: "line",
@@ -380,9 +392,9 @@ export default {
         },
         yAxis: {
           type: "value",
-          max: "dataMax",
+          max: yMax,
           name: "斜率",
-          min: "dataMin"
+          min: yMin
         },
         series: seriesList
       };
