@@ -52,7 +52,22 @@
           ></el-option>
         </el-select>
       </div>
-
+      <div class="selectitem">
+        <span>网络大小:</span>
+        <el-select
+          v-model="graphSize"
+          class="selectsubjectmiddle"
+          placeholder="请选择"
+          @change="subjectChange"
+        >
+          <el-option
+            v-for="item in graphSizeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+      </div>
       <!-- <el-button type="primary" @click="getData">确定</el-button> -->
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
@@ -62,7 +77,7 @@
 <script>
 import smallworlddirect from "../data/smallworlddirect.json";
 export default {
-  name: "SmallWorld有向图学科间趋势",
+  name: "SmallWorld有向图学科间趋smallworlddirect势",
   data() {
     return {
       currentSubject: "",
@@ -70,6 +85,20 @@ export default {
       methodValue: "linksin",
       subjectLevel: "0",
       reverseOption: 0,
+      graphSize: "2500",
+      graphSizeOptions: [
+        {
+          value: "2000",
+          label: "2000"
+        },
+        {
+          value: "2500",
+          label: "2500"
+        },        {
+          value: "full",
+          label: "二层类"
+        },
+      ],
       reverseOptions: [
         {
           value: 0,
@@ -195,7 +224,7 @@ export default {
       }
       for (let data of smallworlddirect.data) {
         for (let sbj of this.targetSubject) {
-          if (this.currentSubject === data.s && sbj === data.t) {
+          if (this.currentSubject === data.s && sbj === data.t  && this.graphSize == data.m) {
             ydata[sbj][smallworlddirect.year.indexOf(data.y)] =
               data[this.mathodOption];
             if (this.mathodOption === "average_path") {
@@ -216,7 +245,7 @@ export default {
       }
       for (let data of smallworlddirect.data) {
         for (let sbj of this.targetSubject) {
-          if (this.currentSubject === data.t && sbj === data.s) {
+          if (this.currentSubject === data.t && sbj === data.s && this.graphSize == data.m) {
             subdata[sbj][smallworlddirect.year.indexOf(data.y)] =
               data[this.mathodOption];
             if (this.mathodOption === "average_path") {
