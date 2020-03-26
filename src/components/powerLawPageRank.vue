@@ -209,7 +209,7 @@ export default {
           name: "回归线",
           type: "line",
           showSymbol: false,
-          smooth: true,
+          smooth: false,
           data: myRegression.points,
           markPoint: {
             itemStyle: {

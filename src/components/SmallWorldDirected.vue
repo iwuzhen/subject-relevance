@@ -458,7 +458,7 @@ export default {
             return {
               name: data.legend[index],
               type: "line",
-              smooth: true,
+              smooth: false,
               xAxisIndex: 2,
               yAxisIndex: 2,
               data: item
@@ -469,7 +469,7 @@ export default {
               return {
                 name: data.legend[index],
                 type: "line",
-                smooth: true,
+                smooth: false,
                 data: item,
                 xAxisIndex: 0,
                 yAxisIndex: 0
@@ -481,7 +481,7 @@ export default {
               return {
                 name: data.legend[index],
                 type: "line",
-                smooth: true,
+                smooth: false,
                 data: item,
                 xAxisIndex: 1,
                 yAxisIndex: 1

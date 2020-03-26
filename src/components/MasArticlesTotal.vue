@@ -214,7 +214,7 @@ export default {
             ret.push({
               name: key,
               type: "line",
-              smooth: true,
+              smooth: false,
               data: Object.values(data[key])
             });
           }

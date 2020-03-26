@@ -193,7 +193,7 @@ export default {
           return {
             name: data.legend[index],
             type: "line",
-            smooth: true,
+            smooth: false,
             data: item
           };
         })

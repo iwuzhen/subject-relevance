@@ -378,7 +378,7 @@ export default {
           data: tmp_dict[_id]["data"].sort((x, y) => {
             return x[0] - y[0];
           }),
-          smooth: true
+          smooth: false
         });
       }
       let data = {

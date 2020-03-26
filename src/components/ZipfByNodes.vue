@@ -317,7 +317,7 @@ export default {
         seriesList.push({
           name: data.title,
           type: "line",
-          smooth: true,
+          smooth: false,
           data: gradientList
         });
         lengnds.push(data.title);
@@ -416,7 +416,7 @@ export default {
           name: "回归线",
           type: "line",
           showSymbol: false,
-          smooth: true,
+          smooth: false,
           data: myRegression.points,
           markPoint: {
             itemStyle: {
