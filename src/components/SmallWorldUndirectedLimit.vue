@@ -92,8 +92,8 @@
           ></el-option>
         </el-select>
       </div>
-            <div class="selectitem">
-      <el-button type="primary" @click="helpMessage">参数说明</el-button>
+      <div class="selectitem">
+        <el-button type="primary" @click="helpMessage">参数说明</el-button>
       </div>
       <!-- <div class="selectitem">
         <span>log(N)/log(log(N))</span>
@@ -290,17 +290,19 @@ export default {
     }
   },
   methods: {
-    helpMessage(){        
+    helpMessage() {
       this.$notify({
-        dangerouslyUseHTMLString:true,
-        title: '参数说明',
-      message: '<b>网络扩大方式</b>：	<br>按照 Wikipedia 三层类距离为顺序，不同规模下的网络的小世界属性<br>\
+        dangerouslyUseHTMLString: true,
+        title: "参数说明",
+        message:
+          "<b>网络扩大方式</b>：	<br>按照 Wikipedia 三层类距离为顺序，不同规模下的网络的小世界属性<br>\
 					<br>按照 google 距离距离为顺序，不同规模下的网络的小世界属性<br>\
 					<br>随机顺序，不同规模下的网络的小世界属性<br>\
 <b>小世界指标</b>：		<br>小世界网络指标有两个指标，平均路径长度，集聚系数。<br>\
-<b>节点上限</b>：		<br>图表中展示的节点的最大数量<br>',
-      position: 'top-left'
-    });},
+<b>节点上限</b>：		<br>图表中展示的节点的最大数量<br>",
+        position: "top-left"
+      });
+    },
     async getData() {
       if (
         this.subjectTarget.length === 0 ||
@@ -396,23 +398,20 @@ export default {
       this.loading = false;
     },
     setOptions(data) {
-            // 获取 y 轴的最大最小值
-      var yMax = null, yMin  = null;
-      for(let series_t of data.series){
-        let gradientList = []
-        for (let row of series_t.data){
-          gradientList.push(row[1])
+      // 获取 y 轴的最大最小值
+      var yMax = null,
+        yMin = null;
+      for (let series_t of data.series) {
+        let gradientList = [];
+        for (let row of series_t.data) {
+          gradientList.push(row[1]);
         }
         let tmp = (Math.floor(Math.max(...gradientList) * 10) + 1) / 10;
-        if (yMax === null)
-          yMax = tmp
-        else if (yMax < tmp)
-          yMax = tmp
+        if (yMax === null) yMax = tmp;
+        else if (yMax < tmp) yMax = tmp;
         tmp = (Math.ceil(Math.min(...gradientList) * 10) - 1) / 10;
-        if (yMin === null)
-          yMin = tmp
-        else if (yMin > tmp)
-          yMin = tmp
+        if (yMin === null) yMin = tmp;
+        else if (yMin > tmp) yMin = tmp;
       }
 
       let _opt = {

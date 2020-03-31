@@ -94,10 +94,15 @@ export default {
         {
           value: "2500",
           label: "2500"
-        },        {
+        },
+        {
+          value: "3000",
+          label: "3000"
+        },
+        {
           value: "full",
           label: "二层类"
-        },
+        }
       ],
       reverseOptions: [
         {
@@ -224,7 +229,11 @@ export default {
       }
       for (let data of smallworlddirect.data) {
         for (let sbj of this.targetSubject) {
-          if (this.currentSubject === data.s && sbj === data.t  && this.graphSize == data.m) {
+          if (
+            this.currentSubject === data.s &&
+            sbj === data.t &&
+            this.graphSize == data.m
+          ) {
             ydata[sbj][smallworlddirect.year.indexOf(data.y)] =
               data[this.mathodOption];
             if (this.mathodOption === "average_path") {
@@ -245,7 +254,11 @@ export default {
       }
       for (let data of smallworlddirect.data) {
         for (let sbj of this.targetSubject) {
-          if (this.currentSubject === data.t && sbj === data.s && this.graphSize == data.m) {
+          if (
+            this.currentSubject === data.t &&
+            sbj === data.s &&
+            this.graphSize == data.m
+          ) {
             subdata[sbj][smallworlddirect.year.indexOf(data.y)] =
               data[this.mathodOption];
             if (this.mathodOption === "average_path") {
