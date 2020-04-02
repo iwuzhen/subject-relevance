@@ -69,6 +69,16 @@
       <div id="slider" class="selectitem">
         <el-row type="flex">
           <span class="title">点数计算范围</span>
+          <div style="margin-left:10px">
+            <el-input-number
+              v-model="nodeRange[0]"
+              size="small"
+              @change="getData"
+              :min="1"
+              :max="nodeRange[1]"
+            ></el-input-number>
+          </div>
+
           <el-slider
             v-model="nodeRange"
             range
@@ -76,6 +86,15 @@
             :max="nodeCount"
             @change="getData"
           ></el-slider>
+          <div style="margin-left:10px">
+            <el-input-number
+              v-model="nodeRange[1]"
+              size="small"
+              @change="getData"
+              :min="nodeRange[0]"
+              :max="10000"
+            ></el-input-number>
+          </div>
         </el-row>
       </div>
       <el-button class="selectitem" type="primary" @click="getData"
@@ -108,7 +127,7 @@ export default {
       ],
       subjectTarget: [],
       nodeCount: 10000,
-      nodeRange: [0, 10000],
+      nodeRange: [250, 2500],
       categorys: [
         "Literature",
         "Psychology",
@@ -299,7 +318,8 @@ export default {
       // 原始线
       let seriesList = [];
       let lengnds = [];
-      var yMax=null,yMin=null
+      var yMax = null,
+        yMin = null;
       for (let data of dataList) {
         let gradientList = [];
         for (let i = 0; i < data.y.length; i++) {
@@ -316,15 +336,11 @@ export default {
           gradientList.push(myRegression.parameter.gradient.toFixed(4));
         }
         let tmp = (Math.floor(Math.max(...gradientList) * 10) + 1) / 10;
-        if (yMax === null)
-          yMax = tmp
-        else if (yMax < tmp)
-          yMax = tmp
+        if (yMax === null) yMax = tmp;
+        else if (yMax < tmp) yMax = tmp;
         tmp = (Math.ceil(Math.min(...gradientList) * 10) - 1) / 10;
-        if (yMin === null)
-          yMin = tmp
-        else if (yMin > tmp)
-          yMin = tmp
+        if (yMin === null) yMin = tmp;
+        else if (yMin > tmp) yMin = tmp;
 
         seriesList.push({
           name: data.title,
@@ -528,7 +544,7 @@ export default {
 @import url("../assets/style/common.less");
 #slider {
   display: flex;
-  width: 20rem;
+  width: 48rem;
   .el-row {
     display: flex;
     // margin: 0 auto;
@@ -537,7 +553,7 @@ export default {
       margin-left: 15px;
       display: block;
       position: relative;
-      width: 11rem;
+      width: 20rem;
     }
   }
 }
