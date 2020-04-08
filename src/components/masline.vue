@@ -77,7 +77,7 @@ export default {
     return {
       subjectTarget: "",
       subjectRelevances: [],
-      methodValue: "linksin",
+      methodValue: "linksout",
       years: [1950, 2019],
       categorys: [
         "biology",
