@@ -1,4 +1,7 @@
 import request from "@/utils/request";
+import requestwiki from "@/utils/requestwiki";
+
+
 export function getWikiData(params) {
   return request({
     url: "/wiki/getDistance",
@@ -77,4 +80,50 @@ export function getDfb(params) {
     method: "post",
     data: params
   });
+}
+
+// 文章 tree
+export function getWikiPageTree(params) {
+  if (params.db === "WIKI11") {
+    return requestwiki({
+      url: "/wikidb11/childArticles",
+      method: "get",
+      params: params
+    });
+  } else if (params.db === "WIKI13") {
+    return requestwiki({
+      url: "/wikidb11/childArticles",
+      method: "get",
+      params: params
+    });
+  } else {
+    return requestwiki({
+      url: "/wiki/childArticles",
+      method: "get",
+      params: params
+    });
+  }
+}
+
+// 类 tree
+export function getWikiCategoryTree(params) {
+  if (params.db === "WIKI11") {
+    return requestwiki({
+      url: "/wikidb11/childCategories",
+      method: "get",
+      params: params
+    });
+  } else if (params.db === "WIKI13") {
+    return requestwiki({
+      url: "/wikidb11/childCategories",
+      method: "get",
+      params: params
+    });
+  } else {
+    return requestwiki({
+      url: "/wiki/childCategories",
+      method: "get",
+      params: params
+    });
+  }
 }

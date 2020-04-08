@@ -14,6 +14,7 @@ import SmallWorldDirected from "@/components/SmallWorldDirected";
 import powerLawPageRank from "@/components/powerLawPageRank";
 import DegreeDistribution from "@/components/DegreeDistribution";
 import ZipfByNodes from "@/components/ZipfByNodes";
+import WikiTree from "@/components/WikiTree";
 
 Vue.use(Router);
 
@@ -89,6 +90,11 @@ export default new Router({
       path: "/ZipfByNodes",
       name: "ZipfByNodes",
       component: ZipfByNodes
+    },
+    {
+      path: "/WikiTree",
+      name: "WikiTree",
+      component: WikiTree
     }
   ]
 });

@@ -8,6 +8,13 @@ module.exports = {
         pathRewrite: {
           '^/api': '/'
         }
+      },
+      '/wapi': {
+        target: 'http://wikidb.lambdax.cn:5555/wikidb_web/rest/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/wapi': '/'
+        }
       }
     },
   }
