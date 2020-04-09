@@ -55,7 +55,9 @@
       </div>
 
       <div class="selectitem">
-        <el-button type="primary" @click="helpMessage">参数说明</el-button>
+        <el-button type="primary" size="medium" @click="helpMessage"
+          >参数说明</el-button
+        >
       </div>
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>

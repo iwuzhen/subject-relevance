@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-09 14:34:19
+ * @LastEditTime: 2020-04-09 14:54:00
  * @Description: 
  -->
 <template>
@@ -12,7 +12,11 @@
     <div class="page-discipline">
       <div class="selectbox">
         <div class="selectitem">
-          <el-button type="primary" class="selectitem" @click="checkNode"
+          <el-button
+            type="primary"
+            class="selectitem"
+            size="medium"
+            @click="checkNode"
             >对比选中的节点</el-button
           >
         </div>
