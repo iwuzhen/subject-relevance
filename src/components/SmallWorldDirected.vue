@@ -68,6 +68,9 @@
           ></el-option>
         </el-select>
       </div>
+      <div class="selectitem">
+        <el-button type="primary" @click="helpMessage">参数说明</el-button>
+      </div>
       <!-- <el-button type="primary" @click="getData">确定</el-button> -->
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
@@ -204,6 +207,22 @@ export default {
     this.$store.commit("changeCurentPath", this.$options.name);
   },
   methods: {
+    helpMessage() {
+      this.$notify({
+        dangerouslyUseHTMLString: true,
+        title: "参数说明",
+        message:
+          "<b>当前学科</b>：	<br>wikipedia 中的学科。<br>\
+          <b>目标学科</b>：	<br>当前学科中引用文章所属的学科。<br>\
+<b>参数</b>：		<br>小世界网络 平均路径长度。及其计算参数<br>\
+<b>网络大小</b>：		<br>网络大小限定在一定数量下，限定的规则是类距离排序<br>\
+      <b>图表说明</b> <br>\
+      <b>当前学科到目标学科</b>：当前学科下的所有文章，通过多层引用，到达目标学科下的所有文章，计算出来的小世界参数值。值越小，当前学科依赖目标学科越强<br>\
+      <b>目标学科到当前学科</b>：交换当前学科和目标学科进行计算，值越小，目标学科依赖当前学科越强<br>\
+			<b>学科间依赖</b>：图A 减去图B 的值， 正值：目标学科更加依赖当前学科，负值：当前学科更加依赖目标学科<br>",
+        position: "top-left"
+      });
+    },
     async getData() {
       if (this.currentSubject.length === 0 || this.targetSubject.length === 0) {
         return false;
@@ -317,14 +336,14 @@ export default {
             textStyle: {
               fontSize: 15
             },
-            text: "当前学科 到 目标学科",
+            text: "A 当前学科 到 目标学科",
             left: "10%"
           },
           {
             textStyle: {
               fontSize: 15
             },
-            text: "目标学科 到 当前学科",
+            text: "B 目标学科 到 当前学科",
             left: "60%"
           },
           {
@@ -334,7 +353,7 @@ export default {
             top: "50%",
             left: "center",
             text:
-              "学科间依赖，正值：目标学科依赖当前学科，负值：当前学科依赖目标学科"
+              "C 学科间依赖，正值：目标学科依赖当前学科，负值：当前学科依赖目标学科"
           }
         ],
         tooltip: {
