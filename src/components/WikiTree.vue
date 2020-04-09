@@ -3,84 +3,93 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-09 14:54:00
+ * @LastEditTime: 2020-04-09 17:31:46
  * @Description: 
  -->
 <template>
-  <div>
-    <div v-html="prettyHtml" />
-    <div class="page-discipline">
-      <div class="selectbox">
-        <div class="selectitem">
-          <el-button
-            type="primary"
-            class="selectitem"
-            size="medium"
-            @click="checkNode"
-            >对比选中的节点</el-button
-          >
-        </div>
+  <div class="wrapper">
+    <div class="diffbox"><div v-html="prettyHtml" /></div>
+
+    <div class="elbutton">
+      <div>
+        <el-autocomplete
+          placeholder="搜索 category"
+          v-model="searchString"
+          clearable
+          :fetch-suggestions="querySearchAsync"
+          @select="handleSelect"
+        >
+        </el-autocomplete>
+      </div>
+      <div>
+        <el-button type="primary" class="selectitem" @click="checkNode"
+          >对比选中的节点</el-button
+        >
+      </div>
+      <div>
+        <el-button type="info" class="selectitem" @click="reset"
+          >重置Tree</el-button
+        >
       </div>
     </div>
-    <div class="wrapper">
-      <div>
-        <div class="selectitem">
-          <span class="title">年份</span>
-          <el-select
-            v-model="yearSelect1"
-            class="selectsubjectmiddle"
-            placeholder="请选择"
-            @change="changeYear(1)"
-          >
-            <el-option
-              v-for="item in yearOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </div>
-        <el-tree
-          v-if="openPanel1"
-          :props="props"
-          :load="loadNode1"
-          show-checkbox
-          accordion
-          lazy
-          node-key="id"
-          ref="tree1"
+
+    <div id="eltree1">
+      <div class="selectitem">
+        <span class="title">年份</span>
+        <el-select
+          v-model="yearSelect1"
+          class="selectsubjectmiddle"
+          placeholder="请选择"
+          @change="changeYear(1)"
         >
-        </el-tree>
+          <el-option
+            v-for="item in yearOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
       </div>
-      <div>
-        <div class="selectitem">
-          <span class="title">年份</span>
-          <el-select
-            v-model="yearSelect2"
-            class="selectsubjectmiddle"
-            placeholder="请选择"
-            @change="changeYear(2)"
-          >
-            <el-option
-              v-for="item in yearOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </div>
-        <el-tree
-          v-if="openPanel2"
-          :props="props"
-          :load="loadNode2"
-          show-checkbox
-          accordion
-          lazy
-          node-key="id"
-          ref="tree2"
+      <el-tree
+        v-if="openPanel1"
+        :props="props"
+        :load="loadNode1"
+        show-checkbox
+        accordion
+        lazy
+        node-key="id"
+        ref="tree1"
+      >
+      </el-tree>
+    </div>
+    <div id="eltree2">
+      <div class="selectitem">
+        <span class="title">年份</span>
+        <el-select
+          v-model="yearSelect2"
+          class="selectsubjectmiddle"
+          placeholder="请选择"
+          @change="changeYear(2)"
         >
-        </el-tree>
+          <el-option
+            v-for="item in yearOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
       </div>
+      <el-tree
+        v-if="openPanel2"
+        :props="props"
+        :load="loadNode2"
+        show-checkbox
+        accordion
+        lazy
+        node-key="id"
+        ref="tree2"
+      >
+      </el-tree>
     </div>
   </div>
 </template>
@@ -94,11 +103,12 @@ export default {
   name: "WikiTree",
   data() {
     return {
+      searchString: "",
       diffs: "",
       openPanel1: true,
       openPanel2: true,
-      yearSelect1: 2020,
-      yearSelect2: 2019,
+      yearSelect1: 2019,
+      yearSelect2: 2020,
       wikiYearOptions: [
         2007,
         2008,
@@ -118,7 +128,8 @@ export default {
         children: "zones",
         isLeaf: "leaf"
       },
-      categorys: [
+      categorys: [],
+      basiccategorys: [
         "Literature",
         "Psychology",
         "Logic",
@@ -182,7 +193,39 @@ export default {
       return _data;
     }
   },
+  mounted() {
+    this.reset();
+  },
   methods: {
+    reset() {
+      this.categorys = this.basiccategorys;
+      this.diffs = "";
+      this.changeYear(1);
+      this.changeYear(2);
+    },
+    async handleSelect(item) {
+      this.categorys = [item.value];
+      this.changeYear(1);
+      this.changeYear(2);
+    },
+    async querySearchAsync(queryString, cb) {
+      // var restaurants = this.restaurants;
+
+      let _wikiDB = String(this.yearSelect1).slice(2, 4);
+
+      let response = await getWikiCategoryTree({
+        categoryTitle: Buffer.from(queryString).toString("base64"),
+        db: `WIKI${_wikiDB}`
+      });
+
+      if (
+        response.data.childList.length == 0 &&
+        response.data.parentList.length == 0
+      ) {
+        return cb([]);
+      }
+      return cb([{ value: queryString }]);
+    },
     checkNode() {
       let names1 = this.$refs.tree1.getCheckedNodes().map(item => {
         return item.name;
@@ -306,15 +349,37 @@ export default {
 .wrapper {
   display: grid;
   // grid-template-columns: 1fr 1fr;
-  grid-template-columns: repeat(2, 1fr);
-
+  // grid-template-columns: repeat(2, 1fr);
+  grid-template-areas:
+    "diffbox diffbox"
+    "elbutton elbutton"
+    "eltree1 eltree2";
   gap: 1rem;
-  div {
-    background: #eee;
-    // padding: 1rem;
+
+  .diffbox {
+    grid-area: diffbox;
   }
-  div:nth-child(odd) {
-    background: #ddd;
+  .elbutton {
+    grid-area: elbutton;
+    display: flex;
+    > div {
+      margin: 0 0.2rem 0 1rem;
+    }
   }
+
+  #eltree1 {
+    grid-area: eltree1;
+  }
+  #eltree2 {
+    grid-area: eltree2;
+  }
+
+  // div {
+  //   background: #eee;
+  //   // padding: 1rem;
+  // }
+  // div:nth-child(odd) {
+  //   background: #ddd;
+  // }
 }
 </style>
