@@ -55,7 +55,7 @@
       </div>
 
       <div class="selectitem">
-      <el-button type="primary" @click="helpMessage">参数说明</el-button>
+        <el-button type="primary" @click="helpMessage">参数说明</el-button>
       </div>
     </div>
     <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
@@ -192,20 +192,22 @@ export default {
     this.$store.commit("changeCurentPath", this.$options.name);
   },
   methods: {
-    helpMessage(){        
+    helpMessage() {
       this.$notify({
-        dangerouslyUseHTMLString:true,
-        title: '参数说明',
-      message: '<b>目标学科</b>：	<br>wikipedia 中的学科。<br>\
+        dangerouslyUseHTMLString: true,
+        title: "参数说明",
+        message:
+          "<b>目标学科</b>：	<br>wikipedia 中的学科。<br>\
 <b>参数</b>：		<br>小世界网络指标有两个指标，平均路径长度，集聚系数。<br>\
 			网络总点数，网络连接边数。<br>\
 <b>数据源</b>：		<br>按 wikipedia category 计算出的前 2000,2500,3000个节点的组成的网络。<br>\
 			按 google 距离计算出的前 2000,2500,3000个节点的组成的网络。<br>\
 			Wikipedia 全部的 2 层类下的文章组成的网络。<br>\
 			Wikipedia 全部的 3 层类下的文章组成的网络。<br>\
-			Mas 学科下的论文的组成的网络。',
-      position: 'top-left'
-    });},
+			Mas 学科下的论文的组成的网络。",
+        position: "top-left"
+      });
+    },
     async getData() {
       if (this.subjectTarget.length === 0 || this.methodOptions.length === 0) {
         // this.$message.error("请选择完整");

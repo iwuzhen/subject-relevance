@@ -12,7 +12,6 @@
       <router-link to="/viewandedits"><p>访问量&编辑量</p></router-link>
       <router-link to="/ArticlesTotal"><p>文章数查询</p></router-link>
       <router-link to="/WikiTree"><p>Tree浏览器</p></router-link>
-      
     </div>
 
     <h1>MAS</h1>

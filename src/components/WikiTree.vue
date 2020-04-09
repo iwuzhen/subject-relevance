@@ -3,16 +3,17 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-09 11:13:10
+ * @LastEditTime: 2020-04-09 14:34:19
  * @Description: 
  -->
 <template>
   <div>
+    <div v-html="prettyHtml" />
     <div class="page-discipline">
       <div class="selectbox">
         <div class="selectitem">
-          <el-button type="primary" class="selectitem" @click="changeYear(1)"
-            >确定</el-button
+          <el-button type="primary" class="selectitem" @click="checkNode"
+            >对比选中的节点</el-button
           >
         </div>
       </div>
@@ -82,10 +83,14 @@
 
 <script>
 import { getWikiPageTree, getWikiCategoryTree } from "@/api/index";
+import * as Diff2Html from "diff2html";
+import * as diff from "diff";
+
 export default {
   name: "WikiTree",
   data() {
     return {
+      diffs: "",
       openPanel1: true,
       openPanel2: true,
       yearSelect1: 2020,
@@ -148,6 +153,13 @@ export default {
     };
   },
   computed: {
+    prettyHtml() {
+      return Diff2Html.html(this.diffs, {
+        drawFileList: true,
+        matching: "lines",
+        outputFormat: "side-by-side"
+      });
+    },
     yearOptions: function() {
       let _data = this.wikiYearOptions.map(item => {
         return {
@@ -167,6 +179,32 @@ export default {
     }
   },
   methods: {
+    checkNode() {
+      let names1 = this.$refs.tree1.getCheckedNodes().map(item => {
+        return item.name;
+      });
+      names1 = names1.filter(item => {
+        if (item.indexOf("文章") > -1 || item.indexOf("子类") > -1)
+          return false;
+        return true;
+      });
+      let names2 = this.$refs.tree2.getCheckedNodes().map(item => {
+        return item.name;
+      });
+      names2 = names2.filter(item => {
+        if (item.indexOf("文章") > -1 || item.indexOf("子类") > -1)
+          return false;
+        return true;
+      });
+      var DiffString = diff.createTwoFilesPatch(
+        this.yearSelect1,
+        this.yearSelect2,
+        names1.join("\n"),
+        names2.join("\n")
+      );
+      this.diffs = DiffString;
+    },
+
     changeYear(flag) {
       if (flag === 1) {
         this.openPanel1 = false;
