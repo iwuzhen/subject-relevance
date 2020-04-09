@@ -80,7 +80,7 @@
 <script>
 import smallworlddirect from "../data/smallworlddirect.json";
 export default {
-  name: "SmallWorld有向图学科间趋smallworlddirect势",
+  name: "SmallWorld有向图学科间趋势",
   data() {
     return {
       currentSubject: "",
