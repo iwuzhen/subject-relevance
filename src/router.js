@@ -15,6 +15,7 @@ import powerLawPageRank from "@/components/powerLawPageRank";
 import DegreeDistribution from "@/components/DegreeDistribution";
 import ZipfByNodes from "@/components/ZipfByNodes";
 import WikiTree from "@/components/WikiTree";
+import Home from "@/views/Home";
 
 Vue.use(Router);
 
@@ -95,6 +96,11 @@ export default new Router({
       path: "/WikiTree",
       name: "WikiTree",
       component: WikiTree
+    },
+    {
+      path: "/Home",
+      name: "Home",
+      component: Home
     }
   ]
 });

@@ -1,4 +1,13 @@
 <template>
+<v-container>
+  <v-row>
+<h1>wikipedia</h1>
+<v-divider></v-divider>
+  </v-row>
+  <v-row>
+
+  </v-row>
+
   <div class="indexPage">
     <div class="page-container page-component"></div>
     <h1>wikipedia</h1>
@@ -35,6 +44,9 @@
       <router-link to="/SmallWorldDirected"><p>学科间趋势</p></router-link>
     </div>
   </div>
+
+</v-container>
+  
 </template>
 
 <script>

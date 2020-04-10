@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-09 17:31:46
+ * @LastEditTime: 2020-04-10 14:05:19
  * @Description: 
  -->
 <template>
@@ -195,6 +195,8 @@ export default {
   },
   mounted() {
     this.reset();
+    this.$store.commit("changeCurentPath", this.$options.name);
+
   },
   methods: {
     reset() {
@@ -209,8 +211,6 @@ export default {
       this.changeYear(2);
     },
     async querySearchAsync(queryString, cb) {
-      // var restaurants = this.restaurants;
-
       let _wikiDB = String(this.yearSelect1).slice(2, 4);
 
       let response = await getWikiCategoryTree({

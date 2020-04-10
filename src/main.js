@@ -8,6 +8,7 @@ import echarts from "echarts";
 import elementui from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import store from "./store.js";
+import vuetify from './plugins/vuetify';
 Vue.use(echarts);
 // Vue.use(ecStat);
 Vue.use(elementui);
@@ -17,5 +18,6 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
+  vuetify,
   render: h => h(App)
 }).$mount("#app");
