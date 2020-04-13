@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-13 12:27:24
+ * @LastEditTime: 2020-04-13 13:59:59
  * @Description: 
  -->
 <template>
@@ -67,9 +67,17 @@
             return-object
             transition
           >
-            <!-- <template v-slot:prepend="{ item }">
-              <v-icon v-if="!item.children">mdi-account</v-icon>
-            </template> -->
+            <template v-slot:append="{ item }">
+              <v-btn
+                text
+                small
+                color="primary"
+                target="blank"
+                :href="'https://en.wikipedia.org/wiki/' + item.name"
+              >
+                <v-icon v-if="!item.children">mdi-wikipedia</v-icon></v-btn
+              >
+            </template>
             <!-- <template v-slot:prepend="{ item }">
               <div @click="fetchChildren1(item)">
                 {{ item.name }}
@@ -98,6 +106,17 @@
             return-object
             transition
           >
+            <template v-slot:append="{ item }">
+              <v-btn
+                text
+                small
+                color="primary"
+                target="blank"
+                :href="'https://en.wikipedia.org/wiki/' + item.name"
+              >
+                <v-icon v-if="!item.children">mdi-wikipedia</v-icon></v-btn
+              >
+            </template>
             <!-- <template v-slot:prepend="{ item }">
               <v-icon v-if="!item.children">mdi-account</v-icon>
             </template> -->
@@ -353,12 +372,14 @@ export default {
             {
               id: uuidv4(),
               name: `文章 ${articleLength}`,
-              children: articleChildrens
+              children: articleChildrens,
+              file: "article"
             },
             {
               id: uuidv4(),
               name: `子类 ${categoryLength}`,
-              children: categoryChildrens
+              children: categoryChildrens,
+              file: "category"
             }
           ]
         );
