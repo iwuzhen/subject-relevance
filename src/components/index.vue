@@ -15,15 +15,19 @@
           v-for="(item, index) in items"
           :key="index"
         >
-          <v-card class="mx-auto" max-width="344" elevation="8" min-height="180"
-            ><v-card-title>{{ item.title }}</v-card-title
-            ><v-card-text>{{ item.text }}</v-card-text
-            ><v-card-actions
-              ><v-btn color="primary" :to="item.to" :href="item.href"
-                >go</v-btn
-              ></v-card-actions
-            ></v-card
-          >
+          <v-hover v-slot:default="{ hover }" close-delay="200">
+            <v-card
+              class="mx-auto"
+              max-width="344"
+              :elevation="hover ? 16 : 2"
+              min-height="180"
+              :to="item.to"
+              :href="item.href"
+              ><v-card-title>{{ item.title }}</v-card-title
+              ><v-card-text>{{ item.text }}</v-card-text
+              ><v-card-actions></v-card-actions
+            ></v-card>
+          </v-hover>
         </v-col>
       </v-row>
     </div>
