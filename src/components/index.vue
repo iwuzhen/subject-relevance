@@ -89,12 +89,12 @@ export default {
         ],
         幂率: [
           {
-            title: "Zipf 幂律",
+            title: "Zipf 幂律(世界)",
             text: "逐年幂律图",
             to: "/powerlaw"
           },
           {
-            title: "Zipf 幂律斜率",
+            title: "Zipf 幂律(小世界)斜率",
             text: "逐年幂律图，及其斜率曲线",
             to: "/ZipfByNodes"
           },
