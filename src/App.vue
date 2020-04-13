@@ -38,40 +38,35 @@
     </v-app-bar> -->
 
     <v-content>
-      
-    <v-breadcrumbs :items="items" large ></v-breadcrumbs>
+      <v-breadcrumbs :items="items" large></v-breadcrumbs>
 
-      <router-view/>
+      <router-view />
     </v-content>
   </v-app>
 </template>
 
 <script>
-
-
 export default {
+  name: "App",
 
-  name: 'App',
-
-  data: () => ({
-    
-  }),
-  mounted(){
-  },  
+  data: () => ({}),
+  mounted() {},
   computed: {
     currentPath: function() {
       return this.$store.state.curentPath;
     },
-    items:function(){
-      return [{
-          text: '首页',
+    items: function() {
+      return [
+        {
+          text: "首页",
           disabled: false,
-          to: '/',
+          to: "/"
         },
         {
           text: this.$store.state.curentPath,
-          disabled: true,
-        }]
+          disabled: true
+        }
+      ];
     }
   }
 };

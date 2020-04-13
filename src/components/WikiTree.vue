@@ -3,110 +3,136 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-10 14:05:19
+ * @LastEditTime: 2020-04-13 12:27:24
  * @Description: 
  -->
 <template>
-  <div class="wrapper">
-    <div class="diffbox"><div v-html="prettyHtml" /></div>
-
-    <div class="elbutton">
-      <div>
-        <el-autocomplete
-          placeholder="搜索 category"
+  <v-container>
+    <v-dialog
+      v-model="overlay"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
+      <v-card>
+        <v-toolbar dark color="primary">
+          <v-btn icon dark @click="overlay = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>关闭对比面板</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn dark text @click="overlay = false">Close</v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-col class="diffbox"><div v-html="prettyHtml"/></v-col>
+      </v-card>
+    </v-dialog>
+    <v-row>
+      <v-col>
+        <v-btn color="primary" @click="checkNode">对比选中的节点</v-btn>
+      </v-col>
+      <v-col>
+        <v-autocomplete
           v-model="searchString"
+          label="搜索 category"
+          :loading="isLoadingButton"
           clearable
-          :fetch-suggestions="querySearchAsync"
-          @select="handleSelect"
+          cache-items
+          no-data-text="没有匹配值"
+          :search-input.sync="search"
+          :items="searchItems"
         >
-        </el-autocomplete>
-      </div>
-      <div>
-        <el-button type="primary" class="selectitem" @click="checkNode"
-          >对比选中的节点</el-button
-        >
-      </div>
-      <div>
-        <el-button type="info" class="selectitem" @click="reset"
-          >重置Tree</el-button
-        >
-      </div>
-    </div>
-
-    <div id="eltree1">
-      <div class="selectitem">
-        <span class="title">年份</span>
-        <el-select
-          v-model="yearSelect1"
-          class="selectsubjectmiddle"
-          placeholder="请选择"
-          @change="changeYear(1)"
-        >
-          <el-option
-            v-for="item in yearOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <el-tree
-        v-if="openPanel1"
-        :props="props"
-        :load="loadNode1"
-        show-checkbox
-        accordion
-        lazy
-        node-key="id"
-        ref="tree1"
+        </v-autocomplete>
+      </v-col>
+    </v-row>
+    <v-row justify="space-between">
+      <v-col cols="6">
+        <v-card hover flat>
+          <v-select
+            v-model="yearSelect1"
+            :items="yearOptions"
+            chips
+            label="年份"
+          ></v-select>
+          <v-treeview
+            v-model="selection1"
+            :items="treeItems1"
+            :load-children="fetchChildren1"
+            selectable
+            activatable
+            color="warning"
+            selection-type="leaf"
+            open-on-click
+            return-object
+            transition
+          >
+            <!-- <template v-slot:prepend="{ item }">
+              <v-icon v-if="!item.children">mdi-account</v-icon>
+            </template> -->
+            <!-- <template v-slot:prepend="{ item }">
+              <div @click="fetchChildren1(item)">
+                {{ item.name }}
+              </div>
+            </template> -->
+          </v-treeview>
+        </v-card></v-col
       >
-      </el-tree>
-    </div>
-    <div id="eltree2">
-      <div class="selectitem">
-        <span class="title">年份</span>
-        <el-select
-          v-model="yearSelect2"
-          class="selectsubjectmiddle"
-          placeholder="请选择"
-          @change="changeYear(2)"
-        >
-          <el-option
-            v-for="item in yearOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <el-tree
-        v-if="openPanel2"
-        :props="props"
-        :load="loadNode2"
-        show-checkbox
-        accordion
-        lazy
-        node-key="id"
-        ref="tree2"
+      <v-col cols="6">
+        <v-card hover flat>
+          <v-select
+            v-model="yearSelect2"
+            :items="yearOptions"
+            chips
+            label="年份"
+          ></v-select
+          ><v-treeview
+            v-model="selection2"
+            :items="treeItems2"
+            :load-children="fetchChildren2"
+            selectable
+            activatable
+            color="warning"
+            selection-type="leaf"
+            open-on-click
+            return-object
+            transition
+          >
+            <!-- <template v-slot:prepend="{ item }">
+              <v-icon v-if="!item.children">mdi-account</v-icon>
+            </template> -->
+            <!-- <template v-slot:prepend="{ item }">
+              <div @click="fetchChildren1(item)">
+                {{ item.name }}
+              </div>
+            </template> -->
+          </v-treeview></v-card
+        ></v-col
       >
-      </el-tree>
-    </div>
-  </div>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 import { getWikiPageTree, getWikiCategoryTree } from "@/api/index";
 import * as Diff2Html from "diff2html";
 import * as diff from "diff";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
-  name: "WikiTree",
+  name: "Tree_Viewer",
   data() {
     return {
+      selection1: [],
+      selection2: [],
+      treeItems1: [],
+      treeItems2: [],
+      overlay: false,
+      isLoadingButton: false,
+      searchItems: [],
+      search: null,
       searchString: "",
       diffs: "",
-      openPanel1: true,
-      openPanel2: true,
       yearSelect1: 2019,
       yearSelect2: 2020,
       wikiYearOptions: [
@@ -123,13 +149,8 @@ export default {
         2019,
         2020
       ],
-      props: {
-        label: "name",
-        children: "zones",
-        isLeaf: "leaf"
-      },
-      categorys: [],
       basiccategorys: [
+        "Contents",
         "Literature",
         "Psychology",
         "Logic",
@@ -179,7 +200,7 @@ export default {
       let _data = this.wikiYearOptions.map(item => {
         return {
           value: item,
-          label: item
+          text: item
         };
       });
       return _data;
@@ -196,25 +217,37 @@ export default {
   mounted() {
     this.reset();
     this.$store.commit("changeCurentPath", this.$options.name);
-
+    this.loadDefauleCategory();
   },
-  methods: {
-    reset() {
-      this.categorys = this.basiccategorys;
-      this.diffs = "";
-      this.changeYear(1);
-      this.changeYear(2);
+  watch: {
+    searchString() {
+      if (!this.searchString) {
+        this.loadDefauleCategory();
+        // this.categorys = this.basiccategorys;
+      } else {
+        this.treeItems1 = [
+          {
+            id: uuidv4(),
+            name: this.searchString,
+            children: []
+          }
+        ];
+        this.treeItems2 = [
+          {
+            id: uuidv4(),
+            name: this.searchString,
+            children: []
+          }
+        ];
+      }
     },
-    async handleSelect(item) {
-      this.categorys = [item.value];
-      this.changeYear(1);
-      this.changeYear(2);
-    },
-    async querySearchAsync(queryString, cb) {
+    async search(val) {
+      if (!val) return;
+      this.isLoadingButton = true;
       let _wikiDB = String(this.yearSelect1).slice(2, 4);
 
       let response = await getWikiCategoryTree({
-        categoryTitle: Buffer.from(queryString).toString("base64"),
+        categoryTitle: Buffer.from(val).toString("base64"),
         db: `WIKI${_wikiDB}`
       });
 
@@ -222,12 +255,33 @@ export default {
         response.data.childList.length == 0 &&
         response.data.parentList.length == 0
       ) {
-        return cb([]);
+        this.searchItems = [];
+      } else {
+        this.searchItems = [val];
       }
-      return cb([{ value: queryString }]);
+      this.isLoadingButton = false;
+    }
+  },
+  methods: {
+    loadDefauleCategory() {
+      this.treeItems1 = this.basiccategorys.map(item => {
+        return {
+          id: uuidv4(),
+          name: item,
+          children: []
+        };
+      });
+      this.treeItems2 = this.basiccategorys.map(item => {
+        return {
+          id: uuidv4(),
+          name: item,
+          children: []
+        };
+      });
     },
+    reset() {},
     checkNode() {
-      let names1 = this.$refs.tree1.getCheckedNodes().map(item => {
+      let names1 = this.selection1.map(item => {
         return item.name;
       });
       names1 = names1.filter(item => {
@@ -235,7 +289,7 @@ export default {
           return false;
         return true;
       });
-      let names2 = this.$refs.tree2.getCheckedNodes().map(item => {
+      let names2 = this.selection2.map(item => {
         return item.name;
       });
       names2 = names2.filter(item => {
@@ -250,136 +304,86 @@ export default {
         names2.join("\n")
       );
       this.diffs = DiffString;
+      this.overlay = !this.overlay;
     },
 
-    changeYear(flag) {
-      if (flag === 1) {
-        this.openPanel1 = false;
-        setTimeout(() => {
-          this.openPanel1 = true;
-        }, 10);
+    async _fetchChildren(treeitem, _wikiDB) {
+      if (
+        treeitem.name.indexOf("文章") > -1 ||
+        treeitem.name.indexOf("子类") > -1
+      ) {
+        console.log("cat");
       } else {
-        this.openPanel2 = false;
-        setTimeout(() => {
-          this.openPanel2 = true;
-        }, 10);
-      }
-    },
-    async _loadNode(node, resolve, _wikiDB) {
-      if (node.level === 0) {
-        return resolve(this.baseRegion);
-      }
-
-      if (node.label.indexOf("文章") > -1) {
-        let response = await getWikiPageTree({
-          categoryTitle: Buffer.from(node.parent.label).toString("base64"),
-          db: `WIKI${_wikiDB}`
-        });
-        if (response.data) {
-          let _data = response.data.childList.map(item => {
-            return {
-              name: item,
-              leaf: true
-            };
-          });
-          return resolve(_data);
-        } else {
-          this.$message.error("请求失败");
-        }
-      } else if (node.label.indexOf("子类") > -1) {
-        // TODO
-        let response = await getWikiCategoryTree({
-          categoryTitle: Buffer.from(node.parent.label).toString("base64"),
-          db: `WIKI${_wikiDB}`
-        });
-        if (response.data) {
-          let _data = response.data.childList.map(item => {
-            return {
-              name: item
-            };
-          });
-          return resolve(_data);
-        }
-      } else {
-        // carticle
-        let articleLength, categoryLength;
+        let articleLength, categoryLength, articleChildrens, categoryChildrens;
 
         let response = await getWikiPageTree({
-          categoryTitle: Buffer.from(node.label).toString("base64"),
+          categoryTitle: Buffer.from(treeitem.name).toString("base64"),
           db: `WIKI${_wikiDB}`
         });
         if (response.data) {
           articleLength = response.data.childList.length;
+          articleChildrens = response.data.childList.map(item => {
+            return {
+              id: uuidv4(),
+              name: item,
+              leaf: true
+            };
+          });
         } else {
           this.$message.error("请求失败");
         }
 
         response = await getWikiCategoryTree({
-          categoryTitle: Buffer.from(node.label).toString("base64"),
+          categoryTitle: Buffer.from(treeitem.name).toString("base64"),
           db: `WIKI${_wikiDB}`
         });
         if (response.data) {
           categoryLength = response.data.childList.length;
+          categoryChildrens = response.data.childList.map(item => {
+            return {
+              id: uuidv4(),
+              name: item,
+              children: []
+            };
+          });
         }
 
-        resolve([
-          {
-            name: `文章 ${articleLength}`
-          },
-          {
-            name: `子类 ${categoryLength}`
-          }
-        ]);
+        treeitem.children.push(
+          ...[
+            {
+              id: uuidv4(),
+              name: `文章 ${articleLength}`,
+              children: articleChildrens
+            },
+            {
+              id: uuidv4(),
+              name: `子类 ${categoryLength}`,
+              children: categoryChildrens
+            }
+          ]
+        );
+
+        // treeitem.children.push(
+        //   ...[
+        //     {
+        //       id: uuidv4(),
+        //       name: `文章 ${_wikiDB}`,
+        //       children: []
+        //     }
+        //   ]
+        // );
       }
     },
-    async loadNode1(node, resolve) {
+    async fetchChildren1(treeitem) {
       let _wikiDB = String(this.yearSelect1).slice(2, 4);
-      return await this._loadNode(node, resolve, _wikiDB);
+      return await this._fetchChildren(treeitem, _wikiDB);
     },
-    async loadNode2(node, resolve) {
+    async fetchChildren2(treeitem) {
       let _wikiDB = String(this.yearSelect2).slice(2, 4);
-      return await this._loadNode(node, resolve, _wikiDB);
+      return await this._fetchChildren(treeitem, _wikiDB);
     }
   }
 };
 </script>
 
-<style lang="less" scoped>
-@import url("../assets/style/common.less");
-.wrapper {
-  display: grid;
-  // grid-template-columns: 1fr 1fr;
-  // grid-template-columns: repeat(2, 1fr);
-  grid-template-areas:
-    "diffbox diffbox"
-    "elbutton elbutton"
-    "eltree1 eltree2";
-  gap: 1rem;
-
-  .diffbox {
-    grid-area: diffbox;
-  }
-  .elbutton {
-    grid-area: elbutton;
-    display: flex;
-    > div {
-      margin: 0 0.2rem 0 1rem;
-    }
-  }
-
-  #eltree1 {
-    grid-area: eltree1;
-  }
-  #eltree2 {
-    grid-area: eltree2;
-  }
-
-  // div {
-  //   background: #eee;
-  //   // padding: 1rem;
-  // }
-  // div:nth-child(odd) {
-  //   background: #ddd;
-  // }
-}
-</style>
+<style lang="less" scoped></style>

@@ -1,97 +1,126 @@
 <template>
-<v-container>
-  <v-row>
-<h1>wikipedia</h1>
-<v-divider></v-divider>
-  </v-row>
-  <v-row>
-
-  </v-row>
-
-  <div class="indexPage">
-    <div class="page-container page-component"></div>
-    <h1>wikipedia</h1>
-    <div class="enterButton">
-      <router-link to="/discipline"><p>学科相关度</p></router-link>
-      <router-link to="/SubDiscipline"><p>单学科相关度</p></router-link>
-      <router-link to="/powerlaw"><p>Zipf 幂律</p></router-link>
-      <router-link to="/ZipfByNodes"><p>Zipf 幂律斜率</p></router-link>
-      <router-link to="/DegreeDistribution"><p>幂律度分布</p></router-link>
-      <router-link to="/powerLawPageRank"><p>PageRank幂律</p></router-link>
-      <router-link to="/viewandedits"><p>访问量&编辑量</p></router-link>
-      <router-link to="/ArticlesTotal"><p>文章数查询</p></router-link>
-      <router-link to="/WikiTree"><p>Tree浏览器</p></router-link>
+  <v-container>
+    <div v-for="(items, name) in indexObject" :key="name" class="mb-5">
+      <v-row>
+        <h1>{{ name }}</h1>
+      </v-row>
+      <v-row>
+        <v-divider></v-divider>
+      </v-row>
+      <v-row>
+        <v-col
+          cols="4"
+          md="3"
+          lg="2"
+          v-for="(item, index) in items"
+          :key="index"
+        >
+          <v-card class="mx-auto" max-width="344" elevation="8" min-height="180"
+            ><v-card-title>{{ item.title }}</v-card-title
+            ><v-card-text>{{ item.text }}</v-card-text
+            ><v-card-actions
+              ><v-btn color="primary" :to="item.to" :href="item.href"
+                >go</v-btn
+              ></v-card-actions
+            ></v-card
+          >
+        </v-col>
+      </v-row>
     </div>
-
-    <h1>MAS</h1>
-    <div class="enterButton">
-      <router-link to="/masline"><p>学科相关度</p></router-link>
-      <router-link to="/MasArticlesTotal"><p>文章数</p></router-link>
-    </div>
-    <h1>wikipedia 分类层次</h1>
-    <div class="enterButton">
-      <a href="http://wikidb.lambdax.cn:5555/wikidb_web/first.jsp"
-        ><p>分类层次</p></a
-      >
-    </div>
-    <h1>小世界无向图</h1>
-    <div class="enterButton">
-      <router-link to="/SmallWorldUndirectedLimit"><p>规模趋势</p></router-link>
-      <router-link to="/SmallWorldUndirected"><p>逐年趋势</p></router-link>
-    </div>
-    <h1>小世界有向图</h1>
-    <div class="enterButton">
-      <router-link to="/SmallWorldDirected"><p>学科间趋势</p></router-link>
-    </div>
-  </div>
-
-</v-container>
-  
+  </v-container>
 </template>
 
 <script>
 export default {
   mounted() {
     this.$store.commit("changeCurentPath", null);
+  },
+  data() {
+    return {
+      indexObject: {
+        统计数据: [
+          {
+            title: "Tree Viewer",
+            text: "WIKI 分类文章层次浏览",
+            to: "/WikiTree"
+          },
+          {
+            title: "访问量&编辑量",
+            text: "WIKI 访问量&编辑量",
+            to: "/viewandedits"
+          },
+          {
+            title: "WIKI 文章数",
+            text: "WIKI 文章数查询",
+            to: "/ArticlesTotal"
+          },
+          {
+            title: "MAS 文章数",
+            text: "MAS 文章数查询",
+            to: "/MasArticlesTotal"
+          },
+          {
+            title: "WIKI 分类层次",
+            text: "WIKI 分类层次查询",
+            href: "http://wikidb.lambdax.cn:5555/wikidb_web/first.jsp"
+          }
+        ],
+        学科相关度: [
+          {
+            title: "WIKI",
+            text: "各学科的逐年相关度",
+            to: "/discipline"
+          },
+          { title: "MAS", text: "MAS 中各学科的逐年相关度", to: "/masline" },
+          {
+            title: "小世界",
+            text: "小世界有向网络学科间趋势",
+            to: "/SmallWorldDirected"
+          },
+          {
+            title: "WIKI 单学科",
+            text: "Cognitive science 和其他学科的逐年相关度",
+            to: "/SubDiscipline"
+          }
+        ],
+        幂率: [
+          {
+            title: "Zipf 幂律",
+            text: "逐年幂律图",
+            to: "/powerlaw"
+          },
+          {
+            title: "Zipf 幂律斜率",
+            text: "逐年幂律图，及其斜率曲线",
+            to: "/ZipfByNodes"
+          },
+          {
+            title: "幂律度分布",
+            text: "幂律度分布",
+            to: "/DegreeDistribution"
+          },
+          {
+            title: "PageRank幂律",
+            text: "PageRank幂律",
+            to: "/powerLawPageRank"
+          }
+        ],
+        小世界: [
+          {
+            title: "规模趋势",
+            text: "小世界",
+            to: "/SmallWorldUndirectedLimit"
+          },
+          {
+            title: "逐年趋势",
+            text: "小世界",
+            to: "/SmallWorldUndirectedLimit"
+          }
+        ]
+      }
+    };
   }
 };
 </script>
 
-<style lang="less">
-.indexPage {
-  text-align: left;
-  padding: 0 10vw;
-
-  // h1 {
-  //   display: inline;
-  // }
-  .enterButton {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 1rem 0 1rem;
-    a {
-      display: flex;
-      height: 3rem;
-      width: 8rem;
-      margin: 0.5rem 0.5rem;
-      align-items: center;
-      text-align: center;
-      // align-items: center;
-      // align-self: center;
-      text-decoration: none;
-      color: #fff;
-      background: #409eff;
-      border-color: #409eff;
-      &:hover {
-        color: #409eff;
-        background: #ecf5ff;
-        border-color: #b3d8ff;
-      }
-      p {
-        position: relative;
-        margin: auto;
-      }
-    }
-  }
-}
-</style>
+<style lang="less"></style>

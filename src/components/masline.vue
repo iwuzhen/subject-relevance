@@ -90,7 +90,7 @@ export default {
         "logic",
         "mathematics",
         "philosophy",
-        "physics",
+        // "physics",
         "political science",
         "psychology",
         "sociology"
