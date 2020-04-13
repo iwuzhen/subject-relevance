@@ -3,11 +3,11 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-13 13:59:59
+ * @LastEditTime: 2020-04-13 17:16:59
  * @Description: 
  -->
 <template>
-  <v-container>
+  <v-container fluid>
     <v-dialog
       v-model="overlay"
       fullscreen
@@ -61,6 +61,7 @@
             :load-children="fetchChildren1"
             selectable
             activatable
+            dense
             color="warning"
             selection-type="leaf"
             open-on-click
@@ -100,6 +101,7 @@
             :load-children="fetchChildren2"
             selectable
             activatable
+            dense
             color="warning"
             selection-type="leaf"
             open-on-click
@@ -170,40 +172,40 @@ export default {
       ],
       basiccategorys: [
         "Contents",
-        "Literature",
-        "Psychology",
-        "Logic",
-        "Philosophy",
-        "Mathematics",
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Sociology",
-        "Economics",
-        "Political science",
-        "Linguistics",
-        "History",
-        "Computer science",
+        "Anthropology",
         "Artificial intelligence",
-        "Engineering disciplines",
-        "Chemical engineering",
-        "Civil engineering",
-        "Electrical engineering",
-        "Mechanical engineering",
         "Biological engineering",
-        "Computer engineering",
-        "Industrial engineering",
-        "Environmental engineering",
-        "Cognitive science",
-        "Machine learning",
+        "Biology",
         "Blockchains",
+        "Chemical engineering",
+        "Chemistry",
+        "Civil engineering",
+        "Cognitive science",
+        "Computer engineering",
+        "Computer science",
         "Deep learning",
-        "Theoretical computer science",
-        "Quantum computing",
+        "Economics",
+        "Electrical engineering",
+        "Engineering disciplines",
+        "Environmental engineering",
         "Genetic engineering",
         "Genome editing",
-        "Anthropology",
-        "Neuroscience"
+        "History",
+        "Industrial engineering",
+        "Linguistics",
+        "Literature",
+        "Logic",
+        "Machine learning",
+        "Mathematics",
+        "Mechanical engineering",
+        "Neuroscience",
+        "Philosophy",
+        "Physics",
+        "Political science",
+        "Psychology",
+        "Quantum computing",
+        "Sociology",
+        "Theoretical computer science"
       ]
     };
   },
