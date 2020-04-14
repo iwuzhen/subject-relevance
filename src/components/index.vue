@@ -49,6 +49,16 @@ export default {
             to: "/WikiTree"
           },
           {
+            title: "wiki子类半衰期",
+            text: "2007年的N层子类，经过x年，其子类有一半改变了",
+            to: "/BanShuaiQi"
+          },
+          {
+            title: "wiki top500文章",
+            text: "各学科top500文章展示,数值表示该篇文章的ArticleLinksin",
+            to: "/TopArticles"
+          },
+          {
             title: "访问量&编辑量",
             text: "WIKI 访问量&编辑量",
             to: "/viewandedits"

@@ -16,6 +16,8 @@ import DegreeDistribution from "@/components/DegreeDistribution";
 import ZipfByNodes from "@/components/ZipfByNodes";
 import WikiTree from "@/components/WikiTree";
 import Home from "@/views/Home";
+import BanShuaiQi from "@/components/BanShuaiQi";
+import TopArticles from "@/components/TopArticles";
 
 Vue.use(Router);
 
@@ -101,6 +103,16 @@ export default new Router({
       path: "/Home",
       name: "Home",
       component: Home
+    },
+    {
+      path: "/BanShuaiQi",
+      name: "BanShuaiQi",
+      component: BanShuaiQi
+    },
+    {
+      path: "/TopArticles",
+      name: "TopArticles",
+      component: TopArticles
     }
   ]
 });

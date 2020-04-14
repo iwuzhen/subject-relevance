@@ -61,9 +61,6 @@
           ></el-slider>
         </el-row>
       </div>
-      <el-button type="primary" class="selectitem" @click="getData"
-        >确定</el-button
-      >
     </div>
     <div class="echartsBox" id="masChart" v-loading="loading"></div>
   </div>
@@ -80,26 +77,31 @@ export default {
       methodValue: "linksout",
       years: [1950, 2019],
       categorys: [
-        "biology",
-        "chemistry",
-        "computer science",
-        "economics",
-        "history",
-        "linguistics",
-        "literature",
-        "logic",
-        "mathematics",
-        "philosophy",
-        // "physics",
-        "political science",
-        "psychology",
-        "sociology"
+        "Logic",
+        "Philosophy",
+        "Mathematics",
+        "Physics",
+        "Chemistry",
+        "Biology",
+        "Sociology",
+        "Economics",
+        "Political science",
+        "Psychology",
+        "Linguistics",
+        "History",
+        "Computer science",
+        "Artificial intelligence",
+        "Engineering disciplines",
+        "Chemical engineering",
+        "Civil engineering",
+        "Electrical engineering",
+        "Mechanical engineering",
+        "Biological engineering",
+        "Computer engineering",
+        "Industrial engineering",
+        "Environmental engineering"
       ],
       methodOptions: [
-        {
-          value: "linksin",
-          label: "linksin"
-        },
         {
           value: "linksout",
           label: "linksout"
@@ -132,7 +134,7 @@ export default {
   methods: {
     async getData() {
       if (!this.subjectTarget || this.subjectRelevances.length === 0) {
-        this.$message.error("请选择完整");
+        // this.$message.error("请选择完整");
         return false;
       }
       this.loading = true;
@@ -199,7 +201,7 @@ export default {
         legend: {
           data: data.legend,
           right: "5%",
-          top: "10%",
+          top: "30%",
           orient: "vertical"
         },
         grid: {

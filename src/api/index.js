@@ -1,7 +1,6 @@
 import request from "@/utils/request";
 import requestwiki from "@/utils/requestwiki";
 
-
 export function getWikiData(params) {
   return request({
     url: "/wiki/getDistance",
@@ -77,6 +76,20 @@ export function getPagerankZipf(params) {
 export function getDfb(params) {
   return request({
     url: "/wiki/getDfb",
+    method: "post",
+    data: params
+  });
+}
+export function getBanshuaiqi(params) {
+  return request({
+    url: "/wiki/getBanshuaiqi",
+    method: "post",
+    data: params
+  });
+}
+export function getTopArticles(params) {
+  return request({
+    url: "/wiki/getTopArticles",
     method: "post",
     data: params
   });
