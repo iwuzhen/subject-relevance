@@ -1,67 +1,92 @@
-<template>
-  <div class="page-discipline">
-    <div class="selectbox">
-      <div class="selectitem">
-        <span>目标学科</span>
-        <el-select
-          v-model="subjectTarget"
-          class="selectsubjectmax"
-          placeholder="请选择"
-          multiple
-          collapse-tags
-          @change="subjectChange"
-        >
-          <el-option
-            v-for="item in categorysOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>参数</span>
-        <el-select
-          v-model="methodOptions"
-          class="selectsubjectmax"
-          collapse-tags
-          placeholder="请选择"
-          @change="subjectChange"
-        >
-          <el-option
-            v-for="item in methods"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            :disabled="item.label === subjectTarget"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>数据源</span>
-        <el-select
-          v-model="sourceOption"
-          class="selectsubjectmax"
-          placeholder="请选择"
-          @change="sourceChange"
-        >
-          <el-option
-            v-for="item in sourceOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
+<!--
+ * @Version: 0.0.1
+ * @Author: ider
+ * @Date: 2020-04-13 18:38:54
+ * @LastEditors: ider
+ * @LastEditTime: 2020-04-14 09:21:25
+ * @Description: 
+ -->
 
-      <div class="selectitem">
-        <el-button type="primary" size="medium" @click="helpMessage"
-          >参数说明</el-button
+<template>
+  <v-container fluid>
+    <v-row>
+      <v-col cols="5">
+        <v-select
+          v-model="currentSubjectSelect"
+          :items="categoryOpt"
+          @change="getData"
+          chips
+          multiple
+          dense
+          label="目标学科"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="methodSelect"
+          :items="methodOpt"
+          @change="getData"
+          label="小世界指标"
+        ></v-select>
+      </v-col>
+
+      <v-col cols="3">
+        <v-select
+          v-model="sourceSelect"
+          :items="sourceOpt"
+          @change="getData"
+          label="数据源"
+        ></v-select>
+      </v-col>
+      <v-col align-self="center" cols="2">
+        <v-btn
+          color="light-blue lighten-2"
+          dark
+          small
+          @click.stop="dialog = true"
         >
-      </div>
-    </div>
-    <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
-  </div>
+          <v-icon>mdi-help-circle</v-icon>
+          参数
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+          id="subjectChart"
+        >
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-dialog v-model="dialog" width="500">
+      <v-card>
+        <v-card-title class="headline grey lighten-2" primary-title>
+          参数说明
+        </v-card-title>
+
+        <v-card-text>
+          <p>
+            <b>目标学科</b>： <br />wikipedia 中的学科。<br />
+            <b>参数</b>：
+            <br />小世界网络指标有两个指标，平均路径长度，集聚系数。<br />
+            网络总点数，网络连接边数。<br />
+            <b>数据源</b>： <br />按 wikipedia category 计算出的前
+            2000,2500,3000个节点的组成的网络。<br />
+            按 google 距离计算出的前 2000,2500,3000个节点的组成的网络。<br />
+            Wikipedia 全部的 2 层类下的文章组成的网络。<br />
+            Wikipedia 全部的 3 层类下的文章组成的网络。<br />
+            Mas 学科下的论文的组成的网络。
+          </p>
+        </v-card-text>
+
+        <v-divider></v-divider>
+      </v-card>
+    </v-dialog>
+  </v-container>
 </template>
 
 <script>
@@ -70,11 +95,67 @@ export default {
   name: "SmallWorld无向图逐年趋势",
   data() {
     return {
-      subjectTarget: [],
-      subjectRelevances: [],
-      methodValue: "linksin",
-      subjectLevel: "0",
-      categorys: [
+      dialog: false,
+      currentSubjectSelect: [],
+      methodSelect: "a",
+      methodOpt: [
+        {
+          value: "a",
+          text: "平均路径长度"
+        },
+        {
+          value: "c",
+          text: "集聚系数"
+        },
+        {
+          value: "nv",
+          text: "网络点数"
+        },
+        {
+          value: "ne",
+          text: "网络边数"
+        }
+      ],
+      sourceSelect: "w-2500",
+      sourceOpt: [
+        {
+          value: "w-2000",
+          text: "wikipedia top 2000"
+        },
+        {
+          value: "w-2500",
+          text: "wikipedia top 2500"
+        },
+        {
+          value: "w-3000",
+          text: "wikipedia top 3000"
+        },
+        {
+          value: "g-2000",
+          text: "google top 2000"
+        },
+        {
+          value: "g-2500",
+          text: "google top 2500"
+        },
+        {
+          value: "g-3000",
+          text: "google top 3000"
+        },
+        {
+          value: "w2",
+          text: "wikipedia level 2"
+        },
+        {
+          value: "w3",
+          text: "wikipedia level 3"
+        },
+        {
+          value: "m",
+          text: "Mas (尚未完整)"
+        }
+      ],
+      categoryOpt: [
         "Literature",
         "Psychology",
         "Logic",
@@ -110,82 +191,8 @@ export default {
         "Anthropology",
         "Neuroscience"
       ],
-      methodOptions: "a",
-      methods: [
-        {
-          value: "a",
-          label: "平均路径长度"
-        },
-        {
-          value: "c",
-          label: "集聚系数"
-        },
-        {
-          value: "nv",
-          label: "网络点数"
-        },
-        {
-          value: "ne",
-          label: "网络边数"
-        }
-      ],
-      sourceOption: "w-2500",
-      sourceOptions: [
-        {
-          value: "w-2000",
-          label: "wikipedia top 2000"
-        },
-        {
-          value: "w-2500",
-          label: "wikipedia top 2500"
-        },
-        {
-          value: "w-3000",
-          label: "wikipedia top 3000"
-        },
-        {
-          value: "g-2000",
-          label: "google top 2000"
-        },
-        {
-          value: "g-2500",
-          label: "google top 2500"
-        },
-        {
-          value: "g-3000",
-          label: "google top 3000"
-        },
-        {
-          value: "w2",
-          label: "wikipedia level 2"
-        },
-        {
-          value: "w3",
-          label: "wikipedia level 3"
-        },
-        {
-          value: "m",
-          label: "Mas (尚未完整)"
-        }
-      ],
       loading: false
     };
-  },
-  computed: {
-    categorysOptions: function() {
-      let _data;
-      _data = this.categorys.map(item => {
-        return {
-          value: item,
-          label: item
-        };
-      });
-
-      return _data;
-    },
-    myChart: function() {
-      return this.$echarts.init(document.getElementById("subjectChart"));
-    }
   },
   mounted() {
     window.onresize = () => {
@@ -193,37 +200,25 @@ export default {
     };
     this.$store.commit("changeCurentPath", this.$options.name);
   },
+  computed: {
+    myChart: function() {
+      return this.$echarts.init(document.getElementById("subjectChart"));
+    }
+  },
   methods: {
-    helpMessage() {
-      this.$notify({
-        dangerouslyUseHTMLString: true,
-        title: "参数说明",
-        message:
-          "<b>目标学科</b>：	<br>wikipedia 中的学科。<br>\
-<b>参数</b>：		<br>小世界网络指标有两个指标，平均路径长度，集聚系数。<br>\
-			网络总点数，网络连接边数。<br>\
-<b>数据源</b>：		<br>按 wikipedia category 计算出的前 2000,2500,3000个节点的组成的网络。<br>\
-			按 google 距离计算出的前 2000,2500,3000个节点的组成的网络。<br>\
-			Wikipedia 全部的 2 层类下的文章组成的网络。<br>\
-			Wikipedia 全部的 3 层类下的文章组成的网络。<br>\
-			Mas 学科下的论文的组成的网络。",
-        position: "top-left"
-      });
-    },
     async getData() {
-      if (this.subjectTarget.length === 0 || this.methodOptions.length === 0) {
-        // this.$message.error("请选择完整");
+      if (this.currentSubjectSelect.length === 0) {
         return false;
       }
       this.loading = true;
       let data = {
         y: [],
         x: [],
-        legend: this.subjectTarget,
+        legend: this.currentSubjectSelect,
         title: `小世界无向图逐年分布`
       };
       let selectSubjectIds = [];
-      for (let selectSubjectName of this.subjectTarget) {
+      for (let selectSubjectName of this.currentSubjectSelect) {
         selectSubjectIds.push(smallworldundirect["n"][selectSubjectName]);
       }
       let ts = new Set();
@@ -232,7 +227,7 @@ export default {
         legend[sbj] = [];
       }
 
-      let dataItem = smallworldundirect[this.sourceOption];
+      let dataItem = smallworldundirect[this.sourceSelect];
       for (let row of dataItem) {
         ts.add(row["y"]);
       }
@@ -243,7 +238,7 @@ export default {
       for (let row of dataItem) {
         if (selectSubjectIds.indexOf(row["n"]) > -1) {
           legend[row["n"]][data["x"].indexOf(row["y"])] =
-            row[this.methodOptions];
+            row[this.methodSelect];
         }
       }
       for (let sbj of selectSubjectIds) {
@@ -334,26 +329,7 @@ export default {
         })
       };
       return _opt;
-    },
-    subjectChange() {
-      this.getData();
-    },
-    sourceChange() {
-      this.getData();
     }
   }
 };
 </script>
-
-<style lang="less" scoped>
-@import url("../assets/style/common.less");
-.subjectRelevances {
-  width: 300px;
-}
-.methodSelect {
-  width: 150px;
-}
-.subjectLevel {
-  width: 80px;
-}
-</style>

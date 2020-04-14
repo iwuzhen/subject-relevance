@@ -20,7 +20,8 @@ module.exports = {
   "configureWebpack": {
     "externals": {
       "diff2html": "Diff2Html",
-      "diff": "Diff"
+      "diff": "Diff",
+      "localforage": "localforage",
     }
   },
   "transpileDependencies": [

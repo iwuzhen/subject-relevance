@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-13 17:16:59
+ * @LastEditTime: 2020-04-14 14:34:43
  * @Description: 
  -->
 <template>
@@ -76,14 +76,9 @@
                 target="blank"
                 :href="'https://en.wikipedia.org/wiki/' + item.name"
               >
-                <v-icon v-if="!item.children">mdi-wikipedia</v-icon></v-btn
-              >
+                <v-icon v-if="item.father">mdi-wikipedia</v-icon>
+              </v-btn>
             </template>
-            <!-- <template v-slot:prepend="{ item }">
-              <div @click="fetchChildren1(item)">
-                {{ item.name }}
-              </div>
-            </template> -->
           </v-treeview>
         </v-card></v-col
       >
@@ -116,17 +111,9 @@
                 target="blank"
                 :href="'https://en.wikipedia.org/wiki/' + item.name"
               >
-                <v-icon v-if="!item.children">mdi-wikipedia</v-icon></v-btn
-              >
+                <v-icon v-if="item.father">mdi-wikipedia</v-icon>
+              </v-btn>
             </template>
-            <!-- <template v-slot:prepend="{ item }">
-              <v-icon v-if="!item.children">mdi-account</v-icon>
-            </template> -->
-            <!-- <template v-slot:prepend="{ item }">
-              <div @click="fetchChildren1(item)">
-                {{ item.name }}
-              </div>
-            </template> -->
           </v-treeview></v-card
         ></v-col
       >
@@ -138,12 +125,20 @@
 import { getWikiPageTree, getWikiCategoryTree } from "@/api/index";
 import * as Diff2Html from "diff2html";
 import * as diff from "diff";
+import * as localforage from "localforage";
+
 import { v4 as uuidv4 } from "uuid";
 
 export default {
   name: "Tree_Viewer",
   data() {
     return {
+      store: localforage.createInstance({
+        name: "wikiTree",
+        version: 1.0,
+        storeName: "keyvaluepairs", // Should be alphanumeric, with underscores.
+        description: "some description"
+      }),
       selection1: [],
       selection2: [],
       treeItems1: [],
@@ -337,37 +332,74 @@ export default {
       } else {
         let articleLength, categoryLength, articleChildrens, categoryChildrens;
 
-        let response = await getWikiPageTree({
-          categoryTitle: Buffer.from(treeitem.name).toString("base64"),
-          db: `WIKI${_wikiDB}`
-        });
-        if (response.data) {
-          articleLength = response.data.childList.length;
-          articleChildrens = response.data.childList.map(item => {
-            return {
-              id: uuidv4(),
-              name: item,
-              leaf: true
-            };
+        //  本地缓存
+        let pageKey = `Page${treeitem.name}${_wikiDB}`;
+        let categoryKey = `Cat${treeitem.name}${_wikiDB}`;
+        console.log("扩展 tree");
+        let store = this.store;
+        await store
+          .getItem(pageKey)
+          .then(async function(value) {
+            let data;
+            if (!value) {
+              let response = await getWikiPageTree({
+                categoryTitle: Buffer.from(treeitem.name).toString("base64"),
+                db: `WIKI${_wikiDB}`
+              });
+              data = response.data;
+              if (!data) {
+                this.$message.error("请求失败");
+              }
+              await store.setItem(pageKey, data);
+            } else {
+              data = value;
+            }
+            console.log(data);
+            articleLength = data.childList.length;
+            articleChildrens = data.childList.map(item => {
+              return {
+                id: uuidv4(),
+                father: "page",
+                name: item,
+                leaf: true
+              };
+            });
+          })
+          .catch(function(err) {
+            console.log(err);
           });
-        } else {
-          this.$message.error("请求失败");
-        }
 
-        response = await getWikiCategoryTree({
-          categoryTitle: Buffer.from(treeitem.name).toString("base64"),
-          db: `WIKI${_wikiDB}`
-        });
-        if (response.data) {
-          categoryLength = response.data.childList.length;
-          categoryChildrens = response.data.childList.map(item => {
-            return {
-              id: uuidv4(),
-              name: item,
-              children: []
-            };
+        await store
+          .getItem(categoryKey)
+          .then(async function(value) {
+            // 当离线仓库中的值被载入时，此处代码运行
+            let data;
+            if (!value) {
+              let response = await getWikiCategoryTree({
+                categoryTitle: Buffer.from(treeitem.name).toString("base64"),
+                db: `WIKI${_wikiDB}`
+              });
+              data = response.data;
+              if (!data) {
+                this.$message.error("请求失败");
+              }
+              await store.setItem(categoryKey, data);
+            } else {
+              data = value;
+            }
+            categoryLength = data.childList.length;
+            categoryChildrens = data.childList.map(item => {
+              return {
+                id: uuidv4(),
+                name: item,
+                leaf: true,
+                children: []
+              };
+            });
+          })
+          .catch(function(err) {
+            console.log(err);
           });
-        }
 
         treeitem.children.push(
           ...[
@@ -385,16 +417,6 @@ export default {
             }
           ]
         );
-
-        // treeitem.children.push(
-        //   ...[
-        //     {
-        //       id: uuidv4(),
-        //       name: `文章 ${_wikiDB}`,
-        //       children: []
-        //     }
-        //   ]
-        // );
       }
     },
     async fetchChildren1(treeitem) {

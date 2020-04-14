@@ -1,80 +1,99 @@
+<!--
+ * @Version: 0.0.1
+ * @Author: ider
+ * @Date: 2020-04-13 19:09:27
+ * @LastEditors: ider
+ * @LastEditTime: 2020-04-14 11:06:39
+ * @Description: 
+ -->
+
 <template>
-  <div class="page-discipline">
-    <div class="selectbox">
-      <div class="selectitem">
-        <span>当前学科:</span>
-        <el-select
-          v-model="currentSubject"
-          placeholder="请选择"
-          class="selectsubjectmax"
-          @change="currentSubjectChange"
-        >
-          <el-option
-            v-for="item in currentSubjectOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>目标学科:</span>
-        <el-select
-          v-model="targetSubject"
-          class="selectsubjectmax"
-          collapse-tags
-          placeholder="请选择"
+  <v-container fluid>
+    <v-row>
+      <v-col cols="2">
+        <v-select
+          v-model="currentSubjectSelect"
+          :items="categoryOpt"
+          chips
+          @change="getData"
+          label="当前学科"
+        ></v-select>
+      </v-col>
+      <v-col cols="4">
+        <v-select
+          v-model="targetSubjectSelect"
+          :items="categoryOpt"
+          chips
           multiple
-          @change="subjectChange"
+          @change="getData"
+          label="目标学科"
+        ></v-select>
+      </v-col>
+
+      <v-col cols="2">
+        <v-select
+          v-model="methodSelect"
+          :items="methodOpt"
+          chips
+          label="参数"
+          @change="getData"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="graphSizeSelect"
+          :items="graphSizeOpt"
+          chips
+          label="网络大小"
+          @change="getData"
+        ></v-select>
+      </v-col>
+      <v-col align-self="center" cols="2">
+        <v-btn color="light-blue lighten-2" dark @click.stop="dialog = true">
+          <v-icon>mdi-help-circle</v-icon>
+          帮助说明
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="80vh"
+          id="subjectChart"
         >
-          <el-option
-            v-for="item in targetSubjectOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>参数:</span>
-        <el-select
-          v-model="mathodOption"
-          class="selectsubjectmiddle"
-          placeholder="请选择"
-          @change="subjectChange"
-        >
-          <el-option
-            v-for="item in mathodOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            :disabled="item.label === currentSubject"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>网络大小:</span>
-        <el-select
-          v-model="graphSize"
-          class="selectsubjectmiddle"
-          placeholder="请选择"
-          @change="subjectChange"
-        >
-          <el-option
-            v-for="item in graphSizeOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <el-button type="primary" @click="helpMessage">参数说明</el-button>
-      </div>
-      <!-- <el-button type="primary" @click="getData">确定</el-button> -->
-    </div>
-    <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
-  </div>
+          <!-- <div class="echartsBox" id="subjectChart"></div
+      > -->
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-dialog v-model="dialog" width="500">
+      <v-card>
+        <v-card-title class="headline grey lighten-2" primary-title>
+          帮助说明
+        </v-card-title>
+
+        <v-card-text>
+          <b>当前学科</b>： <br />wikipedia 中的学科。<br />
+          <b>目标学科</b>： <br />当前学科中引用文章所属的学科。<br />
+          <b>参数</b>： <br />小世界网络 平均路径长度。及其计算参数<br />
+          <b>网络大小</b>：
+          <br />网络大小限定在一定数量下，限定的规则是类距离排序<br />
+          <b>图表说明</b> <br />
+          <b>当前学科到目标学科</b
+          >：当前学科下的所有文章，通过多层引用，到达目标学科下的所有文章，计算出来的小世界参数值。值越小，当前学科依赖目标学科越强<br />
+          <b>目标学科到当前学科</b
+          >：交换当前学科和目标学科进行计算，值越小，目标学科依赖当前学科越强<br />
+          <b>学科间依赖</b>：图A 减去图B 的值，
+          正值：目标学科更加依赖当前学科，负值：当前学科更加依赖目标学科<br />
+        </v-card-text>
+
+        <v-divider></v-divider>
+      </v-card>
+    </v-dialog>
+  </v-container>
 </template>
 
 <script>
@@ -83,60 +102,49 @@ export default {
   name: "SmallWorld有向图学科间趋势",
   data() {
     return {
-      currentSubject: "",
-      targetSubject: [],
-      methodValue: "linksin",
-      subjectLevel: "0",
-      reverseOption: 0,
-      graphSize: "2500",
-      graphSizeOptions: [
+      dialog: false,
+      loading: false,
+      currentSubjectSelect: "",
+      targetSubjectSelect: [],
+      methodSelect: "average_path",
+      graphSizeSelect: "2500",
+      graphSizeOpt: [
         {
           value: "2000",
-          label: "2000"
+          text: "2000"
         },
         {
           value: "2500",
-          label: "2500"
+          text: "2500"
         },
         {
           value: "3000",
-          label: "3000"
+          text: "3000"
         },
         {
           value: "full",
-          label: "二层类"
+          text: "二层类"
         }
       ],
-      reverseOptions: [
-        {
-          value: 0,
-          label: "否"
-        },
-        {
-          value: 1,
-          label: "是"
-        }
-      ],
-      mathodOption: "average_path",
-      mathodOptions: [
+      methodOpt: [
         {
           value: "average_path",
-          label: "平均最短路径"
+          text: "平均最短路径"
         },
         {
           value: "sd",
-          label: "最短路径和"
+          text: "最短路径和"
         },
         {
           value: "sp",
-          label: "联通路径量"
+          text: "联通路径量"
         },
         {
           value: "md",
-          label: "MAX(最短路径)"
+          text: "MAX(最短路径)"
         }
       ],
-      subjRank: [
+      categoryOpt: [
         "Literature",
         "Psychology",
         "Logic",
@@ -171,31 +179,10 @@ export default {
         "Genome editing",
         "Anthropology",
         "Neuroscience"
-      ],
-      loading: false
+      ]
     };
   },
   computed: {
-    currentSubjectOptions: function() {
-      let ret_data = [];
-      for (let key of this.subjRank) {
-        ret_data.push({
-          value: smallworlddirect.source[key],
-          label: key
-        });
-      }
-      return ret_data;
-    },
-    targetSubjectOptions: function() {
-      let ret_data = [];
-      for (let key of this.subjRank) {
-        ret_data.push({
-          value: smallworlddirect.source[key],
-          label: key
-        });
-      }
-      return ret_data;
-    },
     myChart: function() {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
@@ -207,24 +194,11 @@ export default {
     this.$store.commit("changeCurentPath", this.$options.name);
   },
   methods: {
-    helpMessage() {
-      this.$notify({
-        dangerouslyUseHTMLString: true,
-        title: "参数说明",
-        message:
-          "<b>当前学科</b>：	<br>wikipedia 中的学科。<br>\
-          <b>目标学科</b>：	<br>当前学科中引用文章所属的学科。<br>\
-<b>参数</b>：		<br>小世界网络 平均路径长度。及其计算参数<br>\
-<b>网络大小</b>：		<br>网络大小限定在一定数量下，限定的规则是类距离排序<br>\
-      <b>图表说明</b> <br>\
-      <b>当前学科到目标学科</b>：当前学科下的所有文章，通过多层引用，到达目标学科下的所有文章，计算出来的小世界参数值。值越小，当前学科依赖目标学科越强<br>\
-      <b>目标学科到当前学科</b>：交换当前学科和目标学科进行计算，值越小，目标学科依赖当前学科越强<br>\
-			<b>学科间依赖</b>：图A 减去图B 的值， 正值：目标学科更加依赖当前学科，负值：当前学科更加依赖目标学科<br>",
-        position: "top-left"
-      });
-    },
     async getData() {
-      if (this.currentSubject.length === 0 || this.targetSubject.length === 0) {
+      if (
+        this.currentSubjectSelect.length === 0 ||
+        this.targetSubjectSelect.length === 0
+      ) {
         return false;
       }
       this.loading = true;
@@ -233,9 +207,9 @@ export default {
         b: [], //正反向之差
         c: [], //反向数据
         x: smallworlddirect.year,
-        legend: this.targetSubject.map(value => {
+        legend: this.targetSubjectSelect.map(value => {
           for (let key in smallworlddirect.source) {
-            if (smallworlddirect.source[key] === value) return key;
+            if (key === value) return key;
           }
         }),
         ymax: 0,
@@ -243,56 +217,56 @@ export default {
       };
 
       let ydata = {};
-      for (let sbj of this.targetSubject) {
+      for (let sbj of this.targetSubjectSelect) {
         ydata[sbj] = [];
       }
       for (let data of smallworlddirect.data) {
-        for (let sbj of this.targetSubject) {
+        for (let sbj of this.targetSubjectSelect) {
           if (
-            this.currentSubject === data.s &&
-            sbj === data.t &&
-            this.graphSize == data.m
+            smallworlddirect.source[this.currentSubjectSelect] === data.s &&
+            smallworlddirect.source[sbj] === data.t &&
+            this.graphSizeSelect == data.m
           ) {
             ydata[sbj][smallworlddirect.year.indexOf(data.y)] =
-              data[this.mathodOption];
-            if (this.mathodOption === "average_path") {
+              data[this.methodSelect];
+            if (this.methodSelect === "average_path") {
               ydata[sbj][smallworlddirect.year.indexOf(data.y)] = Number(
                 (data["sd"] / data["sp"]).toFixed(4)
               );
             } else {
               ydata[sbj][smallworlddirect.year.indexOf(data.y)] =
-                data[this.mathodOption];
+                data[this.methodSelect];
             }
           }
         }
       }
 
       let subdata = {};
-      for (let sbj of this.targetSubject) {
+      for (let sbj of this.targetSubjectSelect) {
         subdata[sbj] = [];
       }
       for (let data of smallworlddirect.data) {
-        for (let sbj of this.targetSubject) {
+        for (let sbj of this.targetSubjectSelect) {
           if (
-            this.currentSubject === data.t &&
-            sbj === data.s &&
-            this.graphSize == data.m
+            smallworlddirect.source[this.currentSubjectSelect] === data.t &&
+            smallworlddirect.source[sbj] === data.s &&
+            this.graphSizeSelect == data.m
           ) {
             subdata[sbj][smallworlddirect.year.indexOf(data.y)] =
-              data[this.mathodOption];
-            if (this.mathodOption === "average_path") {
+              data[this.methodSelect];
+            if (this.methodSelect === "average_path") {
               subdata[sbj][smallworlddirect.year.indexOf(data.y)] = Number(
                 (data["sd"] / data["sp"]).toFixed(4)
               );
             } else {
               subdata[sbj][smallworlddirect.year.indexOf(data.y)] =
-                data[this.mathodOption];
+                data[this.methodSelect];
             }
           }
         }
       }
       let barDate = {};
-      for (let sbj of this.targetSubject) {
+      for (let sbj of this.targetSubjectSelect) {
         barDate[sbj] = [];
         for (let i = 0; i < ydata[sbj].length; i++) {
           barDate[sbj].push(
@@ -301,7 +275,7 @@ export default {
         }
       }
 
-      for (let sbj of this.targetSubject) {
+      for (let sbj of this.targetSubjectSelect) {
         ret_data.y.push(ydata[sbj]);
         ret_data.c.push(subdata[sbj]);
         ret_data.b.push(barDate[sbj]);
@@ -315,7 +289,6 @@ export default {
         ...[].concat(...ret_data.y),
         ...[].concat(...ret_data.c)
       );
-      console.log(ret_data);
       this.drawChart(ret_data);
     },
     drawChart(data) {
@@ -324,10 +297,10 @@ export default {
       this.loading = false;
     },
     setOptions(data) {
-      var gridWidth = "35%";
+      var gridWidth = "40%";
       var gridHeight = "35%";
       // var gridLeft = 80;
-      var gridRight = 50;
+      var gridRight = 80;
       var gridTop = 50;
       // var gridBottom = 80;
       let _opt = {
@@ -424,17 +397,18 @@ export default {
         },
         legend: {
           data: data.legend,
-          // right: "5%",
+          //   right: "5%",
           right: gridRight,
           top: "50%",
-          orient: "vertical"
+          orient: "vertical",
+          z: 999
         },
         grid: [
           {
             top: gridTop,
             width: gridWidth,
             height: gridHeight,
-            left: "8%",
+            left: "4%",
             containLabel: true
           },
           {
@@ -446,7 +420,7 @@ export default {
           },
           {
             top: "55%",
-            left: "8%",
+            left: "4%",
             right: "20%",
             height: "38%",
             containLabel: true
@@ -553,17 +527,7 @@ export default {
         })(data)
       };
       return _opt;
-    },
-    subjectChange() {
-      this.getData();
-    },
-    currentSubjectChange() {
-      this.getData();
     }
   }
 };
 </script>
-
-<style lang="less" scoped>
-@import url("../assets/style/common.less");
-</style>

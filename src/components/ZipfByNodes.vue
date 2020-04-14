@@ -1,134 +1,138 @@
+<!--
+ * @Version: 0.0.1
+ * @Author: ider
+ * @Date: 2020-04-13 18:06:14
+ * @LastEditors: ider
+ * @LastEditTime: 2020-04-14 16:18:19
+ * @Description: 
+ -->
+
 <template>
-  <div class="page-discipline">
-    <div class="selectbox">
-      <div class="selectitem">
-        <span>目标学科</span>
-        <el-select
-          v-model="subjectTarget"
-          class="selectsubjectmax"
-          placeholder="请选择"
+  <v-container fluid>
+    <v-row>
+      <v-col cols="6">
+        <v-select
+          v-model="subjectSelect"
+          :items="categoryOpt"
+          small-chips
+          dense
           multiple
-          collapse-tags
-        >
-          <el-option
-            v-for="item in categorysOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>年份</span>
-        <el-select
-          v-model="dataYear"
-          placeholder="请选择"
+          deletable-chips
+          @change="getData"
+          label="目标学科"
+        ></v-select>
+      </v-col>
+      <v-col cols="6">
+        <v-select
+          v-model="yearSelect"
+          :items="yearOpt"
+          dense
+          @change="calZipf"
+          label="年份"
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="8">
+        <v-range-slider
+          v-model="nodeRange"
+          :max="nodeMax"
+          :min="nodeMin"
+          dense
+          hide-details
           @change="yearChange"
-          :disabled="chartType === 0"
+          hint="求斜率范围"
+          class="align-center"
         >
-          <el-option
-            v-for="item in dataYearOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>节点数</span>
-        <el-select
-          v-model="nodeCount"
-          disabled
-          placeholder="请选择"
-          @change="yearChange"
+          <template v-slot:prepend>
+            <p style="width: 100px">求斜率范围</p>
+            <v-text-field
+              :value="nodeRange[0]"
+              class="mt-0 pt-0"
+              hide-details
+              single-line
+              type="number"
+              style="width: 60px"
+              @change="$set(nodeRange, 0, $event)"
+            ></v-text-field>
+          </template>
+          <template v-slot:append>
+            <v-text-field
+              :value="nodeRange[1]"
+              class="mt-0 pt-0"
+              hide-details
+              single-line
+              type="number"
+              style="width: 60px"
+              @change="$set(nodeRange, 1, $event)"
+            ></v-text-field>
+          </template>
+        </v-range-slider>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="6">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="50vh"
+          id="subjectChart1"
         >
-          <el-option
-            v-for="item in nodeCountOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>图表类型</span>
-        <el-select
-          v-model="chartType"
-          class="selectsubjectmiddle"
-          placeholder="请选择"
+        </v-card>
+      </v-col>
+      <v-col col="6">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="50vh"
+          id="subjectChart2"
         >
-          <el-option
-            v-for="item in chartTypeOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-
-      <div id="slider" class="selectitem">
-        <el-row type="flex">
-          <span class="title">点数计算范围</span>
-          <div style="margin-left:10px">
-            <el-input-number
-              v-model="nodeRange[0]"
-              size="small"
-              @change="getData"
-              :min="1"
-              :max="nodeRange[1]"
-            ></el-input-number>
-          </div>
-
-          <el-slider
-            v-model="nodeRange"
-            range
-            :min="0"
-            :max="nodeCount"
-            @change="getData"
-          ></el-slider>
-          <div style="margin-left:10px">
-            <el-input-number
-              v-model="nodeRange[1]"
-              size="small"
-              @change="getData"
-              :min="nodeRange[0]"
-              :max="10000"
-            ></el-input-number>
-          </div>
-        </el-row>
-      </div>
-      <el-button class="selectitem" type="primary" @click="getData"
-        >确定</el-button
-      >
-    </div>
-    <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
-  </div>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 import { getZipfByNodes } from "@/api/index";
 import ecStat from "echarts-stat";
 
+import * as localforage from "localforage";
+
 export default {
   name: "zipf幂律斜率",
   data() {
     return {
-      dataCache: {},
-      chartType: 0,
-      chartTypeOptions: [
-        {
-          value: 0,
-          label: "斜率趋势"
-        },
-        {
-          value: 1,
-          label: "zipf 点图"
-        }
-      ],
-      subjectTarget: [],
-      nodeCount: 10000,
+      store: localforage.createInstance({
+        name: "subject",
+        version: 1.0,
+        storeName: "ZipfByNodes", // Should be alphanumeric, with underscores.
+        description: "store tree"
+      }),
+      loading: false,
       nodeRange: [250, 2500],
-      categorys: [
+      nodeMax: 10000,
+      nodeMin: 0,
+      subjectSelect: [],
+      yearSelect: null,
+      yearOpt: [
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020
+      ],
+      categoryOpt: [
         "Literature",
         "Psychology",
         "Logic",
@@ -163,155 +167,109 @@ export default {
         "Genome editing",
         "Anthropology",
         "Neuroscience"
-      ],
-      dataYear: 2007,
-      dataYearopt: [
-        2007,
-        2008,
-        2009,
-        2010,
-        2011,
-        2013,
-        2014,
-        2015,
-        2016,
-        2017,
-        2018,
-        2019,
-        2020
-      ],
-      loading: false
+      ]
     };
   },
   mounted() {
     window.onresize = () => {
-      this.myChart.resize();
+      this.myChart1.resize();
+      this.myChart2.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
   },
   computed: {
-    nodeCountOptions: function() {
-      let ret_list = [];
-      for (let i = 1000; i <= 10000; i += 1000) {
-        ret_list.push({
-          value: i,
-          label: i
-        });
-      }
-      return ret_list;
+    myChart1: function() {
+      return this.$echarts.init(document.getElementById("subjectChart1"));
     },
-    categorysOptions: function() {
-      let that = this;
-      let _data = that.categorys.map(item => {
-        return {
-          value: item,
-          label: item
-        };
-      });
-      return _data;
-    },
-    dataYearOptions: function() {
-      let that = this;
-      let _data = that.dataYearopt.map(item => {
-        return {
-          value: item,
-          label: item
-        };
-      });
-      _data.push({
-        value: 1111,
-        label: "历年总和"
-      });
-      return _data;
-    },
-    myChart: function() {
-      return this.$echarts.init(document.getElementById("subjectChart"));
+    myChart2: function() {
+      return this.$echarts.init(document.getElementById("subjectChart2"));
     }
   },
   methods: {
     getData() {
-      if (this.chartType === 0) {
-        this.yearChange();
-      } else {
-        this.calZipf();
-      }
+      this.yearChange();
+      this.calZipf();
     },
     yearChange() {
       /**
        * @description: 多个学科的斜率历年趋势
        */
-      if (this.subjectTarget.length < 1) {
-        this.$message.error("请选择一个学科");
+      if (this.subjectSelect.length < 1) {
         return;
       }
-      // this.getData();
       this.calMulitYear();
     },
     async calMulitYear() {
       let resList = [];
       this.loading = true;
-      for (let subject of this.subjectTarget) {
+      for (let subject of this.subjectSelect) {
         let opt = {
           str: subject,
           N: 10000
         };
         // 缓存
-        let res = this.dataCache[JSON.stringify(opt)];
-        if (!res) {
-          let response = await getZipfByNodes(opt);
-          if (response.data.data) {
-            res = response.data.data;
-            this.dataCache[JSON.stringify(opt)] = res;
-          } else {
-            this.loading = false;
-            this.$message.error("请求失败");
-            return false;
-          }
-        }
-        resList.push(res);
+        let self = this;
+        let resquestKey = JSON.stringify(opt);
+        await self.store
+          .getItem(resquestKey)
+          .then(async function(value) {
+            if (!value) {
+              let response = await getZipfByNodes(opt);
+              if (response.data.data) {
+                value = response.data.data;
+                await self.store.setItem(resquestKey, response.data.data);
+              } else {
+                this.$message.error("请求失败");
+              }
+            }
+            resList.push(value);
+            let options = self.setOptions_slope(resList);
+            self.myChart1.setOption(options, true);
+            self.loading = false;
+          })
+          .catch(function(err) {
+            console.log(err);
+          });
       }
-      let options = this.setOptions_slope(resList);
-      this.myChart.setOption(options, true);
-      this.loading = false;
     },
     async calZipf() {
-      if (this.subjectTarget.length < 1 || !this.dataYear) {
-        this.$message.error("请选择完整");
+      if (this.subjectSelect.length < 1 || !this.yearSelect) {
         return false;
       }
-      if (this.subjectTarget.length > 1 && !this.dataYear === 1111) {
-        this.$message.error("历年全部只能选择一个学科");
+      if (this.subjectSelect.length > 1 && !this.yearSelect === 1111) {
         return false;
       }
       this.loading = true;
       let opt = {
-        str: this.subjectTarget.join(","),
-        N: this.nodeCount
+        str: this.subjectSelect.join(","),
+        N: 10000
       };
-      if (this.dataYear !== 1111) {
-        opt["year"] = this.dataYear;
+      if (this.yearSelect !== 1111) {
+        opt["year"] = this.yearSelect;
       }
 
-      getZipfByNodes(opt)
-        .then(res => {
-          if (res.data.data) {
-            this.drawChart(res.data.data);
-          } else {
-            this.loading = false;
-            this.$message.error("请求失败");
-            return false;
+      let self = this;
+      let resquestKey = JSON.stringify(opt);
+
+      await self.store
+        .getItem(resquestKey)
+        .then(async function(value) {
+          if (!value) {
+            let response = await getZipfByNodes(opt);
+            if (response.data.data) {
+              value = response.data.data;
+              await self.store.setItem(resquestKey, response.data.data);
+            } else {
+              this.$message.error("请求失败");
+            }
           }
+          let options = self.setOptions_zipf(value);
+          self.myChart2.setOption(options, true);
+          self.loading = false;
         })
-        .catch(rej => {
-          this.loading = false;
-          this.$message.error(`请求失败:${rej}`);
+        .catch(function(err) {
+          console.log(err);
         });
-    },
-    drawChart(data) {
-      let myChart = this.$echarts.init(document.getElementById("subjectChart"));
-      let options = this.setOptions_zipf(data);
-      myChart.setOption(options, true);
-      this.loading = false;
     },
 
     setOptions_slope(dataList) {
@@ -341,14 +299,14 @@ export default {
         tmp = (Math.ceil(Math.min(...gradientList) * 10) - 1) / 10;
         if (yMin === null) yMin = tmp;
         else if (yMin > tmp) yMin = tmp;
-
+        let title = data.title.replace(" zipf分布", "");
         seriesList.push({
-          name: data.title,
+          name: title,
           type: "line",
           smooth: false,
           data: gradientList
         });
-        lengnds.push(data.title);
+        lengnds.push(title);
       }
 
       let _opt = {
@@ -386,7 +344,7 @@ export default {
         legend: {
           data: lengnds,
           right: "5%",
-          top: "10%",
+          top: "50%",
           orient: "vertical"
         },
         grid: {
@@ -404,7 +362,7 @@ export default {
         xAxis: {
           type: "category",
           name: "年",
-          data: this.dataYearopt
+          data: this.yearOpt
         },
         yAxis: {
           type: "value",
@@ -471,6 +429,9 @@ export default {
           }
         });
       }
+      let ymax = Math.floor(Math.max(...[].concat(...data.y)) * 10) + 1;
+
+      console.log(data);
       let _opt = {
         title: {
           text: data.title,
@@ -506,7 +467,7 @@ export default {
         legend: {
           data: data.legend,
           right: "5%",
-          top: "10%",
+          top: "50%",
           orient: "vertical"
         },
         grid: {
@@ -528,7 +489,7 @@ export default {
         },
         yAxis: {
           type: "value",
-          max: "dataMax",
+          max: ymax / 10,
           name: "数量 log",
           min: 0
         },
@@ -539,22 +500,3 @@ export default {
   }
 };
 </script>
-
-<style lang="less" scoped>
-@import url("../assets/style/common.less");
-#slider {
-  display: flex;
-  width: 48rem;
-  .el-row {
-    display: flex;
-    // margin: 0 auto;
-    align-items: center;
-    .el-slider {
-      margin-left: 15px;
-      display: block;
-      position: relative;
-      width: 20rem;
-    }
-  }
-}
-</style>

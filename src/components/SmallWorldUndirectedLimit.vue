@@ -1,140 +1,179 @@
+<!--
+ * @Version: 0.0.1
+ * @Author: ider
+ * @Date: 2020-04-13 18:38:54
+ * @LastEditors: ider
+ * @LastEditTime: 2020-04-14 11:06:26
+ * @Description: 
+ -->
+
 <template>
-  <div class="page-discipline">
-    <div class="selectbox">
-      <div class="selectitem">
-        <span>目标学科</span>
-        <el-select
-          v-model="subjectTarget"
-          class="selectsubjectmax"
-          placeholder="请选择"
+  <v-container fluid>
+    <v-row>
+      <v-col cols="6">
+        <v-select
+          v-model="currentSubjectSelect"
+          :items="categoryOpt"
+          @change="getData"
+          small-chips
+          dense
+          deletable-chips
           multiple
-          collapse-tags
-          @change="subjectChange"
-        >
-          <el-option
-            v-for="item in categorysOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>年份</span>
-        <el-select
-          v-model="yearTarget"
-          class="yearSelect"
-          collapse-tags
-          placeholder="请选择"
+          label="当前学科"
+        ></v-select>
+      </v-col>
+      <v-col cols="6">
+        <v-select
+          v-model="yearSelect"
+          :items="yearOpt"
+          @change="getData"
+          small-chips
+          dense
+          deletable-chips
           multiple
-          @change="subjectChange"
-        >
-          <el-option
-            v-for="item in yearOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            :disabled="item.label === subjectTarget"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>网络扩大方式</span>
-        <el-select
-          v-model="increaseTaeget"
-          class="selectsubjectmax"
-          collapse-tags
-          placeholder="请选择"
+          label="年份"
+        ></v-select>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="5">
+        <v-select
+          v-model="netSelect"
+          :items="netOpt"
+          @change="getData"
+          dense
+          small-chips
           multiple
-          @change="subjectChange"
+          label="网络扩大方式"
+        ></v-select>
+      </v-col>
+      <v-col cols="3">
+        <v-select
+          v-model="methodSelect"
+          :items="methodOpt"
+          @change="getData"
+          dense
+          small-chips
+          label="小世界指标"
+        ></v-select>
+      </v-col>
+
+      <v-col cols="2">
+        <v-select
+          v-model="nodeCountSelect"
+          :items="nodeCountOpt"
+          @change="getData"
+          dense
+          small-chips
+          label="网络节点上限"
+        ></v-select>
+      </v-col>
+      <v-col align-self="center" cols="2">
+        <v-btn
+          color="light-blue lighten-2"
+          dark
+          small
+          @click.stop="dialog = true"
         >
-          <el-option
-            v-for="item in increaseOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            :disabled="item.label === subjectTarget"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>小世界指标</span>
-        <el-select
-          v-model="methodOptions"
-          class="selectsubjectmiddle"
-          collapse-tags
-          placeholder="请选择"
-          @change="subjectChange"
+          <v-icon>mdi-help-circle</v-icon>
+          参数
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+          id="subjectChart"
         >
-          <el-option
-            v-for="item in methods"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            :disabled="item.label === subjectTarget"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>网络节点上限</span>
-        <el-select
-          v-model="nodeCounttarget"
-          class="nodeCountSelect"
-          collapse-tags
-          placeholder="请选择"
-          @change="subjectChange"
-        >
-          <el-option
-            v-for="item in nodeCountOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <el-button type="primary" @click="helpMessage">参数说明</el-button>
-      </div>
-      <!-- <div class="selectitem">
-        <span>log(N)/log(log(N))</span>
-        <el-select
-          v-model="devOption"
-          class="methodSelect"
-          collapse-tags
-          placeholder="请选择"
-          @change="subjectChange"
-        >
-          <el-option
-            v-for="item in devOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            :disabled="item.label === subjectTarget"
-          ></el-option>
-        </el-select>
-      </div> -->
-      <!-- <el-button type="primary" @click="getData">确定</el-button> -->
-    </div>
-    <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
-  </div>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-dialog v-model="dialog" width="500">
+      <v-card>
+        <v-card-title class="headline grey lighten-2" primary-title>
+          参数说明
+        </v-card-title>
+
+        <v-card-text>
+          <p>
+            <b>网络扩大方式</b>： <br />按照 Wikipedia
+            三层类距离为顺序，不同规模下的网络的小世界属性 <br />按照 google
+            距离距离为顺序，不同规模下的网络的小世界属性
+            <br />随机顺序，不同规模下的网络的小世界属性<br /><b>小世界指标</b
+            >： <br />小世界网络指标有两个指标，平均路径长度，集聚系数。<br /><b
+              >节点上限</b
+            >： <br />图表中展示的节点的最大数量<br />
+          </p>
+        </v-card-text>
+
+        <v-divider></v-divider>
+      </v-card>
+    </v-dialog>
+  </v-container>
 </template>
 
 <script>
 import smallworldundirectLimter from "../data/smallworldundirectLimter.json";
+
 export default {
   name: "SmallWorld无向图规模趋势",
   data() {
     return {
-      subjectTarget: [],
-      subjectRelevances: [],
-      yearTarget: [],
-      increaseTaeget: [0],
-      nodeCounttarget: 4000,
-      methodValue: "linksin",
-      subjectLevel: "0",
-      categorys: [
-        "Psychology",
+      dialog: false,
+      loading: false,
+      currentSubjectSelect: [],
+      yearSelect: [],
+      netSelect: [0],
+      methodSelect: "ad",
+      nodeCountSelect: 4000,
+      nodeCountOpt: [500, 2000, 4000, 6000, 10000],
+      methodOpt: [
+        {
+          value: "ad",
+          text: "平均路径长度"
+        },
+        {
+          value: "cc",
+          text: "集聚系数"
+        }
+      ],
+      netOpt: [
+        {
+          value: 2,
+          text: "三层类距离"
+        },
+        {
+          value: 0,
+          text: "谷歌距离"
+        },
+        {
+          value: 1,
+          text: "随机排序"
+        }
+      ],
+
+      yearOpt: [
+        2007,
+        2008,
+        2009,
+        2011,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020
+      ],
+      categoryOpt: [
         "Literature",
+        "Psychology",
         "Logic",
         "Philosophy",
         "Mathematics",
@@ -167,106 +206,13 @@ export default {
         "Genome editing",
         "Anthropology",
         "Neuroscience"
-      ],
-      methodOptions: "ad",
-      nodeCountOptions: [
-        {
-          value: 500,
-          label: 500
-        },
-        {
-          value: 2000,
-          label: 2000
-        },
-        {
-          value: 4000,
-          label: 4000
-        },
-        {
-          value: 6000,
-          label: 6000
-        },
-        {
-          value: 100000,
-          label: "不限制"
-        }
-      ],
-      increaseOptions: [
-        {
-          value: 2,
-          label: "三层类距离"
-        },
-        {
-          value: 0,
-          label: "谷歌距离"
-        },
-        {
-          value: 1,
-          label: "随机排序"
-        }
-      ],
-      methods: [
-        {
-          value: "ad",
-          label: "平均路径长度"
-        },
-        {
-          value: "cc",
-          label: "集聚系数"
-        }
-      ],
-      yearOptions: [
-        {
-          value: 2007,
-          label: 2007
-        },
-        {
-          value: 2008,
-          label: 2008
-        },
-        {
-          value: 2009,
-          label: 2009
-        },
-        {
-          value: 2011,
-          label: 2011
-        },
-        {
-          value: 2013,
-          label: 2013
-        },
-        {
-          value: 2014,
-          label: 2014
-        },
-        {
-          value: 2015,
-          label: 2015
-        },
-        {
-          value: 2016,
-          label: 2016
-        },
-        {
-          value: 2017,
-          label: 2017
-        },
-        {
-          value: 2018,
-          label: 2018
-        },
-        {
-          value: 2019,
-          label: 2019
-        },
-        {
-          value: 2020,
-          label: 2020
-        }
-      ],
-      loading: false
+      ]
     };
+  },
+  computed: {
+    myChart: function() {
+      return this.$echarts.init(document.getElementById("subjectChart"));
+    }
   },
   mounted() {
     window.onresize = () => {
@@ -274,41 +220,12 @@ export default {
     };
     this.$store.commit("changeCurentPath", this.$options.name);
   },
-  computed: {
-    categorysOptions: function() {
-      let that = this;
-      let _data = that.categorys.map(item => {
-        return {
-          value: item,
-          label: item
-        };
-      });
-      return _data;
-    },
-    myChart: function() {
-      return this.$echarts.init(document.getElementById("subjectChart"));
-    }
-  },
   methods: {
-    helpMessage() {
-      this.$notify({
-        dangerouslyUseHTMLString: true,
-        title: "参数说明",
-        message:
-          "<b>网络扩大方式</b>：	<br>按照 Wikipedia 三层类距离为顺序，不同规模下的网络的小世界属性<br>\
-					<br>按照 google 距离距离为顺序，不同规模下的网络的小世界属性<br>\
-					<br>随机顺序，不同规模下的网络的小世界属性<br>\
-<b>小世界指标</b>：		<br>小世界网络指标有两个指标，平均路径长度，集聚系数。<br>\
-<b>节点上限</b>：		<br>图表中展示的节点的最大数量<br>",
-        position: "top-left"
-      });
-    },
     async getData() {
       if (
-        this.subjectTarget.length === 0 ||
-        this.methodOptions.length === 0 ||
-        this.yearTarget.length === 0 ||
-        this.increaseTaeget.length === 0
+        this.currentSubjectSelect.length === 0 ||
+        this.yearSelect.length === 0 ||
+        this.netSelect.length === 0
       ) {
         // this.$message.error("请选择完整");
         return false;
@@ -319,12 +236,12 @@ export default {
 
       let tmp_dict = {};
       let legend = new Set();
-      for (let x of this.subjectTarget) {
-        for (let y of this.yearTarget) {
-          for (let z of this.increaseTaeget) {
+      for (let x of this.currentSubjectSelect) {
+        for (let y of this.yearSelect) {
+          for (let z of this.netSelect) {
             let iName = "";
-            if (z === 1) iName = "随机";
-            else if (z === 2) iName = "三层类距离";
+            if (z === "随机排序") iName = "随机";
+            else if (z === "三层类距离") iName = "三层类距离";
             else iName = "谷歌";
             let _id = `${x} - ${iName} - ${y}`;
             legend.add(_id);
@@ -333,42 +250,15 @@ export default {
               y: y,
               data: []
             };
+            console.log(x, y, z);
             for (let row of smallworldundirectLimter[x][y][z]) {
-              if (this.nodeCounttarget > row["nv"]) {
-                tmp_dict[_id].data.push([row["nv"], row[this.methodOptions]]);
+              if (this.nodeCountSelect > row["nv"]) {
+                tmp_dict[_id].data.push([row["nv"], row[this.methodSelect]]);
               }
             }
           }
         }
       }
-
-      // for (let row of smallworldundirectLimter.data) {
-      //   console.log(row["n"]);
-      //   let current_name = smallworldundirectLimter.schema[row["n"]];
-      //   if (
-      //     this.subjectTarget.indexOf(current_name) > -1 &&
-      //     this.yearTarget.indexOf(row["y"]) > -1 &&
-      //     this.increaseTaeget.indexOf(row["t"]) > -1 &&
-      //     this.nodeCounttarget > row["nv"]
-      //   ) {
-      //     let iName = "";
-      //     if (row["t"] === 1) iName = "随机";
-      //     else if (row["t"] === 2) iName = "三层类距离";
-      //     else iName = "谷歌";
-      //     let _id = `${current_name} - ${iName} - ${row["y"]}`;
-      //     if (this.devOption === 1) {
-      //       tmp_dict[_id]["data"].push([
-      //         row["nv"],
-      //         row[this.methodOptions] /
-      //           (Math.log10(row["nv"]) / Math.log10(Math.log10(row["nv"])))
-      //       ]);
-      //       console.log(
-      //         Math.log10(row["nv"]) / Math.log10(Math.log10(row["nv"]))
-      //       );
-      //     } else
-      //       tmp_dict[_id]["data"].push([row["nv"], row[this.methodOptions]]);
-      //   }
-      // }
 
       let ret_seriest = [];
       for (let _id in tmp_dict) {
@@ -478,32 +368,7 @@ export default {
         series: data.series
       };
       return _opt;
-    },
-    subjectChange() {
-      this.getData();
     }
   }
 };
 </script>
-
-<style lang="less" scoped>
-@import url("../assets/style/common.less");
-.subjectRelevances {
-  width: 300px;
-}
-.methodSelect {
-  width: 150px;
-}
-.nodeCountSelect {
-  width: 120px;
-}
-.increaseSelect {
-  width: 240px;
-}
-.yearSelect {
-  width: 140px;
-}
-.subjectLevel {
-  width: 120px;
-}
-</style>

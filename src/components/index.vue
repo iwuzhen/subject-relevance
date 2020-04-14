@@ -20,7 +20,7 @@
               class="mx-auto"
               max-width="344"
               :elevation="hover ? 16 : 2"
-              min-height="180"
+              min-height="150"
               :to="item.to"
               :href="item.href"
               ><v-card-title>{{ item.title }}</v-card-title
@@ -118,7 +118,7 @@ export default {
           {
             title: "逐年趋势",
             text: "小世界",
-            to: "/SmallWorldUndirectedLimit"
+            to: "/SmallWorldUndirected"
           }
         ]
       }
