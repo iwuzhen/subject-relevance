@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-14 22:23:01
  * @LastEditors: ider
- * @LastEditTime: 2020-04-15 00:03:53
+ * @LastEditTime: 2020-04-15 12:17:02
  * @Description: 
  -->
 <template>
@@ -16,6 +16,7 @@
           @change="getData"
           chips
           multiple
+          clearable
           dense
           label="目标学科"
         ></v-select>
@@ -42,14 +43,15 @@
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="70vh"
-          id="subjectChart"
-        >
-        </v-card>
+        <v-data-table
+          :headers="headers"
+          :items="desserts"
+          :page.sync="page"
+          :items-per-page="itemsPerPage"
+          hide-default-footer
+          class="elevation-1"
+          @page-count="pageCount = $event"
+        ></v-data-table>
       </v-col>
     </v-row>
     <v-dialog v-model="dialog" width="500">

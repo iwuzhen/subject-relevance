@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-14 22:23:01
  * @LastEditors: ider
- * @LastEditTime: 2020-04-15 00:09:51
+ * @LastEditTime: 2020-04-15 15:32:41
  * @Description: 
  -->
 <template>
@@ -29,6 +29,14 @@
           label="year"
         ></v-select>
       </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="tableSelect"
+          :items="tableOpt"
+          @change="getData"
+          label="表格类型"
+        ></v-select>
+      </v-col>
       <!-- <v-col align-self="center" cols="2">
         <v-btn
           color="light-blue lighten-2"
@@ -42,14 +50,16 @@
       </v-col> -->
     </v-row>
     <v-row>
-      <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="70vh"
-          id="subjectChart"
-        >
+      <v-col col="2" v-for="item in gridData" :key="item">
+        <v-card>
+          <v-card-title>{{ item.title }}</v-card-title>
+          <v-data-table
+            :headers="item.headers"
+            :items="item.desserts"
+            dense
+            sort-desc
+            class="elevation-1"
+          ></v-data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -79,6 +89,8 @@ export default {
       dialog: false,
       currentSubjectSelect: [],
       yearsSelect: [],
+      tableSelect: "按学科组合",
+      tableOpt: ["按年组合", "按学科组合"],
       yearsOpt: [
         2007,
         2008,
@@ -130,7 +142,8 @@ export default {
         "Anthropology",
         "Neuroscience"
       ],
-      loading: false
+      loading: false,
+      gridData: []
     };
   },
   mounted() {
@@ -160,103 +173,131 @@ export default {
       //   let data;
       let response = await getTopArticles(opt);
       if (response.data.data) {
-        console.log(response.data.data);
-        // this.drawChart(response.data.data);
+        this.drawTable(response.data.data);
       } else {
         this.$message.error("请求失败");
       }
     },
-    drawChart(data) {
-      let options = this.setOptions(data);
-      console.log(options);
-      console.log("draw");
-      this.myChart.setOption(options, true);
-      this.loading = false;
-    },
-    setOptions(data) {
-      let pieData = {};
-      for (let year of data.y) {
-        if (!pieData[`${year}年`]) {
-          pieData[`${year}年`] = 1;
-        } else {
-          pieData[`${year}年`] = pieData[`${year}年`] + 1;
+    drawTable(data) {
+      let ret_data = [];
+      if (this.tableSelect == "按年组合") {
+        let headers = [
+          {
+            text: "article name",
+            align: "start",
+            sortable: false,
+            value: "name"
+          },
+          {
+            text: "links count",
+            align: "start",
+            value: "links"
+          }
+        ];
+        // 组合 header
+        for (let catename of this.currentSubjectSelect) {
+          headers.push({
+            text: `${catename} 排名`,
+            align: "center",
+            value: catename,
+            sort: (a, b) => {
+              if (!a) {
+                return 1;
+              } else if (!b) {
+                return -1;
+              }
+              return a - b;
+            }
+          });
+        }
+        for (let year of this.yearsSelect) {
+          let desserts = {};
+          for (let catename of this.currentSubjectSelect) {
+            let sortedItems = Object.entries(data[year][catename]).sort(
+              (x, y) => {
+                return Number(y[1]) - Number(x[1]);
+              }
+            );
+            let sortedNameArray = Object.entries(data[year][catename])
+              .sort((x, y) => {
+                return Number(y[1]) - Number(x[1]);
+              })
+              .map(item => {
+                return item[0];
+              });
+            for (let item of sortedItems) {
+              if (!desserts[item[0]]) {
+                desserts[item[0]] = {};
+              }
+              desserts[item[0]]["name"] = item[0];
+              desserts[item[0]]["links"] = item[1];
+              desserts[item[0]][catename] =
+                sortedNameArray.indexOf(item[0]) + 1;
+            }
+          }
+          ret_data.push({
+            title: `${year} 各学科文章`,
+            headers: headers,
+            desserts: Object.values(desserts)
+          });
+        }
+      } else {
+        // 年为表头
+        let headers = [
+          {
+            text: "article name",
+            align: "start",
+            sortable: false,
+            value: "name"
+          }
+        ];
+        // 组合 header
+
+        for (let year of this.yearsSelect) {
+          headers.push({
+            text: `${year} count`,
+            align: "center",
+            value: `y${year}`,
+            sort: (a, b) => {
+              if (!a) {
+                return -1;
+              } else if (!b) {
+                return 1;
+              }
+              return a - b;
+            }
+          });
+        }
+        for (let catename of this.currentSubjectSelect) {
+          // 二次循环出
+
+          let desserts = {};
+          for (let year of this.yearsSelect) {
+            let sortedItems = Object.entries(data[year][catename]).sort(
+              (x, y) => {
+                return Number(y[1]) - Number(x[1]);
+              }
+            );
+            for (let articleCount of sortedItems) {
+              if (!desserts[articleCount[0]]) {
+                desserts[articleCount[0]] = {};
+              }
+              desserts[articleCount[0]]["name"] = articleCount[0];
+              desserts[articleCount[0]][`y${year}`] = articleCount[1];
+            }
+          }
+          ret_data.push({
+            title: `${catename} 各年文章`,
+            headers: headers,
+            desserts: Object.values(desserts)
+          });
         }
       }
-      console.log(pieData);
-      let _opt = {
-        tooltip: {},
-        title: [
-          {
-            text: "衰减学科分布",
-            left: "35%",
-            textAlign: "center"
-          },
-          {
-            text: "衰减年份分布",
-            left: "80%",
-            textAlign: "center"
-          }
-        ],
-        grid: [
-          {
-            top: 50,
-            width: "70%",
-            bottom: "45%",
-            left: 10,
-            containLabel: true
-          }
-        ],
-        xAxis: [
-          {
-            type: "value",
-            name: "衰减需要的年数",
-            max: Math.max(...data.y) + 1,
-            splitLine: {
-              show: false
-            }
-          }
-        ],
-        yAxis: [
-          {
-            name: "学科",
-            type: "category",
-            data: data.x,
-            axisLabel: {
-              interval: 0,
-              rotate: 30
-            },
-            splitLine: {
-              show: false
-            }
-          }
-        ],
-        series: [
-          {
-            type: "bar",
-            stack: "chart",
-            z: 3,
-            label: {
-              normal: {
-                position: "right",
-                show: true
-              }
-            },
-            data: data.y
-          },
-          {
-            type: "pie",
-            radius: [0, "30%"],
-            center: ["80%", "25%"],
-            data: Object.keys(pieData).map(function(key) {
-              return {
-                name: key,
-                value: pieData[key]
-              };
-            })
-          }
-        ]
-      };
-      return _opt;
+
+      console.log(ret_data);
+      this.gridData = ret_data;
+      console.log(this.gridData);
+      this.loading = false;
     }
   }
 };
