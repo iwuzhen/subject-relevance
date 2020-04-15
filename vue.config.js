@@ -2,7 +2,7 @@ module.exports = {
   "devServer": {
     "proxy": {
       "/api": {
-        "target": "http://192.168.1.224:10004/wiki_api/api/",
+        "target": "http://127.0.0.1:10004/wiki_api/api/",
         "changeOrigin": true,
         "pathRewrite": {
           "^/api": "/"
