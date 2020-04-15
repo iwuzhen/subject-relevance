@@ -4,7 +4,7 @@
  * @Date: 2020-04-14 22:23:01
  * @LastEditors: ider
 <<<<<<< Updated upstream
- * @LastEditTime: 2020-04-15 15:53:57
+ * @LastEditTime: 2020-04-15 19:35:16
 =======
  * @LastEditTime: 2020-04-15 15:45:16
 >>>>>>> Stashed changes
@@ -47,6 +47,7 @@
     </v-row>
     <v-row>
       <v-col col="12">
+        <v-subheader>最大值 20 年，代表没有半衰期</v-subheader>
         <v-card
           class="mx-auto"
           outlined
