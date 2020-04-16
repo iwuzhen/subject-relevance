@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-14 14:34:43
+ * @LastEditTime: 2020-04-16 12:22:40
  * @Description: 
  -->
 <template>
@@ -134,10 +134,10 @@ export default {
   data() {
     return {
       store: localforage.createInstance({
-        name: "wikiTree",
+        name: "subject",
         version: 1.0,
-        storeName: "keyvaluepairs", // Should be alphanumeric, with underscores.
-        description: "some description"
+        storeName: "wikiTree", // Should be alphanumeric, with underscores.
+        description: "store tree"
       }),
       selection1: [],
       selection2: [],
