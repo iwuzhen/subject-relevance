@@ -15,6 +15,7 @@ import powerLawPageRank from "@/components/powerLawPageRank";
 import DegreeDistribution from "@/components/DegreeDistribution";
 import ZipfByNodes from "@/components/ZipfByNodes";
 import WikiTree from "@/components/WikiTree";
+import BritannicaTree from "@/components/BritannicaTree";
 import Home from "@/views/Home";
 import BanShuaiQi from "@/components/BanShuaiQi";
 import TopArticles from "@/components/TopArticles";
@@ -113,6 +114,11 @@ export default new Router({
       path: "/TopArticles",
       name: "TopArticles",
       component: TopArticles
+    },
+    {
+      path: "/BritannicaTree",
+      name: "BritannicaTree",
+      component: BritannicaTree
     }
   ]
 });

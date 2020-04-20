@@ -94,6 +94,15 @@ export function getTopArticles(params) {
     data: params
   });
 }
+// http://wikidb.lambdax.cn:5555/wikidb_web/rest/Britannica/childCategories?categoryTitle=TG9naWM=
+// 大英百科全书 tree
+export function getBritannicaTree(params) {
+  return requestwiki({
+    url: "/Britannica/childCategories",
+    method: "get",
+    params: params
+  });
+}
 
 // 文章 tree
 export function getWikiPageTree(params) {

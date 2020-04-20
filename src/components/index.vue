@@ -49,6 +49,11 @@ export default {
             to: "/WikiTree"
           },
           {
+            title: "Britan Tree",
+            text: "大英百科全书分类层次浏览",
+            to: "/BritannicaTree"
+          },
+          {
             title: "wiki子类半衰期",
             text: "2007年的N层子类，经过x年，其子类有一半改变了",
             to: "/BanShuaiQi"
