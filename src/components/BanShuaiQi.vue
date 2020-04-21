@@ -3,11 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-14 22:23:01
  * @LastEditors: ider
-<<<<<<< Updated upstream
- * @LastEditTime: 2020-04-15 19:35:16
-=======
- * @LastEditTime: 2020-04-15 15:45:16
->>>>>>> Stashed changes
+ * @LastEditTime: 2020-04-21 12:31:20
  * @Description: 
  -->
 <template>
@@ -31,6 +27,14 @@
           :items="levelOpt"
           @change="getData"
           label="level"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="yearSelect"
+          :items="yearOpt"
+          @change="getData"
+          label="year"
         ></v-select>
       </v-col>
       <!-- <v-col align-self="center" cols="2">
@@ -85,6 +89,8 @@ export default {
       currentSubjectSelect: [],
       levelSelect: "2",
       levelOpt: ["1", "2"],
+      yearSelect:2007,
+      yearOpt:[2007,2008,2009,2010,2011,2013,2014,2015,2016,2017,2018,2019,2020],
       categoryOpt: [
         "Literature",
         "Psychology",
@@ -143,7 +149,8 @@ export default {
       this.loading = true;
       let opt = {
         cats: this.currentSubjectSelect.join(","),
-        level: this.levelSelect
+        level: this.levelSelect,
+        year: this.yearSelect
       };
       //   let data;
       let response = await getBanshuaiqi(opt);
