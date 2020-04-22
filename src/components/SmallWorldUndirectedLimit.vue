@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-04-14 11:06:26
+ * @LastEditTime: 2020-04-22 21:27:09
  * @Description: 
  -->
 
@@ -37,7 +37,7 @@
     </v-row>
 
     <v-row>
-      <v-col cols="5">
+      <v-col cols="4">
         <v-select
           v-model="netSelect"
           :items="netOpt"
@@ -48,13 +48,12 @@
           label="网络扩大方式"
         ></v-select>
       </v-col>
-      <v-col cols="3">
+      <v-col cols="2">
         <v-select
           v-model="methodSelect"
           :items="methodOpt"
           @change="getData"
           dense
-          small-chips
           label="小世界指标"
         ></v-select>
       </v-col>
@@ -65,7 +64,6 @@
           :items="nodeCountOpt"
           @change="getData"
           dense
-          small-chips
           label="网络节点上限"
         ></v-select>
       </v-col>
@@ -240,10 +238,10 @@ export default {
         for (let y of this.yearSelect) {
           for (let z of this.netSelect) {
             let iName = "";
-            if (z === "随机排序") iName = "随机";
-            else if (z === "三层类距离") iName = "三层类距离";
+            if (z === 1) iName = "随机";
+            else if (z === 2) iName = "类排序";
             else iName = "谷歌";
-            let _id = `${x} - ${iName} - ${y}`;
+            let _id = `${x} -${iName}- ${y}`;
             legend.add(_id);
             tmp_dict[_id] = {
               n: x,
@@ -289,8 +287,7 @@ export default {
     },
     setOptions(data) {
       // 获取 y 轴的最大最小值
-      var yMax = null,
-        yMin = null;
+      var yMax = null;
       for (let series_t of data.series) {
         let gradientList = [];
         for (let row of series_t.data) {
@@ -299,9 +296,6 @@ export default {
         let tmp = (Math.floor(Math.max(...gradientList) * 10) + 1) / 10;
         if (yMax === null) yMax = tmp;
         else if (yMax < tmp) yMax = tmp;
-        tmp = (Math.ceil(Math.min(...gradientList) * 10) - 1) / 10;
-        if (yMin === null) yMin = tmp;
-        else if (yMin > tmp) yMin = tmp;
       }
 
       let _opt = {
@@ -338,8 +332,11 @@ export default {
         },
         legend: {
           data: data.legend,
-          right: "5%",
-          top: "10%",
+          right: "4%",
+          top: "35%",
+          textStyle: {
+            fontSize: 14
+          },
           orient: "vertical"
         },
         grid: {
@@ -362,8 +359,7 @@ export default {
         },
         yAxis: {
           type: "value",
-          max: yMax,
-          min: yMin
+          max: yMax
         },
         series: data.series
       };

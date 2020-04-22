@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-16 12:22:40
+ * @LastEditTime: 2020-04-22 22:06:41
  * @Description: 
  -->
 <template>
@@ -348,7 +348,7 @@ export default {
               });
               data = response.data;
               if (!data) {
-                this.$message.error("请求失败");
+                this.$emit("emitMesage", "请求失败");
               }
               await store.setItem(pageKey, data);
             } else {
@@ -381,7 +381,7 @@ export default {
               });
               data = response.data;
               if (!data) {
-                this.$message.error("请求失败");
+                this.$emit("emitMesage", "请求失败");
               }
               await store.setItem(categoryKey, data);
             } else {

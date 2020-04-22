@@ -1,66 +1,54 @@
 <template>
-  <div class="page-discipline">
-    <div class="selectbox">
-      <div class="selectitem">
-        <span>目标学科 </span>
-        <el-select
+  <v-container fluid>
+    <v-row>
+      <v-col cols="8">
+        <v-select
           v-model="subjectTarget"
-          class="selectsubjectmax"
-          placeholder="请选择"
+          :items="categorys"
+          @change="getData"
+          chips
           multiple
-          collapse-tags
-          @change="subjectChange"
-        >
-          <el-option
-            v-for="item in categorysOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>数据类型 </span>
-        <el-select
+          dense
+          label="目标学科"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select
           v-model="dataType"
-          @change="subjectChange"
-          placeholder="请选择"
-        >
-          <el-option
-            v-for="item in dataTypeOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>level </span>
-        <el-select
+          :items="dataTypeOptions"
+          @change="getData"
+          label="数据类型"
+        ></v-select>
+      </v-col>
+
+      <v-col cols="2">
+        <v-select
           v-model="subjectLevel"
-          placeholder="请选择"
-          @change="subjectChange"
+          :items="levelOptions"
+          @change="getData"
+          label="level"
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+          id="subjectChart"
         >
-          <el-option
-            v-for="item in levelOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <el-button class="selectitem" type="primary" @click="getData"
-        >确定</el-button
-      >
-    </div>
-    <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
-  </div>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 import { getViewAndEdits } from "@/api/index";
 export default {
-  name: "view_edit",
+  name: "ve_访问量&编辑量",
   data() {
     return {
       subjectTarget: [],
@@ -104,56 +92,36 @@ export default {
       levelOptions: [
         {
           value: 0,
-          label: "0"
+          text: "0"
         },
         {
           value: 1,
-          label: "1"
+          text: "1"
         },
         {
           value: 2,
-          label: "2"
+          text: "2"
         },
         {
           value: "1000",
-          label: "top 1000"
+          text: "top 1000"
         }
       ],
       dataType: 0,
       dataTypeOptions: [
         {
           value: 0,
-          label: "访问量"
+          text: "访问量"
         },
         {
           value: 1,
-          label: "编辑量"
+          text: "编辑量"
         }
       ],
       loading: false
     };
   },
   computed: {
-    categorysOptions: function() {
-      let that = this;
-      let _data = that.categorys.map(item => {
-        return {
-          value: item,
-          label: item
-        };
-      });
-      return _data;
-    },
-    SubCategorysOptions: function() {
-      let that = this;
-      let _data = that.enginerringChildren.map(item => {
-        return {
-          value: item,
-          label: item
-        };
-      });
-      return _data;
-    },
     myChart: function() {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
@@ -183,32 +151,16 @@ export default {
       getViewAndEdits(opt)
         .then(res => {
           if (res.data.data) {
-            // let keyIndex = []
-            // let newLegend = []
-            // let newY = []
-            // console.log(this.subjectTarget)
-            // for (let key of this.subjectTarget) {
-            //   if (res.data.data['legend'].indexOf(key) >= 0) {
-            //     keyIndex.push(res.data.data['legend'].indexOf(key))
-            //     newLegend.push(key)
-            //   }
-            // }
-            // for (let key of keyIndex) {
-            //   newY.push(res.data.data['y'][key])
-            // }
-            // res.data.data['legend'] = newLegend
-            // res.data.data['y'] = newY
-            // console.log(res.data.data)
             this.drawChart(res.data.data);
           } else {
             this.loading = false;
-            this.$message.error("请求失败");
+            this.$emit("emitMesage", "请求失败");
             return false;
           }
         })
         .catch(rej => {
           this.loading = false;
-          this.$message.error(`请求失败:${rej}`);
+          this.$emit("emitMesage", `请求失败:${rej}`);
         });
     },
     drawChart(data) {
@@ -217,6 +169,9 @@ export default {
       this.loading = false;
     },
     setOptions(data) {
+      let ymax = Math.max(...[].concat(...data.y));
+      let digit = Math.floor(ymax).toString().length;
+      ymax = Math.ceil(ymax / 10 ** (digit - 2)) * 10 ** (digit - 2);
       let _opt = {
         title: {
           text: data.title,
@@ -252,7 +207,10 @@ export default {
         legend: {
           data: data.legend,
           right: "5%",
-          top: "10%",
+          top: "35%",
+          textStyle: {
+            fontSize: 14
+          },
           orient: "vertical"
         },
         grid: {
@@ -275,7 +233,7 @@ export default {
         },
         yAxis: {
           type: "value",
-          max: "dataMax"
+          max: ymax
         },
         series: data.y.map((item, index) => {
           return {

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 19:09:27
  * @LastEditors: ider
- * @LastEditTime: 2020-04-14 11:06:39
+ * @LastEditTime: 2020-04-22 19:17:44
  * @Description: 
  -->
 
@@ -14,16 +14,15 @@
         <v-select
           v-model="currentSubjectSelect"
           :items="categoryOpt"
-          chips
           @change="getData"
           label="当前学科"
         ></v-select>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="5">
         <v-select
           v-model="targetSubjectSelect"
           :items="categoryOpt"
-          chips
+          small-chips
           multiple
           @change="getData"
           label="目标学科"
@@ -34,16 +33,14 @@
         <v-select
           v-model="methodSelect"
           :items="methodOpt"
-          chips
           label="参数"
           @change="getData"
         ></v-select>
       </v-col>
-      <v-col cols="2">
+      <v-col cols="1">
         <v-select
           v-model="graphSizeSelect"
           :items="graphSizeOpt"
-          chips
           label="网络大小"
           @change="getData"
         ></v-select>
@@ -399,7 +396,10 @@ export default {
           data: data.legend,
           //   right: "5%",
           right: gridRight,
-          top: "50%",
+          top: "55%",
+          textStyle: {
+            fontSize: 14
+          },
           orient: "vertical",
           z: 999
         },

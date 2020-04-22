@@ -40,8 +40,14 @@
     <v-content>
       <v-breadcrumbs :items="items" large></v-breadcrumbs>
 
-      <router-view />
+      <router-view v-on:emitMesage="message" />
     </v-content>
+    <v-snackbar v-model="snackbar" top :timeout="timeout">
+      {{ text }}
+      <v-btn color="blue" text @click="snackbar = false">
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -49,8 +55,14 @@
 export default {
   name: "App",
 
-  data: () => ({}),
+  data: () => ({ snackbar: false, timeout: 2000, text: "" }),
   mounted() {},
+  methods: {
+    message(text) {
+      this.text = text;
+      this.snackbar = true;
+    }
+  },
   computed: {
     currentPath: function() {
       return this.$store.state.curentPath;

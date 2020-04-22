@@ -1,69 +1,88 @@
 <template>
-  <div class="page-discipline">
-    <div class="selectbox">
-      <div class="selectitem">
-        <span class="title">目标学科</span>
-        <el-select
+  <v-container fluid>
+    <v-row>
+      <v-col cols="2">
+        <v-select
           v-model="subjectTarget"
-          class="selectsubjectmax"
-          placeholder="请选择"
-          @change="subjectChange"
-        >
-          <el-option
-            v-for="item in categorysOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-
-      <div class="selectitem">
-        <span class="title">相关学科</span>
-        <el-select
-          v-model="subjectRelevances"
-          class="selectsubjectmax"
-          multiple
-          collapse-tags
-          placeholder="请选择"
+          :items="categorys"
+          dense
+          deletable-chips
           @change="getData"
+          label="目标学科"
+        ></v-select>
+      </v-col>
+      <v-col cols="8">
+        <v-select
+          v-model="subjectRelevances"
+          :items="categorysOptions"
+          dense
+          small-chips
+          multiple
+          @change="getData"
+          label="相关学科"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="methodValue"
+          :items="methodOptions"
+          dense
+          @change="getData"
+          label="条件"
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="8">
+        <v-range-slider
+          v-model="years"
+          :max="2019"
+          :min="1950"
+          dense
+          hide-details
+          @change="getData"
+          hint="年份范围"
+          class="align-center"
         >
-          <el-option
-            v-for="item in categorysOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            :disabled="item.label === subjectTarget"
-          ></el-option>
-        </el-select>
-      </div>
-
-      <div class="selectitem">
-        <span class="title">条件</span>
-        <el-select v-model="methodValue" @change="getData" placeholder="请选择">
-          <el-option
-            v-for="item in methodOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div id="slider" class="selectitem">
-        <el-row type="flex">
-          <span class="title">年份范围</span>
-          <el-slider
-            v-model="years"
-            range
-            :min="1950"
-            @change="getData"
-            :max="2019"
-          ></el-slider>
-        </el-row>
-      </div>
-    </div>
-    <div class="echartsBox" id="masChart" v-loading="loading"></div>
-  </div>
+          <template v-slot:prepend>
+            <p style="width: 100px">年份范围</p>
+            <v-text-field
+              :value="years[0]"
+              class="mt-0 pt-0"
+              hide-details
+              single-line
+              type="number"
+              style="width: 60px"
+              @change="$set(years, 0, $event)"
+            ></v-text-field>
+          </template>
+          <template v-slot:append>
+            <v-text-field
+              :value="years[1]"
+              class="mt-0 pt-0"
+              hide-details
+              single-line
+              type="number"
+              style="width: 60px"
+              @change="$set(years, 1, $event)"
+            ></v-text-field>
+          </template>
+        </v-range-slider>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+          id="masChart"
+        >
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -101,12 +120,7 @@ export default {
         "Industrial engineering",
         "Environmental engineering"
       ],
-      methodOptions: [
-        {
-          value: "linksout",
-          label: "linksout"
-        }
-      ],
+      methodOptions: ["linksout"],
       loading: false
     };
   },
@@ -118,14 +132,15 @@ export default {
   },
   computed: {
     categorysOptions: function() {
-      let that = this;
-      let _data = that.categorys.map(item => {
-        return {
+      let subjectTarget = this.subjectTarget;
+      return this.categorys.map(item => {
+        let ret = {
           value: item,
-          label: item
+          text: item
         };
+        if (item == subjectTarget) ret["disabled"] = true;
+        return ret;
       });
-      return _data;
     },
     myChart: function() {
       return this.$echarts.init(document.getElementById("masChart"));
@@ -138,9 +153,17 @@ export default {
         return false;
       }
       this.loading = true;
+      let subjectTarget = this.subjectTarget;
       let opt = {
         strA: this.subjectTarget,
-        strB: this.subjectRelevances.join(","),
+        strB: this.subjectRelevances
+          .filter(item => {
+            if (item == subjectTarget) {
+              return false;
+            }
+            return true;
+          })
+          .join(","),
         method: this.methodValue,
         from: this.years[0],
         to: this.years[1]
@@ -151,13 +174,13 @@ export default {
             this.drawChart(res.data.data);
           } else {
             this.loading = false;
-            this.$message.error("请求失败");
+            this.$emit("emitMesage", "请求失败");
             return false;
           }
         })
         .catch(rej => {
           this.loading = false;
-          this.$message.error(`请求失败:${rej}`);
+          this.$emit("emitMesage", `请求失败:${rej}`);
         });
     },
     drawChart(data) {

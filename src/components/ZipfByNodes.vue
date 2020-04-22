@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-04-14 16:18:19
+ * @LastEditTime: 2020-04-22 22:06:32
  * @Description: 
  -->
 
@@ -219,7 +219,7 @@ export default {
                 value = response.data.data;
                 await self.store.setItem(resquestKey, response.data.data);
               } else {
-                this.$message.error("请求失败");
+                this.$emit("emitMesage", "请求失败");
               }
             }
             resList.push(value);
@@ -260,7 +260,7 @@ export default {
               value = response.data.data;
               await self.store.setItem(resquestKey, response.data.data);
             } else {
-              this.$message.error("请求失败");
+              this.$emit("emitMesage", "请求失败");
             }
           }
           let options = self.setOptions_zipf(value);
@@ -343,8 +343,11 @@ export default {
         },
         legend: {
           data: lengnds,
-          right: "5%",
-          top: "50%",
+          right: "1%",
+          top: "35%",
+          textStyle: {
+            fontSize: 14
+          },
           orient: "vertical"
         },
         grid: {
@@ -466,8 +469,11 @@ export default {
         },
         legend: {
           data: data.legend,
-          right: "5%",
-          top: "50%",
+          right: "1%",
+          top: "35%",
+          textStyle: {
+            fontSize: 14
+          },
           orient: "vertical"
         },
         grid: {

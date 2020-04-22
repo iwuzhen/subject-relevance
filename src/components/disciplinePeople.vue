@@ -237,7 +237,7 @@ export default {
         if (response.data.data) {
           chartData = response.data.data;
         } else {
-          this.$message.error("请求失败");
+          this.$emit("emitMesage", "请求失败");
         }
       }
       if (this.targetPeopleSubjectSelect.length > 0) {
@@ -262,13 +262,13 @@ export default {
           } else {
             chartData.legend.push(
               ...response.data.data.legend.map(item => {
-                return item + " 学科下的人";
+                return item + "(人)";
               })
             );
             chartData.y.push(...response.data.data.y);
           }
         } else {
-          this.$message.error("请求失败");
+          this.$emit("emitMesage", "请求失败");
         }
       }
 
@@ -314,9 +314,12 @@ export default {
         },
         legend: {
           data: data.legend,
-          right: "5%",
-          top: "10%",
-          orient: "vertical"
+          right: "3%",
+          orient: "vertical",
+          top: "35%",
+          textStyle: {
+            fontSize: 14
+          }
         },
         grid: {
           left: "8%",

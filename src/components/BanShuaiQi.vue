@@ -89,8 +89,22 @@ export default {
       currentSubjectSelect: [],
       levelSelect: "2",
       levelOpt: ["1", "2"],
-      yearSelect:2007,
-      yearOpt:[2007,2008,2009,2010,2011,2013,2014,2015,2016,2017,2018,2019,2020],
+      yearSelect: 2007,
+      yearOpt: [
+        2007,
+        2008,
+        2009,
+        2010,
+        2011,
+        2013,
+        2014,
+        2015,
+        2016,
+        2017,
+        2018,
+        2019,
+        2020
+      ],
       categoryOpt: [
         "Literature",
         "Psychology",
@@ -157,7 +171,7 @@ export default {
       if (response.data.data) {
         this.drawChart(response.data.data);
       } else {
-        this.$message.error("请求失败");
+        this.$emit("emitMesage", `请求失败`);
       }
     },
     drawChart(data) {

@@ -1,44 +1,36 @@
 <template>
-  <div class="page-discipline">
-    <div class="selectbox">
-      <div class="selectitem">
-        <span>目标学科</span>
-        <el-select
+  <v-container fluid>
+    <v-row>
+      <v-col cols="2">
+        <v-select
           v-model="subjectTarget"
-          class="selectsubjectmax"
-          placeholder="请选择"
-          multiple
-          @change="subjectChange"
-        >
-          <el-option
-            v-for="item in categorysOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>level</span>
-        <el-select
+          :items="categorys"
+          @change="getData"
+          label="目标学科"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select
           v-model="subjectLevel"
-          placeholder="请选择"
-          @change="subjectChange"
+          :items="levelOptions"
+          @change="getData"
+          label="相关学科"
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+          id="subjectChart"
         >
-          <el-option
-            v-for="item in levelOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <!-- <el-button class="selectitem" type="primary" @click="getData"
-        >确定</el-button
-      > -->
-    </div>
-    <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
-  </div>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -47,47 +39,14 @@ export default {
   name: "Cognitive_science相关度",
   data() {
     return {
-      subjectTarget: ["Cognitive science"],
+      subjectTarget: "Cognitive science",
       subjectLevel: "1",
       categorys: ["Cognitive science"],
-      levelOptions: [
-        {
-          value: "1",
-          label: "1"
-        },
-        {
-          value: "2",
-          label: "2"
-        },
-        {
-          value: "mas",
-          label: "mas"
-        }
-      ],
+      levelOptions: ["1", "2", "mas"],
       loading: false
     };
   },
   computed: {
-    categorysOptions: function() {
-      let that = this;
-      let _data = that.categorys.map(item => {
-        return {
-          value: item,
-          label: item
-        };
-      });
-      return _data;
-    },
-    SubCategorysOptions: function() {
-      let that = this;
-      let _data = that.enginerringChildren.map(item => {
-        return {
-          value: item,
-          label: item
-        };
-      });
-      return _data;
-    },
     myChart: function() {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
@@ -101,13 +60,9 @@ export default {
   },
   methods: {
     async getData() {
-      if (!this.subjectTarget) {
-        this.$message.error("请选择完整");
-        return false;
-      }
       this.loading = true;
       let opt = {
-        strA: this.subjectTarget.join(","),
+        strA: this.subjectTarget,
         level: this.subjectLevel
       };
       getDistanceByFile(opt)
@@ -116,13 +71,13 @@ export default {
             this.drawChart(res.data.data);
           } else {
             this.loading = false;
-            this.$message.error("请求失败");
+            this.$emit("emitMesage", "请求失败");
             return false;
           }
         })
         .catch(rej => {
           this.loading = false;
-          this.$message.error(`请求失败:${rej}`);
+          this.$emit("emitMesage", `请求失败:${rej}`);
         });
     },
     drawChart(data) {
@@ -166,6 +121,9 @@ export default {
           data: data.legend,
           right: "5%",
           top: "10%",
+          textStyle: {
+            fontSize: 14
+          },
           orient: "vertical"
         },
         grid: {

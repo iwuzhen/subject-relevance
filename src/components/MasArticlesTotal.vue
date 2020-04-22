@@ -1,27 +1,31 @@
 <template>
-  <div class="page-discipline">
-    <div class="selectbox">
-      <div class="selectitem">
-        <span>目标学科</span>
-        <el-select
+  <v-container fluid>
+    <v-row>
+      <v-col cols="12">
+        <v-select
           v-model="subjectRelevances"
-          class="selectsubjectmax"
-          placeholder="请选择"
+          :items="categorys"
           @change="getData"
-          collapse-tags
+          chips
           multiple
+          dense
+          label="目标学科"
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+          id="subjectChart"
         >
-          <el-option
-            v-for="item in categorysOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-    </div>
-    <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
-  </div>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -59,45 +63,22 @@ export default {
       typeOptions: [
         {
           value: "0",
-          label: "否"
+          text: "否"
         },
         {
           value: "1",
-          label: "是"
+          text: "是"
         },
         {
           value: "mas",
-          label: "mas"
+          text: "mas"
         }
       ],
-      levelOptions: [
-        {
-          value: "0",
-          label: "0"
-        },
-        {
-          value: "1",
-          label: "1"
-        },
-        {
-          value: "2",
-          label: "2"
-        }
-      ],
+      levelOptions: ["0", "1", "2"],
       loading: false
     };
   },
   computed: {
-    categorysOptions: function() {
-      let that = this;
-      let _data = that.categorys.map(item => {
-        return {
-          value: item,
-          label: item
-        };
-      });
-      return _data;
-    },
     myChart: function() {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
@@ -111,7 +92,6 @@ export default {
   methods: {
     async getData() {
       if (this.subjectRelevances.length === 0) {
-        this.$message.error("请选择完整");
         return false;
       }
       this.loading = true;
@@ -124,13 +104,13 @@ export default {
             this.drawChart(res.data);
           } else {
             this.loading = false;
-            this.$message.error("请求失败");
+            this.$emit("emitMesage", "请求失败");
             return false;
           }
         })
         .catch(rej => {
           this.loading = false;
-          this.$message.error(`请求失败:${rej}`);
+          this.$emit("emitMesage", `请求失败:${rej}`);
         });
     },
     drawChart(data) {
@@ -175,7 +155,10 @@ export default {
         legend: {
           data: Object.keys(data),
           right: "5%",
-          top: "10%",
+          top: "35%",
+          textStyle: {
+            fontSize: 14
+          },
           orient: "vertical"
         },
         grid: {

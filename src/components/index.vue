@@ -49,7 +49,7 @@ export default {
             to: "/WikiTree"
           },
           {
-            title: "Britan Tree",
+            title: "Britannica Tree",
             text: "大英百科全书分类层次浏览",
             to: "/BritannicaTree"
           },
@@ -89,7 +89,8 @@ export default {
             title: "People in WIKI",
             text: "人和人，学科的相关度",
             to: "/disciplinePeople"
-          },{
+          },
+          {
             title: "WIKI",
             text: "各学科的逐年相关度",
             to: "/discipline"

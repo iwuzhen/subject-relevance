@@ -1,46 +1,39 @@
 <template>
-  <div class="page-discipline">
-    <div class="selectbox">
-      <div class="selectitem">
-        <span>目标学科</span>
-        <el-select
+  <v-container fluid>
+    <v-row>
+      <v-col cols="8">
+        <v-select
           v-model="subjectTarget"
-          class="selectsubjectmax"
-          placeholder="请选择"
+          :items="categorys"
+          @change="getData"
+          small-chips
           multiple
-          collapse-tags
-          @change="subjectChange"
-        >
-          <el-option
-            v-for="item in categorysOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>年份</span>
-        <el-select
+          clearable
+          label="目标学科"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select
           v-model="dataYear"
-          class="dataYear"
-          placeholder="请选择"
-          @change="yearChange"
+          :items="dataYearopt"
+          @change="getData"
+          label="年份"
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+          id="subjectChart"
         >
-          <el-option
-            v-for="item in dataYearOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <!-- <el-button class="selectitem" type="primary" @click="getData"
-        >确定</el-button
-      > -->
-    </div>
-    <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
-  </div>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 6
 <script>
@@ -100,7 +93,8 @@ export default {
         2016,
         2017,
         2018,
-        2019
+        2019,
+        "历年总和"
       ],
       loading: false
     };
@@ -112,30 +106,6 @@ export default {
     this.$store.commit("changeCurentPath", this.$options.name);
   },
   computed: {
-    categorysOptions: function() {
-      let that = this;
-      let _data = that.categorys.map(item => {
-        return {
-          value: item,
-          label: item
-        };
-      });
-      return _data;
-    },
-    dataYearOptions: function() {
-      let that = this;
-      let _data = that.dataYearopt.map(item => {
-        return {
-          value: item,
-          label: item
-        };
-      });
-      _data.push({
-        value: 1111,
-        label: "历年总和"
-      });
-      return _data;
-    },
     myChart: function() {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
@@ -146,7 +116,7 @@ export default {
       this.yearChange();
     },
     yearChange() {
-      if (this.dataYear === 1111 && this.subjectTarget.length > 1) {
+      if (this.dataYear === "历年总和" && this.subjectTarget.length > 1) {
         this.subjectTarget = [];
         this.$message.error("历年总和只能选择一个学科");
         return;
@@ -162,7 +132,7 @@ export default {
       let opt = {
         str: this.subjectTarget.join(",")
       };
-      if (this.dataYear !== 1111) {
+      if (this.dataYear !== "历年总和") {
         opt["year"] = this.dataYear;
       }
 
@@ -172,13 +142,13 @@ export default {
             this.drawChart(res.data.data);
           } else {
             this.loading = false;
-            this.$message.error("请求失败");
+            this.$emit("emitMesage", "请求失败");
             return false;
           }
         })
         .catch(rej => {
           this.loading = false;
-          this.$message.error(`请求失败:${rej}`);
+          this.$emit("emitMesage", `请求失败:${rej}`);
         });
     },
     drawChart(data) {
@@ -187,6 +157,10 @@ export default {
       this.loading = false;
     },
     setOptions(data) {
+      let ymax = Math.max(...[].concat(...data.y));
+      ymax = Math.ceil(ymax * 10) / 10;
+      let xmax = Math.max(...data.x);
+      xmax = Math.ceil(xmax * 10) / 10;
       // 设置
       let seriesList = [];
       for (let i = 0; i < data.y.length; i++) {
@@ -270,8 +244,11 @@ export default {
         },
         legend: {
           data: data.legend,
-          right: "5%",
-          top: "10%",
+          right: "8%",
+          top: "35%",
+          textStyle: {
+            fontSize: 14
+          },
           orient: "vertical"
         },
         grid: {
@@ -288,11 +265,11 @@ export default {
         },
         xAxis: {
           type: "value",
-          max: "dataMax"
+          max: xmax
         },
         yAxis: {
           type: "value",
-          max: "dataMax"
+          max: ymax
         },
         series: seriesList
       };

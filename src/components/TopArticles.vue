@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-14 22:23:01
  * @LastEditors: ider
- * @LastEditTime: 2020-04-15 15:32:41
+ * @LastEditTime: 2020-04-22 22:06:54
  * @Description: 
  -->
 <template>
@@ -175,7 +175,7 @@ export default {
       if (response.data.data) {
         this.drawTable(response.data.data);
       } else {
-        this.$message.error("请求失败");
+        this.$emit("emitMesage", "请求失败");
       }
     },
     drawTable(data) {

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-20 18:03:48
+ * @LastEditTime: 2020-04-22 16:27:43
  * @Description: 
  -->
 <template>
@@ -29,9 +29,9 @@
       </v-card>
     </v-dialog>
     <v-row>
-      <v-col>
+      <!-- <v-col>
         <v-btn color="primary" @click="checkNode">对比选中的节点</v-btn>
-      </v-col>
+      </v-col> -->
       <v-col>
         <v-autocomplete
           v-model="searchString"
@@ -47,9 +47,9 @@
       </v-col>
     </v-row>
     <v-row justify="space-between">
-      <v-col cols="6">
+      <v-col>
         <v-card hover flat>
-          <v-card-title>left</v-card-title>
+          <!-- <v-card-title>left</v-card-title> -->
           <v-treeview
             v-model="selection1"
             :items="treeItems1"
@@ -79,7 +79,7 @@
           </v-treeview>
         </v-card></v-col
       >
-      <v-col cols="6">
+      <!-- <v-col cols="6">
         <v-card hover flat>
           <v-card-title>right</v-card-title
           ><v-treeview
@@ -110,7 +110,7 @@
             </template>
           </v-treeview></v-card
         ></v-col
-      >
+      > -->
     </v-row>
   </v-container>
 </template>
@@ -124,7 +124,7 @@ import * as localforage from "localforage";
 import { v4 as uuidv4 } from "uuid";
 
 export default {
-  name: "BritanTree_大英百科全书",
+  name: "Britannica_Tree_大英百科全书",
   data() {
     return {
       store: localforage.createInstance({
@@ -267,7 +267,7 @@ export default {
             });
             data = response.data;
             if (!data) {
-              this.$message.error("请求失败");
+              this.$emit("emitMesage", `请求失败`);
             }
             await store.setItem(categoryKey, data);
           } else {

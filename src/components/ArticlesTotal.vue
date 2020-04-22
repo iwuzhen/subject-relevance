@@ -1,57 +1,48 @@
 <template>
-  <div class="page-discipline">
-    <div class="selectbox">
-      <div class="selectitem">
-        <span>目标学科</span>
-        <el-select
+  <v-container fluid>
+    <v-row>
+      <v-col cols="8">
+        <v-select
           v-model="subjectRelevances"
-          class="selectsubjectmax"
-          placeholder="请选择"
-          collapse-tags
+          :items="categorys"
+          @change="getData"
+          chips
           multiple
-          @change="subjectChange"
-        >
-          <el-option
-            v-for="item in categorysOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>是否统计子类数目</span>
-        <el-select
+          dense
+          label="目标学科"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select
           v-model="subjecType"
-          @change="subjectChange"
-          placeholder="请选择"
-        >
-          <el-option
-            v-for="item in typeOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>level</span>
-        <el-select
+          :items="typeOptions"
+          @change="getData"
+          label="是否统计子类数目"
+        ></v-select>
+      </v-col>
+
+      <v-col cols="2">
+        <v-select
           v-model="subjectLevel"
-          placeholder="请选择"
-          @change="subjectChange"
+          :items="levelOptions"
+          @change="getData"
+          label="level"
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+          id="subjectChart"
         >
-          <el-option
-            v-for="item in levelOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-    </div>
-    <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
-  </div>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -91,53 +82,18 @@ export default {
       typeOptions: [
         {
           value: "0",
-          label: "否"
+          text: "否"
         },
         {
           value: "1",
-          label: "是"
+          text: "是"
         }
       ],
-      levelOptions: [
-        {
-          value: "0",
-          label: "0"
-        },
-        {
-          value: "1",
-          label: "1"
-        },
-        {
-          value: "2",
-          label: "2"
-        },
-        {
-          value: "3",
-          label: "3"
-        },
-        {
-          value: "4",
-          label: "4"
-        },
-        {
-          value: "5",
-          label: "5"
-        }
-      ],
+      levelOptions: ["0", "1", "2", "3", "4", "5"],
       loading: false
     };
   },
   computed: {
-    categorysOptions: function() {
-      let that = this;
-      let _data = that.categorys.map(item => {
-        return {
-          value: item,
-          label: item
-        };
-      });
-      return _data;
-    },
     myChart: function() {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
@@ -151,11 +107,10 @@ export default {
   methods: {
     async getData() {
       if (this.subjectRelevances.length === 0) {
-        // this.$message.error("请选择完整");
         return false;
       }
       if (this.subjectLevel === "0" && this.subjecType === "1") {
-        this.$message.error("0 层没有子类");
+        this.$emit("emitMesage", "0 层没有子类");
         return false;
       }
       this.loading = true;
@@ -170,13 +125,15 @@ export default {
             this.drawChart(res.data);
           } else {
             this.loading = false;
-            this.$message.error("请求失败");
+
+            this.$emit("emitMesage", "请求失败");
             return false;
           }
         })
         .catch(rej => {
           this.loading = false;
-          this.$message.error(`请求失败:${rej}`);
+
+          this.$emit("emitMesage", `请求失败:${rej}`);
         });
     },
     drawChart(data) {
@@ -220,7 +177,10 @@ export default {
         legend: {
           data: Object.keys(data),
           right: "5%",
-          top: "10%",
+          top: "35%",
+          textStyle: {
+            fontSize: 14
+          },
           orient: "vertical"
         },
         grid: {

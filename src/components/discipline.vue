@@ -1,79 +1,55 @@
 <template>
-  <div class="page-discipline">
-    <div class="selectbox">
-      <div class="selectitem">
-        <span>目标学科</span>
-        <el-select
+  <v-container fluid>
+    <v-row>
+      <v-col cols="2">
+        <v-select
           v-model="subjectTarget"
-          class="selectsubjectmax"
-          placeholder="请选择"
-          @change="subjectChange"
-        >
-          <el-option
-            v-for="item in categorysOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>相关学科</span>
-        <el-select
+          :items="categorys"
+          @change="getData"
+          label="目标学科"
+        ></v-select>
+      </v-col>
+      <v-col cols="6">
+        <v-select
           v-model="subjectRelevances"
-          class="selectsubjectmax"
+          :items="categorysOptions"
+          @change="getData"
+          small-chips
           multiple
-          collapse-tags
-          placeholder="请选择"
-          @change="selectChange"
-        >
-          <el-option
-            v-for="item in categorysOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            :disabled="item.label === subjectTarget"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>条件</span>
-        <el-select
+          clearable
+          label="相关学科"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select
           v-model="methodValue"
-          class="methodSelect"
-          placeholder="请选择"
-          @change="selectChange"
-        >
-          <el-option
-            v-for="item in methodOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <div class="selectitem">
-        <span>level</span>
-        <el-select
+          :items="methodOptions"
+          @change="getData"
+          label="条件"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select
           v-model="subjectLevel"
-          class="selectsubjectmiddle"
-          placeholder="请选择"
-          @change="selectChange"
+          :items="levelOptions"
+          @change="getData"
+          label="level"
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+          id="subjectChart"
         >
-          <el-option
-            v-for="item in levelOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </div>
-      <!-- <el-button class="selectitem" type="primary" @click="getData"
-        >确定</el-button
-      > -->
-    </div>
-    <div class="echartsBox" id="subjectChart" v-loading="loading"></div>
-  </div>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -122,48 +98,39 @@ export default {
         "Industrial engineering",
         "Environmental engineering"
       ],
-      methodOptions: [
-        {
-          value: "linksin",
-          label: "linksin"
-        },
-        {
-          value: "linksout",
-          label: "linksout"
-        }
-      ],
+      methodOptions: ["linksin", "linksout"],
       levelOptions: [
         {
           value: "0",
-          label: "0 层"
+          text: "0 层"
         },
         {
           value: "1",
-          label: "1 层"
+          text: "1 层"
         },
         {
           value: "2",
-          label: " 2层"
+          text: " 2层"
         },
         {
           value: "1000",
-          label: "top 1000 文章"
+          text: "top 1000 文章"
         },
         {
           value: "2000",
-          label: "top 2000 文章"
+          text: "top 2000 文章"
         },
         {
           value: "3000",
-          label: "top 3000 文章"
+          text: "top 3000 文章"
         },
         {
           value: "4000",
-          label: "top 4000 文章"
+          text: "top 4000 文章"
         },
         {
           value: "5000",
-          label: "top 5000 文章"
+          text: "top 5000 文章"
         }
       ],
       loading: false
@@ -171,14 +138,16 @@ export default {
   },
   computed: {
     categorysOptions: function() {
-      let that = this;
-      let _data = that.categorys.map(item => {
-        return {
+      let subjectTarget = this.subjectTarget;
+      return this.categorys.map(item => {
+        let ret = {
           value: item,
-          label: item
+          text: item
         };
+        if (item == subjectTarget) ret["disabled"] = true;
+
+        return ret;
       });
-      return _data;
     },
     myChart: function() {
       return this.$echarts.init(document.getElementById("subjectChart"));
@@ -193,13 +162,20 @@ export default {
   methods: {
     async getData() {
       if (!this.subjectTarget || this.subjectRelevances.length === 0) {
-        this.$message.error("请选择完整");
         return false;
       }
       this.loading = true;
+      let subjectTarget = this.subjectTarget;
       let opt = {
         strA: this.subjectTarget,
-        strB: this.subjectRelevances.join(","),
+        strB: this.subjectRelevances
+          .filter(item => {
+            if (item == subjectTarget) {
+              return false;
+            }
+            return true;
+          })
+          .join(","),
         method: this.methodValue,
         level: this.subjectLevel
       };
@@ -209,13 +185,15 @@ export default {
             this.drawChart(res.data.data);
           } else {
             this.loading = false;
-            this.$message.error("请求失败");
+
+            this.$emit("emitMesage", "请求失败");
             return false;
           }
         })
         .catch(rej => {
           this.loading = false;
-          this.$message.error(`请求失败:${rej}`);
+
+          this.$emit("emitMesage", `请求失败:${rej}`);
         });
     },
     drawChart(data) {
@@ -258,7 +236,10 @@ export default {
         legend: {
           data: data.legend,
           right: "5%",
-          top: "10%",
+          top: "35%",
+          textStyle: {
+            fontSize: 14
+          },
           orient: "vertical"
         },
         grid: {

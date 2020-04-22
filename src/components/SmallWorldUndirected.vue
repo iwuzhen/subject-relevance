@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-04-14 09:21:25
+ * @LastEditTime: 2020-04-22 16:44:28
  * @Description: 
  -->
 
@@ -295,7 +295,10 @@ export default {
         legend: {
           data: data.legend,
           right: "5%",
-          top: "10%",
+          top: "35%",
+          textStyle: {
+            fontSize: 14
+          },
           orient: "vertical"
         },
         grid: {
