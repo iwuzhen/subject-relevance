@@ -51,7 +51,7 @@
           label="level"
         ></v-select>
       </v-col>
-      <v-col align-self="center" cols="2">
+      <!-- <v-col align-self="center" cols="2">
         <v-btn
           color="light-blue lighten-2"
           dark
@@ -61,7 +61,7 @@
           <v-icon>mdi-help-circle</v-icon>
           参数
         </v-btn>
-      </v-col>
+      </v-col> -->
     </v-row>
     <v-row>
       <v-col col="12">
