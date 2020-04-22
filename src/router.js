@@ -19,6 +19,7 @@ import BritannicaTree from "@/components/BritannicaTree";
 import Home from "@/views/Home";
 import BanShuaiQi from "@/components/BanShuaiQi";
 import TopArticles from "@/components/TopArticles";
+import disciplinePeople from "@/components/disciplinePeople";
 
 Vue.use(Router);
 
@@ -119,6 +120,11 @@ export default new Router({
       path: "/BritannicaTree",
       name: "BritannicaTree",
       component: BritannicaTree
+    },
+    {
+      path: "/disciplinePeople",
+      name: "disciplinePeople",
+      component: disciplinePeople
     }
   ]
 });

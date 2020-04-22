@@ -94,6 +94,22 @@ export function getTopArticles(params) {
     data: params
   });
 }
+// 人和人的相关度
+export function getDistanceByPeoples(params) {
+  return request({
+    url: "/wiki/getDistanceByPeoples",
+    method: "post",
+    data: params
+  });
+}
+// 人和学科的相关度
+export function getDistanceByPeopleAndCats(params) {
+  return request({
+    url: "/wiki/getDistanceByPeopleAndCats",
+    method: "post",
+    data: params
+  });
+}
 // http://wikidb.lambdax.cn:5555/wikidb_web/rest/Britannica/childCategories?categoryTitle=TG9naWM=
 // 大英百科全书 tree
 export function getBritannicaTree(params) {
