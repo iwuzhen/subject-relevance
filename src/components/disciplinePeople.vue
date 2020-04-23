@@ -148,7 +148,6 @@ export default {
         "Biology",
         "Sociology",
         "Economics",
-        "Medicine",
         "Political science",
         "Psychology",
         "Linguistics",
