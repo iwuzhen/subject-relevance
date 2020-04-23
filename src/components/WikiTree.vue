@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-22 22:06:41
+ * @LastEditTime: 2020-04-23 10:48:21
  * @Description: 
  -->
 <template>
@@ -59,6 +59,7 @@
             v-model="selection1"
             :items="treeItems1"
             :load-children="fetchChildren1"
+            :open.sync="openTree1"
             selectable
             activatable
             dense
@@ -96,6 +97,7 @@
             :load-children="fetchChildren2"
             selectable
             activatable
+            :open.sync="openTree2"
             dense
             color="warning"
             selection-type="leaf"
@@ -139,6 +141,8 @@ export default {
         storeName: "wikiTree", // Should be alphanumeric, with underscores.
         description: "store tree"
       }),
+      openTree2: [],
+      openTree1: [],
       selection1: [],
       selection2: [],
       treeItems1: [],
@@ -421,11 +425,21 @@ export default {
     },
     async fetchChildren1(treeitem) {
       let _wikiDB = String(this.yearSelect1).slice(2, 4);
-      return await this._fetchChildren(treeitem, _wikiDB);
+      await this._fetchChildren(treeitem, _wikiDB);
+      if (
+        treeitem.children.length > 1 &&
+        treeitem.children[1].name.indexOf("子类") > -1
+      )
+        this.openTree1.push(treeitem.children[1]);
     },
     async fetchChildren2(treeitem) {
       let _wikiDB = String(this.yearSelect2).slice(2, 4);
-      return await this._fetchChildren(treeitem, _wikiDB);
+      await this._fetchChildren(treeitem, _wikiDB);
+      if (
+        treeitem.children.length > 1 &&
+        treeitem.children[1].name.indexOf("子类") > -1
+      )
+        this.openTree2.push(treeitem.children[1]);
     }
   }
 };

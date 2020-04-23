@@ -15,7 +15,6 @@
     "core-js": "^3.5.0",
     "echarts": "^4.5.0",
     "echarts-stat": "^1.1.1",
-    "element-ui": "^2.13.0",
     "uuid": "^7.0.3",
     "vue": "^2.6.10",
     "vue-router": "^3.1.3",
