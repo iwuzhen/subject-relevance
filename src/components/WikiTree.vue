@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-23 10:48:21
+ * @LastEditTime: 2020-04-23 16:51:22
  * @Description: 
  -->
 <template>
@@ -127,20 +127,13 @@
 import { getWikiPageTree, getWikiCategoryTree } from "@/api/index";
 import * as Diff2Html from "diff2html";
 import * as diff from "diff";
-import * as localforage from "localforage";
-
+import { basiCategorys } from "@/api/data";
 import { v4 as uuidv4 } from "uuid";
 
 export default {
   name: "Tree_Viewer",
   data() {
     return {
-      store: localforage.createInstance({
-        name: "subject",
-        version: 1.0,
-        storeName: "wikiTree", // Should be alphanumeric, with underscores.
-        description: "store tree"
-      }),
       openTree2: [],
       openTree1: [],
       selection1: [],
@@ -169,43 +162,7 @@ export default {
         2019,
         2020
       ],
-      basiccategorys: [
-        "Contents",
-        "Anthropology",
-        "Artificial intelligence",
-        "Biological engineering",
-        "Biology",
-        "Blockchains",
-        "Chemical engineering",
-        "Chemistry",
-        "Civil engineering",
-        "Cognitive science",
-        "Computer engineering",
-        "Computer science",
-        "Deep learning",
-        "Economics",
-        "Electrical engineering",
-        "Engineering disciplines",
-        "Environmental engineering",
-        "Genetic engineering",
-        "Genome editing",
-        "History",
-        "Industrial engineering",
-        "Linguistics",
-        "Literature",
-        "Logic",
-        "Machine learning",
-        "Mathematics",
-        "Mechanical engineering",
-        "Neuroscience",
-        "Philosophy",
-        "Physics",
-        "Political science",
-        "Psychology",
-        "Quantum computing",
-        "Sociology",
-        "Theoretical computer science"
-      ]
+      basiccategorys: basiCategorys
     };
   },
   computed: {
@@ -335,92 +292,50 @@ export default {
         console.log("cat");
       } else {
         let articleLength, categoryLength, articleChildrens, categoryChildrens;
-
-        //  本地缓存
-        let pageKey = `Page${treeitem.name}${_wikiDB}`;
-        let categoryKey = `Cat${treeitem.name}${_wikiDB}`;
         console.log("扩展 tree");
-        let store = this.store;
-        await store
-          .getItem(pageKey)
-          .then(async function(value) {
-            let data;
-            if (!value) {
-              let response = await getWikiPageTree({
-                categoryTitle: Buffer.from(treeitem.name).toString("base64"),
-                db: `WIKI${_wikiDB}`
-              });
-              data = response.data;
-              if (!data) {
-                this.$emit("emitMesage", "请求失败");
-              }
-              await store.setItem(pageKey, data);
-            } else {
-              data = value;
-            }
-            console.log(data);
-            articleLength = data.childList.length;
-            articleChildrens = data.childList.map(item => {
-              return {
-                id: uuidv4(),
-                father: "page",
-                name: item,
-                leaf: true
-              };
-            });
-          })
-          .catch(function(err) {
-            console.log(err);
+        try {
+          let data = await getWikiPageTree({
+            categoryTitle: Buffer.from(treeitem.name).toString("base64"),
+            db: `WIKI${_wikiDB}`
+          });
+          articleLength = data.childList.length;
+          articleChildrens = data.childList.map(item => {
+            return {
+              id: uuidv4(),
+              father: "page",
+              name: item,
+              leaf: true
+            };
           });
 
-        await store
-          .getItem(categoryKey)
-          .then(async function(value) {
-            // 当离线仓库中的值被载入时，此处代码运行
-            let data;
-            if (!value) {
-              let response = await getWikiCategoryTree({
-                categoryTitle: Buffer.from(treeitem.name).toString("base64"),
-                db: `WIKI${_wikiDB}`
-              });
-              data = response.data;
-              if (!data) {
-                this.$emit("emitMesage", "请求失败");
-              }
-              await store.setItem(categoryKey, data);
-            } else {
-              data = value;
-            }
-            categoryLength = data.childList.length;
-            categoryChildrens = data.childList.map(item => {
-              return {
-                id: uuidv4(),
-                name: item,
-                leaf: true,
-                children: []
-              };
-            });
-          })
-          .catch(function(err) {
-            console.log(err);
+          data = await getWikiCategoryTree({
+            categoryTitle: Buffer.from(treeitem.name).toString("base64"),
+            db: `WIKI${_wikiDB}`
           });
-
-        treeitem.children.push(
-          ...[
-            {
+          categoryLength = data.childList.length;
+          categoryChildrens = data.childList.map(item => {
+            return {
               id: uuidv4(),
-              name: `文章 ${articleLength}`,
-              children: articleChildrens,
-              file: "article"
-            },
-            {
-              id: uuidv4(),
-              name: `子类 ${categoryLength}`,
-              children: categoryChildrens,
-              file: "category"
-            }
-          ]
-        );
+              name: item,
+              leaf: true,
+              children: []
+            };
+          });
+          treeitem.children.push({
+            id: uuidv4(),
+            name: `文章 ${articleLength}`,
+            children: articleChildrens,
+            file: "article"
+          });
+          treeitem.children.push({
+            id: uuidv4(),
+            name: `子类 ${categoryLength}`,
+            children: categoryChildrens,
+            file: "category"
+          });
+        } catch (error) {
+          this.$emit("emitMesage", `请求失败,${error}`);
+        }
       }
     },
     async fetchChildren1(treeitem) {

@@ -117,6 +117,7 @@
 
 <script>
 import smallworldundirectLimter from "../data/smallworldundirectLimter.json";
+import { basiCategorys } from "@/api/data";
 
 export default {
   name: "SmallWorld无向图规模趋势",
@@ -169,42 +170,7 @@ export default {
         2019,
         2020
       ],
-      categoryOpt: [
-        "Literature",
-        "Psychology",
-        "Logic",
-        "Philosophy",
-        "Mathematics",
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Sociology",
-        "Economics",
-        "Political science",
-        "Linguistics",
-        "History",
-        "Computer science",
-        "Artificial intelligence",
-        "Engineering disciplines",
-        "Chemical engineering",
-        "Civil engineering",
-        "Electrical engineering",
-        "Mechanical engineering",
-        "Biological engineering",
-        "Computer engineering",
-        "Industrial engineering",
-        "Environmental engineering",
-        "Cognitive science",
-        "Machine learning",
-        "Blockchains",
-        "Deep learning",
-        "Theoretical computer science",
-        "Quantum computing",
-        "Genetic engineering",
-        "Genome editing",
-        "Anthropology",
-        "Neuroscience"
-      ]
+      categoryOpt: basiCategorys
     };
   },
   computed: {

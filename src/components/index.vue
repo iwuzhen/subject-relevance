@@ -109,6 +109,16 @@ export default {
         ],
         幂率: [
           {
+            title: "Zipf 幂律(世界)斜率 (人)",
+            text: "people 计算出的世界逐年幂律图",
+            to: "/PeopleZipfByNodes"
+          },
+          {
+            title: "Zipf 幂律(小世界) (人)",
+            text: "people 计算出的小世界逐年幂律图",
+            to: "/PeopleInnerZipfByNodes"
+          },
+          {
             title: "Zipf 幂律(世界)",
             text: "逐年幂律图",
             to: "/powerlaw"

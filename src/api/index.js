@@ -1,12 +1,48 @@
 import request from "@/utils/request";
 import requestwiki from "@/utils/requestwiki";
+import * as localforage from "localforage";
 
-export function getWikiData(params) {
-  return request({
+let store1 = localforage.createInstance({
+  name: "wikiknogen",
+  version: 1.0,
+  storeName: "api", // Should be alphanumeric, with underscores.
+  description: "store api"
+});
+let store2 = localforage.createInstance({
+  name: "wikiknogenTree",
+  version: 1.0,
+  storeName: "api", // Should be alphanumeric, with underscores.
+  description: "store api"
+});
+
+// 对请求进行缓存
+let cacheRequest = async requestParams => {
+  let item = await store1.getItem(JSON.stringify(requestParams));
+  if (!item) {
+    let response = await request(requestParams);
+    await store1.setItem(JSON.stringify(requestParams), response.data);
+    item = response.data;
+  }
+  return item;
+};
+// 对请求进行缓存
+let cacheRequestWiki = async requestParams => {
+  let item = await store2.getItem(JSON.stringify(requestParams));
+  if (!item) {
+    let response = await requestwiki(requestParams);
+    await store2.setItem(JSON.stringify(requestParams), response.data);
+    item = response.data;
+  }
+  return item;
+};
+
+export async function getWikiData(params) {
+  let requestParams = {
     url: "/wiki/getDistance",
     method: "post",
     data: params
-  });
+  };
+  return await cacheRequest(requestParams);
 }
 
 export function getMasData(params) {
@@ -17,12 +53,13 @@ export function getMasData(params) {
   });
 }
 
-export function getArticlesTotal(params) {
-  return request({
+export async function getArticlesTotal(params) {
+  let requestParams = {
     url: "/wiki/getArticlesTotal",
     method: "post",
     data: params
-  });
+  };
+  return await cacheRequest(requestParams);
 }
 
 export function getDistanceByFile(params) {
@@ -57,12 +94,29 @@ export function getZipf(params) {
   });
 }
 
-export function getZipfByNodes(params) {
-  return request({
+export async function getZipfByNodes(params) {
+  let requestParams = {
     url: "/wiki/getZipfByNodes",
     method: "post",
     data: params
-  });
+  };
+  return await cacheRequest(requestParams);
+}
+export async function getPeopleZipfByNodes(params) {
+  let requestParams = {
+    url: "/wiki/getPeopleZipfByNodes",
+    method: "post",
+    data: params
+  };
+  return await cacheRequest(requestParams);
+}
+export async function getPeopleInnerZipfByNodes(params) {
+  let requestParams = {
+    url: "/wiki/getPeopleInnerZipfByNodes",
+    method: "post",
+    data: params
+  };
+  return await cacheRequest(requestParams);
 }
 
 export function getPagerankZipf(params) {
@@ -95,20 +149,22 @@ export function getTopArticles(params) {
   });
 }
 // 人和人的相关度
-export function getDistanceByPeoples(params) {
-  return request({
+export async function getDistanceByPeoples(params) {
+  let requestParams = {
     url: "/wiki/getDistanceByPeoples",
     method: "post",
     data: params
-  });
+  };
+  return await cacheRequest(requestParams);
 }
 // 人和学科的相关度
-export function getDistanceByPeopleAndCats(params) {
-  return request({
+export async function getDistanceByPeopleAndCats(params) {
+  let requestParams = {
     url: "/wiki/getDistanceByPeopleAndCats",
     method: "post",
     data: params
-  });
+  };
+  return await cacheRequest(requestParams);
 }
 // http://wikidb.lambdax.cn:5555/wikidb_web/rest/Britannica/childCategories?categoryTitle=TG9naWM=
 // 大英百科全书 tree
@@ -121,47 +177,51 @@ export function getBritannicaTree(params) {
 }
 
 // 文章 tree
-export function getWikiPageTree(params) {
+export async function getWikiPageTree(params) {
+  let requestParams;
   if (params.db === "WIKI11") {
-    return requestwiki({
+    requestParams = {
       url: "/wikidb11/childArticles",
       method: "get",
       params: params
-    });
+    };
   } else if (params.db === "WIKI13") {
-    return requestwiki({
+    requestParams = {
       url: "/wikidb11/childArticles",
       method: "get",
       params: params
-    });
+    };
   } else {
-    return requestwiki({
+    requestParams = {
       url: "/wiki/childArticles",
       method: "get",
       params: params
-    });
+    };
   }
+  return await cacheRequestWiki(requestParams);
 }
 
 // 类 tree
-export function getWikiCategoryTree(params) {
+export async function getWikiCategoryTree(params) {
+  let requestParams;
   if (params.db === "WIKI11") {
-    return requestwiki({
+    requestParams = {
       url: "/wikidb11/childCategories",
       method: "get",
       params: params
-    });
+    };
   } else if (params.db === "WIKI13") {
-    return requestwiki({
+    requestParams = {
       url: "/wikidb11/childCategories",
       method: "get",
       params: params
-    });
+    };
   } else {
-    return requestwiki({
+    requestParams = {
       url: "/wiki/childCategories",
       method: "get",
       params: params
-    });
+    };
   }
+  return await cacheRequestWiki(requestParams);
 }

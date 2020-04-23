@@ -1,5 +1,5 @@
 # university-rank
-
+Engineering disciplines 修改为 Engineering
 ## Project setup
 ```
 npm install --registry=https://registry.npm.taobao.org

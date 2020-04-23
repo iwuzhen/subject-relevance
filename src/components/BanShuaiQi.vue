@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-14 22:23:01
  * @LastEditors: ider
- * @LastEditTime: 2020-04-21 12:31:20
+ * @LastEditTime: 2020-04-23 16:10:50
  * @Description: 
  -->
 <template>
@@ -80,7 +80,7 @@
 
 <script>
 import { getBanshuaiqi } from "@/api/index";
-
+import { basiCategorys } from "@/api/data";
 export default {
   name: "wiki子类半衰期",
   data() {
@@ -105,42 +105,7 @@ export default {
         2019,
         2020
       ],
-      categoryOpt: [
-        "Literature",
-        "Psychology",
-        "Logic",
-        "Philosophy",
-        "Mathematics",
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Sociology",
-        "Economics",
-        "Political science",
-        "Linguistics",
-        "History",
-        "Computer science",
-        "Artificial intelligence",
-        "Engineering disciplines",
-        "Chemical engineering",
-        "Civil engineering",
-        "Electrical engineering",
-        "Mechanical engineering",
-        "Biological engineering",
-        "Computer engineering",
-        "Industrial engineering",
-        "Environmental engineering",
-        "Cognitive science",
-        "Machine learning",
-        "Blockchains",
-        "Deep learning",
-        "Theoretical computer science",
-        "Quantum computing",
-        "Genetic engineering",
-        "Genome editing",
-        "Anthropology",
-        "Neuroscience"
-      ],
+      categoryOpt: basiCategorys,
       loading: false
     };
   },

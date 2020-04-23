@@ -50,7 +50,7 @@ export default {
         "History",
         "Computer science",
         "Artificial intelligence",
-        "Engineering disciplines",
+        "Engineering",
         "Chemical engineering",
         "Civil engineering",
         "Electrical engineering",
@@ -124,7 +124,7 @@ export default {
       let _opt = {
         title: {
           text: "学科 article 数量",
-          left: "10%"
+          left: "40%"
         },
         tooltip: {
           trigger: "axis",
@@ -174,11 +174,13 @@ export default {
           }
         },
         xAxis: {
+          name: "Year",
           type: "category",
           boundaryGap: false,
           data: years
         },
         yAxis: {
+          name: "Count",
           type: "value",
           max: (data => {
             let max = 100;

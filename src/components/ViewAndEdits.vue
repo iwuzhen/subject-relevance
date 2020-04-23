@@ -47,48 +47,14 @@
 
 <script>
 import { getViewAndEdits } from "@/api/index";
+import { basiCategorys } from "@/api/data";
 export default {
-  name: "ve_访问量&编辑量",
+  name: "ve访问量和编辑量",
   data() {
     return {
       subjectTarget: [],
       subjectLevel: 0,
-      categorys: [
-        "Literature",
-        "Psychology",
-        "Logic",
-        "Philosophy",
-        "Mathematics",
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Sociology",
-        "Economics",
-        "Political science",
-        "Linguistics",
-        "History",
-        "Computer science",
-        "Artificial intelligence",
-        "Engineering disciplines",
-        "Chemical engineering",
-        "Civil engineering",
-        "Electrical engineering",
-        "Mechanical engineering",
-        "Biological engineering",
-        "Computer engineering",
-        "Industrial engineering",
-        "Environmental engineering",
-        "Cognitive science",
-        "Machine learning",
-        "Blockchains",
-        "Deep learning",
-        "Theoretical computer science",
-        "Quantum computing",
-        "Genetic engineering",
-        "Genome editing",
-        "Anthropology",
-        "Neuroscience"
-      ],
+      categorys: basiCategorys,
       levelOptions: [
         {
           value: 0,
@@ -175,7 +141,7 @@ export default {
       let _opt = {
         title: {
           text: data.title,
-          left: "10%"
+          left: "40%"
         },
         tooltip: {
           trigger: "axis",
@@ -226,12 +192,14 @@ export default {
           }
         },
         xAxis: {
+          name: "Date",
           type: "category",
           boundaryGap: false,
           data: data.x,
           max: "dataMax"
         },
         yAxis: {
+          name: "Count",
           type: "value",
           max: ymax
         },

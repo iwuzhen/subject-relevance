@@ -46,48 +46,13 @@
 
 <script>
 import { getDfb } from "@/api/index";
-
+import { basiCategorys } from "@/api/data";
 export default {
   name: "subject幂律度分布",
   data() {
     return {
       subjectTarget: [],
-      categorys: [
-        "Literature",
-        "Psychology",
-        "Logic",
-        "Philosophy",
-        "Mathematics",
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Sociology",
-        "Economics",
-        "Political science",
-        "Linguistics",
-        "History",
-        "Computer science",
-        "Artificial intelligence",
-        "Engineering disciplines",
-        "Chemical engineering",
-        "Civil engineering",
-        "Electrical engineering",
-        "Mechanical engineering",
-        "Biological engineering",
-        "Computer engineering",
-        "Industrial engineering",
-        "Environmental engineering",
-        "Cognitive science",
-        "Machine learning",
-        "Blockchains",
-        "Deep learning",
-        "Theoretical computer science",
-        "Quantum computing",
-        "Genetic engineering",
-        "Genome editing",
-        "Anthropology",
-        "Neuroscience"
-      ],
+      categorys: basiCategorys,
       dataYear: null,
       dataYearopt: [
         2007,
@@ -140,7 +105,6 @@ export default {
     },
     async getData() {
       if (this.subjectTarget.length < 1 || !this.dataYear) {
-        // this.$message.error("请选择完整");
         return false;
       }
       this.loading = true;
@@ -198,7 +162,7 @@ export default {
       let _opt = {
         title: {
           text: data.title,
-          left: "10%"
+          left: "40%"
         },
         tooltip: {
           trigger: "axis",
@@ -251,12 +215,12 @@ export default {
         xAxis: {
           type: "value",
           max: xmax,
-          name: "度数 log"
+          name: "log (rank)"
         },
         yAxis: {
           type: "value",
           max: ymax,
-          name: "数量 log"
+          name: "log (citation)"
         },
         series: seriesList
       };

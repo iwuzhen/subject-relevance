@@ -95,6 +95,7 @@
 
 <script>
 import smallworlddirect from "../data/smallworlddirect.json";
+import { basiCategorys } from "@/api/data";
 export default {
   name: "SmallWorld有向图学科间趋势",
   data() {
@@ -141,42 +142,7 @@ export default {
           text: "MAX(最短路径)"
         }
       ],
-      categoryOpt: [
-        "Literature",
-        "Psychology",
-        "Logic",
-        "Philosophy",
-        "Mathematics",
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Sociology",
-        "Economics",
-        "Political science",
-        "Linguistics",
-        "History",
-        "Computer science",
-        "Artificial intelligence",
-        "Engineering disciplines",
-        "Chemical engineering",
-        "Civil engineering",
-        "Electrical engineering",
-        "Mechanical engineering",
-        "Biological engineering",
-        "Computer engineering",
-        "Industrial engineering",
-        "Environmental engineering",
-        "Cognitive science",
-        "Machine learning",
-        "Blockchains",
-        "Deep learning",
-        "Theoretical computer science",
-        "Quantum computing",
-        "Genetic engineering",
-        "Genome editing",
-        "Anthropology",
-        "Neuroscience"
-      ]
+      categoryOpt: basiCategorys
     };
   },
   computed: {

@@ -154,7 +154,7 @@ export default {
         "History",
         "Computer science",
         "Artificial intelligence",
-        "Engineering disciplines",
+        "Engineering",
         "Chemical engineering",
         "Civil engineering",
         "Electrical engineering",
@@ -232,9 +232,9 @@ export default {
           method: this.methodSelect,
           level: this.levelSelect
         };
-        let response = await getDistanceByPeopleAndCats(opt);
-        if (response.data.data) {
-          chartData = response.data.data;
+        let retData = await getDistanceByPeopleAndCats(opt);
+        if (retData.data) {
+          chartData = retData.data;
         } else {
           this.$emit("emitMesage", "请求失败");
         }
@@ -254,17 +254,17 @@ export default {
           method: this.methodSelect,
           level: this.levelSelect
         };
-        let response = await getDistanceByPeoples(opt);
-        if (response.data.data) {
+        let retData = await getDistanceByPeoples(opt);
+        if (retData.data) {
           if (!chartData) {
-            chartData = response.data.data;
+            chartData = retData.data;
           } else {
             chartData.legend.push(
-              ...response.data.data.legend.map(item => {
+              ...retData.data.legend.map(item => {
                 return item + "(人)";
               })
             );
-            chartData.y.push(...response.data.data.y);
+            chartData.y.push(...retData.data.y);
           }
         } else {
           this.$emit("emitMesage", "请求失败");
@@ -283,7 +283,7 @@ export default {
       let _opt = {
         title: {
           text: data.title,
-          left: "10%"
+          left: "35%"
         },
         tooltip: {
           trigger: "axis",
@@ -333,11 +333,13 @@ export default {
           }
         },
         xAxis: {
+          name: "Year",
           type: "category",
           boundaryGap: false,
           data: data.x
         },
         yAxis: {
+          name: "Correlation degree",
           type: "value",
           max: 1
         },

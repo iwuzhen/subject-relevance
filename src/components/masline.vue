@@ -110,7 +110,7 @@ export default {
         "History",
         "Computer science",
         "Artificial intelligence",
-        "Engineering disciplines",
+        "Engineering",
         "Chemical engineering",
         "Civil engineering",
         "Electrical engineering",
@@ -193,7 +193,7 @@ export default {
       let _opt = {
         title: {
           text: data.title,
-          left: "10%"
+          left: "35%"
         },
         tooltip: {
           trigger: "axis",
@@ -240,11 +240,13 @@ export default {
           }
         },
         xAxis: {
+          name: "Year",
           type: "category",
           boundaryGap: false,
           data: data.x
         },
         yAxis: {
+          name: "Correlation degree",
           type: "value",
           max: 1
         },

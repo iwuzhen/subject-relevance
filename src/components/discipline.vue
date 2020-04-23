@@ -71,14 +71,13 @@ export default {
         "Biology",
         "Sociology",
         "Economics",
-        "Medicine",
         "Political science",
         "Psychology",
         "Linguistics",
         "History",
         "Computer science",
         "Artificial intelligence",
-        "Engineering disciplines",
+        "Engineering",
         "Chemical engineering",
         "Civil engineering",
         "Electrical engineering",
@@ -181,8 +180,8 @@ export default {
       };
       getWikiData(opt)
         .then(res => {
-          if (res.data.data) {
-            this.drawChart(res.data.data);
+          if (res.data) {
+            this.drawChart(res.data);
           } else {
             this.loading = false;
 
@@ -205,7 +204,7 @@ export default {
       let _opt = {
         title: {
           text: data.title,
-          left: "10%"
+          left: "30%"
         },
         tooltip: {
           trigger: "axis",
@@ -255,11 +254,13 @@ export default {
           }
         },
         xAxis: {
+          name: "Year",
           type: "category",
           boundaryGap: false,
           data: data.x
         },
         yAxis: {
+          name: "Correlation degree",
           type: "value",
           max: 1
         },

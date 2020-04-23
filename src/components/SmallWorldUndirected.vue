@@ -91,6 +91,7 @@
 
 <script>
 import smallworldundirect from "../data/smallworldundirect.json";
+import { basiCategorys } from "@/api/data";
 export default {
   name: "SmallWorld无向图逐年趋势",
   data() {
@@ -155,42 +156,7 @@ export default {
           text: "Mas (尚未完整)"
         }
       ],
-      categoryOpt: [
-        "Literature",
-        "Psychology",
-        "Logic",
-        "Philosophy",
-        "Mathematics",
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Sociology",
-        "Economics",
-        "Political science",
-        "Linguistics",
-        "History",
-        "Computer science",
-        "Artificial intelligence",
-        "Engineering disciplines",
-        "Chemical engineering",
-        "Civil engineering",
-        "Electrical engineering",
-        "Mechanical engineering",
-        "Biological engineering",
-        "Computer engineering",
-        "Industrial engineering",
-        "Environmental engineering",
-        "Cognitive science",
-        "Machine learning",
-        "Blockchains",
-        "Deep learning",
-        "Theoretical computer science",
-        "Quantum computing",
-        "Genetic engineering",
-        "Genome editing",
-        "Anthropology",
-        "Neuroscience"
-      ],
+      categoryOpt: basiCategorys,
       loading: false
     };
   },

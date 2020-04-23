@@ -20,6 +20,8 @@ import Home from "@/views/Home";
 import BanShuaiQi from "@/components/BanShuaiQi";
 import TopArticles from "@/components/TopArticles";
 import disciplinePeople from "@/components/disciplinePeople";
+import PeopleZipfByNodes from "@/components/PeopleZipfByNodes";
+import PeopleInnerZipfByNodes from "@/components/PeopleInnerZipfByNodes";
 
 Vue.use(Router);
 
@@ -125,6 +127,16 @@ export default new Router({
       path: "/disciplinePeople",
       name: "disciplinePeople",
       component: disciplinePeople
+    },
+    {
+      path: "/PeopleZipfByNodes",
+      name: "PeopleZipfByNodes",
+      component: PeopleZipfByNodes
+    },
+    {
+      path: "/PeopleInnerZipfByNodes",
+      name: "PeopleInnerZipfByNodes",
+      component: PeopleInnerZipfByNodes
     }
   ]
 });

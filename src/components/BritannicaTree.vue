@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-22 16:27:43
+ * @LastEditTime: 2020-04-23 17:02:57
  * @Description: 
  -->
 <template>
@@ -119,20 +119,12 @@
 import { getBritannicaTree } from "@/api/index";
 import * as Diff2Html from "diff2html";
 import * as diff from "diff";
-import * as localforage from "localforage";
-
 import { v4 as uuidv4 } from "uuid";
 
 export default {
   name: "Britannica_Tree_大英百科全书",
   data() {
     return {
-      store: localforage.createInstance({
-        name: "BritanTree",
-        version: 1,
-        storeName: "BritanTree", // Should be alphanumeric, with underscores.
-        description: "store tree"
-      }),
       treeLength: {},
       selection1: [],
       selection2: [],
@@ -253,39 +245,32 @@ export default {
     async getChildren(name) {
       //  本地缓存
       let categoryLength, categoryChildrens;
-      let categoryKey = `Cat${name}`;
       console.log(`扩展 tree,${name}`);
-      let store = this.store;
-      await store
-        .getItem(categoryKey)
-        .then(async function(value) {
-          // 当离线仓库中的值被载入时，此处代码运行
-          let data;
-          if (!value) {
-            let response = await getBritannicaTree({
-              categoryTitle: Buffer.from(name).toString("base64")
+      await getBritannicaTree({
+        categoryTitle: Buffer.from(name).toString("base64")
+      })
+        .then(res => {
+          if (res.data) {
+            categoryLength = res.data.childList.length;
+            categoryChildrens = res.data.childList.map(item => {
+              return {
+                id: uuidv4(),
+                name: item,
+                leaf: true,
+                children: []
+              };
             });
-            data = response.data;
-            if (!data) {
-              this.$emit("emitMesage", `请求失败`);
-            }
-            await store.setItem(categoryKey, data);
           } else {
-            data = value;
+            this.loading = false;
+            this.$emit("emitMesage", "请求失败");
+            return false;
           }
-          categoryLength = data.childList.length;
-          categoryChildrens = data.childList.map(item => {
-            return {
-              id: uuidv4(),
-              name: item,
-              leaf: true,
-              children: []
-            };
-          });
         })
-        .catch(function(err) {
-          console.log(err);
+        .catch(rej => {
+          this.loading = false;
+          this.$emit("emitMesage", `请求失败:${rej}`);
         });
+
       return [categoryLength, categoryChildrens];
     },
 

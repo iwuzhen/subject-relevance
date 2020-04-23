@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-04-22 22:06:32
+ * @LastEditTime: 2020-04-23 19:49:29
  * @Description: 
  -->
 
@@ -22,13 +22,22 @@
           label="目标学科"
         ></v-select>
       </v-col>
-      <v-col cols="6">
+      <v-col cols="3">
         <v-select
           v-model="yearSelect"
           :items="yearOpt"
           dense
           @change="calZipf"
           label="年份"
+        ></v-select>
+      </v-col>
+      <v-col cols="3">
+        <v-select
+          v-model="nodeCountSelect"
+          :items="nodeCountOpt"
+          dense
+          @change="getData"
+          label="节点数量"
         ></v-select>
       </v-col>
     </v-row>
@@ -98,24 +107,29 @@
 <script>
 import { getZipfByNodes } from "@/api/index";
 import ecStat from "echarts-stat";
-
-import * as localforage from "localforage";
+import { basiCategorys } from "@/api/data";
 
 export default {
   name: "zipf幂律斜率",
   data() {
     return {
-      store: localforage.createInstance({
-        name: "subject",
-        version: 1.0,
-        storeName: "ZipfByNodes", // Should be alphanumeric, with underscores.
-        description: "store tree"
-      }),
       loading: false,
       nodeRange: [250, 2500],
-      nodeMax: 10000,
       nodeMin: 0,
       subjectSelect: [],
+      nodeCountSelect: 10000,
+      nodeCountOpt: [
+        1000,
+        2000,
+        3000,
+        4000,
+        5000,
+        6000,
+        7000,
+        8000,
+        9000,
+        10000
+      ],
       yearSelect: null,
       yearOpt: [
         2007,
@@ -132,42 +146,7 @@ export default {
         2019,
         2020
       ],
-      categoryOpt: [
-        "Literature",
-        "Psychology",
-        "Logic",
-        "Philosophy",
-        "Mathematics",
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Sociology",
-        "Economics",
-        "Political science",
-        "Linguistics",
-        "History",
-        "Computer science",
-        "Artificial intelligence",
-        "Engineering disciplines",
-        "Chemical engineering",
-        "Civil engineering",
-        "Electrical engineering",
-        "Mechanical engineering",
-        "Biological engineering",
-        "Computer engineering",
-        "Industrial engineering",
-        "Environmental engineering",
-        "Cognitive science",
-        "Machine learning",
-        "Blockchains",
-        "Deep learning",
-        "Theoretical computer science",
-        "Quantum computing",
-        "Genetic engineering",
-        "Genome editing",
-        "Anthropology",
-        "Neuroscience"
-      ]
+      categoryOpt: basiCategorys
     };
   },
   mounted() {
@@ -178,6 +157,9 @@ export default {
     this.$store.commit("changeCurentPath", this.$options.name);
   },
   computed: {
+    nodeMax: function() {
+      return this.nodeCountSelect;
+    },
     myChart1: function() {
       return this.$echarts.init(document.getElementById("subjectChart1"));
     },
@@ -187,6 +169,9 @@ export default {
   },
   methods: {
     getData() {
+      if (this.nodeCountSelect < this.nodeRange[1]) {
+        this.nodeRange[1] = this.nodeCountSelect;
+      }
       this.yearChange();
       this.calZipf();
     },
@@ -205,30 +190,24 @@ export default {
       for (let subject of this.subjectSelect) {
         let opt = {
           str: subject,
-          N: 10000
+          N: this.nodeCountSelect
         };
-        // 缓存
-        let self = this;
-        let resquestKey = JSON.stringify(opt);
-        await self.store
-          .getItem(resquestKey)
-          .then(async function(value) {
-            if (!value) {
-              let response = await getZipfByNodes(opt);
-              if (response.data.data) {
-                value = response.data.data;
-                await self.store.setItem(resquestKey, response.data.data);
-              } else {
-                this.$emit("emitMesage", "请求失败");
-              }
+        await getZipfByNodes(opt)
+          .then(res => {
+            if (res.data) {
+              resList.push(res.data);
+              let options = this.setOptions_slope(resList);
+              this.myChart1.setOption(options, true);
+              this.loading = false;
+            } else {
+              this.loading = false;
+              this.$emit("emitMesage", "请求失败");
+              return false;
             }
-            resList.push(value);
-            let options = self.setOptions_slope(resList);
-            self.myChart1.setOption(options, true);
-            self.loading = false;
           })
-          .catch(function(err) {
-            console.log(err);
+          .catch(rej => {
+            this.loading = false;
+            this.$emit("emitMesage", `请求失败:${rej}`);
           });
       }
     },
@@ -236,39 +215,27 @@ export default {
       if (this.subjectSelect.length < 1 || !this.yearSelect) {
         return false;
       }
-      if (this.subjectSelect.length > 1 && !this.yearSelect === 1111) {
-        return false;
-      }
       this.loading = true;
       let opt = {
         str: this.subjectSelect.join(","),
-        N: 10000
+        N: this.nodeCountSelect,
+        year: this.yearSelect
       };
-      if (this.yearSelect !== 1111) {
-        opt["year"] = this.yearSelect;
-      }
-
-      let self = this;
-      let resquestKey = JSON.stringify(opt);
-
-      await self.store
-        .getItem(resquestKey)
-        .then(async function(value) {
-          if (!value) {
-            let response = await getZipfByNodes(opt);
-            if (response.data.data) {
-              value = response.data.data;
-              await self.store.setItem(resquestKey, response.data.data);
-            } else {
-              this.$emit("emitMesage", "请求失败");
-            }
+      await getZipfByNodes(opt)
+        .then(res => {
+          if (res.data) {
+            let options = this.setOptions_zipf(res.data);
+            this.myChart2.setOption(options, true);
+            this.loading = false;
+          } else {
+            this.loading = false;
+            this.$emit("emitMesage", "请求失败");
+            return false;
           }
-          let options = self.setOptions_zipf(value);
-          self.myChart2.setOption(options, true);
-          self.loading = false;
         })
-        .catch(function(err) {
-          console.log(err);
+        .catch(rej => {
+          this.loading = false;
+          this.$emit("emitMesage", `请求失败:${rej}`);
         });
     },
 
@@ -312,7 +279,7 @@ export default {
       let _opt = {
         title: {
           text: "斜率趋势",
-          left: "10%"
+          left: "30%"
         },
         tooltip: {
           trigger: "axis",
@@ -344,7 +311,7 @@ export default {
         legend: {
           data: lengnds,
           right: "1%",
-          top: "35%",
+          top: "25%",
           textStyle: {
             fontSize: 14
           },
@@ -364,13 +331,13 @@ export default {
         },
         xAxis: {
           type: "category",
-          name: "年",
+          name: "Year",
           data: this.yearOpt
         },
         yAxis: {
           type: "value",
           max: yMax,
-          name: "斜率",
+          name: "Slope",
           min: yMin
         },
         series: seriesList
@@ -433,12 +400,13 @@ export default {
         });
       }
       let ymax = Math.floor(Math.max(...[].concat(...data.y)) * 10) + 1;
+      let xmax = Math.floor(Math.max(...data.x) * 10) + 1;
 
       console.log(data);
       let _opt = {
         title: {
           text: data.title,
-          left: "10%"
+          left: "40%"
         },
         tooltip: {
           trigger: "axis",
@@ -470,7 +438,7 @@ export default {
         legend: {
           data: data.legend,
           right: "1%",
-          top: "35%",
+          top: "25%",
           textStyle: {
             fontSize: 14
           },
@@ -490,13 +458,13 @@ export default {
         },
         xAxis: {
           type: "value",
-          max: "dataMax",
-          name: "度数 log"
+          max: xmax / 10,
+          name: "log (rank)"
         },
         yAxis: {
           type: "value",
           max: ymax / 10,
-          name: "数量 log",
+          name: "log (citation)",
           min: 0
         },
         series: seriesList

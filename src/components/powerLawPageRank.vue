@@ -39,48 +39,14 @@
 <script>
 import { getPagerankZipf } from "@/api/index";
 import ecStat from "echarts-stat";
+import { basiCategorys } from "@/api/data";
 
 export default {
   name: "PageRank幂律分布",
   data() {
     return {
       subjectTarget: [],
-      categorys: [
-        "Literature",
-        "Psychology",
-        "Logic",
-        "Philosophy",
-        "Mathematics",
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Sociology",
-        "Economics",
-        "Political science",
-        "Linguistics",
-        "History",
-        "Computer science",
-        "Artificial intelligence",
-        "Engineering disciplines",
-        "Chemical engineering",
-        "Civil engineering",
-        "Electrical engineering",
-        "Mechanical engineering",
-        "Biological engineering",
-        "Computer engineering",
-        "Industrial engineering",
-        "Environmental engineering",
-        "Cognitive science",
-        "Machine learning",
-        "Blockchains",
-        "Deep learning",
-        "Theoretical computer science",
-        "Quantum computing",
-        "Genetic engineering",
-        "Genome editing",
-        "Anthropology",
-        "Neuroscience"
-      ],
+      categorys: basiCategorys,
       dataYear: null,
       dataYearopt: [
         2007,
@@ -213,7 +179,7 @@ export default {
       let _opt = {
         title: {
           text: data.title,
-          left: "10%"
+          left: "40%"
         },
         tooltip: {
           trigger: "axis",
@@ -264,10 +230,12 @@ export default {
           }
         },
         xAxis: {
+          name: "log (rank)",
           type: "value",
           max: xmax
         },
         yAxis: {
+          name: "log (citation)",
           type: "value",
           max: ymax
         },

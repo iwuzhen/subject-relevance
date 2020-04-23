@@ -44,9 +44,6 @@
     </v-content>
     <v-snackbar v-model="snackbar" top :timeout="timeout">
       {{ text }}
-      <v-btn color="blue" text @click="snackbar = false">
-        Close
-      </v-btn>
     </v-snackbar>
   </v-app>
 </template>
