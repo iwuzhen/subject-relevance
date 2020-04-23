@@ -225,7 +225,7 @@ export default {
         xAxis: {
           name: "log (rank)",
           type: "value",
-          max: 4
+          max: "dataMax"
         },
         yAxis: {
           name: "log (citation)",
