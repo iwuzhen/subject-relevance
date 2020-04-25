@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-23 16:51:22
+ * @LastEditTime: 2020-04-25 23:23:01
  * @Description: 
  -->
 <template>
@@ -192,6 +192,7 @@ export default {
     }
   },
   mounted() {
+    this.basiccategorys.sort();
     this.reset();
     this.$store.commit("changeCurentPath", this.$options.name);
     this.loadDefauleCategory();

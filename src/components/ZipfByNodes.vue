@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-04-23 19:49:29
+ * @LastEditTime: 2020-04-26 01:58:20
  * @Description: 
  -->
 
@@ -80,22 +80,24 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col col="6">
+      <v-col col="12">
         <v-card
           class="mx-auto"
           outlined
           :loading="loading"
-          height="50vh"
+          height="45vh"
           id="subjectChart1"
         >
         </v-card>
       </v-col>
-      <v-col col="6">
+    </v-row>
+    <v-row>
+      <v-col col="12">
         <v-card
           class="mx-auto"
           outlined
           :loading="loading"
-          height="50vh"
+          height="45vh"
           id="subjectChart2"
         >
         </v-card>
@@ -310,7 +312,7 @@ export default {
         },
         legend: {
           data: lengnds,
-          right: "1%",
+          left: "83%",
           top: "25%",
           textStyle: {
             fontSize: 14
@@ -437,7 +439,7 @@ export default {
         },
         legend: {
           data: data.legend,
-          right: "1%",
+          left: "83%",
           top: "25%",
           textStyle: {
             fontSize: 14

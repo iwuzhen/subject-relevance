@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 19:09:27
  * @LastEditors: ider
- * @LastEditTime: 2020-04-22 19:17:44
+ * @LastEditTime: 2020-04-26 01:46:47
  * @Description: 
  -->
 
@@ -260,10 +260,10 @@ export default {
       this.loading = false;
     },
     setOptions(data) {
-      var gridWidth = "40%";
+      var gridWidth = "35%";
       var gridHeight = "35%";
       // var gridLeft = 80;
-      var gridRight = 80;
+      var gridRight = "87%";
       var gridTop = 50;
       // var gridBottom = 80;
       let _opt = {
@@ -358,36 +358,60 @@ export default {
             return showHtm;
           }
         },
-        legend: {
-          data: data.legend,
-          //   right: "5%",
-          right: gridRight,
-          top: "55%",
-          textStyle: {
-            fontSize: 14
+        legend: [
+          {
+            data: data.legend,
+            //   right: "5%",
+            left: "38%",
+            top: "15%",
+            textStyle: {
+              fontSize: 14
+            },
+            orient: "vertical",
+            z: 999
           },
-          orient: "vertical",
-          z: 999
-        },
+          {
+            data: data.legend,
+            //   right: "5%",
+            left: gridRight,
+            top: "15%",
+            textStyle: {
+              fontSize: 14
+            },
+            orient: "vertical",
+            z: 999
+          },
+          {
+            data: data.legend,
+            //   right: "5%",
+            left: gridRight,
+            top: "65%",
+            textStyle: {
+              fontSize: 14
+            },
+            orient: "vertical",
+            z: 999
+          }
+        ],
         grid: [
           {
             top: gridTop,
             width: gridWidth,
             height: gridHeight,
-            left: "4%",
+            left: "1%",
             containLabel: true
           },
           {
             top: gridTop,
             width: gridWidth,
             height: gridHeight,
-            right: gridRight,
+            right: "15%",
             containLabel: true
           },
           {
             top: "55%",
-            left: "4%",
-            right: "20%",
+            left: "1%",
+            right: "15%",
             height: "38%",
             containLabel: true
           }

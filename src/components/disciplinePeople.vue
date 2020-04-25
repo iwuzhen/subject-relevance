@@ -13,7 +13,7 @@
         <v-select
           v-model="targetSubjectSelect"
           :items="subjectOpt"
-          @change="getData"
+          @change="getSubjectDegree"
           chips
           multiple
           dense
@@ -25,7 +25,7 @@
         <v-select
           v-model="targetPeopleSubjectSelect"
           :items="peopleSubjectOpt"
-          @change="getData"
+          @change="getPeopleDegree"
           chips
           multiple
           dense
@@ -51,17 +51,6 @@
           label="level"
         ></v-select>
       </v-col>
-      <!-- <v-col align-self="center" cols="2">
-        <v-btn
-          color="light-blue lighten-2"
-          dark
-          small
-          @click.stop="dialog = true"
-        >
-          <v-icon>mdi-help-circle</v-icon>
-          参数
-        </v-btn>
-      </v-col> -->
     </v-row>
     <v-row>
       <v-col col="12">
@@ -69,36 +58,24 @@
           class="mx-auto"
           outlined
           :loading="loading"
-          height="70vh"
-          id="subjectChart"
+          height="45vh"
+          id="subjectChart1"
         >
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="dialog" width="500">
-      <v-card>
-        <v-card-title class="headline grey lighten-2" primary-title>
-          参数说明
-        </v-card-title>
-
-        <v-card-text>
-          <p>
-            <b>目标学科</b>： <br />wikipedia 中的学科。<br />
-            <b>参数</b>：
-            <br />小世界网络指标有两个指标，平均路径长度，集聚系数。<br />
-            网络总点数，网络连接边数。<br />
-            <b>数据源</b>： <br />按 wikipedia category 计算出的前
-            2000,2500,3000个节点的组成的网络。<br />
-            按 google 距离计算出的前 2000,2500,3000个节点的组成的网络。<br />
-            Wikipedia 全部的 2 层类下的文章组成的网络。<br />
-            Wikipedia 全部的 3 层类下的文章组成的网络。<br />
-            Mas 学科下的论文的组成的网络。
-          </p>
-        </v-card-text>
-
-        <v-divider></v-divider>
-      </v-card>
-    </v-dialog>
+    <v-row>
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="45vh"
+          id="subjectChart2"
+        >
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -204,23 +181,23 @@ export default {
         return ret;
       });
     },
-    myChart: function() {
-      return this.$echarts.init(document.getElementById("subjectChart"));
+    myChart1: function() {
+      return this.$echarts.init(document.getElementById("subjectChart1"));
+    },
+    myChart2: function() {
+      return this.$echarts.init(document.getElementById("subjectChart2"));
     }
   },
   mounted() {
     window.onresize = () => {
-      this.myChart.resize();
+      this.myChart1.resize();
+      this.myChart2.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
   },
   methods: {
-    async getData() {
-      if (
-        !this.peopleSubjectSelect ||
-        (this.targetSubjectSelect.length === 0 &&
-          this.targetPeopleSubjectSelect.length === 0)
-      ) {
+    async getSubjectDegree() {
+      if (!this.peopleSubjectSelect || this.targetSubjectSelect.length === 0) {
         return false;
       }
       let chartData;
@@ -239,6 +216,20 @@ export default {
           this.$emit("emitMesage", "请求失败");
         }
       }
+      let options = this.setOptions(chartData);
+      this.myChart1.setOption(options, true);
+      this.loading = false;
+    },
+    async getPeopleDegree() {
+      if (
+        !this.peopleSubjectSelect ||
+        this.targetPeopleSubjectSelect.length === 0
+      ) {
+        return false;
+      }
+      let chartData;
+      this.loading = true;
+
       if (this.targetPeopleSubjectSelect.length > 0) {
         let peopleSubjectSelect = this.peopleSubjectSelect;
         let opt = {
@@ -256,29 +247,21 @@ export default {
         };
         let retData = await getDistanceByPeoples(opt);
         if (retData.data) {
-          if (!chartData) {
-            chartData = retData.data;
-          } else {
-            chartData.legend.push(
-              ...retData.data.legend.map(item => {
-                return item + "(人)";
-              })
-            );
-            chartData.y.push(...retData.data.y);
-          }
+          chartData = retData.data;
         } else {
           this.$emit("emitMesage", "请求失败");
         }
       }
 
-      this.drawChart(chartData);
+      let options = this.setOptions(chartData);
+      this.myChart2.setOption(options, true);
       this.loading = false;
     },
-    drawChart(data) {
-      let options = this.setOptions(data);
-      this.myChart.setOption(options, true);
-      this.loading = false;
+    async getData() {
+      this.getSubjectDegree();
+      this.getPeopleDegree();
     },
+
     setOptions(data) {
       let _opt = {
         title: {
@@ -313,7 +296,7 @@ export default {
         },
         legend: {
           data: data.legend,
-          right: "3%",
+          left: "83%",
           orient: "vertical",
           top: "35%",
           textStyle: {

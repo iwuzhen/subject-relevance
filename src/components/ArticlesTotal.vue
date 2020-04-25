@@ -176,7 +176,7 @@ export default {
         },
         legend: {
           data: Object.keys(data),
-          right: "5%",
+          left: "83%",
           top: "35%",
           textStyle: {
             fontSize: 14

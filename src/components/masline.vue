@@ -223,9 +223,12 @@ export default {
         },
         legend: {
           data: data.legend,
-          right: "5%",
+          left: "83%",
           top: "30%",
-          orient: "vertical"
+          orient: "vertical",
+          textStyle: {
+            fontSize: 14
+          }
         },
         grid: {
           left: "8%",
@@ -268,21 +271,4 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-@import url("../assets/style/common.less");
-#slider {
-  display: flex;
-  width: 20rem;
-  .el-row {
-    display: flex;
-    // margin: 0 auto;
-    align-items: center;
-    .el-slider {
-      margin-left: 15px;
-      display: block;
-      position: relative;
-      width: 12rem;
-    }
-  }
-}
-</style>
+<style lang="less" scoped></style>

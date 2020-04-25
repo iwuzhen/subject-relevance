@@ -203,7 +203,7 @@ export default {
         },
         legend: {
           data: data.legend,
-          right: "8%",
+          left: "83%",
           top: "35%",
           textStyle: {
             fontSize: 14

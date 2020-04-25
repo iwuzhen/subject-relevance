@@ -74,8 +74,8 @@ export default {
             to: "/ArticlesTotal"
           },
           {
-            title: "MAS 文章数",
-            text: "MAS 文章数查询",
+            title: "MAG 文章数",
+            text: "MAG 文章数查询",
             to: "/MasArticlesTotal"
           },
           {
@@ -97,7 +97,7 @@ export default {
           },
           { title: "MAS", text: "MAS 中各学科的逐年相关度", to: "/masline" },
           {
-            title: "小世界",
+            title: "小世界有向图",
             text: "小世界有向网络学科间趋势",
             to: "/SmallWorldDirected"
           },

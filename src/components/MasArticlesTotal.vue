@@ -154,7 +154,7 @@ export default {
         },
         legend: {
           data: Object.keys(data),
-          right: "5%",
+          left: "83%",
           top: "35%",
           textStyle: {
             fontSize: 14
@@ -212,6 +212,4 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
-@import url("../assets/style/common.less");
-</style>
+<style lang="less" scoped></style>

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-04-22 21:27:09
+ * @LastEditTime: 2020-04-26 02:00:40
  * @Description: 
  -->
 
@@ -298,7 +298,7 @@ export default {
         },
         legend: {
           data: data.legend,
-          right: "4%",
+          left: "83%",
           top: "35%",
           textStyle: {
             fontSize: 14
