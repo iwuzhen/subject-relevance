@@ -47,7 +47,7 @@
 
 <script>
 import { getViewAndEdits } from "@/api/index";
-import { basiCategorys } from "@/api/data";
+import { basiCategorys, extendEchartsOpts } from "@/api/data";
 export default {
   name: "ve访问量和编辑量",
   data() {
@@ -138,65 +138,18 @@ export default {
       let ymax = Math.max(...[].concat(...data.y));
       let digit = Math.floor(ymax).toString().length;
       ymax = Math.ceil(ymax / 10 ** (digit - 2)) * 10 ** (digit - 2);
-      let _opt = {
+      let _opt = extendEchartsOpts({
         title: {
-          text: data.title,
-          left: "40%"
-        },
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "cross",
-            animation: true,
-            label: {
-              backgroundColor: "#505765"
-            }
-          },
-
-          textStyle: {
-            align: "left"
-          },
-          formatter: function(params) {
-            params.sort((x, y) => {
-              return y.data - x.data;
-            });
-            let showHtm = ` ${params[0].name}<br>`;
-            for (let i = 0; i < params.length; i++) {
-              let _text = params[i].seriesName;
-              let _data = params[i].data;
-              let _marker = params[i].marker;
-              showHtm += `${_marker}${_text}：${_data}<br>`;
-            }
-            return showHtm;
-          }
+          text: data.title
         },
         legend: {
-          data: data.legend,
-          left: "83%",
-          top: "35%",
-          textStyle: {
-            fontSize: 14
-          },
-          orient: "vertical"
-        },
-        grid: {
-          left: "8%",
-          right: "20%",
-          bottom: "5%",
-          containLabel: true
-        },
-        toolbox: {
-          right: "20%",
-          feature: {
-            saveAsImage: {}
-          }
+          data: data.legend
         },
         xAxis: {
           name: "Date",
           type: "category",
           boundaryGap: false,
-          data: data.x,
-          max: "dataMax"
+          data: data.x
         },
         yAxis: {
           name: "Count",
@@ -211,25 +164,11 @@ export default {
             data: item
           };
         })
-      };
+      });
       return _opt;
-    },
-    subjectChange() {
-      this.getData();
     }
   }
 };
 </script>
 
-<style lang="less" scoped>
-@import url("../assets/style/common.less");
-.subjectRelevances {
-  width: 300px;
-}
-.dataType {
-  width: 100px;
-}
-.subjectLevel {
-  width: 120px;
-}
-</style>
+<style lang="less" scoped></style>

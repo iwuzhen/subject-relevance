@@ -46,7 +46,7 @@
 
 <script>
 import { getDfb } from "@/api/index";
-import { basiCategorys } from "@/api/data";
+import { basiCategorys, extendEchartsOpts } from "@/api/data";
 export default {
   name: "subject幂律度分布",
   data() {
@@ -122,14 +122,12 @@ export default {
             this.drawChart(res.data.data);
           } else {
             this.loading = false;
-
             this.$emit("emitMesage", "请求失败");
             return false;
           }
         })
         .catch(rej => {
           this.loading = false;
-
           this.$emit("emitMesage", `请求失败:${rej}`);
         });
     },
@@ -157,60 +155,20 @@ export default {
           large: true,
           data: dataItem
         });
-      }
+      } // 排序;
+      seriesList.sort((x, y) => {
+        console.log(y.data.slice(-1)[0][1], x.data.slice(-1)[0][1]);
+        return y.data.slice(-1)[0][1] - x.data.slice(-1)[0][1];
+      });
 
-      let _opt = {
+      let _opt = extendEchartsOpts({
         title: {
-          text: data.title,
-          left: "40%"
-        },
-        tooltip: {
-          trigger: "axis",
-          textStyle: {
-            align: "left"
-          },
-          axisPointer: {
-            type: "cross",
-            animation: true,
-            label: {
-              backgroundColor: "#505765"
-            }
-          },
-          formatter: function(params) {
-            params.sort((x, y) => {
-              return y.data[1] - x.data[1];
-            });
-            let showHtm = ` ${params[0].name}<br>`;
-            for (let i = 0; i < params.length; i++) {
-              let _text = params[i].seriesName;
-              let _data_x = params[i].data[0].toFixed(4);
-              let _data_y = params[i].data[1].toFixed(4);
-              let _marker = params[i].marker;
-              showHtm += `${_marker}${_text}： x=${_data_x} y=${_data_y}<br>`;
-            }
-            return showHtm;
-          }
+          text: data.title
         },
         legend: {
-          data: data.legend,
-          left: "83%",
-          top: "35%",
-          textStyle: {
-            fontSize: 14
-          },
-          orient: "vertical"
-        },
-        grid: {
-          left: "8%",
-          right: "20%",
-          bottom: "5%",
-          containLabel: true
-        },
-        toolbox: {
-          right: "20%",
-          feature: {
-            saveAsImage: {}
-          }
+          data: seriesList.map(item => {
+            return item.name;
+          })
         },
         xAxis: {
           type: "value",
@@ -223,13 +181,11 @@ export default {
           name: "log (citation)"
         },
         series: seriesList
-      };
+      });
       return _opt;
     }
   }
 };
 </script>
 
-<style lang="less" scoped>
-@import url("../assets/style/common.less");
-</style>
+<style lang="less" scoped></style>

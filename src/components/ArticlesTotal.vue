@@ -47,6 +47,8 @@
 
 <script>
 import { getArticlesTotal } from "@/api/index";
+import { extendEchartsOpts, lessCategorys } from "@/api/data";
+
 export default {
   name: "ArticleTotal",
   data() {
@@ -54,31 +56,7 @@ export default {
       subjectRelevances: [],
       subjectLevel: "0",
       subjecType: "0",
-      categorys: [
-        "Logic",
-        "Philosophy",
-        "Mathematics",
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Sociology",
-        "Economics",
-        "Political science",
-        "Psychology",
-        "Linguistics",
-        "History",
-        "Computer science",
-        "Artificial intelligence",
-        "Engineering",
-        "Chemical engineering",
-        "Civil engineering",
-        "Electrical engineering",
-        "Mechanical engineering",
-        "Biological engineering",
-        "Computer engineering",
-        "Industrial engineering",
-        "Environmental engineering"
-      ],
+      categorys: lessCategorys,
       typeOptions: [
         {
           value: "0",
@@ -125,14 +103,12 @@ export default {
             this.drawChart(res);
           } else {
             this.loading = false;
-
             this.$emit("emitMesage", "请求失败");
             return false;
           }
         })
         .catch(rej => {
           this.loading = false;
-
           this.$emit("emitMesage", `请求失败:${rej}`);
         });
     },
@@ -143,57 +119,12 @@ export default {
     },
     setOptions(data) {
       let years = Object.keys(data[this.subjectRelevances[0]]);
-      let _opt = {
+      let _opt = extendEchartsOpts({
         title: {
-          text: "学科 article 数量",
-          left: "40%"
-        },
-        tooltip: {
-          trigger: "axis",
-          textStyle: {
-            align: "left"
-          },
-          axisPointer: {
-            type: "cross",
-            animation: true,
-            label: {
-              backgroundColor: "#505765"
-            }
-          },
-          formatter: function(params) {
-            params.sort((x, y) => {
-              return y.data - x.data;
-            });
-            let showHtm = ` ${params[0].name}<br>`;
-            for (let i = 0; i < params.length; i++) {
-              let _text = params[i].seriesName;
-              let _data = params[i].data;
-              let _marker = params[i].marker;
-              showHtm += `${_marker}${_text}：${_data}<br>`;
-            }
-            return showHtm;
-          }
+          text: "学科 article 数量"
         },
         legend: {
-          data: Object.keys(data),
-          left: "83%",
-          top: "35%",
-          textStyle: {
-            fontSize: 14
-          },
-          orient: "vertical"
-        },
-        grid: {
-          left: "8%",
-          right: "20%",
-          bottom: "5%",
-          containLabel: true
-        },
-        toolbox: {
-          right: "20%",
-          feature: {
-            saveAsImage: {}
-          }
+          data: Object.keys(data)
         },
         xAxis: {
           name: "Year",
@@ -203,49 +134,21 @@ export default {
         },
         yAxis: {
           name: "Count",
-          type: "value",
-          max: (data => {
-            let max = 100;
-            for (let key in data) {
-              max = Math.max(
-                max,
-                Math.max.apply(null, Object.values(data[key]))
-              );
-            }
-            return Math.ceil(max / 100) * 100;
-          })(data)
+          type: "value"
         },
-        series: (data => {
-          let ret = [];
-          for (let key in data) {
-            ret.push({
-              name: key,
-              type: "line",
-              smooth: false,
-              data: Object.values(data[key])
-            });
-          }
-          return ret;
-        })(data)
-      };
+        series: Object.entries(data).map(item => {
+          return {
+            name: item[0],
+            type: "line",
+            smooth: false,
+            data: Object.values(item[1])
+          };
+        })
+      });
       return _opt;
-    },
-    subjectChange() {
-      this.getData();
     }
   }
 };
 </script>
 
-<style lang="less" scoped>
-@import url("../assets/style/common.less");
-.subjectRelevances {
-  width: 300px;
-}
-.methodSelect {
-  width: 100px;
-}
-.subjectLevel {
-  width: 80px;
-}
-</style>
+<style lang="less" scoped></style>

@@ -35,6 +35,7 @@
 
 <script>
 import { getDistanceByFile } from "@/api/index";
+import { extendEchartsOpts } from "@/api/data";
 export default {
   name: "Cognitive_science相关度",
   data() {
@@ -86,57 +87,13 @@ export default {
       this.loading = false;
     },
     setOptions(data) {
-      let _opt = {
+      let _opt = extendEchartsOpts({
         title: {
           text: data.title,
           left: "35%"
         },
-        tooltip: {
-          trigger: "axis",
-          textStyle: {
-            align: "left"
-          },
-          axisPointer: {
-            type: "cross",
-            animation: true,
-            label: {
-              backgroundColor: "#505765"
-            }
-          },
-          formatter: function(params) {
-            params.sort((x, y) => {
-              return y.data - x.data;
-            });
-            let showHtm = ` ${params[0].name}<br>`;
-            for (let i = 0; i < params.length; i++) {
-              let _text = params[i].seriesName;
-              let _data = params[i].data.toFixed(6);
-              let _marker = params[i].marker;
-              showHtm += `${_marker}${_text}：${_data}<br>`;
-            }
-            return showHtm;
-          }
-        },
         legend: {
-          data: data.legend,
-          left: "83%",
-          top: "25%",
-          textStyle: {
-            fontSize: 14
-          },
-          orient: "vertical"
-        },
-        grid: {
-          left: "8%",
-          right: "20%",
-          bottom: "5%",
-          containLabel: true
-        },
-        toolbox: {
-          right: "20%",
-          feature: {
-            saveAsImage: {}
-          }
+          data: data.legend
         },
         xAxis: {
           name: "Year",
@@ -157,11 +114,8 @@ export default {
             data: item
           };
         })
-      };
+      });
       return _opt;
-    },
-    subjectChange() {
-      this.getData();
     }
   }
 };

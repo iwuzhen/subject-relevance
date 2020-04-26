@@ -39,7 +39,7 @@
 <script>
 import { getZipf } from "@/api/index";
 import ecStat from "echarts-stat";
-import { basiCategorys } from "@/api/data";
+import { basiCategorys, extendEchartsOpts } from "@/api/data";
 
 export default {
   name: "zipf幂律",
@@ -135,6 +135,11 @@ export default {
           data: dataItem
         });
       }
+      // 排序
+      // seriesList.sort((x, y) => {
+      //   return y.data.slice(-1)[1] - x.data.slice(-1)[1];
+      // });
+      // console.log(seriesList);
       // 趋势线
       let myRegression = ecStat.regression("linear", seriesList[0].data);
       if (data.y.length === 1) {
@@ -169,58 +174,14 @@ export default {
           }
         });
       }
-      let _opt = {
+      let _opt = extendEchartsOpts({
         title: {
-          text: data.title,
-          left: "40%"
-        },
-        tooltip: {
-          trigger: "axis",
-          textStyle: {
-            align: "left"
-          },
-          axisPointer: {
-            type: "cross",
-            animation: true,
-            label: {
-              backgroundColor: "#505765"
-            }
-          },
-          formatter: function(params) {
-            params.sort((x, y) => {
-              return y.data[1] - x.data[1];
-            });
-            let showHtm = ` ${params[0].name}<br>`;
-            for (let i = 0; i < params.length; i++) {
-              let _text = params[i].seriesName;
-              let _data_x = params[i].data[0].toFixed(4);
-              let _data_y = params[i].data[1].toFixed(4);
-              let _marker = params[i].marker;
-              showHtm += `${_marker}${_text}： x=${_data_x} y=${_data_y}<br>`;
-            }
-            return showHtm;
-          }
+          text: data.title
         },
         legend: {
-          data: data.legend,
-          left: "83%",
-          top: "35%",
-          textStyle: {
-            fontSize: 14
-          },
-          orient: "vertical"
-        },
-        grid: {
-          left: "8%",
-          right: "20%",
-          bottom: "5%",
-          containLabel: true
-        },
-        toolbox: {
-          right: "20%",
-          feature: {
-            saveAsImage: {}
-          }
+          data: seriesList.map(item => {
+            return item.name;
+          })
         },
         xAxis: {
           name: "log (rank)",
@@ -233,13 +194,11 @@ export default {
           max: ymax
         },
         series: seriesList
-      };
+      });
       return _opt;
     }
   }
 };
 </script>
 
-<style lang="less" scoped>
-@import url("../assets/style/common.less");
-</style>
+<style lang="less" scoped></style>

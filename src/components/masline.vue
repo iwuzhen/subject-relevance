@@ -87,6 +87,7 @@
 
 <script>
 import { getMasData } from "@/api/index";
+import { extendEchartsOpts, lessCategorys } from "@/api/data";
 export default {
   name: "mas学科相关度",
   data() {
@@ -95,31 +96,7 @@ export default {
       subjectRelevances: [],
       methodValue: "linksout",
       years: [1950, 2019],
-      categorys: [
-        "Logic",
-        "Philosophy",
-        "Mathematics",
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Sociology",
-        "Economics",
-        "Political science",
-        "Psychology",
-        "Linguistics",
-        "History",
-        "Computer science",
-        "Artificial intelligence",
-        "Engineering",
-        "Chemical engineering",
-        "Civil engineering",
-        "Electrical engineering",
-        "Mechanical engineering",
-        "Biological engineering",
-        "Computer engineering",
-        "Industrial engineering",
-        "Environmental engineering"
-      ],
+      categorys: lessCategorys,
       methodOptions: ["linksout"],
       loading: false
     };
@@ -190,57 +167,12 @@ export default {
       this.loading = false;
     },
     setOptions(data) {
-      let _opt = {
+      let _opt = extendEchartsOpts({
         title: {
-          text: data.title,
-          left: "35%"
-        },
-        tooltip: {
-          trigger: "axis",
-          textStyle: {
-            align: "left"
-          },
-          axisPointer: {
-            type: "cross",
-            animation: true,
-            label: {
-              backgroundColor: "#505765"
-            }
-          },
-          formatter: function(params) {
-            params.sort((x, y) => {
-              return y.data - x.data;
-            });
-            let showHtm = ` ${params[0].name}<br>`;
-            for (let i = 0; i < params.length; i++) {
-              let _text = params[i].seriesName;
-              let _data = params[i].data.toFixed(6);
-              let _marker = params[i].marker;
-              showHtm += `${_marker}${_text}：${_data}<br>`;
-            }
-            return showHtm;
-          }
+          text: data.title
         },
         legend: {
-          data: data.legend,
-          left: "83%",
-          top: "30%",
-          orient: "vertical",
-          textStyle: {
-            fontSize: 14
-          }
-        },
-        grid: {
-          left: "8%",
-          right: "20%",
-          bottom: "5%",
-          containLabel: true
-        },
-        toolbox: {
-          right: "20%",
-          feature: {
-            saveAsImage: {}
-          }
+          data: data.legend
         },
         xAxis: {
           name: "Year",
@@ -261,11 +193,8 @@ export default {
             data: item
           };
         })
-      };
+      });
       return _opt;
-    },
-    subjectChange() {
-      this.subjectRelevances = [];
     }
   }
 };

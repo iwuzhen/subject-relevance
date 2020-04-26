@@ -81,6 +81,7 @@
 
 <script>
 import { getDistanceByPeopleAndCats, getDistanceByPeoples } from "@/api/index";
+import { peopleCategorys, extendEchartsOpts, lessCategorys } from "@/api/data";
 export default {
   name: "wiki_人的相关度",
   data() {
@@ -90,57 +91,8 @@ export default {
       targetPeopleSubjectSelect: "",
       methodSelect: "linksin",
       levelSelect: "1000",
-      defaultPeopleSubjectOpt: [
-        "Anthropology",
-        "Artificial intelligence",
-        "Biology",
-        "Chemical engineering",
-        "Chemistry",
-        "Civil engineering",
-        "Cognitive science",
-        "Computer science",
-        "Economics",
-        "Electrical engineering",
-        "Environmental engineering",
-        "History",
-        "Industrial engineering",
-        "Linguistics",
-        "logic",
-        "Machine learning",
-        "Mathematics",
-        "Mechanical engineering",
-        "Neuroscience",
-        "Philosophy",
-        "Physics",
-        "Political science",
-        "Psychology",
-        "Sociology"
-      ],
-      subjectOpt: [
-        "Logic",
-        "Philosophy",
-        "Mathematics",
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Sociology",
-        "Economics",
-        "Political science",
-        "Psychology",
-        "Linguistics",
-        "History",
-        "Computer science",
-        "Artificial intelligence",
-        "Engineering",
-        "Chemical engineering",
-        "Civil engineering",
-        "Electrical engineering",
-        "Mechanical engineering",
-        "Biological engineering",
-        "Computer engineering",
-        "Industrial engineering",
-        "Environmental engineering"
-      ],
+      defaultPeopleSubjectOpt: peopleCategorys,
+      subjectOpt: lessCategorys,
       methodOpt: ["linksin"],
       levelOpt: [
         {
@@ -263,57 +215,13 @@ export default {
     },
 
     setOptions(data) {
-      let _opt = {
+      let _opt = extendEchartsOpts({
         title: {
           text: data.title,
           left: "35%"
         },
-        tooltip: {
-          trigger: "axis",
-          textStyle: {
-            align: "left"
-          },
-          axisPointer: {
-            type: "cross",
-            animation: true,
-            label: {
-              backgroundColor: "#505765"
-            }
-          },
-          formatter: function(params) {
-            params.sort((x, y) => {
-              return y.data - x.data;
-            });
-            let showHtm = ` ${params[0].name}<br>`;
-            for (let i = 0; i < params.length; i++) {
-              let _text = params[i].seriesName;
-              let _data = params[i].data.toFixed(6);
-              let _marker = params[i].marker;
-              showHtm += `${_marker}${_text}：${_data}<br>`;
-            }
-            return showHtm;
-          }
-        },
         legend: {
-          data: data.legend,
-          left: "83%",
-          orient: "vertical",
-          top: "35%",
-          textStyle: {
-            fontSize: 14
-          }
-        },
-        grid: {
-          left: "8%",
-          right: "20%",
-          bottom: "5%",
-          containLabel: true
-        },
-        toolbox: {
-          right: "20%",
-          feature: {
-            saveAsImage: {}
-          }
+          data: data.legend
         },
         xAxis: {
           name: "Year",
@@ -334,14 +242,8 @@ export default {
             data: item
           };
         })
-      };
+      });
       return _opt;
-    },
-    subjectChange() {
-      this.subjectRelevances = [];
-    },
-    selectChange() {
-      this.getData();
     }
   }
 };

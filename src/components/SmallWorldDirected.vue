@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 19:09:27
  * @LastEditors: ider
- * @LastEditTime: 2020-04-26 01:46:47
+ * @LastEditTime: 2020-04-26 14:08:32
  * @Description: 
  -->
 
@@ -252,6 +252,33 @@ export default {
         ...[].concat(...ret_data.y),
         ...[].concat(...ret_data.c)
       );
+      // 重新排序
+      let rankArray = ret_data.y.map((item, index) => {
+        return [
+          ret_data.legend[index],
+          ret_data.y[index],
+          ret_data.c[index],
+          ret_data.b[index]
+        ];
+      });
+      rankArray.sort((x, y) => {
+        return y[1].slice(-1) - x[1].slice(-1);
+      });
+      ret_data.legend = rankArray.map(item => {
+        return item[0];
+      });
+      ret_data.y = rankArray.map(item => {
+        return item[1];
+      });
+
+      ret_data.c = rankArray.map(item => {
+        return item[2];
+      });
+
+      ret_data.b = rankArray.map(item => {
+        return item[3];
+      });
+
       this.drawChart(ret_data);
     },
     drawChart(data) {
@@ -262,10 +289,8 @@ export default {
     setOptions(data) {
       var gridWidth = "35%";
       var gridHeight = "35%";
-      // var gridLeft = 80;
       var gridRight = "87%";
       var gridTop = 50;
-      // var gridBottom = 80;
       let _opt = {
         title: [
           {

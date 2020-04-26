@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-04-26 02:00:40
+ * @LastEditTime: 2020-04-26 14:34:55
  * @Description: 
  -->
 
@@ -117,7 +117,7 @@
 
 <script>
 import smallworldundirectLimter from "../data/smallworldundirectLimter.json";
-import { basiCategorys } from "@/api/data";
+import { basiCategorys, extendEchartsOpts } from "@/api/data";
 
 export default {
   name: "SmallWorld无向图规模趋势",
@@ -242,8 +242,6 @@ export default {
         legend: Array.from(legend),
         title: `扩大图谱后的小世界趋势`
       };
-      console.log(data);
-
       this.drawChart(data);
     },
     drawChart(data) {
@@ -252,6 +250,11 @@ export default {
       this.loading = false;
     },
     setOptions(data) {
+      // 排序
+      data.series.sort((x, y) => {
+        return y.data.slice(-1)[0][1] - x.data.slice(-1)[0][1];
+      });
+
       // 获取 y 轴的最大最小值
       var yMax = null;
       for (let series_t of data.series) {
@@ -264,58 +267,14 @@ export default {
         else if (yMax < tmp) yMax = tmp;
       }
 
-      let _opt = {
+      let _opt = extendEchartsOpts({
         title: {
-          text: data.title,
-          left: "10%"
-        },
-        tooltip: {
-          trigger: "axis",
-          textStyle: {
-            align: "left"
-          },
-          axisPointer: {
-            type: "cross",
-            animation: true,
-            label: {
-              backgroundColor: "#505765"
-            }
-          },
-          formatter: function(params) {
-            params.sort((x, y) => {
-              return y.data[1] - x.data[1];
-            });
-            let showHtm = ` ${params[0].name}<br>`;
-            for (let i = 0; i < params.length; i++) {
-              let _text = params[i].seriesName;
-              let _data_x = params[i].data[0];
-              let _data_y = params[i].data[1].toFixed(4);
-              let _marker = params[i].marker;
-              showHtm += `${_marker}${_text}： x=${_data_x} y=${_data_y}<br>`;
-            }
-            return showHtm;
-          }
+          text: data.title
         },
         legend: {
-          data: data.legend,
-          left: "83%",
-          top: "35%",
-          textStyle: {
-            fontSize: 14
-          },
-          orient: "vertical"
-        },
-        grid: {
-          left: "8%",
-          right: "20%",
-          bottom: "5%",
-          containLabel: true
-        },
-        toolbox: {
-          right: "20%",
-          feature: {
-            saveAsImage: {}
-          }
+          data: data.series.map(item => {
+            return item.name;
+          })
         },
         xAxis: {
           name: "图谱节点数",
@@ -328,7 +287,7 @@ export default {
           max: yMax
         },
         series: data.series
-      };
+      });
       return _opt;
     }
   }

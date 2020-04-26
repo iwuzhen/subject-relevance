@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-04-26 02:00:21
+ * @LastEditTime: 2020-04-26 14:38:44
  * @Description: 
  -->
 
@@ -91,7 +91,7 @@
 
 <script>
 import smallworldundirect from "../data/smallworldundirect.json";
-import { basiCategorys } from "@/api/data";
+import { basiCategorys, extendEchartsOpts } from "@/api/data";
 export default {
   name: "SmallWorld无向图逐年趋势",
   data() {
@@ -210,9 +210,7 @@ export default {
       for (let sbj of selectSubjectIds) {
         data["y"].push(legend[sbj]);
       }
-
       console.log(data);
-
       this.drawChart(data);
     },
     drawChart(data) {
@@ -221,63 +219,28 @@ export default {
       this.loading = false;
     },
     setOptions(data) {
-      let _opt = {
-        title: {
-          text: data.title,
-          left: "10%"
-        },
-        tooltip: {
-          trigger: "axis",
-          textStyle: {
-            align: "left"
-          },
-          axisPointer: {
-            type: "cross",
-            animation: true,
-            label: {
-              backgroundColor: "#505765"
-            }
-          },
-          formatter: function(params) {
-            params.sort((x, y) => {
-              return y.data - x.data;
-            });
-            let showHtm = ` ${params[0].name}<br>`;
-            for (let i = 0; i < params.length; i++) {
-              let _text = params[i].seriesName;
-              let _data;
-              if (params[i].data) {
-                _data = parseFloat(params[i].data.toFixed(6));
-              } else {
-                _data = null;
-              }
+      let series = data.y.map((item, index) => {
+        return {
+          name: data.legend[index],
+          type: "line",
+          smooth: false,
+          data: item
+        };
+      });
+      console.log(series);
+      // 排序
+      series.sort((x, y) => {
+        return y.data.slice(-1)[0] - x.data.slice(-1)[0];
+      });
 
-              let _marker = params[i].marker;
-              showHtm += `${_marker}${_text}：${_data}<br>`;
-            }
-            return showHtm;
-          }
+      let _opt = extendEchartsOpts({
+        title: {
+          text: data.title
         },
         legend: {
-          data: data.legend,
-          left: "83%",
-          top: "35%",
-          textStyle: {
-            fontSize: 14
-          },
-          orient: "vertical"
-        },
-        grid: {
-          left: "8%",
-          right: "20%",
-          bottom: "5%",
-          containLabel: true
-        },
-        toolbox: {
-          right: "20%",
-          feature: {
-            saveAsImage: {}
-          }
+          data: series.map(item => {
+            return item.name;
+          })
         },
         xAxis: {
           type: "category",
@@ -285,18 +248,10 @@ export default {
           data: data.x
         },
         yAxis: {
-          type: "value",
-          max: "dataMax"
+          type: "value"
         },
-        series: data.y.map((item, index) => {
-          return {
-            name: data.legend[index],
-            type: "line",
-            smooth: false,
-            data: item
-          };
-        })
-      };
+        series: series
+      });
       return _opt;
     }
   }

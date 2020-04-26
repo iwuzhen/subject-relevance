@@ -54,6 +54,7 @@
 
 <script>
 import { getWikiData } from "@/api/index";
+import { extendEchartsOpts, lessCategorys } from "@/api/data";
 export default {
   name: "wiki学科相关度",
   data() {
@@ -62,41 +63,7 @@ export default {
       subjectRelevances: [],
       methodValue: "linksin",
       subjectLevel: "0",
-      categorys: [
-        "Logic",
-        "Philosophy",
-        "Mathematics",
-        "Physics",
-        "Chemistry",
-        "Biology",
-        "Sociology",
-        "Economics",
-        "Political science",
-        "Psychology",
-        "Linguistics",
-        "History",
-        "Computer science",
-        "Artificial intelligence",
-        "Engineering",
-        "Chemical engineering",
-        "Civil engineering",
-        "Electrical engineering",
-        "Mechanical engineering",
-        "Biological engineering",
-        "Computer engineering",
-        "Industrial engineering",
-        "Environmental engineering"
-      ],
-      enginerringChildren: [
-        "Chemical engineering",
-        "Civil engineering",
-        "Electrical engineering",
-        "Mechanical engineering",
-        "Biological engineering",
-        "Computer engineering",
-        "Industrial engineering",
-        "Environmental engineering"
-      ],
+      categorys: lessCategorys,
       methodOptions: ["linksin", "linksout"],
       levelOptions: [
         {
@@ -191,7 +158,6 @@ export default {
         })
         .catch(rej => {
           this.loading = false;
-
           this.$emit("emitMesage", `请求失败:${rej}`);
         });
     },
@@ -201,57 +167,12 @@ export default {
       this.loading = false;
     },
     setOptions(data) {
-      let _opt = {
+      let _opt = extendEchartsOpts({
         title: {
-          text: data.title,
-          left: "30%"
-        },
-        tooltip: {
-          trigger: "axis",
-          textStyle: {
-            align: "left"
-          },
-          axisPointer: {
-            type: "cross",
-            animation: true,
-            label: {
-              backgroundColor: "#505765"
-            }
-          },
-          formatter: function(params) {
-            params.sort((x, y) => {
-              return y.data - x.data;
-            });
-            let showHtm = ` ${params[0].name}<br>`;
-            for (let i = 0; i < params.length; i++) {
-              let _text = params[i].seriesName;
-              let _data = params[i].data.toFixed(6);
-              let _marker = params[i].marker;
-              showHtm += `${_marker}${_text}：${_data}<br>`;
-            }
-            return showHtm;
-          }
+          text: data.title
         },
         legend: {
-          data: data.legend,
-          left: "83%",
-          top: "35%",
-          textStyle: {
-            fontSize: 14
-          },
-          orient: "vertical"
-        },
-        grid: {
-          left: "8%",
-          right: "20%",
-          bottom: "5%",
-          containLabel: true
-        },
-        toolbox: {
-          right: "20%",
-          feature: {
-            saveAsImage: {}
-          }
+          data: data.legend
         },
         xAxis: {
           name: "Year",
@@ -272,19 +193,11 @@ export default {
             data: item
           };
         })
-      };
+      });
       return _opt;
-    },
-    subjectChange() {
-      this.subjectRelevances = [];
-    },
-    selectChange() {
-      this.getData();
     }
   }
 };
 </script>
 
-<style lang="less" scoped>
-@import url("../assets/style/common.less");
-</style>
+<style lang="less" scoped></style>

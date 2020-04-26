@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-04-26 01:55:13
+ * @LastEditTime: 2020-04-26 14:24:02
  * @Description: 
  -->
 
@@ -109,7 +109,7 @@
 <script>
 import { getPeopleZipfByNodes } from "@/api/index";
 import ecStat from "echarts-stat";
-import { peopleCategorys } from "@/api/data";
+import { peopleCategorys, extendEchartsOpts } from "@/api/data";
 
 export default {
   name: "zipf幂律斜率（人）（世界）",
@@ -187,8 +187,6 @@ export default {
           .then(res => {
             if (res.data) {
               resList.push(res.data);
-              let options = this.setOptions_slope(resList);
-              this.myChart1.setOption(options, true);
               this.loading = false;
             } else {
               this.loading = false;
@@ -201,6 +199,8 @@ export default {
             this.$emit("emitMesage", `请求失败:${rej}`);
           });
       }
+      let options = this.setOptions_slope(resList);
+      this.myChart1.setOption(options, true);
     },
     async calZipf() {
       if (this.subjectSelect.length < 1 || !this.yearSelect) {
@@ -232,8 +232,7 @@ export default {
 
     setOptions_slope(dataList) {
       // 原始线
-      let seriesList = [];
-      let lengnds = [];
+      let seriesTitleArray = [];
       for (let data of dataList) {
         let gradientList = [];
         for (let i = 0; i < data.y.length; i++) {
@@ -241,7 +240,6 @@ export default {
           for (let j = 0; j < data.y[i].length; j++) {
             dataItem.push([data.x[j], data.y[i][j]]);
           }
-
           let myRegression = ecStat.regression(
             "linear",
             dataItem.slice(this.nodeRange[0], this.nodeRange[1])
@@ -250,67 +248,28 @@ export default {
           gradientList.push(myRegression.parameter.gradient.toFixed(4));
         }
         let title = data.title.replace(" zipf分布", "");
-        seriesList.push({
-          name: title,
-          type: "line",
-          smooth: false,
-          data: gradientList
-        });
-        lengnds.push(title);
-      }
-
-      let _opt = {
-        title: {
-          text: "斜率趋势",
-          left: "10%"
-        },
-        tooltip: {
-          trigger: "axis",
-          textStyle: {
-            align: "left"
-          },
-          axisPointer: {
-            type: "cross",
-            animation: true,
-            label: {
-              backgroundColor: "#505765"
-            }
-          },
-          formatter: function(params) {
-            params.sort((x, y) => {
-              return y.data - x.data;
-            });
-            let showHtm = ` ${params[0].name}<br>`;
-            for (let i = 0; i < params.length; i++) {
-              // console.log(params);
-              let _text = params[i].seriesName;
-              let _data_y = params[i].data;
-              let _marker = params[i].marker;
-              showHtm += `${_marker}${_text}：${_data_y}<br>`;
-            }
-            return showHtm;
+        // 为了排序，放在一起
+        seriesTitleArray.push([
+          title,
+          {
+            name: title,
+            type: "line",
+            smooth: false,
+            data: gradientList
           }
+        ]);
+      }
+      seriesTitleArray.sort((x, y) => {
+        return y[1].data.slice(-1) - x[1].data.slice(-1);
+      });
+      let _opt = extendEchartsOpts({
+        title: {
+          text: "斜率趋势"
         },
         legend: {
-          data: lengnds,
-          left: "83%",
-          top: "25%",
-          textStyle: {
-            fontSize: 14
-          },
-          orient: "vertical"
-        },
-        grid: {
-          left: "8%",
-          right: "20%",
-          bottom: "5%",
-          containLabel: true
-        },
-        toolbox: {
-          right: "20%",
-          feature: {
-            saveAsImage: {}
-          }
+          data: seriesTitleArray.map(item => {
+            return item[0];
+          })
         },
         xAxis: {
           type: "category",
@@ -321,8 +280,10 @@ export default {
           type: "value",
           name: "Slope"
         },
-        series: seriesList
-      };
+        series: seriesTitleArray.map(item => {
+          return item[1];
+        })
+      });
       return _opt;
     },
     setOptions_zipf(data) {
@@ -341,13 +302,15 @@ export default {
           data: dataItem
         });
       }
-
+      // 排序
+      // seriesList.sort((x, y) => {
+      //   return y.data.slice(-1) - x.data.slice(-1);
+      // });
       // 趋势线
       let myRegression = ecStat.regression(
         "linear",
         seriesList[0].data.slice(this.nodeRange[0], this.nodeRange[1])
       );
-      console.log(this.nodeRange);
       if (data.y.length === 1) {
         seriesList.push({
           name: "回归线",
@@ -382,60 +345,15 @@ export default {
       }
       let ymax = Math.floor(Math.max(...[].concat(...data.y)) * 10) + 1;
       let xmax = Math.floor(Math.max(...data.x) * 10) + 1;
-
       console.log(data);
-      let _opt = {
+      let _opt = extendEchartsOpts({
         title: {
-          text: data.title,
-          left: "40%"
-        },
-        tooltip: {
-          trigger: "axis",
-          textStyle: {
-            align: "left"
-          },
-          axisPointer: {
-            type: "cross",
-            animation: true,
-            label: {
-              backgroundColor: "#505765"
-            }
-          },
-          formatter: function(params) {
-            params.sort((x, y) => {
-              return y.data[1] - x.data[1];
-            });
-            let showHtm = ` ${params[0].name}<br>`;
-            for (let i = 0; i < params.length; i++) {
-              let _text = params[i].seriesName;
-              let _data_x = params[i].data[0].toFixed(4);
-              let _data_y = params[i].data[1].toFixed(4);
-              let _marker = params[i].marker;
-              showHtm += `${_marker}${_text}： x=${_data_x} y=${_data_y}<br>`;
-            }
-            return showHtm;
-          }
+          text: data.title
         },
         legend: {
-          data: data.legend,
-          left: "83%",
-          top: "25%",
-          textStyle: {
-            fontSize: 14
-          },
-          orient: "vertical"
-        },
-        grid: {
-          left: "8%",
-          right: "20%",
-          bottom: "5%",
-          containLabel: true
-        },
-        toolbox: {
-          right: "20%",
-          feature: {
-            saveAsImage: {}
-          }
+          data: seriesList.map(item => {
+            return item.name;
+          })
         },
         xAxis: {
           type: "value",
@@ -449,7 +367,7 @@ export default {
           min: 0
         },
         series: seriesList
-      };
+      });
       return _opt;
     }
   }
