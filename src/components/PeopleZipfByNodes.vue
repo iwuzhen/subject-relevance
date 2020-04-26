@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-04-26 14:24:02
+ * @LastEditTime: 2020-04-26 20:33:54
  * @Description: 
  -->
 
@@ -297,7 +297,7 @@ export default {
         seriesList.push({
           name: data.legend[i],
           type: "scatter",
-          symbolSize: 5,
+          symbolSize: 2,
           large: true,
           data: dataItem
         });

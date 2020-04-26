@@ -130,7 +130,7 @@ export default {
         seriesList.push({
           name: data.legend[i],
           type: "scatter",
-          symbolSize: 5,
+          symbolSize: 2,
           large: true,
           data: dataItem
         });
