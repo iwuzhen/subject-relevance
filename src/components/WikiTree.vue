@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-25 23:23:01
+ * @LastEditTime: 2020-04-27 19:53:41
  * @Description: 
  -->
 <template>
@@ -129,7 +129,7 @@ import * as Diff2Html from "diff2html";
 import * as diff from "diff";
 import { basiCategorys } from "@/api/data";
 import { v4 as uuidv4 } from "uuid";
-
+basiCategorys.push(...["Geography", "Geology"]);
 export default {
   name: "Tree_Viewer",
   data() {
@@ -192,6 +192,7 @@ export default {
     }
   },
   mounted() {
+    this.basiccategorys;
     this.basiccategorys.sort();
     this.reset();
     this.$store.commit("changeCurentPath", this.$options.name);
