@@ -62,7 +62,7 @@ export default {
       subjectTarget: "",
       subjectRelevances: [],
       methodValue: "linksin",
-      subjectLevel: "0",
+      subjectLevel: "3000",
       categorys: coreCategorys,
       methodOptions: ["linksin", "linksout"],
       levelOptions: [
