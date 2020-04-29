@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-04-29 16:46:11
+ * @LastEditTime: 2020-04-29 23:10:11
  * @Description:
  */
 export let basiCategorys = [
@@ -41,7 +41,7 @@ export let basiCategorys = [
   "Genome editing",
   "Anthropology",
   "Neuroscience"
-];
+].sort();
 export let lessCategorys = [
   "Logic",
   "Philosophy",
@@ -66,7 +66,7 @@ export let lessCategorys = [
   "Computer engineering",
   "Industrial engineering",
   "Environmental engineering"
-];
+].sort();
 export let peopleCategorys = [
   "Anthropology",
   "Artificial intelligence",
@@ -92,7 +92,7 @@ export let peopleCategorys = [
   "Political science",
   "Psychology",
   "Sociology"
-];
+].sort();
 
 export let coreCategorys = [
   "Materials science",
@@ -134,7 +134,7 @@ export let coreCategorys = [
   "Anthropology",
   "Neuroscience",
   "Literature"
-];
+].sort();
 
 // 单页图，使用这个模版
 export function extendEchartsOpts(opt) {
