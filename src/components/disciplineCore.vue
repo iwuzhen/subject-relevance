@@ -54,7 +54,7 @@
 
 <script>
 import { getDistanceCore } from "@/api/index";
-import { extendEchartsOpts, lessCategorys } from "@/api/data";
+import { extendEchartsOpts, coreCategorys } from "@/api/data";
 export default {
   name: "CoreWiki学科相关度",
   data() {
@@ -63,21 +63,9 @@ export default {
       subjectRelevances: [],
       methodValue: "linksin",
       subjectLevel: "0",
-      categorys: lessCategorys,
+      categorys: coreCategorys,
       methodOptions: ["linksin", "linksout"],
       levelOptions: [
-        {
-          value: "0",
-          text: "0 层"
-        },
-        {
-          value: "1",
-          text: "1 层"
-        },
-        {
-          value: "2",
-          text: " 2层"
-        },
         {
           value: "1000",
           text: "top 1000 文章"

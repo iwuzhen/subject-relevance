@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-04-26 11:46:07
+ * @LastEditTime: 2020-04-29 16:46:11
  * @Description:
  */
 export let basiCategorys = [
@@ -92,6 +92,48 @@ export let peopleCategorys = [
   "Political science",
   "Psychology",
   "Sociology"
+];
+
+export let coreCategorys = [
+  "Materials science",
+  "Geology",
+  "Geography",
+  "Environmental science",
+  "Medicine",
+  "Psychology",
+  "Logic",
+  "Philosophy",
+  "Mathematics",
+  "Physics",
+  "Chemistry",
+  "Biology",
+  "Sociology",
+  "Economics",
+  "Political science",
+  "Linguistics",
+  "History",
+  "Computer science",
+  "Artificial intelligence",
+  "Engineering disciplines",
+  "Chemical engineering",
+  "Civil engineering",
+  "Electrical engineering",
+  "Mechanical engineering",
+  "Biological engineering",
+  "Computer engineering",
+  "Industrial engineering",
+  "Environmental engineering",
+  "Cognitive science",
+  "Machine learning",
+  "Blockchains",
+  "Deep learning",
+  "Theoretical computer science",
+  "Quantum computing",
+  "Genetic engineering",
+  "Genome editing",
+  "Anthropology",
+  "Neuroscience",
+  "Literature"
 ];
 
 // 单页图，使用这个模版
