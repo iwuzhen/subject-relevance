@@ -86,6 +86,11 @@ export default {
         ],
         学科相关度: [
           {
+            title: "WIKI Core",
+            text: "各 Core 学科的逐年相关度",
+            to: "/DisciplineCore"
+          },
+          {
             title: "People in WIKI",
             text: "人和人，学科的相关度",
             to: "/disciplinePeople"

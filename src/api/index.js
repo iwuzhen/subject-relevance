@@ -45,6 +45,15 @@ export async function getWikiData(params) {
   return await cacheRequest(requestParams);
 }
 
+export async function getDistanceCore(params) {
+  let requestParams = {
+    url: "/wiki/getDistanceCore",
+    method: "post",
+    data: params
+  };
+  return await cacheRequest(requestParams);
+}
+
 export function getMasData(params) {
   return request({
     url: "/wiki/getMasDistance",

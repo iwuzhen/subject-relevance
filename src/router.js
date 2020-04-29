@@ -2,6 +2,8 @@ import Vue from "vue";
 import Router from "vue-router";
 import IndexPage from "@/components/index";
 import Discipline from "@/components/discipline";
+import DisciplineCore from "@/components/disciplineCore";
+
 import Masline from "@/components/masline";
 import wikiPageCount from "@/components/ArticlesTotal";
 import SubDiscipline from "@/components/SubDiscipline";
@@ -137,6 +139,11 @@ export default new Router({
       path: "/PeopleInnerZipfByNodes",
       name: "PeopleInnerZipfByNodes",
       component: PeopleInnerZipfByNodes
+    },
+    {
+      path: "/DisciplineCore",
+      name: "DisciplineCore",
+      component: DisciplineCore
     }
   ]
 });
