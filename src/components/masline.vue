@@ -89,7 +89,7 @@
 import { getMasData } from "@/api/index";
 import { extendEchartsOpts, lessCategorys } from "@/api/data";
 export default {
-  name: "mas学科相关度",
+  name: "mag学科相关度",
   data() {
     return {
       subjectTarget: "",

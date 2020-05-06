@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-04-26 14:38:44
+ * @LastEditTime: 2020-05-06 19:26:21
  * @Description: 
  -->
 
@@ -79,7 +79,7 @@
             按 google 距离计算出的前 2000,2500,3000个节点的组成的网络。<br />
             Wikipedia 全部的 2 层类下的文章组成的网络。<br />
             Wikipedia 全部的 3 层类下的文章组成的网络。<br />
-            Mas 学科下的论文的组成的网络。
+            Mag 学科下的论文的组成的网络。
           </p>
         </v-card-text>
 
@@ -153,7 +153,7 @@ export default {
         },
         {
           value: "m",
-          text: "Mas (尚未完整)"
+          text: "Mag (尚未完整)"
         }
       ],
       categoryOpt: basiCategorys,

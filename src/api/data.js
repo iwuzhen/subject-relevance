@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-04-29 23:10:11
+ * @LastEditTime: 2020-05-06 18:09:53
  * @Description:
  */
 export let basiCategorys = [
@@ -68,31 +68,33 @@ export let lessCategorys = [
   "Environmental engineering"
 ].sort();
 export let peopleCategorys = [
-  "Anthropology",
-  "Artificial intelligence",
-  "Biology",
-  "Chemical engineering",
-  "Chemistry",
-  "Civil engineering",
-  "Cognitive science",
-  "Computer science",
-  "Economics",
-  "Electrical engineering",
-  "Environmental engineering",
-  "History",
-  "Industrial engineering",
-  "Linguistics",
-  "logic",
-  "Machine learning",
-  "Mathematics",
-  "Mechanical engineering",
-  "Neuroscience",
-  "Philosophy",
-  "Physics",
-  "Political science",
-  "Psychology",
-  "Sociology"
-].sort();
+  ["Anthropology", "Anthropologist"],
+  ["Artificial intelligence", "AI scientist"],
+  ["Biology", "Biologist"],
+  ["Chemical engineering", "Chemical Engineer"],
+  ["Chemistry", "Chemist"],
+  ["Civil engineering", "Civil Engineer"],
+  ["Cognitive science", "Cognitive scientist"],
+  ["Computer science", "Computer scientist"],
+  ["Economics", "Economist"],
+  ["Electrical engineering", "Electrical Engineer"],
+  ["Environmental engineering", "Environmental Engineer"],
+  ["History", "Historian"],
+  ["Industrial engineering", "Industrial Engineer"],
+  ["Linguistics", "Linguist"],
+  ["logic", "logician"],
+  ["Machine learning", "Machine learning"],
+  ["Mathematics", "Mathematician"],
+  ["Mechanical engineering", "Mechanical Engineer"],
+  ["Neuroscience", "Neuroscientist"],
+  ["Philosophy", "Philosopher"],
+  ["Physics", "Physical scientist"],
+  ["Political science", "Political scientist"],
+  ["Psychology", "Psychologist"],
+  ["Sociology", "Sociologist"]
+].sort((x, y) => {
+  return x[0] - y[0];
+});
 
 export let coreCategorys = [
   "Materials science",

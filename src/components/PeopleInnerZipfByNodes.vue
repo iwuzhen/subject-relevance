@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-04-26 20:34:27
+ * @LastEditTime: 2020-05-06 19:28:49
  * @Description: 
  -->
 
@@ -19,7 +19,7 @@
           multiple
           deletable-chips
           @change="getData"
-          label="目标学科"
+          label="目标人"
         ></v-select>
       </v-col>
       <v-col cols="3">
@@ -137,7 +137,12 @@ export default {
         2019,
         2020
       ],
-      categoryOpt: peopleCategorys
+      categoryOpt: peopleCategorys.map(item => {
+        return {
+          value: item[0],
+          text: item[1]
+        };
+      })
     };
   },
   mounted() {

@@ -99,7 +99,6 @@ export default {
           text: item
         };
         if (item == subjectTarget) ret["disabled"] = true;
-
         return ret;
       });
     },

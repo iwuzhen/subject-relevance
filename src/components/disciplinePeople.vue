@@ -6,14 +6,14 @@
           v-model="peopleSubjectSelect"
           :items="defaultPeopleSubjectOpt"
           @change="getData"
-          label="当前人的学科"
+          label="当前人"
         ></v-select>
       </v-col>
       <v-col cols="5">
         <v-select
           v-model="targetSubjectSelect"
           :items="subjectOpt"
-          @change="getSubjectDegree"
+          @change="targetSubjectChange"
           chips
           multiple
           dense
@@ -25,12 +25,12 @@
         <v-select
           v-model="targetPeopleSubjectSelect"
           :items="peopleSubjectOpt"
-          @change="getPeopleDegree"
+          @change="targetPeopleSubjectChange"
           chips
           multiple
           dense
           clearable
-          label="目标人的学科"
+          label="目标人"
         ></v-select>
       </v-col>
       <v-col cols="2">
@@ -87,11 +87,16 @@ export default {
   data() {
     return {
       peopleSubjectSelect: "",
-      targetSubjectSelect: "",
-      targetPeopleSubjectSelect: "",
+      targetSubjectSelect: [],
+      targetPeopleSubjectSelect: [],
       methodSelect: "linksin",
       levelSelect: "1000",
-      defaultPeopleSubjectOpt: peopleCategorys,
+      defaultPeopleSubjectOpt: peopleCategorys.map(item => {
+        return {
+          value: item[0],
+          text: item[1]
+        };
+      }),
       subjectOpt: lessCategorys,
       methodOpt: ["linksin"],
       levelOpt: [
@@ -121,15 +126,22 @@ export default {
     };
   },
   computed: {
+    unionCategory: function() {
+      let peopleCategoryValues = new Set(
+        peopleCategorys.map(item => {
+          return item[0];
+        })
+      );
+      return new Set(this.subjectOpt.filter(x => peopleCategoryValues.has(x)));
+    },
     peopleSubjectOpt: function() {
       let peopleSubjectSelect = this.peopleSubjectSelect;
-      return this.defaultPeopleSubjectOpt.map(item => {
+      return peopleCategorys.map(item => {
         let ret = {
-          value: item,
-          text: item
+          value: item[0],
+          text: item[1]
         };
-        if (item == peopleSubjectSelect) ret["disabled"] = true;
-
+        if (item[0] == peopleSubjectSelect) ret["disabled"] = true;
         return ret;
       });
     },
@@ -148,6 +160,37 @@ export default {
     this.$store.commit("changeCurentPath", this.$options.name);
   },
   methods: {
+    async targetSubjectChange() {
+      // 学科和人关联
+      let newTargetPeopleSubjectSelect = new Set();
+      for (let subject of this.targetSubjectSelect) {
+        if (this.unionCategory.has(subject)) {
+          newTargetPeopleSubjectSelect.add(subject);
+        }
+      }
+      for (let subject of this.targetPeopleSubjectSelect) {
+        if (!this.unionCategory.has(subject)) {
+          newTargetPeopleSubjectSelect.add(subject);
+        }
+      }
+      this.targetPeopleSubjectSelect = Array.from(newTargetPeopleSubjectSelect);
+      this.getData();
+    },
+    async targetPeopleSubjectChange() {
+      let newTargetPeopleSubjectSelect = new Set();
+      for (let subject of this.targetPeopleSubjectSelect) {
+        if (this.unionCategory.has(subject)) {
+          newTargetPeopleSubjectSelect.add(subject);
+        }
+      }
+      for (let subject of this.targetSubjectSelect) {
+        if (!this.unionCategory.has(subject)) {
+          newTargetPeopleSubjectSelect.add(subject);
+        }
+      }
+      this.targetSubjectSelect = Array.from(newTargetPeopleSubjectSelect);
+      this.getData();
+    },
     async getSubjectDegree() {
       if (!this.peopleSubjectSelect || this.targetSubjectSelect.length === 0) {
         return false;

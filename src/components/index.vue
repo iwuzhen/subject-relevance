@@ -100,7 +100,7 @@ export default {
             text: "各学科的逐年相关度",
             to: "/discipline"
           },
-          { title: "MAS", text: "MAS 中各学科的逐年相关度", to: "/masline" },
+          { title: "MAG", text: "MAG 中各学科的逐年相关度", to: "/masline" },
           {
             title: "小世界有向图",
             text: "小世界有向网络学科间趋势",

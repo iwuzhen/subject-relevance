@@ -32,7 +32,7 @@
 import { getMasArticlesTotal } from "@/api/index";
 import { extendEchartsOpts, lessCategorys } from "@/api/data";
 export default {
-  name: "mas文章数",
+  name: "mag文章数",
   data() {
     return {
       subjectRelevances: [],
@@ -48,7 +48,7 @@ export default {
         },
         {
           value: "mas",
-          text: "mas"
+          text: "mag"
         }
       ],
       levelOptions: ["0", "1", "2"],
