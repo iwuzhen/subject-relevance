@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-05-06 18:09:53
+ * @LastEditTime: 2020-05-12 17:33:45
  * @Description:
  */
 export let basiCategorys = [
@@ -22,13 +22,13 @@ export let basiCategorys = [
   "History",
   "Computer science",
   "Artificial intelligence",
-  "Engineering",
+  // "Engineering",
   "Chemical engineering",
   "Civil engineering",
   "Electrical engineering",
   "Mechanical engineering",
-  "Biological engineering",
-  "Computer engineering",
+  // "Biological engineering",
+  // "Computer engineering",
   "Industrial engineering",
   "Environmental engineering",
   "Cognitive science",
@@ -57,13 +57,13 @@ export let lessCategorys = [
   "History",
   "Computer science",
   "Artificial intelligence",
-  "Engineering",
+  // "Engineering",
   "Chemical engineering",
   "Civil engineering",
   "Electrical engineering",
   "Mechanical engineering",
-  "Biological engineering",
-  "Computer engineering",
+  // "Biological engineering",
+  // "Computer engineering",
   "Industrial engineering",
   "Environmental engineering"
 ].sort();
@@ -88,7 +88,7 @@ export let peopleCategorys = [
   ["Mechanical engineering", "Mechanical Engineer"],
   ["Neuroscience", "Neuroscientist"],
   ["Philosophy", "Philosopher"],
-  ["Physics", "Physical scientist"],
+  ["Physics", "Physicist"],
   ["Political science", "Political scientist"],
   ["Psychology", "Psychologist"],
   ["Sociology", "Sociologist"]
@@ -121,8 +121,8 @@ export let coreCategorys = [
   "Civil engineering",
   "Electrical engineering",
   "Mechanical engineering",
-  "Biological engineering",
-  "Computer engineering",
+  // "Biological engineering",
+  // "Computer engineering",
   "Industrial engineering",
   "Environmental engineering",
   "Cognitive science",
