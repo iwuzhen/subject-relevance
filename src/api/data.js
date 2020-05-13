@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-05-13 14:31:31
+ * @LastEditTime: 2020-05-13 19:29:43
  * @Description:
  */
 export let basiCategorys = [
@@ -22,13 +22,13 @@ export let basiCategorys = [
   "History",
   "Computer science",
   "Artificial intelligence",
-  // "Engineering",
+  "Engineering disciplines",
   "Chemical engineering",
   "Civil engineering",
   "Electrical engineering",
   "Mechanical engineering",
-  // "Biological engineering",
-  // "Computer engineering",
+  "Biological engineering",
+  "Computer engineering",
   "Industrial engineering",
   "Environmental engineering",
   "Cognitive science",
@@ -57,13 +57,13 @@ export let lessCategorys = [
   "History",
   "Computer science",
   "Artificial intelligence",
-  // "Engineering",
+  "Engineering disciplines",
   "Chemical engineering",
   "Civil engineering",
   "Electrical engineering",
   "Mechanical engineering",
-  // "Biological engineering",
-  // "Computer engineering",
+  "Biological engineering",
+  "Computer engineering",
   "Industrial engineering",
   "Environmental engineering"
 ].sort();

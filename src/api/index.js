@@ -4,7 +4,7 @@ import * as localforage from "localforage";
 
 let store1 = localforage.createInstance({
   name: "wikiknogen",
-  version: 2.1,
+  version: 1,
   storeName: "api", // Should be alphanumeric, with underscores.
   description: "store api"
 });

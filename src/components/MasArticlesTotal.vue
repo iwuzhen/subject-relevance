@@ -78,6 +78,7 @@ export default {
       getMasArticlesTotal(opt)
         .then(res => {
           if (res.data) {
+            console.log(res.data);
             this.drawChart(res.data);
           } else {
             this.loading = false;
@@ -97,7 +98,7 @@ export default {
       this.loading = false;
     },
     setOptions(data) {
-      let years = Object.keys(data[this.subjectRelevances[0]]);
+      let years = Object.keys(Object.values(data)[0]);
       let _opt = extendEchartsOpts({
         title: {
           text: "学科 article 数量"

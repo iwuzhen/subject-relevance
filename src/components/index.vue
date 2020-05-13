@@ -116,7 +116,7 @@ export default {
         ],
         "Core 幂律": [
           {
-            title: "Zipf 幂律(小世界)斜率",
+            title: "Core Zipf 幂律斜率",
             text: "Core 逐年幂律图，及其斜率曲线",
             to: "/CoreZipfByNodes"
           }
