@@ -169,8 +169,7 @@ export default {
             this.drawChart(res.data);
           } else {
             this.loading = false;
-
-            this.$emit("emitMesage", "请求失败");
+            // this.$emit("emitMesage", "请求失败");
             return false;
           }
         })
