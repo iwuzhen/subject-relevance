@@ -62,6 +62,14 @@ export function getMasData(params) {
   });
 }
 
+export function getCoreZipfByNodes(params) {
+  return request({
+    url: "/wiki/getCoreZipfByNodes",
+    method: "post",
+    data: params
+  });
+}
+
 export async function getArticlesTotal(params) {
   let requestParams = {
     url: "/wiki/getArticlesTotal",

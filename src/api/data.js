@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-05-12 17:33:45
+ * @LastEditTime: 2020-05-13 14:31:31
  * @Description:
  */
 export let basiCategorys = [
@@ -121,8 +121,8 @@ export let coreCategorys = [
   "Civil engineering",
   "Electrical engineering",
   "Mechanical engineering",
-  // "Biological engineering",
-  // "Computer engineering",
+  "Biological engineering",
+  "Computer engineering",
   "Industrial engineering",
   "Environmental engineering",
   "Cognitive science",

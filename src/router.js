@@ -24,6 +24,7 @@ import TopArticles from "@/components/TopArticles";
 import disciplinePeople from "@/components/disciplinePeople";
 import PeopleZipfByNodes from "@/components/PeopleZipfByNodes";
 import PeopleInnerZipfByNodes from "@/components/PeopleInnerZipfByNodes";
+import CoreZipfByNodes from "@/components/CoreZipfByNodes";
 
 Vue.use(Router);
 
@@ -144,6 +145,11 @@ export default new Router({
       path: "/DisciplineCore",
       name: "DisciplineCore",
       component: DisciplineCore
+    },
+    {
+      path: "/CoreZipfByNodes",
+      name: "CoreZipfByNodes",
+      component: CoreZipfByNodes
     }
   ]
 });

@@ -84,12 +84,14 @@ export default {
             href: "http://wikidb.lambdax.cn:5555/wikidb_web/first.jsp"
           }
         ],
-        学科相关度: [
+        "Core 学科相关度": [
           {
             title: "WIKI Core",
             text: "各 Core 学科的逐年相关度",
             to: "/DisciplineCore"
-          },
+          }
+        ],
+        学科相关度: [
           {
             title: "People in WIKI",
             text: "人和人，学科的相关度",
@@ -110,6 +112,13 @@ export default {
             title: "WIKI 单学科",
             text: "Cognitive science 和其他学科的逐年相关度",
             to: "/SubDiscipline"
+          }
+        ],
+        "Core 幂律": [
+          {
+            title: "Zipf 幂律(小世界)斜率",
+            text: "Core 逐年幂律图，及其斜率曲线",
+            to: "/CoreZipfByNodes"
           }
         ],
         幂率: [
