@@ -9,7 +9,7 @@
           label="目标学科"
         ></v-select>
       </v-col>
-      <v-col cols="6">
+      <v-col cols="5">
         <v-select
           v-model="subjectRelevances"
           :items="categorysOptions"
@@ -30,10 +30,18 @@
       </v-col>
       <v-col cols="2">
         <v-select
-          v-model="subjectLevel"
-          :items="levelOptions"
+          v-model="pageCountSelect"
+          :items="pageCountOpt"
           @change="getData"
-          label="level"
+          label="文章数"
+        ></v-select>
+      </v-col>
+      <v-col cols="1">
+        <v-select
+          v-model="levelSelect"
+          :items="levelOpt"
+          @change="getData"
+          label="层数"
         ></v-select>
       </v-col>
     </v-row>
@@ -62,10 +70,12 @@ export default {
       subjectTarget: "",
       subjectRelevances: [],
       methodValue: "linksin",
-      subjectLevel: "3000",
+      pageCountSelect: "3000",
       categorys: coreCategorys,
       methodOptions: ["linksin", "linksout"],
-      levelOptions: [
+      levelSelect: 3,
+      levelOpt: [3, 4],
+      pageCountOpt: [
         {
           value: "1000",
           text: "top 1000 文章"
@@ -85,6 +95,26 @@ export default {
         {
           value: "5000",
           text: "top 5000 文章"
+        },
+        {
+          value: "6000",
+          text: "top 6000 文章"
+        },
+        {
+          value: "7000",
+          text: "top 7000 文章"
+        },
+        {
+          value: "8000",
+          text: "top 8000 文章"
+        },
+        {
+          value: "9000",
+          text: "top 9000 文章"
+        },
+        {
+          value: "10000",
+          text: "top 10000 文章"
         }
       ],
       loading: false
@@ -130,7 +160,8 @@ export default {
           })
           .join(","),
         method: this.methodValue,
-        level: this.subjectLevel
+        level: this.pageCountSelect,
+        levelType: this.levelSelect
       };
       getDistanceCore(opt)
         .then(res => {
