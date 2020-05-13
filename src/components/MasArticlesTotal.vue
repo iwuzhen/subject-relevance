@@ -30,13 +30,13 @@
 
 <script>
 import { getMasArticlesTotal } from "@/api/index";
-import { extendEchartsOpts, lessCategorys } from "@/api/data";
+import { extendEchartsOpts, coreCategorys } from "@/api/data";
 export default {
   name: "mag文章数",
   data() {
     return {
       subjectRelevances: [],
-      categorys: lessCategorys,
+      categorys: coreCategorys,
       typeOptions: [
         {
           value: "0",

@@ -87,7 +87,7 @@
 
 <script>
 import { getMasData } from "@/api/index";
-import { extendEchartsOpts, lessCategorys } from "@/api/data";
+import { extendEchartsOpts, coreCategorys } from "@/api/data";
 export default {
   name: "mag学科相关度",
   data() {
@@ -96,7 +96,7 @@ export default {
       subjectRelevances: [],
       methodValue: "linksout",
       years: [1950, 2019],
-      categorys: lessCategorys,
+      categorys: coreCategorys,
       methodOptions: ["linksout"],
       loading: false
     };
