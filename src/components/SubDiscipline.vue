@@ -102,7 +102,7 @@ export default {
           data: data.x
         },
         yAxis: {
-          name: "Correlation degree",
+          name: "Semantic Distance",
           type: "value",
           max: 1
         },
