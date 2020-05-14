@@ -1,30 +1,31 @@
 import Vue from "vue";
 import Router from "vue-router";
-import IndexPage from "@/components/index";
-import Discipline from "@/components/discipline";
-import DisciplineCore from "@/components/disciplineCore";
 
-import Masline from "@/components/masline";
-import wikiPageCount from "@/components/ArticlesTotal";
-import SubDiscipline from "@/components/SubDiscipline";
-import MasArticlesTotal from "@/components/MasArticlesTotal";
-import PowerLaw from "@/components/powerLaw";
-import ViewAndEdits from "@/components/ViewAndEdits";
-import SmallWorldUndirected from "@/components/SmallWorldUndirected";
-import SmallWorldUndirectedLimit from "@/components/SmallWorldUndirectedLimit";
-import SmallWorldDirected from "@/components/SmallWorldDirected";
-import powerLawPageRank from "@/components/powerLawPageRank";
-import DegreeDistribution from "@/components/DegreeDistribution";
-import ZipfByNodes from "@/components/ZipfByNodes";
-import WikiTree from "@/components/WikiTree";
-import BritannicaTree from "@/components/BritannicaTree";
-import Home from "@/views/Home";
-import BanShuaiQi from "@/components/BanShuaiQi";
-import TopArticles from "@/components/TopArticles";
-import disciplinePeople from "@/components/disciplinePeople";
-import PeopleZipfByNodes from "@/components/PeopleZipfByNodes";
-import PeopleInnerZipfByNodes from "@/components/PeopleInnerZipfByNodes";
-import CoreZipfByNodes from "@/components/CoreZipfByNodes";
+const IndexPage = () => import("@/components/index");
+const Discipline = () => import("@/components/discipline");
+const DisciplineCore = () => import("@/components/disciplineCore");
+const Masline = () => import("@/components/masline");
+const wikiPageCount = () => import("@/components/ArticlesTotal");
+const SubDiscipline = () => import("@/components/SubDiscipline");
+const MasArticlesTotal = () => import("@/components/MasArticlesTotal");
+const PowerLaw = () => import("@/components/powerLaw");
+const ViewAndEdits = () => import("@/components/ViewAndEdits");
+const SmallWorldUndirected = () => import("@/components/SmallWorldUndirected");
+const SmallWorldUndirectedLimit = () =>
+  import("@/components/SmallWorldUndirectedLimit");
+const SmallWorldDirected = () => import("@/components/SmallWorldUndirected");
+const powerLawPageRank = () => import("@/components/powerLawPageRank");
+const DegreeDistribution = () => import("@/components/DegreeDistribution");
+const ZipfByNodes = () => import("@/components/ZipfByNodes");
+const WikiTree = () => import("@/components/WikiTree");
+const BritannicaTree = () => import("@/components/BritannicaTree");
+const BanShuaiQi = () => import("@/components/BanShuaiQi");
+const TopArticles = () => import("@/components/TopArticles");
+const disciplinePeople = () => import("@/components/disciplinePeople");
+const PeopleZipfByNodes = () => import("@/components/PeopleZipfByNodes");
+const PeopleInnerZipfByNodes = () =>
+  import("@/components/PeopleInnerZipfByNodes");
+const CoreZipfByNodes = () => import("@/components/CoreZipfByNodes");
 
 Vue.use(Router);
 
@@ -107,11 +108,6 @@ export default new Router({
       component: WikiTree
     },
     {
-      path: "/Home",
-      name: "Home",
-      component: Home
-    },
-    {
       path: "/BanShuaiQi",
       name: "BanShuaiQi",
       component: BanShuaiQi
@@ -151,5 +147,12 @@ export default new Router({
       name: "CoreZipfByNodes",
       component: CoreZipfByNodes
     }
-  ]
+  ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition; //滚动到指定位置
+    } else {
+      return { x: 0, y: 0 };
+    }
+  }
 });
