@@ -81,7 +81,11 @@
 
 <script>
 import { getDistanceByPeopleAndCats, getDistanceByPeoples } from "@/api/index";
-import { peopleCategorys, extendEchartsOpts, lessCategorys } from "@/api/data";
+import {
+  peopleCategorys,
+  extendEchartsOpts,
+  lessPersonCategorys
+} from "@/api/data";
 export default {
   name: "wiki_人的相关度",
   data() {
@@ -97,7 +101,7 @@ export default {
           text: item[1]
         };
       }),
-      subjectOpt: lessCategorys,
+      subjectOpt: lessPersonCategorys,
       methodOpt: ["linksin"],
       levelOpt: [
         {
@@ -208,7 +212,7 @@ export default {
         if (retData.data) {
           chartData = retData.data;
         } else {
-          this.$emit("emitMesage", "请求失败");
+          // this.$emit("emitMesage", "请求失败");
         }
       }
       let options = this.setOptions(chartData);
@@ -244,7 +248,7 @@ export default {
         if (retData.data) {
           chartData = retData.data;
         } else {
-          this.$emit("emitMesage", "请求失败");
+          // this.$emit("emitMesage", "请求失败");
         }
       }
 

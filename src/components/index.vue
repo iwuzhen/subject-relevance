@@ -79,6 +79,11 @@ export default {
             to: "/MasArticlesTotal"
           },
           {
+            title: "Wiki 类引用关系",
+            text: "Wiki Core 类之间车引用比例关系",
+            to: "/CoreLinks"
+          },
+          {
             title: "WIKI 分类层次",
             text: "WIKI 分类层次查询",
             href: "http://wikidb.lambdax.cn:5555/wikidb_web/first.jsp"

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-04-29 23:23:33
+ * @LastEditTime: 2020-05-14 19:42:52
  * @Description: 
  -->
 <template>
@@ -52,6 +52,7 @@
           <v-select
             v-model="yearSelect1"
             :items="yearOptions"
+            @change="yearChange1"
             chips
             label="年份"
           ></v-select>
@@ -90,6 +91,7 @@
             :items="yearOptions"
             chips
             label="年份"
+            @change="yearChange2"
           ></v-select
           ><v-treeview
             v-model="selection2"
@@ -249,6 +251,24 @@ export default {
           children: []
         };
       });
+      this.treeItems2 = this.basiccategorys.map(item => {
+        return {
+          id: uuidv4(),
+          name: item,
+          children: []
+        };
+      });
+    },
+    yearChange1() {
+      this.treeItems1 = this.basiccategorys.map(item => {
+        return {
+          id: uuidv4(),
+          name: item,
+          children: []
+        };
+      });
+    },
+    yearChange2() {
       this.treeItems2 = this.basiccategorys.map(item => {
         return {
           id: uuidv4(),

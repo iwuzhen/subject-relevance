@@ -13,7 +13,7 @@ const ViewAndEdits = () => import("@/components/ViewAndEdits");
 const SmallWorldUndirected = () => import("@/components/SmallWorldUndirected");
 const SmallWorldUndirectedLimit = () =>
   import("@/components/SmallWorldUndirectedLimit");
-const SmallWorldDirected = () => import("@/components/SmallWorldUndirected");
+const SmallWorldDirected = () => import("@/components/SmallWorldDirected");
 const powerLawPageRank = () => import("@/components/powerLawPageRank");
 const DegreeDistribution = () => import("@/components/DegreeDistribution");
 const ZipfByNodes = () => import("@/components/ZipfByNodes");
@@ -26,6 +26,7 @@ const PeopleZipfByNodes = () => import("@/components/PeopleZipfByNodes");
 const PeopleInnerZipfByNodes = () =>
   import("@/components/PeopleInnerZipfByNodes");
 const CoreZipfByNodes = () => import("@/components/CoreZipfByNodes");
+const CoreLinks = () => import("@/components/CoreLinks");
 
 Vue.use(Router);
 
@@ -146,6 +147,11 @@ export default new Router({
       path: "/CoreZipfByNodes",
       name: "CoreZipfByNodes",
       component: CoreZipfByNodes
+    },
+    {
+      path: "/CoreLinks",
+      name: "CoreLinks",
+      component: CoreLinks
     }
   ],
   scrollBehavior(to, from, savedPosition) {

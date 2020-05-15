@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-05-13 19:29:43
+ * @LastEditTime: 2020-05-14 19:27:44
  * @Description:
  */
 export let basiCategorys = [
@@ -64,6 +64,29 @@ export let lessCategorys = [
   "Mechanical engineering",
   "Biological engineering",
   "Computer engineering",
+  "Industrial engineering",
+  "Environmental engineering"
+].sort();
+
+export let lessPersonCategorys = [
+  "Logic",
+  "Philosophy",
+  "Mathematics",
+  "Physics",
+  "Chemistry",
+  "Biology",
+  "Sociology",
+  "Economics",
+  "Political science",
+  "Psychology",
+  "Linguistics",
+  "History",
+  "Computer science",
+  "Artificial intelligence",
+  "Chemical engineering",
+  "Civil engineering",
+  "Electrical engineering",
+  "Mechanical engineering",
   "Industrial engineering",
   "Environmental engineering"
 ].sort();
@@ -172,7 +195,7 @@ export function extendEchartsOpts(opt) {
     },
     legend: {
       left: "83%",
-      top: "35%",
+      top: "middle",
       textStyle: {
         fontSize: 15
       },

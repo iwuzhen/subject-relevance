@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 19:09:27
  * @LastEditors: ider
- * @LastEditTime: 2020-04-26 14:08:32
+ * @LastEditTime: 2020-05-14 19:31:58
  * @Description: 
  -->
 
@@ -388,7 +388,7 @@ export default {
             data: data.legend,
             //   right: "5%",
             left: "38%",
-            top: "15%",
+            top: "10%",
             textStyle: {
               fontSize: 14
             },
@@ -399,7 +399,7 @@ export default {
             data: data.legend,
             //   right: "5%",
             left: gridRight,
-            top: "15%",
+            top: "10%",
             textStyle: {
               fontSize: 14
             },
@@ -410,7 +410,7 @@ export default {
             data: data.legend,
             //   right: "5%",
             left: gridRight,
-            top: "65%",
+            top: "60%",
             textStyle: {
               fontSize: 14
             },

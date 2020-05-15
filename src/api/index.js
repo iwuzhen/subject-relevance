@@ -62,6 +62,22 @@ export function getMasData(params) {
   });
 }
 
+export function getCoreLinksInDataByCats(params) {
+  return request({
+    url: "/wiki/getCoreLinksInDataByCats",
+    method: "post",
+    data: params
+  });
+}
+
+export function getCoreLinksInData(params) {
+  return request({
+    url: "/wiki/getCoreLinksInData",
+    method: "post",
+    data: params
+  });
+}
+
 export function getCoreZipfByNodes(params) {
   return request({
     url: "/wiki/getCoreZipfByNodes",
