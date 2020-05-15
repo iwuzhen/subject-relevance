@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-05-14 16:16:27
  * @LastEditors: ider
- * @LastEditTime: 2020-05-15 11:22:13
+ * @LastEditTime: 2020-05-15 12:39:14
  * @Description: 
  -->
 
@@ -207,7 +207,8 @@ export default {
           type: "pie",
           radius: "55%",
           center: ["50%", "40%"],
-          bottom: "50%",
+          height: "50%",
+          // bottom: "50%",
           emphasis: {
             itemStyle: {
               shadowBlur: 10,
@@ -256,7 +257,7 @@ export default {
         let options = extendEchartsOpts({
           title: [
             {
-              left: "40%",
+              left: "45%",
               text: `${this.subjectTarget} 的相关学科占比`
             },
             {
