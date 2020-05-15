@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-05-14 16:16:27
  * @LastEditors: ider
- * @LastEditTime: 2020-05-15 12:39:14
+ * @LastEditTime: 2020-05-15 15:39:12
  * @Description: 
  -->
 
@@ -61,8 +61,20 @@
           class="mx-auto"
           outlined
           :loading="loading"
-          height="140vh"
-          id="subjectChart"
+          height="70vh"
+          id="subjectChart1"
+        >
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+          id="subjectChart2"
         >
         </v-card>
       </v-col>
@@ -160,13 +172,17 @@ export default {
         return ret;
       });
     },
-    myChart: function() {
-      return this.$echarts.init(document.getElementById("subjectChart"));
+    myChart1: function() {
+      return this.$echarts.init(document.getElementById("subjectChart1"));
+    },
+    myChart2: function() {
+      return this.$echarts.init(document.getElementById("subjectChart2"));
     }
   },
   mounted() {
     window.onresize = () => {
-      this.myChart.resize();
+      this.myChart1.resize();
+      this.myChart2.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
   },
@@ -205,9 +221,9 @@ export default {
         let resSankey = await getCoreLinksInDataByCats(opt2);
         let seriesPie = {
           type: "pie",
+          top: "5%",
           radius: "55%",
-          center: ["50%", "40%"],
-          height: "50%",
+          center: ["50%", "60%"],
           // bottom: "50%",
           emphasis: {
             itemStyle: {
@@ -229,9 +245,9 @@ export default {
         console.log(seriesPie);
 
         let seriesSankey = {
+          top: "10%",
           type: "sankey",
           layout: "none",
-          top: "50%",
           focusNodeAdjacency: "allEdges",
           data: [
             ...Object.keys(resSankey.data.data).map(item => {
@@ -254,44 +270,45 @@ export default {
         }
         console.log(seriesSankey);
 
-        let options = extendEchartsOpts({
-          title: [
-            {
-              left: "45%",
-              text: `${this.subjectTarget} 的相关学科占比`
-            },
-            {
-              left: "40%",
-              top: "45%",
-              text: `选中学科间的 linker 分布`
-            }
-          ],
-
+        let options1 = extendEchartsOpts({
+          title: {
+            left: "center",
+            text: `${this.subjectTarget} 的相关学科占比`
+          },
           tooltip: [
             {
               trigger: "item",
               //   formatter: "{a} <br/>{b} : {c} ({d}%)"
               triggerOn: "mousemove"
             }
-            // {
-            //   trigger: "item",
-            //   triggerOn: "mousemove"
-            // }
           ],
-          legend: [
-            {
-              orient: "vertical",
-              left: 20,
-              top: "2%",
-              data: seriesPie.data.map(item => {
-                return item.name;
-              })
-            }
-          ],
-          series: [seriesPie, seriesSankey]
+          legend: {
+            orient: "vertical",
+            left: 20,
+            top: "2%",
+            data: seriesPie.data.map(item => {
+              return item.name;
+            })
+          },
+          series: seriesPie
         });
 
-        this.myChart.setOption(options, true);
+        let options2 = extendEchartsOpts({
+          title: {
+            left: "center",
+            text: `选中学科间的 linker 分布`
+          },
+          tooltip: [
+            {
+              trigger: "item",
+              //   formatter: "{a} <br/>{b} : {c} ({d}%)"
+              triggerOn: "mousemove"
+            }
+          ],
+          series: seriesSankey
+        });
+        this.myChart1.setOption(options1, true);
+        this.myChart2.setOption(options2, true);
         this.loading = false;
       } catch (error) {
         this.$emit("emitMesage", `请求失败:${error}`);
