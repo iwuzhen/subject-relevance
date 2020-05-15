@@ -79,8 +79,8 @@ export default {
             to: "/MasArticlesTotal"
           },
           {
-            title: "Wiki 类引用关系",
-            text: "Wiki Core 类之间车引用比例关系",
+            title: "Wiki 类引用详情",
+            text: "Wiki Core 类之间类引用详情",
             to: "/CoreLinks"
           },
           {
