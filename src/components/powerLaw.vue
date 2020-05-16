@@ -39,7 +39,7 @@
 <script>
 import { getZipf } from "@/api/index";
 import ecStat from "echarts-stat";
-import { basiCategorys, extendEchartsOpts } from "@/api/data";
+import { basiCategorys, extendEchartsOpts, extendLineSeries } from "@/api/data";
 
 export default {
   name: "zipf幂律",
@@ -143,36 +143,38 @@ export default {
       // 趋势线
       let myRegression = ecStat.regression("linear", seriesList[0].data);
       if (data.y.length === 1) {
-        seriesList.push({
-          name: "回归线",
-          type: "line",
-          showSymbol: false,
-          smooth: false,
-          data: myRegression.points,
-          markPoint: {
-            itemStyle: {
-              normal: {
-                color: "transparent"
-              }
-            },
-            label: {
-              normal: {
-                show: true,
-                position: "left",
-                formatter: myRegression.expression,
-                textStyle: {
-                  color: "#333",
-                  fontSize: 14
+        seriesList.push(
+          extendLineSeries({
+            name: "回归线",
+            type: "line",
+            showSymbol: false,
+            smooth: false,
+            data: myRegression.points,
+            markPoint: {
+              itemStyle: {
+                normal: {
+                  color: "transparent"
                 }
-              }
-            },
-            data: [
-              {
-                coord: myRegression.points[myRegression.points.length - 1]
-              }
-            ]
-          }
-        });
+              },
+              label: {
+                normal: {
+                  show: true,
+                  position: "left",
+                  formatter: myRegression.expression,
+                  textStyle: {
+                    color: "#333",
+                    fontSize: 14
+                  }
+                }
+              },
+              data: [
+                {
+                  coord: myRegression.points[myRegression.points.length - 1]
+                }
+              ]
+            }
+          })
+        );
       }
       let _opt = extendEchartsOpts({
         title: {

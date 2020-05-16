@@ -30,7 +30,7 @@
 
 <script>
 import { getMasArticlesTotal } from "@/api/index";
-import { extendEchartsOpts, coreCategorys } from "@/api/data";
+import { extendEchartsOpts, coreCategorys, extendLineSeries } from "@/api/data";
 export default {
   name: "mag文章数",
   data() {
@@ -117,12 +117,12 @@ export default {
           type: "value"
         },
         series: Object.entries(data).map(item => {
-          return {
+          return extendLineSeries({
             name: item[0],
             type: "line",
             smooth: false,
             data: Object.values(item[1])
-          };
+          });
         })
       });
       return _opt;

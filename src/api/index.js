@@ -78,12 +78,13 @@ export function getCoreLinksInData(params) {
   });
 }
 
-export function getCoreZipfByNodes(params) {
-  return request({
+export async function getCoreZipfByNodes(params) {
+  let requestParams = {
     url: "/wiki/getCoreZipfByNodes",
     method: "post",
     data: params
-  });
+  };
+  return await cacheRequest(requestParams);
 }
 
 export async function getArticlesTotal(params) {

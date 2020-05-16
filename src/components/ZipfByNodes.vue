@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-04-26 20:34:54
+ * @LastEditTime: 2020-05-17 00:51:03
  * @Description: 
  -->
 
@@ -109,7 +109,7 @@
 <script>
 import { getZipfByNodes } from "@/api/index";
 import ecStat from "echarts-stat";
-import { basiCategorys, extendEchartsOpts } from "@/api/data";
+import { basiCategorys, extendEchartsOpts, extendLineSeries } from "@/api/data";
 
 export default {
   name: "zipf幂律斜率",
@@ -198,7 +198,6 @@ export default {
           .then(res => {
             if (res.data) {
               resList.push(res.data);
-              this.loading = false;
             } else {
               this.loading = false;
               this.$emit("emitMesage", "请求失败");
@@ -211,6 +210,7 @@ export default {
           });
       }
 
+      this.loading = false;
       let options = this.setOptions_slope(resList);
       this.myChart1.setOption(options, true);
     },
@@ -229,7 +229,6 @@ export default {
           if (res.data) {
             let options = this.setOptions_zipf(res.data);
             this.myChart2.setOption(options, true);
-            this.loading = false;
           } else {
             this.loading = false;
             this.$emit("emitMesage", "请求失败");
@@ -240,6 +239,8 @@ export default {
           this.loading = false;
           this.$emit("emitMesage", `请求失败:${rej}`);
         });
+
+      this.loading = false;
     },
 
     setOptions_slope(dataList) {
@@ -267,16 +268,17 @@ export default {
         tmp = (Math.ceil(Math.min(...gradientList) * 10) - 1) / 10;
         if (yMin === null) yMin = tmp;
         else if (yMin > tmp) yMin = tmp;
+
         let title = data.title.replace(" zipf分布", "");
 
         seriesTitleArray.push([
           title,
-          {
+          extendLineSeries({
             name: title,
             type: "line",
             smooth: false,
             data: gradientList
-          }
+          })
         ]);
       }
 
@@ -334,36 +336,38 @@ export default {
       );
       console.log(this.nodeRange);
       if (data.y.length === 1) {
-        seriesList.push({
-          name: "回归线",
-          type: "line",
-          showSymbol: false,
-          smooth: false,
-          data: myRegression.points,
-          markPoint: {
-            itemStyle: {
-              normal: {
-                color: "transparent"
-              }
-            },
-            label: {
-              normal: {
-                show: true,
-                position: "left",
-                formatter: myRegression.expression,
-                textStyle: {
-                  color: "#333",
-                  fontSize: 14
+        seriesList.push(
+          extendLineSeries({
+            name: "回归线",
+            type: "line",
+            showSymbol: false,
+            smooth: false,
+            data: myRegression.points,
+            markPoint: {
+              itemStyle: {
+                normal: {
+                  color: "transparent"
                 }
-              }
-            },
-            data: [
-              {
-                coord: myRegression.points[myRegression.points.length - 1]
-              }
-            ]
-          }
-        });
+              },
+              label: {
+                normal: {
+                  show: true,
+                  position: "left",
+                  formatter: myRegression.expression,
+                  textStyle: {
+                    color: "#333",
+                    fontSize: 14
+                  }
+                }
+              },
+              data: [
+                {
+                  coord: myRegression.points[myRegression.points.length - 1]
+                }
+              ]
+            }
+          })
+        );
       }
       let ymax = Math.floor(Math.max(...[].concat(...data.y)) * 10) + 1;
       let xmax = Math.floor(Math.max(...data.x) * 10) + 1;

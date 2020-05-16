@@ -47,7 +47,7 @@
 
 <script>
 import { getArticlesTotal } from "@/api/index";
-import { extendEchartsOpts, lessCategorys } from "@/api/data";
+import { extendEchartsOpts, lessCategorys, extendLineSeries } from "@/api/data";
 
 export default {
   name: "ArticleTotal",
@@ -137,12 +137,12 @@ export default {
           type: "value"
         },
         series: Object.entries(data).map(item => {
-          return {
+          return extendLineSeries({
             name: item[0],
             type: "line",
             smooth: false,
             data: Object.values(item[1])
-          };
+          });
         })
       });
       return _opt;

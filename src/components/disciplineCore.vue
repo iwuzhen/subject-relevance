@@ -62,7 +62,7 @@
 
 <script>
 import { getDistanceCore } from "@/api/index";
-import { extendEchartsOpts, coreCategorys } from "@/api/data";
+import { extendEchartsOpts, coreCategorys, extendLineSeries } from "@/api/data";
 export default {
   name: "CoreWiki学科相关度",
   data() {
@@ -203,12 +203,12 @@ export default {
           max: 1
         },
         series: data.y.map((item, index) => {
-          return {
+          return extendLineSeries({
             name: data.legend[index],
             type: "line",
             smooth: false,
             data: item
-          };
+          });
         })
       });
       return _opt;

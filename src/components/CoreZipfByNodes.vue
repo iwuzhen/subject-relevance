@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-05-14 19:37:46
+ * @LastEditTime: 2020-05-17 00:51:24
  * @Description: 
  -->
 
@@ -127,7 +127,7 @@
 <script>
 import { getCoreZipfByNodes } from "@/api/index";
 import ecStat from "echarts-stat";
-import { coreCategorys, extendEchartsOpts } from "@/api/data";
+import { coreCategorys, extendEchartsOpts, extendLineSeries } from "@/api/data";
 
 export default {
   name: "Core_zipf幂律斜率",
@@ -306,12 +306,12 @@ export default {
 
         seriesTitleArray.push([
           title,
-          {
+          extendLineSeries({
             name: title,
             type: "line",
             smooth: false,
             data: gradientList
-          }
+          })
         ]);
       }
 
@@ -369,36 +369,38 @@ export default {
       );
       console.log(this.nodeRange);
       if (data.y.length === 1) {
-        seriesList.push({
-          name: "回归线",
-          type: "line",
-          showSymbol: false,
-          smooth: false,
-          data: myRegression.points,
-          markPoint: {
-            itemStyle: {
-              normal: {
-                color: "transparent"
-              }
-            },
-            label: {
-              normal: {
-                show: true,
-                position: "left",
-                formatter: myRegression.expression,
-                textStyle: {
-                  color: "#333",
-                  fontSize: 14
+        seriesList.push(
+          extendLineSeries({
+            name: "回归线",
+            type: "line",
+            showSymbol: false,
+            smooth: false,
+            data: myRegression.points,
+            markPoint: {
+              itemStyle: {
+                normal: {
+                  color: "transparent"
                 }
-              }
-            },
-            data: [
-              {
-                coord: myRegression.points[myRegression.points.length - 1]
-              }
-            ]
-          }
-        });
+              },
+              label: {
+                normal: {
+                  show: true,
+                  position: "left",
+                  formatter: myRegression.expression,
+                  textStyle: {
+                    color: "#333",
+                    fontSize: 14
+                  }
+                }
+              },
+              data: [
+                {
+                  coord: myRegression.points[myRegression.points.length - 1]
+                }
+              ]
+            }
+          })
+        );
       }
       let ymax = Math.floor(Math.max(...[].concat(...data.y)) * 10) + 1;
       let xmax = Math.floor(Math.max(...data.x) * 10) + 1;

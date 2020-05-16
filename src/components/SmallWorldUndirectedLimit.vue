@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-04-26 14:34:55
+ * @LastEditTime: 2020-05-17 00:49:36
  * @Description: 
  -->
 
@@ -117,7 +117,7 @@
 
 <script>
 import smallworldundirectLimter from "../data/smallworldundirectLimter.json";
-import { basiCategorys, extendEchartsOpts } from "@/api/data";
+import { basiCategorys, extendEchartsOpts, extendLineSeries } from "@/api/data";
 
 export default {
   name: "SmallWorld无向图规模趋势",
@@ -226,16 +226,18 @@ export default {
 
       let ret_seriest = [];
       for (let _id in tmp_dict) {
-        ret_seriest.push({
-          name: _id,
-          type: "line",
-          symbolSize: 5,
-          large: true,
-          data: tmp_dict[_id]["data"].sort((x, y) => {
-            return x[0] - y[0];
-          }),
-          smooth: false
-        });
+        ret_seriest.push(
+          extendLineSeries({
+            name: _id,
+            type: "line",
+            symbolSize: 5,
+            large: true,
+            data: tmp_dict[_id]["data"].sort((x, y) => {
+              return x[0] - y[0];
+            }),
+            smooth: false
+          })
+        );
       }
       let data = {
         series: ret_seriest,

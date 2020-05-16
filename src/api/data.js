@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-05-14 19:27:44
+ * @LastEditTime: 2020-05-17 00:42:28
  * @Description:
  */
 export let basiCategorys = [
@@ -160,6 +160,16 @@ export let coreCategorys = [
   "Neuroscience",
   "Literature"
 ].sort();
+
+export function extendLineSeries(series) {
+  return Object.assign(
+    {
+      symbolSize: 8,
+      smooth: false
+    },
+    series
+  );
+}
 
 // 单页图，使用这个模版
 export function extendEchartsOpts(opt) {

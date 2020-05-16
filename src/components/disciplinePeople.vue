@@ -81,10 +81,12 @@
 
 <script>
 import { getDistanceByPeopleAndCats, getDistanceByPeoples } from "@/api/index";
+
 import {
   peopleCategorys,
   extendEchartsOpts,
-  lessPersonCategorys
+  lessPersonCategorys,
+  extendLineSeries
 } from "@/api/data";
 export default {
   name: "wiki_人的相关度",
@@ -282,12 +284,12 @@ export default {
           max: 1
         },
         series: data.y.map((item, index) => {
-          return {
+          return extendLineSeries({
             name: data.legend[index],
             type: "line",
             smooth: false,
             data: item
-          };
+          });
         })
       });
       return _opt;

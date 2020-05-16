@@ -47,7 +47,7 @@
 
 <script>
 import { getViewAndEdits } from "@/api/index";
-import { basiCategorys, extendEchartsOpts } from "@/api/data";
+import { basiCategorys, extendEchartsOpts, extendLineSeries } from "@/api/data";
 export default {
   name: "ve访问量和编辑量",
   data() {
@@ -157,12 +157,12 @@ export default {
           max: ymax
         },
         series: data.y.map((item, index) => {
-          return {
+          return extendLineSeries({
             name: data.legend[index],
             type: "line",
             smooth: false,
             data: item
-          };
+          });
         })
       });
       return _opt;

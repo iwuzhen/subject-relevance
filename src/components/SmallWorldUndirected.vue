@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-05-06 19:26:21
+ * @LastEditTime: 2020-05-17 00:49:15
  * @Description: 
  -->
 
@@ -91,7 +91,7 @@
 
 <script>
 import smallworldundirect from "../data/smallworldundirect.json";
-import { basiCategorys, extendEchartsOpts } from "@/api/data";
+import { basiCategorys, extendEchartsOpts, extendLineSeries } from "@/api/data";
 export default {
   name: "SmallWorld无向图逐年趋势",
   data() {
@@ -220,12 +220,12 @@ export default {
     },
     setOptions(data) {
       let series = data.y.map((item, index) => {
-        return {
+        return extendLineSeries({
           name: data.legend[index],
           type: "line",
           smooth: false,
           data: item
-        };
+        });
       });
       console.log(series);
       // 排序

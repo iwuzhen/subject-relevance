@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 19:09:27
  * @LastEditors: ider
- * @LastEditTime: 2020-05-14 19:31:58
+ * @LastEditTime: 2020-05-17 00:48:56
  * @Description: 
  -->
 
@@ -95,7 +95,7 @@
 
 <script>
 import smallworlddirect from "../data/smallworlddirect.json";
-import { basiCategorys } from "@/api/data";
+import { basiCategorys, extendLineSeries } from "@/api/data";
 export default {
   name: "SmallWorld有向图学科间趋势",
   data() {
@@ -505,37 +505,37 @@ export default {
         },
         series: (data => {
           let ee = data.b.map((item, index) => {
-            return {
+            return extendLineSeries({
               name: data.legend[index],
               type: "line",
               smooth: false,
               xAxisIndex: 2,
               yAxisIndex: 2,
               data: item
-            };
+            });
           });
           ee.push(
             ...data.y.map((item, index) => {
-              return {
+              return extendLineSeries({
                 name: data.legend[index],
                 type: "line",
                 smooth: false,
                 data: item,
                 xAxisIndex: 0,
                 yAxisIndex: 0
-              };
+              });
             })
           );
           ee.push(
             ...data.c.map((item, index) => {
-              return {
+              return extendLineSeries({
                 name: data.legend[index],
                 type: "line",
                 smooth: false,
                 data: item,
                 xAxisIndex: 1,
                 yAxisIndex: 1
-              };
+              });
             })
           );
           return ee;
