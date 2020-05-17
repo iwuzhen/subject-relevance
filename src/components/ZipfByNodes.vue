@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-05-17 00:51:03
+ * @LastEditTime: 2020-05-18 02:29:42
  * @Description: 
  -->
 
@@ -18,7 +18,6 @@
           dense
           multiple
           deletable-chips
-          @change="getData"
           label="目标学科"
         ></v-select>
       </v-col>
@@ -81,25 +80,15 @@
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="45vh"
-          id="subjectChart1"
-        >
+        <v-card class="mx-auto" outlined :loading="loading" height="45vh">
+          <v-container fluid fill-height id="subjectChart1"> </v-container>
         </v-card>
       </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="45vh"
-          id="subjectChart2"
-        >
+        <v-card class="mx-auto" outlined :loading="loading" height="45vh">
+          <v-container fluid fill-height id="subjectChart2"> </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -110,6 +99,12 @@
 import { getZipfByNodes } from "@/api/index";
 import ecStat from "echarts-stat";
 import { basiCategorys, extendEchartsOpts, extendLineSeries } from "@/api/data";
+import { localCache } from "@/api/cache";
+
+let LC = new localCache({
+  storeName: "zipfbynodes", // Should be alphanumeric, with underscores.
+  description: "store api"
+});
 
 export default {
   name: "zipf幂律斜率",
@@ -148,8 +143,28 @@ export default {
         2019,
         2020
       ],
-      categoryOpt: basiCategorys
+      categoryOpt: basiCategorys,
+      chartOptYear: {},
+      chartOptZipf: {}
     };
+  },
+  watch: {
+    // 更新图标
+    chartOptYear: function(opt) {
+      this.myChart1.setOption(opt, true);
+    },
+    chartOptZipf: function(opt) {
+      this.myChart2.setOption(opt, true);
+    },
+    subjectSelect: async function(newValue, oldValue) {
+      this.loading = true;
+      let diffArray = newValue.filter(item => !oldValue.includes(item));
+      if (diffArray.length > 0) {
+        await this.handleSlopeTrend(diffArray[0]);
+      }
+      await this.calMulitYear(newValue);
+      await this.calZipf();
+    }
   },
   mounted() {
     window.onresize = () => {
@@ -170,123 +185,82 @@ export default {
     }
   },
   methods: {
-    getData() {
+    async handleSlopeTrend(subject) {
+      // 计算单学科的年度趋势，并缓存
+      let opt = {
+        str: subject,
+        N: this.nodeCountSelect
+      };
+
+      let LCKEY = `${JSON.stringify(opt)}_${this.nodeRange[0]}_${
+        this.nodeRange[1]
+      }`;
+      let item = await LC.getItem(LCKEY);
+      if (!item) {
+        try {
+          let res = await getZipfByNodes(opt);
+          if (res.data) {
+            let gradientList = [];
+            for (let i = 0; i < res.data.y.length; i++) {
+              let dataItem = [];
+              for (let j = 0; j < res.data.y[i].length; j++) {
+                dataItem.push([res.data.x[j], res.data.y[i][j]]);
+              }
+              let myRegression = ecStat.regression(
+                "linear",
+                dataItem.slice(this.nodeRange[0], this.nodeRange[1])
+              );
+              gradientList.push(myRegression.parameter.gradient.toFixed(4));
+            }
+
+            let title = res.data.title.replace(" zipf分布", "");
+            item = [
+              title,
+              extendLineSeries({
+                name: title,
+                type: "line",
+                smooth: false,
+                data: gradientList
+              })
+            ];
+            await LC.setItem(LCKEY, item);
+          }
+        } catch (error) {
+          this.$emit("emitMesage", `请求失败:${error}`);
+          return;
+        }
+      }
+      return item;
+    },
+    async getData() {
       if (this.nodeCountSelect < this.nodeRange[1]) {
         this.nodeRange[1] = this.nodeCountSelect;
       }
-      this.yearChange();
+      await this.yearChange();
       this.calZipf();
     },
-    yearChange() {
-      /**
-       * @description: 多个学科的斜率历年趋势
-       */
+    async yearChange() {
       if (this.subjectSelect.length < 1) {
         return;
       }
-      this.calMulitYear();
+      await this.calMulitYear();
     },
-    async calMulitYear() {
-      let resList = [];
-      this.loading = true;
-      for (let subject of this.subjectSelect) {
-        let opt = {
-          str: subject,
-          N: this.nodeCountSelect
-        };
-        await getZipfByNodes(opt)
-          .then(res => {
-            if (res.data) {
-              resList.push(res.data);
-            } else {
-              this.loading = false;
-              this.$emit("emitMesage", "请求失败");
-              return false;
-            }
-          })
-          .catch(rej => {
-            this.loading = false;
-            this.$emit("emitMesage", `请求失败:${rej}`);
-          });
-      }
-
-      this.loading = false;
-      let options = this.setOptions_slope(resList);
-      this.myChart1.setOption(options, true);
-    },
-    async calZipf() {
-      if (this.subjectSelect.length < 1 || !this.yearSelect) {
-        return false;
-      }
-      this.loading = true;
-      let opt = {
-        str: this.subjectSelect.join(","),
-        N: this.nodeCountSelect,
-        year: this.yearSelect
-      };
-      await getZipfByNodes(opt)
-        .then(res => {
-          if (res.data) {
-            let options = this.setOptions_zipf(res.data);
-            this.myChart2.setOption(options, true);
-          } else {
-            this.loading = false;
-            this.$emit("emitMesage", "请求失败");
-            return false;
-          }
-        })
-        .catch(rej => {
-          this.loading = false;
-          this.$emit("emitMesage", `请求失败:${rej}`);
-        });
-
-      this.loading = false;
-    },
-
-    setOptions_slope(dataList) {
-      // 原始线
+    async calMulitYear(subjectSellect = null) {
+      // 第一个图，多年
+      subjectSellect = subjectSellect || this.subjectSelect;
       let seriesTitleArray = [];
-      var yMax = null,
-        yMin = null;
-      for (let data of dataList) {
-        let gradientList = [];
-        for (let i = 0; i < data.y.length; i++) {
-          let dataItem = [];
-          for (let j = 0; j < data.y[i].length; j++) {
-            dataItem.push([data.x[j], data.y[i][j]]);
-          }
-
-          let myRegression = ecStat.regression(
-            "linear",
-            dataItem.slice(this.nodeRange[0], this.nodeRange[1])
-          );
-          gradientList.push(myRegression.parameter.gradient.toFixed(4));
-        }
-        let tmp = (Math.floor(Math.max(...gradientList) * 10) + 1) / 10;
-        if (yMax === null) yMax = tmp;
-        else if (yMax < tmp) yMax = tmp;
-        tmp = (Math.ceil(Math.min(...gradientList) * 10) - 1) / 10;
-        if (yMin === null) yMin = tmp;
-        else if (yMin > tmp) yMin = tmp;
-
-        let title = data.title.replace(" zipf分布", "");
-
-        seriesTitleArray.push([
-          title,
-          extendLineSeries({
-            name: title,
-            type: "line",
-            smooth: false,
-            data: gradientList
-          })
-        ]);
+      this.loading = true;
+      for (let subject of subjectSellect) {
+        let item = await this.handleSlopeTrend(subject);
+        console.log(item);
+        seriesTitleArray.push(item);
       }
 
       seriesTitleArray.sort((x, y) => {
         return y[1].data.slice(-1) - x[1].data.slice(-1);
       });
 
-      let _opt = extendEchartsOpts({
+      this.chartOptYear = extendEchartsOpts({
         title: {
           text: "斜率趋势"
         },
@@ -301,17 +275,51 @@ export default {
           data: this.yearOpt
         },
         yAxis: {
+          max: (function(seriesTitleArray) {
+            let yList = [];
+            for (let item of seriesTitleArray) {
+              yList = yList.concat(item[1].data);
+            }
+            return (Math.floor(Math.max(...yList) * 10) + 1) / 10;
+          })(seriesTitleArray),
           type: "value",
-          max: yMax,
-          name: "Slope",
-          min: yMin
+          name: "Slope"
         },
         series: seriesTitleArray.map(item => {
           return item[1];
         })
       });
-      return _opt;
+
+      this.loading = false;
     },
+    async calZipf() {
+      if (this.subjectSelect.length < 1 || !this.yearSelect) {
+        return false;
+      }
+      this.loading = true;
+      let opt = {
+        str: this.subjectSelect.join(","),
+        N: this.nodeCountSelect,
+        year: this.yearSelect
+      };
+      await getZipfByNodes(opt)
+        .then(res => {
+          if (res.data) {
+            this.chartOptZipf = this.setOptions_zipf(res.data);
+          } else {
+            this.loading = false;
+            this.$emit("emitMesage", "请求失败");
+            return false;
+          }
+        })
+        .catch(rej => {
+          this.loading = false;
+          this.$emit("emitMesage", `请求失败:${rej}`);
+        });
+
+      this.loading = false;
+    },
+
     setOptions_zipf(data) {
       // 设置
       let seriesList = [];
@@ -369,7 +377,7 @@ export default {
           })
         );
       }
-      let ymax = Math.floor(Math.max(...[].concat(...data.y)) * 10) + 1;
+      // let ymax = Math.floor(Math.max(...[].concat(...data.y)) * 10) + 1;
       let xmax = Math.floor(Math.max(...data.x) * 10) + 1;
 
       console.log(data);
@@ -387,7 +395,7 @@ export default {
         },
         yAxis: {
           type: "value",
-          max: ymax / 10,
+          // max: ymax / 10,
           name: "log (citation)",
           min: 0
         },

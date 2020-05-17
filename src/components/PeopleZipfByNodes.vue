@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-05-17 00:52:03
+ * @LastEditTime: 2020-05-18 02:30:12
  * @Description: 
  -->
 
@@ -18,7 +18,6 @@
           dense
           multiple
           deletable-chips
-          @change="getData"
           label="目标人"
         ></v-select>
       </v-col>
@@ -81,25 +80,15 @@
     </v-row>
     <v-row>
       <v-col col="6">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="45vh"
-          id="subjectChart1"
-        >
+        <v-card class="mx-auto" outlined :loading="loading" height="45vh">
+          <v-container fluid fill-height id="subjectChart1"> </v-container>
         </v-card>
       </v-col>
     </v-row>
     <v-row>
       <v-col col="6">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="45vh"
-          id="subjectChart2"
-        >
+        <v-card class="mx-auto" outlined :loading="loading" height="45vh">
+          <v-container fluid fill-height id="subjectChart2"> </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -114,6 +103,12 @@ import {
   extendEchartsOpts,
   extendLineSeries
 } from "@/api/data";
+import { localCache } from "@/api/cache";
+
+let LC = new localCache({
+  storeName: "peoplezipfbynodes", // Should be alphanumeric, with underscores.
+  description: "store api"
+});
 
 export default {
   name: "zipf幂律斜率（人）（世界）",
@@ -146,8 +141,29 @@ export default {
           value: item[0],
           text: item[1]
         };
-      })
+      }),
+
+      chartOptYear: {},
+      chartOptZipf: {}
     };
+  },
+  watch: {
+    // 更新图标
+    chartOptYear: function(opt) {
+      this.myChart1.setOption(opt, true);
+    },
+    chartOptZipf: function(opt) {
+      this.myChart2.setOption(opt, true);
+    },
+    subjectSelect: async function(newValue, oldValue) {
+      this.loading = true;
+      let diffArray = newValue.filter(item => !oldValue.includes(item));
+      if (diffArray.length > 0) {
+        await this.handleSlopeTrend(diffArray[0]);
+      }
+      await this.calMulitYear(newValue);
+      await this.calZipf();
+    }
   },
   mounted() {
     window.onresize = () => {
@@ -168,6 +184,53 @@ export default {
     }
   },
   methods: {
+    async handleSlopeTrend(subject) {
+      // 计算单学科的年度趋势，并缓存
+      let opt = {
+        str: subject,
+        N: this.nodeCountSelect
+      };
+
+      let LCKEY = `${JSON.stringify(opt)}_${this.nodeRange[0]}_${
+        this.nodeRange[1]
+      }`;
+      let item = await LC.getItem(LCKEY);
+      if (!item) {
+        try {
+          let res = await getPeopleZipfByNodes(opt);
+          if (res.data) {
+            let gradientList = [];
+            for (let i = 0; i < res.data.y.length; i++) {
+              let dataItem = [];
+              for (let j = 0; j < res.data.y[i].length; j++) {
+                dataItem.push([res.data.x[j], res.data.y[i][j]]);
+              }
+              let myRegression = ecStat.regression(
+                "linear",
+                dataItem.slice(this.nodeRange[0], this.nodeRange[1])
+              );
+              gradientList.push(myRegression.parameter.gradient.toFixed(4));
+            }
+
+            let title = res.data.title.replace(" zipf分布", "");
+            item = [
+              title,
+              extendLineSeries({
+                name: title,
+                type: "line",
+                smooth: false,
+                data: gradientList
+              })
+            ];
+            await LC.setItem(LCKEY, item);
+          }
+        } catch (error) {
+          this.$emit("emitMesage", `请求失败:${error}`);
+          return;
+        }
+      }
+      return item;
+    },
     getData() {
       if (this.nodeCountSelect < this.nodeRange[1]) {
         this.nodeRange[1] = this.nodeCountSelect;
@@ -185,31 +248,38 @@ export default {
       this.calMulitYear();
     },
     async calMulitYear() {
-      let resList = [];
+      let seriesTitleArray = [];
       this.loading = true;
       for (let subject of this.subjectSelect) {
-        let opt = {
-          str: subject,
-          N: this.nodeCountSelect
-        };
-        await getPeopleZipfByNodes(opt)
-          .then(res => {
-            if (res.data) {
-              resList.push(res.data);
-              this.loading = false;
-            } else {
-              this.loading = false;
-              this.$emit("emitMesage", "请求失败");
-              return false;
-            }
-          })
-          .catch(rej => {
-            this.loading = false;
-            this.$emit("emitMesage", `请求失败:${rej}`);
-          });
+        let item = await this.handleSlopeTrend(subject);
+        seriesTitleArray.push(item);
       }
-      let options = this.setOptions_slope(resList);
-      this.myChart1.setOption(options, true);
+      seriesTitleArray.sort((x, y) => {
+        return y[1].data.slice(-1) - x[1].data.slice(-1);
+      });
+      this.chartOptYear = extendEchartsOpts({
+        title: {
+          text: "斜率趋势"
+        },
+        legend: {
+          data: seriesTitleArray.map(item => {
+            return item[0];
+          })
+        },
+        xAxis: {
+          type: "category",
+          name: "Year",
+          data: this.yearOpt
+        },
+        yAxis: {
+          type: "value",
+          name: "Slope"
+        },
+        series: seriesTitleArray.map(item => {
+          return item[1];
+        })
+      });
+      this.loading = false;
     },
     async calZipf() {
       if (this.subjectSelect.length < 1 || !this.yearSelect) {
@@ -224,8 +294,7 @@ export default {
       await getPeopleZipfByNodes(opt)
         .then(res => {
           if (res.data) {
-            let options = this.setOptions_zipf(res.data);
-            this.myChart2.setOption(options, true);
+            this.chartOptZipf = this.setOptions_zipf(res.data);
             this.loading = false;
           } else {
             this.loading = false;
@@ -354,7 +423,6 @@ export default {
           })
         );
       }
-      let ymax = Math.floor(Math.max(...[].concat(...data.y)) * 10) + 1;
       let xmax = Math.floor(Math.max(...data.x) * 10) + 1;
       console.log(data);
       let _opt = extendEchartsOpts({
@@ -373,7 +441,6 @@ export default {
         },
         yAxis: {
           type: "value",
-          max: ymax / 10,
           name: "log (citation)",
           min: 0
         },
