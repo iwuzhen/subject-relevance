@@ -1,7 +1,7 @@
 import request from "@/utils/request";
 import requestwiki from "@/utils/requestwiki";
 import * as localforage from "localforage";
-
+localforage.setDriver([localforage.INDEXEDDB, localforage.WEBSQL]);
 let store1 = localforage.createInstance({
   name: "wikiknogen",
   version: 1,

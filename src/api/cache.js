@@ -3,11 +3,12 @@
  * @Author: ider
  * @Date: 2020-05-17 22:38:56
  * @LastEditors: ider
- * @LastEditTime: 2020-05-17 23:58:07
+ * @LastEditTime: 2020-05-18 12:55:42
  * @Description: 缓存工具包
  */
 
 import * as localforage from "localforage";
+localforage.setDriver([localforage.INDEXEDDB, localforage.WEBSQL]);
 
 export class localCache {
   constructor(localforageConfig) {
