@@ -16,7 +16,7 @@ export class localCache {
       Object.assign(
         {
           name: "wikiknogen",
-          version: 3,
+          version: 7,
           storeName: "api", // Should be alphanumeric, with underscores.
           description: "store api"
         },

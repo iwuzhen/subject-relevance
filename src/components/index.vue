@@ -69,6 +69,11 @@ export default {
             to: "/viewandedits"
           },
           {
+            title: "Core WIKI 文章数",
+            text: "Core WIKI 文章数查询",
+            to: "/CoreArticlesTotal"
+          },
+          {
             title: "WIKI 文章数",
             text: "WIKI 文章数查询",
             to: "/ArticlesTotal"
@@ -124,6 +129,11 @@ export default {
             title: "Core Zipf 幂律斜率",
             text: "Core 逐年幂律图，及其斜率曲线",
             to: "/CoreZipfByNodes"
+          },
+          {
+            title: "MAG 幂律",
+            text: "MAG 幂律",
+            to: "/MagZipf"
           }
         ],
         幂率: [

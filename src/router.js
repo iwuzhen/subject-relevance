@@ -27,6 +27,8 @@ const PeopleInnerZipfByNodes = () =>
   import("@/components/PeopleInnerZipfByNodes");
 const CoreZipfByNodes = () => import("@/components/CoreZipfByNodes");
 const CoreLinks = () => import("@/components/CoreLinks");
+const CoreArticlesTotal = () => import("@/components/CoreArticlesTotal");
+const MagZipf = () => import("@/components/MagZipf");
 
 Vue.use(Router);
 
@@ -152,6 +154,16 @@ export default new Router({
       path: "/CoreLinks",
       name: "CoreLinks",
       component: CoreLinks
+    },
+    {
+      path: "/CoreArticlesTotal",
+      name: "CoreArticlesTotal",
+      component: CoreArticlesTotal
+    },
+    {
+      path: "/MagZipf",
+      name: "MagZipf",
+      component: MagZipf
     }
   ],
   scrollBehavior(to, from, savedPosition) {

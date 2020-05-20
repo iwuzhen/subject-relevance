@@ -3,9 +3,45 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-05-17 00:42:28
+ * @LastEditTime: 2020-05-20 17:27:16
  * @Description:
  */
+
+export let magCategory = [
+  "Anthropology",
+  "Artificial intelligence",
+  "Biological engineering",
+  "Biology",
+  "Blockchains",
+  "Chemical engineering",
+  "Chemistry",
+  "Civil engineering",
+  "Cognitive science",
+  "Computer engineering",
+  "Computer science",
+  "Deep learning",
+  "Economics",
+  "Electrical engineering",
+  "Environmental engineering",
+  "Genetic engineering",
+  "Genome editing",
+  "History",
+  "Industrial engineering",
+  "Linguistics",
+  "Literature",
+  "Logic",
+  "Machine learning",
+  "Mathematics",
+  "Mechanical engineering",
+  "Neuroscience",
+  "Philosophy",
+  "Physics",
+  "Political science",
+  "Psychology",
+  "Quantum computing",
+  "Sociology",
+  "Theoretical computer science"
+].sort();
 export let basiCategorys = [
   "Literature",
   "Psychology",

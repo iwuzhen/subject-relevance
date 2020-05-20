@@ -5,34 +5,17 @@
         <v-select
           v-model="subjectTarget"
           :items="categorys"
-          @change="getData"
           small-chips
           multiple
           clearable
           label="目标学科"
         ></v-select>
       </v-col>
-      <v-col cols="2">
-        <v-select
-          v-model="dataYear"
-          :items="dataYearopt"
-          @change="getData"
-          label="年份"
-        ></v-select>
-      </v-col>
-      <v-col cols="2">
-        <v-select
-          v-model="nodeCount"
-          :items="nodeCountOptions"
-          @change="getData"
-          label="节点数"
-        ></v-select>
-      </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card class="mx-auto" outlined :loading="loading" height="70vh">
-          <v-container fluid fill-height id="subjectChart"> </v-container>
+        <v-card class="mx-auto" outlined :loading="loading" height="70vh"
+          ><v-container fluid fill-height id="subjectChart"> </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -40,43 +23,26 @@
 </template>
 
 <script>
-import { getDfb } from "@/api/index";
-import { basiCategorys, extendEchartsOpts } from "@/api/data";
+import { getMagZipf } from "@/api/index";
+import { magCategory, extendEchartsOpts } from "@/api/data";
+const Limiter = require("async-limiter");
+
 // tooyip 位置的x位置
 var tipLegend = 0;
 export default {
-  name: "subject幂律度分布",
+  name: "MAG幂律度分布",
   data() {
     return {
       subjectTarget: [],
-      categorys: basiCategorys,
-      dataYear: null,
-      dataYearopt: [
-        2007,
-        2008,
-        2009,
-        2010,
-        2011,
-        2013,
-        2014,
-        2015,
-        2016,
-        2017,
-        2018,
-        2019
-      ],
-      nodeCount: 10000,
+      categorys: magCategory,
       loading: false,
       chartOpt: {}
     };
   },
-  watch: {
-    // 更新图标
-    chartOpt: function(opt) {
-      this.myChart.setOption(opt, true);
-    }
-  },
   mounted() {
+    // 队列 初始化
+    this.asyncLimier = new Limiter({ concurrency: 1 });
+
     window.onresize = () => {
       this.myChart.resize();
     };
@@ -103,65 +69,80 @@ export default {
     });
   },
   computed: {
-    nodeCountOptions: function() {
-      let ret_list = [];
-      for (let i = 1000; i <= 10000; i += 1000) {
-        ret_list.push(i);
-      }
-      return ret_list;
-    },
     myChart: function() {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
-  methods: {
-    subjectChange() {
-      //   this.subjectRelevances = []
-      this.yearChange();
+  watch: {
+    // 更新图标
+    chartOpt: function(opt) {
+      this.myChart.setOption(opt, true);
     },
-    yearChange() {
-      if (this.dataYear === 1111 && this.subjectTarget.length > 1) {
-        this.subjectTarget = [];
-        this.$emit("emitMesage", `历年总和只能选择一个学科`);
-        return;
+    subjectTarget: async function(newValue, oldValue) {
+      this.loading = true;
+      let diffArray = newValue.filter(item => !oldValue.includes(item));
+      if (diffArray.length > 0) {
+        this.asyncLimier.push(async cb => {
+          console.log("asyc");
+          await this.getOneDate(diffArray[0]);
+          console.log("aover");
+          cb();
+        });
       }
-      this.getData();
+      this.asyncLimier.onDone(() => {
+        console.log("all done:");
+        this.getData();
+      });
+    }
+  },
+  methods: {
+    async getOneDate(subject) {
+      console.log("onedata,", subject);
+      let opt = {
+        str: subject
+      };
+      try {
+        await getMagZipf(opt);
+      } catch (error) {
+        this.$emit("emitMesage", `请求失败:${error}`);
+      }
     },
     async getData() {
-      if (this.subjectTarget.length < 1 || !this.dataYear) {
+      // 需要拆分请求
+      if (this.subjectTarget.length < 1) {
         return false;
       }
       this.loading = true;
-      let opt = {
-        str: this.subjectTarget.join(","),
-        N: this.nodeCount
-      };
-      if (this.dataYear !== 1111) {
-        opt["year"] = this.dataYear;
+      let reqData = null;
+      for (let subjectName of this.subjectTarget) {
+        let opt = {
+          str: subjectName
+        };
+        try {
+          let res = await getMagZipf(opt);
+          if (res.data) {
+            if (!reqData) {
+              reqData = res.data;
+            } else {
+              reqData.legend.push(res.data.legend[0]);
+              reqData.y.push(res.data.y[0]);
+            }
+          }
+        } catch (error) {
+          this.$emit("emitMesage", `请求失败:${error}`);
+        }
       }
 
-      getDfb(opt)
-        .then(res => {
-          if (res.data.data) {
-            this.drawChart(res.data.data);
-          } else {
-            this.loading = false;
-            this.$emit("emitMesage", "请求失败");
-            return false;
-          }
-        })
-        .catch(rej => {
-          this.loading = false;
-          this.$emit("emitMesage", `请求失败:${rej}`);
-        });
+      console.log(reqData);
+      this.drawChart(reqData);
     },
     drawChart(data) {
       this.chartOpt = this.setOptions(data);
       this.loading = false;
     },
     setOptions(data) {
-      let ymax = Math.max(...[].concat(...data.y));
-      ymax = Math.ceil(ymax * 10) / 10;
+      // let ymax = Math.max(...[].concat(...data.y));
+      // ymax = Math.ceil(ymax * 10) / 10;
       let xmax = Math.max(...data.x);
       xmax = Math.ceil(xmax * 10) / 10;
       // 设置
@@ -227,7 +208,7 @@ export default {
         },
         yAxis: {
           type: "value",
-          max: ymax,
+          // max: ymax,
           name: "log (citation)"
         },
         series: seriesList

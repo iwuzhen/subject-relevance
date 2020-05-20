@@ -4,7 +4,7 @@ import * as localforage from "localforage";
 localforage.setDriver([localforage.INDEXEDDB, localforage.WEBSQL]);
 let store1 = localforage.createInstance({
   name: "wikiknogen",
-  version: 3,
+  version: 7,
   storeName: "api", // Should be alphanumeric, with underscores.
   description: "store api"
 });
@@ -20,7 +20,9 @@ let cacheRequest = async requestParams => {
   let item = await store1.getItem(JSON.stringify(requestParams));
   if (!item) {
     let response = await request(requestParams);
-    await store1.setItem(JSON.stringify(requestParams), response.data);
+    if (response.status == 200) {
+      await store1.setItem(JSON.stringify(requestParams), response.data);
+    }
     item = response.data;
   }
   return item;
@@ -30,7 +32,9 @@ let cacheRequestWiki = async requestParams => {
   let item = await store2.getItem(JSON.stringify(requestParams));
   if (!item) {
     let response = await requestwiki(requestParams);
-    await store2.setItem(JSON.stringify(requestParams), response.data);
+    if (response.status == 200) {
+      await store2.setItem(JSON.stringify(requestParams), response.data);
+    }
     item = response.data;
   }
   return item;
@@ -42,6 +46,15 @@ export async function getWikiData(params) {
     method: "post",
     data: params
   };
+  return await cacheRequest(requestParams);
+}
+export async function getMagZipf(params) {
+  let requestParams = {
+    url: "/mag/getMagZipf",
+    method: "post",
+    data: params
+  };
+  // return request(requestParams);
   return await cacheRequest(requestParams);
 }
 
@@ -90,6 +103,15 @@ export async function getCoreZipfByNodes(params) {
 export async function getArticlesTotal(params) {
   let requestParams = {
     url: "/wiki/getArticlesTotal",
+    method: "post",
+    data: params
+  };
+  return await cacheRequest(requestParams);
+}
+
+export async function getArticlesTotalByCore(params) {
+  let requestParams = {
+    url: "/wiki/getArticlesTotalByCore",
     method: "post",
     data: params
   };
