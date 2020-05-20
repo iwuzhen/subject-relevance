@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-05-18 02:30:12
+ * @LastEditTime: 2020-05-20 16:20:52
  * @Description: 
  -->
 
@@ -105,6 +105,8 @@ import {
 } from "@/api/data";
 import { localCache } from "@/api/cache";
 
+// tooyip 位置的x位置
+var tipLegend = 0;
 let LC = new localCache({
   storeName: "peoplezipfbynodes", // Should be alphanumeric, with underscores.
   description: "store api"
@@ -171,6 +173,26 @@ export default {
       this.myChart2.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
+    this.myChart2.getZr().on("click", params => {
+      var pointInPixel = [params.offsetX, params.offsetY];
+
+      if (this.myChart2.containPixel("grid", pointInPixel)) {
+        // var xIndex = this.myChart2.convertFromPixel({ seriesIndex: 0 }, [
+        //   params.offsetX,
+        //   params.offsetY
+        // ])[0];
+        // console.log(xIndex);
+        let series = [];
+        for (let ix in this.chartOptZipf.legend.data) {
+          series[
+            tipLegend.indexOf(this.chartOptZipf.legend.data[ix])
+          ] = this.chartOptZipf.series[ix];
+        }
+        this.chartOptZipf.legend.data = tipLegend;
+        this.chartOptZipf.series = series;
+        this.myChart2.setOption(this.chartOptZipf, true);
+      }
+    });
   },
   computed: {
     nodeMax: function() {
@@ -308,62 +330,6 @@ export default {
         });
     },
 
-    setOptions_slope(dataList) {
-      // 原始线
-      let seriesTitleArray = [];
-      for (let data of dataList) {
-        let gradientList = [];
-        for (let i = 0; i < data.y.length; i++) {
-          let dataItem = [];
-          for (let j = 0; j < data.y[i].length; j++) {
-            dataItem.push([data.x[j], data.y[i][j]]);
-          }
-          let myRegression = ecStat.regression(
-            "linear",
-            dataItem.slice(this.nodeRange[0], this.nodeRange[1])
-          );
-
-          gradientList.push(myRegression.parameter.gradient.toFixed(4));
-        }
-        let title = data.title.replace(" zipf分布", "");
-        // 为了排序，放在一起
-        seriesTitleArray.push([
-          title,
-          extendLineSeries({
-            name: title,
-            type: "line",
-            smooth: false,
-            data: gradientList
-          })
-        ]);
-      }
-      seriesTitleArray.sort((x, y) => {
-        return y[1].data.slice(-1) - x[1].data.slice(-1);
-      });
-      let _opt = extendEchartsOpts({
-        title: {
-          text: "斜率趋势"
-        },
-        legend: {
-          data: seriesTitleArray.map(item => {
-            return item[0];
-          })
-        },
-        xAxis: {
-          type: "category",
-          name: "Year",
-          data: this.yearOpt
-        },
-        yAxis: {
-          type: "value",
-          name: "Slope"
-        },
-        series: seriesTitleArray.map(item => {
-          return item[1];
-        })
-      });
-      return _opt;
-    },
     setOptions_zipf(data) {
       // 设置
       let seriesList = [];
@@ -426,6 +392,33 @@ export default {
       let xmax = Math.floor(Math.max(...data.x) * 10) + 1;
       console.log(data);
       let _opt = extendEchartsOpts({
+        tooltip: {
+          trigger: "axis",
+          textStyle: {
+            align: "left"
+          },
+          axisPointer: {
+            type: "cross",
+            animation: true,
+            label: {
+              backgroundColor: "#505765"
+            }
+          },
+          formatter: function(params) {
+            params.sort((x, y) => {
+              return y.data[1] - x.data[1];
+            });
+            let showHtm = ` ${params[0].name}<br>`;
+            for (let i = 0; i < params.length; i++) {
+              let _text = params[i].seriesName;
+              let _data = params[i].data;
+              let _marker = params[i].marker;
+              showHtm += `${_marker}${_text}：x${_data[0]},y：${_data[1]} <br>`;
+            }
+            tipLegend = params.map(item => item.seriesName);
+            return showHtm;
+          }
+        },
         title: {
           text: data.title
         },

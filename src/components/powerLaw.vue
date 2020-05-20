@@ -41,6 +41,9 @@ import { getZipf } from "@/api/index";
 import ecStat from "echarts-stat";
 import { basiCategorys, extendEchartsOpts, extendLineSeries } from "@/api/data";
 
+// tooyip 位置的x位置
+var tipLegend = 0;
+
 export default {
   name: "zipf幂律",
   data() {
@@ -63,7 +66,8 @@ export default {
         2019,
         "历年总和"
       ],
-      loading: false
+      loading: false,
+      chartOpt: {}
     };
   },
   mounted() {
@@ -71,6 +75,32 @@ export default {
       this.myChart.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
+    this.myChart.getZr().on("click", params => {
+      var pointInPixel = [params.offsetX, params.offsetY];
+
+      if (this.myChart.containPixel("grid", pointInPixel)) {
+        // var xIndex = this.myChart2.convertFromPixel({ seriesIndex: 0 }, [
+        //   params.offsetX,
+        //   params.offsetY
+        // ])[0];
+        // console.log(xIndex);
+        let series = [];
+        for (let ix in this.chartOpt.legend.data) {
+          series[
+            tipLegend.indexOf(this.chartOpt.legend.data[ix])
+          ] = this.chartOpt.series[ix];
+        }
+        this.chartOpt.legend.data = tipLegend;
+        this.chartOpt.series = series;
+        this.myChart.setOption(this.chartOpt, true);
+      }
+    });
+  },
+  watch: {
+    // 更新图标
+    chartOpt: function(opt) {
+      this.myChart.setOption(opt, true);
+    }
   },
   computed: {
     myChart: function() {
@@ -113,8 +143,7 @@ export default {
         });
     },
     drawChart(data) {
-      let options = this.setOptions(data);
-      this.myChart.setOption(options, true);
+      this.chartOpt = this.setOptions(data);
       this.loading = false;
     },
     setOptions(data) {
@@ -177,6 +206,33 @@ export default {
         );
       }
       let _opt = extendEchartsOpts({
+        tooltip: {
+          trigger: "axis",
+          textStyle: {
+            align: "left"
+          },
+          axisPointer: {
+            type: "cross",
+            animation: true,
+            label: {
+              backgroundColor: "#505765"
+            }
+          },
+          formatter: function(params) {
+            params.sort((x, y) => {
+              return y.data[1] - x.data[1];
+            });
+            let showHtm = ` ${params[0].name}<br>`;
+            for (let i = 0; i < params.length; i++) {
+              let _text = params[i].seriesName;
+              let _data = params[i].data;
+              let _marker = params[i].marker;
+              showHtm += `${_marker}${_text}：x${_data[0]},y：${_data[1]} <br>`;
+            }
+            tipLegend = params.map(item => item.seriesName);
+            return showHtm;
+          }
+        },
         title: {
           text: data.title
         },

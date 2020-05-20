@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-05-18 02:29:53
+ * @LastEditTime: 2020-05-20 16:17:52
  * @Description: 
  -->
 
@@ -122,7 +122,8 @@ let LC = new localCache({
   storeName: "corezipfbynodes", // Should be alphanumeric, with underscores.
   description: "store api"
 });
-
+// tooyip 位置的x位置
+var tipLegend = 0;
 export default {
   name: "Core_zipf幂律斜率",
   data() {
@@ -202,6 +203,31 @@ export default {
       this.myChart2.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
+    this.myChart2.on("click", function(params) {
+      console.log(params);
+    });
+    this.myChart2.getZr().on("click", params => {
+      var pointInPixel = [params.offsetX, params.offsetY];
+
+      if (this.myChart2.containPixel("grid", pointInPixel)) {
+        // var xIndex = this.myChart2.convertFromPixel({ seriesIndex: 0 }, [
+        //   params.offsetX,
+        //   params.offsetY
+        // ])[0];
+        // console.log(xIndex);
+        let series = [];
+        for (let ix in this.chartOptZipf.legend.data) {
+          series[
+            tipLegend.indexOf(this.chartOptZipf.legend.data[ix])
+          ] = this.chartOptZipf.series[ix];
+        }
+        this.chartOptZipf.legend.data = tipLegend;
+        this.chartOptZipf.series = series;
+        // console.log(this.chartOptZipf);
+        this.myChart2.setOption(this.chartOptZipf, true);
+        // console.log("set");
+      }
+    });
   },
   computed: {
     nodeMax: function() {
@@ -415,6 +441,33 @@ export default {
 
       console.log(data);
       let _opt = extendEchartsOpts({
+        tooltip: {
+          trigger: "axis",
+          textStyle: {
+            align: "left"
+          },
+          axisPointer: {
+            type: "cross",
+            animation: true,
+            label: {
+              backgroundColor: "#505765"
+            }
+          },
+          formatter: function(params) {
+            params.sort((x, y) => {
+              return y.data[1] - x.data[1];
+            });
+            let showHtm = ` ${params[0].name}<br>`;
+            for (let i = 0; i < params.length; i++) {
+              let _text = params[i].seriesName;
+              let _data = params[i].data;
+              let _marker = params[i].marker;
+              showHtm += `${_marker}${_text}：x${_data[0]},y：${_data[1]} <br>`;
+            }
+            tipLegend = params.map(item => item.seriesName);
+            return showHtm;
+          }
+        },
         title: {
           text: data.title
         },
