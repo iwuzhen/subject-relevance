@@ -4,7 +4,7 @@ import * as localforage from "localforage";
 localforage.setDriver([localforage.INDEXEDDB, localforage.WEBSQL]);
 let store1 = localforage.createInstance({
   name: "wikiknogen",
-  version: 1,
+  version: 3,
   storeName: "api", // Should be alphanumeric, with underscores.
   description: "store api"
 });

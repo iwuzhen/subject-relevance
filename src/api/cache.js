@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-05-17 22:38:56
  * @LastEditors: ider
- * @LastEditTime: 2020-05-18 12:55:42
+ * @LastEditTime: 2020-05-20 15:42:40
  * @Description: 缓存工具包
  */
 
@@ -16,7 +16,7 @@ export class localCache {
       Object.assign(
         {
           name: "wikiknogen",
-          version: 1,
+          version: 3,
           storeName: "api", // Should be alphanumeric, with underscores.
           description: "store api"
         },
