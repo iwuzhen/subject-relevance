@@ -10,7 +10,7 @@ let store1 = localforage.createInstance({
 });
 let store2 = localforage.createInstance({
   name: "wikiknogenTree",
-  version: 1.0,
+  version: 7,
   storeName: "api", // Should be alphanumeric, with underscores.
   description: "store api"
 });
@@ -236,6 +236,7 @@ export function getBritannicaTree(params) {
 export async function getWikiPageTree(params) {
   let requestParams;
   if (params.db === "WIKI11") {
+    params.db = "WIKI13";
     requestParams = {
       url: "/wikidb11/childArticles",
       method: "get",
@@ -243,7 +244,7 @@ export async function getWikiPageTree(params) {
     };
   } else if (params.db === "WIKI13") {
     requestParams = {
-      url: "/wikidb11/childArticles",
+      url: "/wikidb13/childArticles",
       method: "get",
       params: params
     };
