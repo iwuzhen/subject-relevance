@@ -262,6 +262,7 @@ export async function getWikiPageTree(params) {
 export async function getWikiCategoryTree(params) {
   let requestParams;
   if (params.db === "WIKI11") {
+    params.db = "WIKI13";
     requestParams = {
       url: "/wikidb11/childCategories",
       method: "get",
@@ -269,7 +270,7 @@ export async function getWikiCategoryTree(params) {
     };
   } else if (params.db === "WIKI13") {
     requestParams = {
-      url: "/wikidb11/childCategories",
+      url: "/wikidb13/childCategories",
       method: "get",
       params: params
     };
