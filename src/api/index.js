@@ -10,7 +10,7 @@ let store1 = localforage.createInstance({
 });
 let store2 = localforage.createInstance({
   name: "wikiknogenTree",
-  version: 7,
+  version: 8,
   storeName: "api", // Should be alphanumeric, with underscores.
   description: "store api"
 });
