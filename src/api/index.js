@@ -19,11 +19,14 @@ let store2 = localforage.createInstance({
 let cacheRequest = async requestParams => {
   let item = await store1.getItem(JSON.stringify(requestParams));
   if (!item) {
+    console.log("无缓存");
     let response = await request(requestParams);
     if (response.status == 200) {
       await store1.setItem(JSON.stringify(requestParams), response.data);
     }
     item = response.data;
+  } else {
+    console.log("命中缓存");
   }
   return item;
 };
@@ -31,11 +34,14 @@ let cacheRequest = async requestParams => {
 let cacheRequestWiki = async requestParams => {
   let item = await store2.getItem(JSON.stringify(requestParams));
   if (!item) {
+    console.log("无缓存");
     let response = await requestwiki(requestParams);
     if (response.status == 200) {
       await store2.setItem(JSON.stringify(requestParams), response.data);
     }
     item = response.data;
+  } else {
+    console.log("命中缓存");
   }
   return item;
 };

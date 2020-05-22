@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-05-14 19:42:52
+ * @LastEditTime: 2020-05-22 13:27:34
  * @Description: 
  -->
 <template>
@@ -165,10 +165,15 @@ export default {
         2019,
         2020
       ],
-      basiccategorys: basiCategorys
+      basiCategorys: basiCategorys
     };
   },
   computed: {
+    basiccategorys() {
+      let ba = ["Contents"];
+      ba.push(...this.basiCategorys);
+      return ba;
+    },
     prettyHtml() {
       return Diff2Html.html(this.diffs, {
         drawFileList: true,
@@ -231,10 +236,7 @@ export default {
         db: `WIKI${_wikiDB}`
       });
 
-      if (
-        response.data.childList.length == 0 &&
-        response.data.parentList.length == 0
-      ) {
+      if (response.childList.length == 0 && response.parentList.length == 0) {
         this.searchItems = [];
       } else {
         this.searchItems = [val];
