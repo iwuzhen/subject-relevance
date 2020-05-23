@@ -124,6 +124,15 @@ export async function getArticlesTotalByCore(params) {
   return await cacheRequest(requestParams);
 }
 
+export async function getArticlesTotalByCoreNew(params) {
+  let requestParams = {
+    url: "/wiki/getArticlesTotalByCoreNew",
+    method: "post",
+    data: params
+  };
+  return await cacheRequest(requestParams);
+}
+
 export function getDistanceByFile(params) {
   return request({
     url: "/wiki/getDistanceByFile",

@@ -74,6 +74,11 @@ export default {
             to: "/CoreArticlesTotal"
           },
           {
+            title: "Core WIKI 文章数 v2",
+            text: "5月22日方法论，Core WIKI 文章数查询",
+            to: "/CoreArticlesTotalV2"
+          },
+          {
             title: "WIKI 文章数",
             text: "WIKI 文章数查询",
             to: "/ArticlesTotal"
