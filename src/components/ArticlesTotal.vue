@@ -47,7 +47,11 @@
 
 <script>
 import { getArticlesTotal } from "@/api/index";
-import { extendEchartsOpts, lessCategorys, extendLineSeries } from "@/api/data";
+import {
+  extendEchartsOpts,
+  wikiArticleCategory,
+  extendLineSeries
+} from "@/api/data";
 
 export default {
   name: "ArticleTotal",
@@ -56,7 +60,7 @@ export default {
       subjectRelevances: [],
       subjectLevel: "0",
       subjecType: "0",
-      categorys: lessCategorys,
+      categorys: wikiArticleCategory,
       typeOptions: [
         {
           value: "0",

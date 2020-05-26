@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-05-20 17:27:16
+ * @LastEditTime: 2020-05-26 19:49:18
  * @Description:
  */
 
@@ -125,6 +125,48 @@ export let lessPersonCategorys = [
   "Mechanical engineering",
   "Industrial engineering",
   "Environmental engineering"
+].sort();
+export let wikiArticleCategory = [
+  "Materials science",
+  "Geology",
+  "Geography",
+  "Environmental science",
+  "Medicine",
+  "Psychology",
+  "Logic",
+  "Philosophy",
+  "Mathematics",
+  "Physics",
+  "Chemistry",
+  "Biology",
+  "Sociology",
+  "Economics",
+  "Political science",
+  "Linguistics",
+  "History",
+  "Computer science",
+  "Artificial intelligence",
+  "Engineering disciplines",
+  "Chemical engineering",
+  "Civil engineering",
+  "Electrical engineering",
+  "Mechanical engineering",
+  "Biological engineering",
+  "Computer engineering",
+  "Industrial engineering",
+  "Environmental engineering",
+  "Cognitive science",
+  "Machine learning",
+  "Blockchains",
+  "Deep learning",
+  "Theoretical computer science",
+  "Quantum computing",
+  "Genetic engineering",
+  "Genome editing",
+  "Anthropology",
+  "Neuroscience",
+  "Literature",
+  "Theoretical physics"
 ].sort();
 export let peopleCategorys = [
   ["Anthropology", "Anthropologist"],
