@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-05-26 19:49:18
+ * @LastEditTime: 2020-05-27 18:52:57
  * @Description:
  */
 
@@ -242,7 +242,7 @@ export let coreCategorys = [
 export function extendLineSeries(series) {
   return Object.assign(
     {
-      symbolSize: 8,
+      symbolSize: 12,
       smooth: false
     },
     series
