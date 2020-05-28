@@ -54,19 +54,9 @@ deploy_master:
     - chmod 600 ~/.ssh/id_rsa
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
     - rsync -rav --delete dist/ ider@192.168.1.223:/home/ider/docker-compose/nginx/www/wiki.knogen.com
-
-deploy_dev:
-  image: alpine
-  stage: deploy
-  only:
-    - "v1.2_20180912"
-  tags: 
-    - builder
-  script:
-    - sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
-    - apk add --no-cache rsync openssh
-    - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
+    - echo "$SSH_PRIVATE_KEY_TOP" > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - rsync -rav --delete dist/ ider@192.168.1.223:/home/ider/docker-compose/nginx/www/wiki.knogen.com
+    - rsync -rav -e 'ssh -p 579' --delete dist/ www-data@114.55.237.247:/var/www/wiki.knogen.com
+
+
+
