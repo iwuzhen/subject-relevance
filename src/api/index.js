@@ -112,7 +112,8 @@ export async function getArticlesTotal(params) {
     method: "post",
     data: params
   };
-  return await cacheRequest(requestParams);
+  let res = await request(requestParams);
+  return res.data;
 }
 
 export async function getArticlesTotalByCore(params) {
@@ -121,7 +122,8 @@ export async function getArticlesTotalByCore(params) {
     method: "post",
     data: params
   };
-  return await cacheRequest(requestParams);
+  let res = await request(requestParams);
+  return res.data;
 }
 
 export async function getArticlesTotalByCoreNew(params) {
@@ -130,7 +132,8 @@ export async function getArticlesTotalByCoreNew(params) {
     method: "post",
     data: params
   };
-  return await cacheRequest(requestParams);
+  let res = await request(requestParams);
+  return res.data;
 }
 
 export function getDistanceByFile(params) {
