@@ -223,12 +223,12 @@ export default {
         xAxis: {
           type: "value",
           max: xmax,
-          name: "log (rank)"
+          name: "log (Degree)"
         },
         yAxis: {
           type: "value",
           max: ymax,
-          name: "log (citation)"
+          name: "log (Count)"
         },
         series: seriesList
       });
