@@ -30,6 +30,7 @@ const CoreLinks = () => import("@/components/CoreLinks");
 const CoreArticlesTotal = () => import("@/components/CoreArticlesTotal");
 const MagZipf = () => import("@/components/MagZipf");
 const CoreArticlesTotalV2 = () => import("@/components/CoreArticlesTotalV2");
+const MagInnerZipf = () => import("@/components/MagInnerZipf");
 
 Vue.use(Router);
 
@@ -170,6 +171,11 @@ export default new Router({
       path: "/MagZipf",
       name: "MagZipf",
       component: MagZipf
+    },
+    {
+      path: "/MagInnerZipf",
+      name: "MagInnerZipf",
+      component: MagInnerZipf
     }
   ],
   scrollBehavior(to, from, savedPosition) {

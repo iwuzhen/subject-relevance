@@ -139,6 +139,11 @@ export default {
             title: "MAG 幂律",
             text: "MAG 幂律",
             to: "/MagZipf"
+          },
+          {
+            title: "MAG 小世界幂律",
+            text: "MAG 小世界幂律",
+            to: "/MagInnerZipf"
           }
         ],
         幂率: [

@@ -60,7 +60,15 @@ export async function getMagZipf(params) {
     method: "post",
     data: params
   };
-  // return request(requestParams);
+  return await cacheRequest(requestParams);
+}
+
+export async function getMagInnerZipf(params) {
+  let requestParams = {
+    url: "/mag/getMagInnerZipf",
+    method: "post",
+    data: params
+  };
   return await cacheRequest(requestParams);
 }
 
