@@ -34,7 +34,6 @@ export default {
   data() {
     return {
       subjectTarget: [],
-      categorys: magCategory,
       loading: false,
       chartOpt: {}
     };
@@ -71,6 +70,16 @@ export default {
   computed: {
     myChart: function() {
       return this.$echarts.init(document.getElementById("subjectChart"));
+    },
+    categorys: function() {
+      let categoryArray = magCategory.map(item => {
+        return {
+          value: item,
+          text: item
+        };
+      });
+      categoryArray.unshift({ text: "All (混合幂律)", value: "all" });
+      return categoryArray;
     }
   },
   watch: {
