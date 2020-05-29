@@ -96,7 +96,7 @@ export default {
           {
             title: "WIKI 分类层次",
             text: "WIKI 分类层次查询",
-            href: "http://wikidb.lambdax.cn:5555/wikidb_web/first.jsp"
+            href: "http://wikidb.lambdax.cn:10080/wikidb_web/first.jsp"
           }
         ],
         "Core 学科相关度": [
