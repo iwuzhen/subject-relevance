@@ -54,7 +54,7 @@ import {
 } from "@/api/data";
 
 export default {
-  name: "ArticleTotal",
+  name: "CoreArticleTotal",
   data() {
     return {
       subjectRelevances: [],

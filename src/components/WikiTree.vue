@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-05-22 13:27:34
+ * @LastEditTime: 2020-06-01 21:23:54
  * @Description: 
  -->
 <template>
@@ -70,6 +70,13 @@
             return-object
             transition
           >
+            <template v-slot:label="{ item }">
+              <b style="color:orange" v-if="isCoreSunject(item.name)">{{
+                item.name
+              }}</b>
+
+              <span v-else>{{ item.name }}</span>
+            </template>
             <template v-slot:append="{ item }">
               <v-btn
                 text
@@ -107,6 +114,13 @@
             return-object
             transition
           >
+            <template v-slot:label="{ item }">
+              <b style="color:orange" v-if="isCoreSunject(item.name)">{{
+                item.name
+              }}</b>
+
+              <span v-else>{{ item.name }}</span>
+            </template>
             <template v-slot:append="{ item }">
               <v-btn
                 text
@@ -245,6 +259,26 @@ export default {
     }
   },
   methods: {
+    isCoreSunject(name) {
+      let keyMatch = [
+        "Subfields of",
+        "Areas of",
+        "Fields of",
+        "Branches of",
+        "Subdivisions of",
+        "by field",
+        "by fields",
+        "of field",
+        "by specialty",
+        "by topic"
+      ];
+      for (let key of keyMatch) {
+        if (name.indexOf(key) > -1) {
+          return true;
+        }
+      }
+      return false;
+    },
     loadDefauleCategory() {
       this.treeItems1 = this.basiccategorys.map(item => {
         return {
@@ -285,7 +319,11 @@ export default {
         return item.name;
       });
       names1 = names1.filter(item => {
-        if (item.indexOf("文章") > -1 || item.indexOf("子类") > -1)
+        if (
+          item.indexOf("文章") > -1 ||
+          item.indexOf("子类") > -1 ||
+          item.indexOf("父类") > -1
+        )
           return false;
         return true;
       });
@@ -293,7 +331,11 @@ export default {
         return item.name;
       });
       names2 = names2.filter(item => {
-        if (item.indexOf("文章") > -1 || item.indexOf("子类") > -1)
+        if (
+          item.indexOf("文章") > -1 ||
+          item.indexOf("子类") > -1 ||
+          item.indexOf("父类") > -1
+        )
           return false;
         return true;
       });
@@ -310,11 +352,12 @@ export default {
     async _fetchChildren(treeitem, _wikiDB) {
       if (
         treeitem.name.indexOf("文章") > -1 ||
-        treeitem.name.indexOf("子类") > -1
+        treeitem.name.indexOf("子类") > -1 ||
+        treeitem.name.indexOf("父类") > -1
       ) {
         console.log("cat");
       } else {
-        let articleLength, categoryLength, articleChildrens, categoryChildrens;
+        let articleLength, articleChildrens, categoryChildrens, categoryParents;
         console.log("扩展 tree");
         try {
           let data = await getWikiPageTree({
@@ -335,7 +378,6 @@ export default {
             categoryTitle: Buffer.from(treeitem.name).toString("base64"),
             db: `WIKI${_wikiDB}`
           });
-          categoryLength = data.childList.length;
           categoryChildrens = data.childList.map(item => {
             return {
               id: uuidv4(),
@@ -344,6 +386,16 @@ export default {
               children: []
             };
           });
+
+          categoryParents = data.parentList.map(item => {
+            return {
+              id: uuidv4(),
+              name: item,
+              leaf: true,
+              children: []
+            };
+          });
+
           treeitem.children.push({
             id: uuidv4(),
             name: `文章 ${articleLength}`,
@@ -352,8 +404,14 @@ export default {
           });
           treeitem.children.push({
             id: uuidv4(),
-            name: `子类 ${categoryLength}`,
+            name: `子类 ${data.childList.length}`,
             children: categoryChildrens,
+            file: "category"
+          });
+          treeitem.children.push({
+            id: uuidv4(),
+            name: `父类 ${data.parentList.length}`,
+            children: categoryParents,
             file: "category"
           });
         } catch (error) {
