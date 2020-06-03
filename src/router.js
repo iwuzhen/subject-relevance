@@ -33,6 +33,8 @@ const CoreArticlesTotalV2 = () => import("@/components/CoreArticlesTotalV2");
 const MagInnerZipf = () => import("@/components/MagInnerZipf");
 const CoreArticlesTotalNew_v3 = () =>
   import("@/components/CoreArticlesTotalNew_v3");
+const CoreSWUndirectLimit = () => import("@/components/CoreSWUndirectLimit");
+const CoreSMUndirected = () => import("@/components/CoreSMUndirected");
 
 Vue.use(Router);
 
@@ -43,6 +45,16 @@ export default new Router({
       path: "/",
       name: "index",
       component: IndexPage
+    },
+    {
+      path: "/CoreSWUndirectLimit",
+      name: "CoreSWUndirectLimit",
+      component: CoreSWUndirectLimit
+    },
+    {
+      path: "/CoreSMUndirected",
+      name: "CoreSMUndirected",
+      component: CoreSMUndirected
     },
     {
       path: "/discipline",

@@ -183,6 +183,18 @@ export default {
             to: "/powerLawPageRank"
           }
         ],
+        "Core 小世界": [
+          {
+            title: "规模趋势",
+            text: "小世界 Core 规模趋势",
+            to: "/CoreSWUndirectLimit"
+          },
+          {
+            title: "逐年趋势",
+            text: "小世界 Core 逐年趋势",
+            to: "/CoreSMUndirected"
+          }
+        ],
         小世界: [
           {
             title: "规模趋势",

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-05-17 00:49:15
+ * @LastEditTime: 2020-06-04 01:37:47
  * @Description: 
  -->
 
@@ -12,9 +12,8 @@
     <v-row>
       <v-col cols="5">
         <v-select
-          v-model="currentSubjectSelect"
+          v-model="subjectTarget"
           :items="categoryOpt"
-          @change="getData"
           chips
           multiple
           dense
@@ -23,19 +22,26 @@
       </v-col>
       <v-col cols="2">
         <v-select
-          v-model="methodSelect"
-          :items="methodOpt"
+          v-model="quotaSelect"
+          :items="quoteOpt"
           @change="getData"
           label="小世界指标"
         ></v-select>
       </v-col>
-
-      <v-col cols="3">
+      <v-col cols="2">
         <v-select
-          v-model="sourceSelect"
-          :items="sourceOpt"
+          v-model="methodSelect"
+          :items="methodOpt"
           @change="getData"
-          label="数据源"
+          label="网络扩大方式"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="limitSelect"
+          :items="limitOpt"
+          @change="getData"
+          label="网络大小"
         ></v-select>
       </v-col>
       <v-col align-self="center" cols="2">
@@ -90,77 +96,68 @@
 </template>
 
 <script>
-import smallworldundirect from "../data/smallworldundirect.json";
 import { basiCategorys, extendEchartsOpts, extendLineSeries } from "@/api/data";
+import { getUndirectedByYear } from "@/api/index";
+const Limiter = require("async-limiter");
+
 export default {
   name: "SmallWorld无向图逐年趋势",
   data() {
     return {
       dialog: false,
-      currentSubjectSelect: [],
-      methodSelect: "a",
-      methodOpt: [
+      subjectTarget: [],
+      quotaSelect: "average_distance",
+      quoteOpt: [
         {
-          value: "a",
+          value: "average_distance",
           text: "平均路径长度"
         },
         {
-          value: "c",
+          value: "clustering_coefficient",
           text: "集聚系数"
         },
         {
-          value: "nv",
+          value: "number_node",
           text: "网络点数"
         },
         {
-          value: "ne",
+          value: "number_edge",
           text: "网络边数"
         }
       ],
-      sourceSelect: "w-2500",
-      sourceOpt: [
-        {
-          value: "w-2000",
-          text: "wikipedia top 2000"
-        },
-        {
-          value: "w-2500",
-          text: "wikipedia top 2500"
-        },
-        {
-          value: "w-3000",
-          text: "wikipedia top 3000"
-        },
-        {
-          value: "g-2000",
-          text: "google top 2000"
-        },
-        {
-          value: "g-2500",
-          text: "google top 2500"
-        },
-        {
-          value: "g-3000",
-          text: "google top 3000"
-        },
-        {
-          value: "w2",
-          text: "wikipedia level 2"
-        },
-        {
-          value: "w3",
-          text: "wikipedia level 3"
-        },
-        {
-          value: "m",
-          text: "Mag (尚未完整)"
-        }
-      ],
+      limitSelect: 4000,
+      limitOpt: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000],
       categoryOpt: basiCategorys,
-      loading: false
+
+      methodSelect: "google",
+      methodOpt: ["random", "google", "category"],
+      loading: false,
+      chartOpt: {}
     };
   },
+  watch: {
+    // 更新图标
+    chartOpt: function(opt) {
+      this.myChart.setOption(opt, true);
+    },
+    subjectTarget: async function(newValue, oldValue) {
+      this.loading = true;
+      let diffArray = newValue.filter(item => !oldValue.includes(item));
+      if (diffArray.length > 0) {
+        this.asyncLimier.push(async cb => {
+          await this.getOneDate(diffArray[0]);
+
+          cb();
+        });
+      }
+      this.asyncLimier.onDone(() => {
+        console.log("all done:");
+        this.getData();
+      });
+    }
+  },
   mounted() {
+    this.asyncLimier = new Limiter({ concurrency: 1 });
     window.onresize = () => {
       this.myChart.resize();
     };
@@ -172,50 +169,76 @@ export default {
     }
   },
   methods: {
+    async getOneDate(subject) {
+      let opt = {
+        name: subject,
+        method: this.methodSelect,
+        version: "undirect_graph_normal_v1",
+        quota: this.quotaSelect,
+        limit: this.limitSelect
+      };
+      try {
+        return await getUndirectedByYear(opt);
+      } catch (error) {
+        this.$emit("emitMesage", `请求失败:${error}`);
+      }
+    },
     async getData() {
-      if (this.currentSubjectSelect.length === 0) {
+      if (this.subjectTarget.length === 0) {
         return false;
       }
       this.loading = true;
       let data = {
         y: [],
         x: [],
-        legend: this.currentSubjectSelect,
+        legend: [],
         title: `小世界无向图逐年分布`
       };
-      let selectSubjectIds = [];
-      for (let selectSubjectName of this.currentSubjectSelect) {
-        selectSubjectIds.push(smallworldundirect["n"][selectSubjectName]);
-      }
-      let ts = new Set();
-      let legend = {};
-      for (let sbj of selectSubjectIds) {
-        legend[sbj] = [];
-      }
+      // let selectSubjectIds = [];
+      let allSubject = {};
+      let allYears = [];
+      let legend = [];
+      let emptySubject = [];
 
-      let dataItem = smallworldundirect[this.sourceSelect];
-      for (let row of dataItem) {
-        ts.add(row["y"]);
-      }
-      data["x"] = Array.from(ts).sort((x, y) => {
-        return x - y;
-      });
-
-      for (let row of dataItem) {
-        if (selectSubjectIds.indexOf(row["n"]) > -1) {
-          legend[row["n"]][data["x"].indexOf(row["y"])] =
-            row[this.methodSelect];
+      for (let selectSubjectName of this.subjectTarget) {
+        let repdata = await this.getOneDate(selectSubjectName);
+        if (repdata.x === null) {
+          emptySubject.push(selectSubjectName);
+          continue;
         }
+        allSubject[selectSubjectName] = repdata;
+        legend.push(selectSubjectName);
+        allYears.push(...repdata.x);
       }
-      for (let sbj of selectSubjectIds) {
-        data["y"].push(legend[sbj]);
+      if (emptySubject.length > 0) {
+        this.$emit("emitMesage", `${emptySubject},没有数据`);
       }
+      if (legend.length == 0) {
+        this.loading = false;
+        this.$emit("emitMesage", `没有更新图表`);
+        return;
+      }
+
+      allYears = Array.from(new Set(allYears)).sort();
+      data.x = allYears;
+      data.legend = legend;
+
+      for (let selectSubjectName of legend) {
+        let yArray = [];
+        for (let year of allSubject[selectSubjectName].x) {
+          yArray[allYears.indexOf(year)] =
+            allSubject[selectSubjectName].y[
+              allSubject[selectSubjectName].x.indexOf(year)
+            ];
+        }
+        data.y.push(yArray);
+      }
+
       console.log(data);
       this.drawChart(data);
     },
     drawChart(data) {
-      let options = this.setOptions(data);
-      this.myChart.setOption(options, true);
+      this.chartOpt = this.setOptions(data);
       this.loading = false;
     },
     setOptions(data) {

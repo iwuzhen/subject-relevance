@@ -1,16 +1,26 @@
 import request from "@/utils/request";
 import requestwiki from "@/utils/requestwiki";
+import requestgo from "@/utils/requestgo";
 import * as localforage from "localforage";
 localforage.setDriver([localforage.INDEXEDDB, localforage.WEBSQL]);
+
 let store1 = localforage.createInstance({
   name: "wikiknogen",
   version: 7,
   storeName: "api", // Should be alphanumeric, with underscores.
   description: "store api"
 });
+
 let store2 = localforage.createInstance({
   name: "wikiknogenTree",
   version: 8,
+  storeName: "api", // Should be alphanumeric, with underscores.
+  description: "store api"
+});
+
+let store3 = localforage.createInstance({
+  name: "wikiGo",
+  version: 1,
   storeName: "api", // Should be alphanumeric, with underscores.
   description: "store api"
 });
@@ -45,6 +55,44 @@ let cacheRequestWiki = async requestParams => {
   }
   return item;
 };
+
+// 对请求进行缓存
+export let cacheRequestGo = async requestParams => {
+  let item = await store3.getItem(JSON.stringify(requestParams));
+  if (!item) {
+    console.log("无缓存");
+    let response = await requestgo(requestParams);
+    if (response.status == 200) {
+      console.log(response.status);
+      await store3.setItem(JSON.stringify(requestParams), response.data);
+    }
+    item = response.data;
+  } else {
+    console.log("命中缓存");
+  }
+  return item;
+};
+
+export async function getScaleTrend(params) {
+  let requestParams = {
+    url: "/smallworld/scaleTrend",
+    method: "get",
+    params: params
+  };
+  // let res = await requestgo(requestParams);
+  // return res.data;
+  return await cacheRequestGo(requestParams);
+}
+export async function getUndirectedByYear(params) {
+  let requestParams = {
+    url: "/smallworld/undirectedByYear",
+    method: "get",
+    params: params
+  };
+  // let res = await requestgo(requestParams);
+  // return res.data;
+  return await cacheRequestGo(requestParams);
+}
 
 export async function getWikiData(params) {
   let requestParams = {

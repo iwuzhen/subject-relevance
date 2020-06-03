@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-05-17 00:49:36
+ * @LastEditTime: 2020-06-03 23:57:29
  * @Description: 
  -->
 
@@ -12,9 +12,8 @@
     <v-row>
       <v-col cols="6">
         <v-select
-          v-model="currentSubjectSelect"
+          v-model="subjectTarget"
           :items="categoryOpt"
-          @change="getData"
           small-chips
           dense
           deletable-chips
@@ -39,8 +38,8 @@
     <v-row>
       <v-col cols="4">
         <v-select
-          v-model="netSelect"
-          :items="netOpt"
+          v-model="methodSelect"
+          :items="methodOpt"
           @change="getData"
           dense
           small-chips
@@ -50,8 +49,8 @@
       </v-col>
       <v-col cols="2">
         <v-select
-          v-model="methodSelect"
-          :items="methodOpt"
+          v-model="quotaSelect"
+          :items="quotaOpt"
           @change="getData"
           dense
           label="小世界指标"
@@ -116,43 +115,55 @@
 </template>
 
 <script>
-import smallworldundirectLimter from "../data/smallworldundirectLimter.json";
 import { basiCategorys, extendEchartsOpts, extendLineSeries } from "@/api/data";
+import { getScaleTrend } from "@/api/index";
+const Limiter = require("async-limiter");
 
 export default {
-  name: "SmallWorld无向图规模趋势",
+  name: "Core_SmallWorld无向图规模趋势",
   data() {
     return {
       dialog: false,
       loading: false,
-      currentSubjectSelect: [],
-      yearSelect: [],
-      netSelect: [0],
-      methodSelect: "ad",
-      nodeCountSelect: 4000,
-      nodeCountOpt: [500, 2000, 4000, 6000, 10000],
-      methodOpt: [
+      subjectTarget: [],
+      yearSelect: [2020],
+      methodSelect: ["google"],
+      quotaSelect: "average_distance",
+      nodeCountSelect: 8000,
+      nodeCountOpt: [
+        1000,
+        2000,
+        3000,
+        4000,
+        5000,
+        6000,
+        7000,
+        8000,
+        9000,
+        10000
+      ],
+      quotaOpt: [
         {
-          value: "ad",
+          value: "average_distance",
           text: "平均路径长度"
         },
         {
-          value: "cc",
+          value: "clustering_coefficient",
           text: "集聚系数"
         }
       ],
-      netOpt: [
+      methodOpt: [
         {
-          value: 2,
-          text: "三层类距离"
-        },
-        {
-          value: 0,
+          value: "google",
           text: "谷歌距离"
         },
         {
-          value: 1,
+          value: "random",
           text: "随机排序"
+        },
+        {
+          value: "category",
+          text: "类距离"
         }
       ],
 
@@ -170,8 +181,35 @@ export default {
         2019,
         2020
       ],
-      categoryOpt: basiCategorys
+      categoryOpt: basiCategorys,
+      chartOpt: {}
     };
+  },
+  watch: {
+    // 更新图标
+    chartOpt: function(opt) {
+      this.myChart.setOption(opt, true);
+    },
+    subjectTarget: async function(newValue, oldValue) {
+      this.loading = true;
+      let diffArray = newValue.filter(item => !oldValue.includes(item));
+      if (diffArray.length > 0) {
+        this.asyncLimier.push(async cb => {
+          console.log("asyc");
+          for (let year of this.yearSelect) {
+            for (let method of this.methodSelect) {
+              await this.getOneDate(diffArray[0], year, method);
+            }
+          }
+          console.log("aover");
+          cb();
+        });
+      }
+      this.asyncLimier.onDone(() => {
+        console.log("all done:");
+        this.getData();
+      });
+    }
   },
   computed: {
     myChart: function() {
@@ -179,17 +217,35 @@ export default {
     }
   },
   mounted() {
+    this.asyncLimier = new Limiter({ concurrency: 1 });
     window.onresize = () => {
       this.myChart.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
   },
+
   methods: {
+    async getOneDate(subject, year, method) {
+      let opt = {
+        name: subject,
+        year: year,
+        method: method,
+        version: "undirect_graph_normal_v1",
+        quota: this.quotaSelect,
+        limit: 10000
+      };
+      try {
+        return await getScaleTrend(opt);
+      } catch (error) {
+        this.$emit("emitMesage", `请求失败:${error}`);
+      }
+    },
+
     async getData() {
       if (
-        this.currentSubjectSelect.length === 0 ||
+        this.subjectTarget.length === 0 ||
         this.yearSelect.length === 0 ||
-        this.netSelect.length === 0
+        this.methodSelect.length === 0
       ) {
         // this.$message.error("请选择完整");
         return false;
@@ -200,14 +256,13 @@ export default {
 
       let tmp_dict = {};
       let legend = new Set();
-      for (let x of this.currentSubjectSelect) {
+
+      for (let x of this.subjectTarget) {
         for (let y of this.yearSelect) {
-          for (let z of this.netSelect) {
-            let iName = "";
-            if (z === 1) iName = "随机";
-            else if (z === 2) iName = "类排序";
-            else iName = "谷歌";
-            let _id = `${x} -${iName}- ${y}`;
+          for (let z of this.methodSelect) {
+            let repdata = await this.getOneDate(x, y, z);
+
+            let _id = `${x} -${z}- ${y}`;
             legend.add(_id);
             tmp_dict[_id] = {
               n: x,
@@ -215,9 +270,9 @@ export default {
               data: []
             };
             console.log(x, y, z);
-            for (let row of smallworldundirectLimter[x][y][z]) {
-              if (this.nodeCountSelect > row["nv"]) {
-                tmp_dict[_id].data.push([row["nv"], row[this.methodSelect]]);
+            for (let i in repdata.x) {
+              if (repdata.x[i] <= this.nodeCountSelect) {
+                tmp_dict[_id].data.push([repdata.x[i], repdata.y[i]]);
               }
             }
           }
@@ -247,8 +302,7 @@ export default {
       this.drawChart(data);
     },
     drawChart(data) {
-      let options = this.setOptions(data);
-      this.myChart.setOption(options, true);
+      this.chartOpt = this.setOptions(data);
       this.loading = false;
     },
     setOptions(data) {
