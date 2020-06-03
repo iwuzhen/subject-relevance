@@ -134,6 +134,16 @@ export async function getArticlesTotalByCore(params) {
   return res.data;
 }
 
+export async function getArticlesTotalByCoreNew_v3(params) {
+  let requestParams = {
+    url: "/wiki/getArticlesTotalByCoreNew_v3",
+    method: "post",
+    data: params
+  };
+  let res = await request(requestParams);
+  return res.data;
+}
+
 export async function getArticlesTotalByCoreNew(params) {
   let requestParams = {
     url: "/wiki/getArticlesTotalByCoreNew",

@@ -79,6 +79,11 @@ export default {
             to: "/CoreArticlesTotalV2"
           },
           {
+            title: "Core WIKI 文章数 v3",
+            text: "儿童节方法论，Core WIKI 文章数查询",
+            to: "/CoreArticlesTotalNew_v3"
+          },
+          {
             title: "WIKI 文章数",
             text: "WIKI 文章数查询",
             to: "/ArticlesTotal"

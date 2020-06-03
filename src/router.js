@@ -31,6 +31,8 @@ const CoreArticlesTotal = () => import("@/components/CoreArticlesTotal");
 const MagZipf = () => import("@/components/MagZipf");
 const CoreArticlesTotalV2 = () => import("@/components/CoreArticlesTotalV2");
 const MagInnerZipf = () => import("@/components/MagInnerZipf");
+const CoreArticlesTotalNew_v3 = () =>
+  import("@/components/CoreArticlesTotalNew_v3");
 
 Vue.use(Router);
 
@@ -166,6 +168,11 @@ export default new Router({
       path: "/CoreArticlesTotalV2",
       name: "CoreArticlesTotalV2",
       component: CoreArticlesTotalV2
+    },
+    {
+      path: "/CoreArticlesTotalNew_v3",
+      name: "CoreArticlesTotalNew_v3",
+      component: CoreArticlesTotalNew_v3
     },
     {
       path: "/MagZipf",
