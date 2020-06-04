@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-14 22:23:01
  * @LastEditors: ider
- * @LastEditTime: 2020-04-22 22:06:54
+ * @LastEditTime: 2020-06-04 17:44:26
  * @Description: 
  -->
 <template>
@@ -50,7 +50,7 @@
       </v-col> -->
     </v-row>
     <v-row>
-      <v-col col="2" v-for="item in gridData" :key="item">
+      <v-col col="4" v-for="(item, index) in gridData" :key="index">
         <v-card>
           <v-card-title>{{ item.title }}</v-card-title>
           <v-data-table
@@ -88,7 +88,7 @@ export default {
     return {
       dialog: false,
       currentSubjectSelect: [],
-      yearsSelect: [],
+      yearsSelect: [2020],
       tableSelect: "按学科组合",
       tableOpt: ["按年组合", "按学科组合"],
       yearsOpt: [

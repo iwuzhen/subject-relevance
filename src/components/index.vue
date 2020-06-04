@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       indexObject: {
-        统计数据: [
+        统计数据WIKI: [
           {
             title: "Tree Viewer",
             text: "WIKI 分类文章层次浏览",
@@ -89,11 +89,6 @@ export default {
             to: "/ArticlesTotal"
           },
           {
-            title: "MAG 文章数",
-            text: "MAG 文章数查询",
-            to: "/MasArticlesTotal"
-          },
-          {
             title: "Wiki 类引用详情",
             text: "Wiki Core 类之间类引用详情",
             to: "/CoreLinks"
@@ -102,6 +97,18 @@ export default {
             title: "WIKI 分类层次",
             text: "WIKI 分类层次查询",
             href: "http://wikidb.lambdax.cn:10080/wikidb_web/first.jsp"
+          }
+        ],
+        统计数据MAG: [
+          {
+            title: "MAG 作者文章数",
+            text: "MAG 作者文章数 统计",
+            to: "/MagAAAInfo"
+          },
+          {
+            title: "MAG 文章数",
+            text: "MAG 文章数查询",
+            to: "/MasArticlesTotal"
           }
         ],
         "Core 学科相关度": [

@@ -35,6 +35,7 @@ const CoreArticlesTotalNew_v3 = () =>
   import("@/components/CoreArticlesTotalNew_v3");
 const CoreSWUndirectLimit = () => import("@/components/CoreSWUndirectLimit");
 const CoreSMUndirected = () => import("@/components/CoreSMUndirected");
+const MagAAAInfo = () => import("@/components/MagAAAInfo");
 
 Vue.use(Router);
 
@@ -45,6 +46,11 @@ export default new Router({
       path: "/",
       name: "index",
       component: IndexPage
+    },
+    {
+      path: "/MagAAAInfo",
+      name: "MagAAAInfo",
+      component: MagAAAInfo
     },
     {
       path: "/CoreSWUndirectLimit",

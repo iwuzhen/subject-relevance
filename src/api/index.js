@@ -36,7 +36,7 @@ let cacheRequest = async requestParams => {
     }
     item = response.data;
   } else {
-    console.log("命中缓存");
+    // console.log("命中缓存");
   }
   return item;
 };
@@ -51,7 +51,7 @@ let cacheRequestWiki = async requestParams => {
     }
     item = response.data;
   } else {
-    console.log("命中缓存");
+    // console.log("命中缓存");
   }
   return item;
 };
@@ -68,7 +68,7 @@ export let cacheRequestGo = async requestParams => {
     }
     item = response.data;
   } else {
-    console.log("命中缓存");
+    // console.log("命中缓存");
   }
   return item;
 };
@@ -102,6 +102,18 @@ export async function getWikiData(params) {
   };
   return await cacheRequest(requestParams);
 }
+
+export async function getMagAuthorsAndArticleInfo(params) {
+  let requestParams = {
+    url: "/mag/getMagAuthorsAndArticleInfo",
+    method: "post",
+    data: params
+  };
+  // let res = await request(requestParams);
+  // return res.data;
+  return await cacheRequest(requestParams);
+}
+
 export async function getMagZipf(params) {
   let requestParams = {
     url: "/mag/getMagZipf",
