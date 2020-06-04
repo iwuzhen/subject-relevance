@@ -20,7 +20,7 @@ let store2 = localforage.createInstance({
 
 let store3 = localforage.createInstance({
   name: "wikiGo",
-  version: 1,
+  version: 2,
   storeName: "api", // Should be alphanumeric, with underscores.
   description: "store api"
 });
