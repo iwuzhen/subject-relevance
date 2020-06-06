@@ -173,6 +173,14 @@ export async function getCoreZipfByNodes(params) {
   };
   return await cacheRequest(requestParams);
 }
+export async function getCoreZipfByNodes_v2(params) {
+  let requestParams = {
+    url: "/wiki/getCoreZipfByNodes_v2",
+    method: "post",
+    data: params
+  };
+  return await cacheRequest(requestParams);
+}
 
 export async function getArticlesTotal(params) {
   let requestParams = {

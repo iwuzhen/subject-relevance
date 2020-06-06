@@ -36,6 +36,7 @@ const CoreArticlesTotalNew_v3 = () =>
 const CoreSWUndirectLimit = () => import("@/components/CoreSWUndirectLimit");
 const CoreSMUndirected = () => import("@/components/CoreSMUndirected");
 const MagAAAInfo = () => import("@/components/MagAAAInfo");
+const CoreZipfByNodesV2 = () => import("@/components/CoreZipfByNodesV2");
 
 Vue.use(Router);
 
@@ -51,6 +52,11 @@ export default new Router({
       path: "/MagAAAInfo",
       name: "MagAAAInfo",
       component: MagAAAInfo
+    },
+    {
+      path: "/CoreZipfByNodesV2",
+      name: "CoreZipfByNodesV2",
+      component: CoreZipfByNodesV2
     },
     {
       path: "/CoreSWUndirectLimit",

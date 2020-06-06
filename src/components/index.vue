@@ -148,6 +148,11 @@ export default {
             to: "/CoreZipfByNodes"
           },
           {
+            title: "Core V2 Zipf 幂律斜率",
+            text: "Core V2 逐年幂律图，及其斜率曲线",
+            to: "/CoreZipfByNodesV2"
+          },
+          {
             title: "MAG 幂律",
             text: "MAG 幂律",
             to: "/MagZipf"
