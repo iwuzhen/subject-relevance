@@ -37,6 +37,8 @@ const CoreSWUndirectLimit = () => import("@/components/CoreSWUndirectLimit");
 const CoreSMUndirected = () => import("@/components/CoreSMUndirected");
 const MagAAAInfo = () => import("@/components/MagAAAInfo");
 const CoreZipfByNodesV2 = () => import("@/components/CoreZipfByNodesV2");
+const CoreArticlesTotalV1_plus = () =>
+  import("@/components/CoreArticlesTotalV1_plus");
 
 Vue.use(Router);
 
@@ -207,6 +209,11 @@ export default new Router({
       path: "/MagInnerZipf",
       name: "MagInnerZipf",
       component: MagInnerZipf
+    },
+    {
+      path: "/CoreArticlesTotalV1_plus",
+      name: "CoreArticlesTotalV1_plus",
+      component: CoreArticlesTotalV1_plus
     }
   ],
   scrollBehavior(to, from, savedPosition) {

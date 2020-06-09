@@ -69,21 +69,6 @@ export default {
             to: "/viewandedits"
           },
           {
-            title: "Core WIKI 文章数",
-            text: "Core WIKI 文章数查询",
-            to: "/CoreArticlesTotal"
-          },
-          {
-            title: "Core WIKI 文章数 v2",
-            text: "5月22日方法论，Core WIKI 文章数查询",
-            to: "/CoreArticlesTotalV2"
-          },
-          {
-            title: "Core WIKI 文章数 v3",
-            text: "儿童节方法论，Core WIKI 文章数查询",
-            to: "/CoreArticlesTotalNew_v3"
-          },
-          {
             title: "WIKI 文章数",
             text: "WIKI 文章数查询",
             to: "/ArticlesTotal"
@@ -97,6 +82,32 @@ export default {
             title: "WIKI 分类层次",
             text: "WIKI 分类层次查询",
             href: "http://wikidb.lambdax.cn:10080/wikidb_web/first.jsp"
+          }
+        ],
+        "WIKI Core 文章数": [
+          {
+            title: "Core WIKI 文章数 v1",
+            text:
+              "有core类只计算core类，无core类只计算非core类，都取N层，未添加黑名单",
+            to: "/CoreArticlesTotal"
+          },
+          {
+            title: "Core WIKI 文章数 v1 Plus",
+            text:
+              "有core类只计算core类，无core类只计算非core类，都取N层，添加黑名单(Sociology,Biology,Economics)",
+            to: "/CoreArticlesTotalV1_plus"
+          },
+          {
+            title: "Core WIKI 文章数 v2",
+            text:
+              "5月22日方法论，core类和非core类，都取N层，添加黑名单(Sociology,Biology,Economics)",
+            to: "/CoreArticlesTotalV2"
+          },
+          {
+            title: "Core WIKI 文章数 v3",
+            text:
+              "儿童节方法论，core类计算N+1层，非core类计算N层，添加黑名单(Sociology,Biology,Economics)",
+            to: "/CoreArticlesTotalNew_v3"
           }
         ],
         统计数据MAG: [
