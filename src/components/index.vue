@@ -147,6 +147,11 @@ export default {
             to: "/SmallWorldDirected"
           },
           {
+            title: "Core_V2_小世界有向图",
+            text: "Core_V2_小世界有向网络学科间趋势",
+            to: "/SmallWorldDirectedCoreV2"
+          },
+          {
             title: "WIKI 单学科",
             text: "Cognitive science 和其他学科的逐年相关度",
             to: "/SubDiscipline"
@@ -209,12 +214,12 @@ export default {
         "Core 小世界": [
           {
             title: "规模趋势",
-            text: "小世界 Core 规模趋势",
+            text: "小世界 Core V2 规模趋势",
             to: "/CoreSWUndirectLimit"
           },
           {
             title: "逐年趋势",
-            text: "小世界 Core 逐年趋势",
+            text: "小世界 Core V2 逐年趋势",
             to: "/CoreSMUndirected"
           }
         ],

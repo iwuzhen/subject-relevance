@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 19:09:27
  * @LastEditors: ider
- * @LastEditTime: 2020-05-17 00:48:56
+ * @LastEditTime: 2020-06-10 16:05:31
  * @Description: 
  -->
 
@@ -94,8 +94,11 @@
 </template>
 
 <script>
-import smallworlddirect from "../data/smallworlddirect.json";
+import { getDirectedByYear } from "@/api/index";
+// import smallworlddirect from "../data/smallworlddirect.json";
 import { basiCategorys, extendLineSeries } from "@/api/data";
+
+const Limiter = require("async-limiter");
 export default {
   name: "SmallWorld有向图学科间趋势",
   data() {
@@ -104,46 +107,70 @@ export default {
       loading: false,
       currentSubjectSelect: "",
       targetSubjectSelect: [],
-      methodSelect: "average_path",
-      graphSizeSelect: "2500",
+      methodSelect: "average_distance",
+      graphSizeSelect: 2500,
       graphSizeOpt: [
         {
-          value: "2000",
+          value: 2000,
           text: "2000"
         },
         {
-          value: "2500",
-          text: "2500"
+          value: 2500,
+          text: 2500
         },
         {
-          value: "3000",
+          value: 3000,
           text: "3000"
         },
         {
-          value: "full",
+          value: 999999,
           text: "二层类"
         }
       ],
       methodOpt: [
         {
-          value: "average_path",
+          value: "average_distance",
           text: "平均最短路径"
         },
         {
-          value: "sd",
+          value: "sum_short_dist",
           text: "最短路径和"
         },
         {
-          value: "sp",
+          value: "sum_connect_path",
           text: "联通路径量"
         },
         {
-          value: "md",
+          value: "max_distance",
           text: "MAX(最短路径)"
         }
       ],
-      categoryOpt: basiCategorys
+      categoryOpt: basiCategorys,
+      chartOpt: {}
     };
+  },
+  watch: {
+    // 更新图标
+    chartOpt: function(opt) {
+      this.myChart.setOption(opt, true);
+    },
+    targetSubjectSelect: async function(newValue, oldValue) {
+      if (this.currentSubjectSelect.length === 0) return;
+      this.loading = true;
+      let diffArray = newValue.filter(item => !oldValue.includes(item));
+      if (diffArray.length > 0) {
+        this.asyncLimier.push(async cb => {
+          console.log("asyc");
+          await this.getOneDate(diffArray[0]);
+          console.log("aover");
+          cb();
+        });
+      }
+      this.asyncLimier.onDone(() => {
+        console.log("all done:");
+        this.getData();
+      });
+    }
   },
   computed: {
     myChart: function() {
@@ -151,12 +178,29 @@ export default {
     }
   },
   mounted() {
+    // 队列 初始化
+    this.asyncLimier = new Limiter({ concurrency: 1 });
     window.onresize = () => {
       this.myChart.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
   },
   methods: {
+    async getOneDate(subject) {
+      console.log("onedata,", subject);
+      let opt = {
+        source: this.currentSubjectSelect,
+        target: subject,
+        version: "direct_graph_normal_v1",
+        toplimit: this.graphSizeSelect,
+        quota: this.methodSelect
+      };
+      try {
+        return await getDirectedByYear(opt);
+      } catch (error) {
+        this.$emit("emitMesage", `请求失败:${error}`);
+      }
+    },
     async getData() {
       if (
         this.currentSubjectSelect.length === 0 ||
@@ -165,129 +209,66 @@ export default {
         return false;
       }
       this.loading = true;
+
+      let allYear = [],
+        subjectData = [];
+      for (let subjectName of this.targetSubjectSelect) {
+        let repdata = await this.getOneDate(subjectName);
+        console.log(repdata);
+        allYear.push(...repdata.a.x, ...repdata.b.x, ...repdata.c.x);
+        subjectData.push([subjectName, repdata]);
+      }
+      allYear = Array.from(new Set(allYear));
+      subjectData.sort((x, y) => {
+        return y[1].a.y.slice(-1) - x[1].a.y.slice(-1);
+      });
+
       let ret_data = {
-        y: [], //正向数据
-        b: [], //正反向之差
-        c: [], //反向数据
-        x: smallworlddirect.year,
-        legend: this.targetSubjectSelect.map(value => {
-          for (let key in smallworlddirect.source) {
-            if (key === value) return key;
+        y: subjectData.map(item => {
+          let rowdata = [];
+          for (let i in item[1].a.x) {
+            rowdata[allYear.indexOf(item[1].a.x[i])] = item[1].a.y[i];
           }
+          return rowdata;
+        }),
+        b: subjectData.map(item => {
+          let rowdata = [];
+          for (let i in item[1].b.x) {
+            rowdata[allYear.indexOf(item[1].c.x[i])] = item[1].c.y[i];
+          }
+          return rowdata;
+        }), //正反向之差
+        c: subjectData.map(item => {
+          let rowdata = [];
+          for (let i in item[1].c.x) {
+            rowdata[allYear.indexOf(item[1].b.x[i])] = item[1].b.y[i];
+          }
+          return rowdata;
+        }), //反向数据
+        x: allYear,
+        legend: subjectData.map(item => {
+          return item[0];
         }),
         ymax: 0,
         ymin: 0
       };
+      ret_data.ymax =
+        Math.ceil(
+          Math.max(...[].concat(...ret_data.y), ...[].concat(...ret_data.c)) *
+            10
+        ) / 10;
+      ret_data.ymin =
+        Math.floor(
+          Math.min(...[].concat(...ret_data.y), ...[].concat(...ret_data.c)) *
+            10
+        ) / 10;
 
-      let ydata = {};
-      for (let sbj of this.targetSubjectSelect) {
-        ydata[sbj] = [];
-      }
-      for (let data of smallworlddirect.data) {
-        for (let sbj of this.targetSubjectSelect) {
-          if (
-            smallworlddirect.source[this.currentSubjectSelect] === data.s &&
-            smallworlddirect.source[sbj] === data.t &&
-            this.graphSizeSelect == data.m
-          ) {
-            ydata[sbj][smallworlddirect.year.indexOf(data.y)] =
-              data[this.methodSelect];
-            if (this.methodSelect === "average_path") {
-              ydata[sbj][smallworlddirect.year.indexOf(data.y)] = Number(
-                (data["sd"] / data["sp"]).toFixed(4)
-              );
-            } else {
-              ydata[sbj][smallworlddirect.year.indexOf(data.y)] =
-                data[this.methodSelect];
-            }
-          }
-        }
-      }
-
-      let subdata = {};
-      for (let sbj of this.targetSubjectSelect) {
-        subdata[sbj] = [];
-      }
-      for (let data of smallworlddirect.data) {
-        for (let sbj of this.targetSubjectSelect) {
-          if (
-            smallworlddirect.source[this.currentSubjectSelect] === data.t &&
-            smallworlddirect.source[sbj] === data.s &&
-            this.graphSizeSelect == data.m
-          ) {
-            subdata[sbj][smallworlddirect.year.indexOf(data.y)] =
-              data[this.methodSelect];
-            if (this.methodSelect === "average_path") {
-              subdata[sbj][smallworlddirect.year.indexOf(data.y)] = Number(
-                (data["sd"] / data["sp"]).toFixed(4)
-              );
-            } else {
-              subdata[sbj][smallworlddirect.year.indexOf(data.y)] =
-                data[this.methodSelect];
-            }
-          }
-        }
-      }
-      let barDate = {};
-      for (let sbj of this.targetSubjectSelect) {
-        barDate[sbj] = [];
-        for (let i = 0; i < ydata[sbj].length; i++) {
-          barDate[sbj].push(
-            parseFloat((ydata[sbj][i] - subdata[sbj][i]).toFixed(6))
-          );
-        }
-      }
-
-      for (let sbj of this.targetSubjectSelect) {
-        ret_data.y.push(ydata[sbj]);
-        ret_data.c.push(subdata[sbj]);
-        ret_data.b.push(barDate[sbj]);
-      }
-
-      ret_data.ymax = Math.max(
-        ...[].concat(...ret_data.y),
-        ...[].concat(...ret_data.c)
-      );
-      ret_data.ymin = Math.min(
-        ...[].concat(...ret_data.y),
-        ...[].concat(...ret_data.c)
-      );
-      // 重新排序
-      let rankArray = ret_data.y.map((item, index) => {
-        return [
-          ret_data.legend[index],
-          ret_data.y[index],
-          ret_data.c[index],
-          ret_data.b[index]
-        ];
-      });
-      rankArray.sort((x, y) => {
-        return y[1].slice(-1) - x[1].slice(-1);
-      });
-      ret_data.legend = rankArray.map(item => {
-        return item[0];
-      });
-      ret_data.y = rankArray.map(item => {
-        return item[1];
-      });
-
-      ret_data.c = rankArray.map(item => {
-        return item[2];
-      });
-
-      ret_data.b = rankArray.map(item => {
-        return item[3];
-      });
-
-      this.drawChart(ret_data);
-    },
-    drawChart(data) {
-      let options = this.setOptions(data);
-      this.myChart.setOption(options, true);
+      console.log(ret_data);
+      this.chartOpt = this.setOptions(ret_data);
       this.loading = false;
     },
     setOptions(data) {
-      var gridWidth = "35%";
+      var gridWidth = "33%";
       var gridHeight = "35%";
       var gridRight = "87%";
       var gridTop = 50;
@@ -492,11 +473,19 @@ export default {
             name: "距离之差",
             type: "value",
             max: function(value) {
-              return Math.max(Math.abs(value.min), Math.abs(value.max));
+              return (
+                Math.ceil(
+                  Math.max(Math.abs(value.min), Math.abs(value.max)) * 10
+                ) / 10
+              );
             },
             gridIndex: 2,
             min: function(value) {
-              return -Math.max(Math.abs(value.min), Math.abs(value.max));
+              return (
+                -Math.ceil(
+                  Math.max(Math.abs(value.min), Math.abs(value.max)) * 10
+                ) / 10
+              );
             }
           }
         ],

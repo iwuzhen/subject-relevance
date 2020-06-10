@@ -39,6 +39,8 @@ const MagAAAInfo = () => import("@/components/MagAAAInfo");
 const CoreZipfByNodesV2 = () => import("@/components/CoreZipfByNodesV2");
 const CoreArticlesTotalV1_plus = () =>
   import("@/components/CoreArticlesTotalV1_plus");
+const SmallWorldDirectedCoreV2 = () =>
+  import("@/components/SmallWorldDirectedCoreV2");
 
 Vue.use(Router);
 
@@ -49,6 +51,11 @@ export default new Router({
       path: "/",
       name: "index",
       component: IndexPage
+    },
+    {
+      path: "/SmallWorldDirectedCoreV2",
+      name: "SmallWorldDirectedCoreV2",
+      component: SmallWorldDirectedCoreV2
     },
     {
       path: "/MagAAAInfo",

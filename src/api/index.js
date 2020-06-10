@@ -83,6 +83,18 @@ export async function getScaleTrend(params) {
   // return res.data;
   return await cacheRequestGo(requestParams);
 }
+
+export async function getDirectedByYear(params) {
+  let requestParams = {
+    url: "/smallworld/directedByYear",
+    method: "post",
+    data: params
+  };
+  let res = await requestgo(requestParams);
+  return res.data;
+  // return await cacheRequestGo(requestParams);
+}
+
 export async function getUndirectedByYear(params) {
   let requestParams = {
     url: "/smallworld/undirectedByYear",
