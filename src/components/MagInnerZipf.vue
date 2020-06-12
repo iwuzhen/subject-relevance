@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="8">
+      <v-col cols="10">
         <v-select
           v-model="subjectTarget"
           :items="categorys"
@@ -10,6 +10,56 @@
           clearable
           label="目标学科"
         ></v-select>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="10">
+        <v-range-slider
+          v-model="nodeRange"
+          :max="nodeMax"
+          :min="nodeMin"
+          dense
+          hide-details
+          @change="calSlope"
+          hint="求斜率范围"
+          class="align-center"
+        >
+          <template v-slot:prepend>
+            <p style="width: 100px">求斜率范围</p>
+            <v-text-field
+              :value="nodeRange[0]"
+              class="mt-0 pt-0"
+              hide-details
+              single-line
+              type="number"
+              style="width: 60px"
+              @change="$set(nodeRange, 0, $event)"
+            ></v-text-field>
+          </template>
+          <template v-slot:append>
+            <v-text-field
+              :value="nodeRange[1]"
+              class="mt-0 pt-0"
+              hide-details
+              single-line
+              type="number"
+              style="width: 60px"
+              @change="$set(nodeRange, 1, $event)"
+            ></v-text-field>
+          </template>
+        </v-range-slider>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12">
+        <v-card>
+          <v-data-table
+            :headers="girdHeaders"
+            hide-default-footer
+            :items="gridData"
+            class="elevation-1"
+          ></v-data-table>
+        </v-card>
       </v-col>
     </v-row>
     <v-row>
@@ -25,6 +75,7 @@
 <script>
 import { getMagInnerZipf } from "@/api/index";
 import { magCategory, extendEchartsOpts } from "@/api/data";
+import ecStat from "echarts-stat";
 const Limiter = require("async-limiter");
 
 // tooyip 位置的x位置
@@ -33,9 +84,15 @@ export default {
   name: "MAG幂律度分布",
   data() {
     return {
+      girdHeaders: [],
+      nodeRange: [2000, 40000],
+      nodeMax: 100000,
+      nodeMin: 1,
       subjectTarget: [],
       loading: false,
-      chartOpt: {}
+      chartOpt: {},
+      chartData: {},
+      gridData: []
     };
   },
   mounted() {
@@ -105,6 +162,42 @@ export default {
     }
   },
   methods: {
+    calSlope() {
+      let lines = [];
+      for (let row of this.chartData.y) {
+        let line = [];
+        for (let i in this.chartData.x) {
+          line.push([this.chartData.x[i], row[i]]);
+        }
+        lines.push(line);
+      }
+      let retData = { name: "斜率" };
+      let retHeader = [
+        {
+          text: "学科",
+          align: "start",
+          value: "name"
+        }
+      ];
+      for (let i in lines) {
+        let myRegression = ecStat.regression(
+          "linear",
+          lines[i].slice(this.nodeRange[0], this.nodeRange[1])
+        );
+
+        retData[
+          this.chartData.legend[i]
+        ] = myRegression.parameter.gradient.toFixed(4);
+        retHeader.push({
+          text: this.chartData.legend[i],
+          value: this.chartData.legend[i]
+        });
+      }
+      this.gridData = [retData];
+      this.girdHeaders = retHeader;
+      console.log(this.gridData);
+      console.log(this.girdHeaders);
+    },
     async getOneDate(subject) {
       console.log("onedata,", subject);
       let opt = {
@@ -143,10 +236,9 @@ export default {
       }
 
       console.log(reqData);
-      this.drawChart(reqData);
-    },
-    drawChart(data) {
-      this.chartOpt = this.setOptions(data);
+      this.chartData = reqData;
+      this.chartOpt = this.setOptions(reqData);
+      this.calSlope();
       this.loading = false;
     },
     setOptions(data) {

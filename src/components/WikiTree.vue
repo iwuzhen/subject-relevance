@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-06-01 21:23:54
+ * @LastEditTime: 2020-06-12 15:44:25
  * @Description: 
  -->
 <template>
@@ -33,6 +33,13 @@
         <v-btn color="primary" @click="checkNode">对比选中的节点</v-btn>
       </v-col>
       <v-col>
+        <v-btn
+          :color="showDouble ? 'light-green' : 'lime'"
+          @click="showDouble = !showDouble"
+          >{{ showDouble ? "单排展示" : "双排对比" }}</v-btn
+        ></v-col
+      >
+      <v-col>
         <v-autocomplete
           v-model="searchString"
           label="搜索 category"
@@ -47,7 +54,7 @@
       </v-col>
     </v-row>
     <v-row justify="space-between">
-      <v-col cols="6">
+      <v-col :cols="showDouble ? 6 : 12">
         <v-card hover flat>
           <v-select
             v-model="yearSelect1"
@@ -91,7 +98,7 @@
           </v-treeview>
         </v-card></v-col
       >
-      <v-col cols="6">
+      <v-col cols="6" v-if="showDouble">
         <v-card hover flat>
           <v-select
             v-model="yearSelect2"
@@ -151,6 +158,7 @@ export default {
   name: "Tree_Viewer",
   data() {
     return {
+      showDouble: true,
       openTree2: [],
       openTree1: [],
       selection1: [],

@@ -64,7 +64,7 @@
 import { getDistanceCore } from "@/api/index";
 import { extendEchartsOpts, coreCategorys, extendLineSeries } from "@/api/data";
 export default {
-  name: "CoreWiki学科相关度",
+  name: "CoreWiki_V2_学科相关度",
   data() {
     return {
       subjectTarget: "",
@@ -162,7 +162,7 @@ export default {
         method: this.methodValue,
         level: this.pageCountSelect,
         levelType: this.levelSelect,
-        btype: "v1"
+        btype: "v2"
       };
       getDistanceCore(opt)
         .then(res => {
@@ -217,5 +217,3 @@ export default {
   }
 };
 </script>
-
-<style lang="less" scoped></style>

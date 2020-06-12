@@ -127,6 +127,11 @@ export default {
             title: "WIKI Core",
             text: "各 Core 学科的逐年相关度",
             to: "/DisciplineCore"
+          },
+          {
+            title: "WIKI Core V2",
+            text: "各 Core V2 学科的逐年相关度",
+            to: "/disciplineCoreV2"
           }
         ],
         学科相关度: [
