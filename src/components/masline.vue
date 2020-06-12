@@ -69,6 +69,16 @@
           </template>
         </v-range-slider>
       </v-col>
+      <v-col>
+        <v-btn
+          :color="showAve ? 'light-green' : 'lime'"
+          @click="
+            showAve = !showAve;
+            getData();
+          "
+          >{{ showAve ? "关闭平均相关度" : "开启平均相关度" }}</v-btn
+        ></v-col
+      >
     </v-row>
     <v-row>
       <v-col col="12">
@@ -92,6 +102,7 @@ export default {
   name: "mag学科相关度",
   data() {
     return {
+      showAve: true,
       subjectTarget: "",
       subjectRelevances: [],
       methodValue: "linksout",
@@ -148,7 +159,20 @@ export default {
       getMasData(opt)
         .then(res => {
           if (res.data.data) {
-            this.drawChart(res.data.data);
+            if (this.subjectRelevances.length > 1 && this.showAve) {
+              console.log(res.data.data);
+              let aveLine = [];
+              for (let i in res.data.data.x) {
+                let ss = 0;
+                for (let row of res.data.data.y) {
+                  ss += row[i];
+                }
+                aveLine.push(ss / res.data.data.y.length);
+              }
+              res.data.data.y.push(aveLine);
+              res.data.data.legend.push("平均相关度");
+              this.drawChart(res.data.data);
+            } else this.drawChart(res.data.data);
           } else {
             this.loading = false;
             this.$emit("emitMesage", "请求失败");
