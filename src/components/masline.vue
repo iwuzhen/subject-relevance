@@ -37,7 +37,7 @@
         <v-range-slider
           v-model="years"
           :max="2019"
-          :min="1950"
+          :min="1900"
           dense
           hide-details
           @change="getData"
@@ -95,7 +95,7 @@ export default {
       subjectTarget: "",
       subjectRelevances: [],
       methodValue: "linksout",
-      years: [1950, 2019],
+      years: [1945, 2019],
       categorys: coreCategorys,
       methodOptions: ["linksout"],
       loading: false
