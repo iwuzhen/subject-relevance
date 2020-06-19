@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-06-12 15:44:25
+ * @LastEditTime: 2020-06-20 01:37:15
  * @Description: 
  -->
 <template>
@@ -78,22 +78,34 @@
             transition
           >
             <template v-slot:label="{ item }">
-              <b style="color:orange" v-if="isCoreSunject(item.name)">{{
-                item.name
-              }}</b>
-
+              <a
+                v-if="item.father"
+                :href="'https://en.wikipedia.org/wiki/' + item.name"
+                target="blank"
+                ><strong style="color:orange" v-if="isCoreSunject(item.name)">{{
+                  item.name
+                }}</strong
+                ><span v-else>{{ item.name }}</span></a
+              >
               <span v-else>{{ item.name }}</span>
             </template>
             <template v-slot:append="{ item }">
-              <v-btn
-                text
-                small
-                color="primary"
-                target="blank"
-                :href="'https://en.wikipedia.org/wiki/' + item.name"
+              <v-chip
+                v-if="item.nodetype == 'article'"
+                color="success"
+                outlined
+                >{{ arithclBirth[item.name] }}</v-chip
               >
-                <v-icon v-if="item.father">mdi-wikipedia</v-icon>
-              </v-btn>
+              <v-tooltip top v-if="item.father">
+                <template v-slot:activator="{ on }">
+                  <v-btn text small v-on="on" color="primary">
+                    <v-icon>mdi-wikipedia</v-icon>
+                    摘要
+                  </v-btn>
+                </template>
+
+                <span> {{ paragraph[item.name] }}</span>
+              </v-tooltip>
             </template>
           </v-treeview>
         </v-card></v-col
@@ -122,22 +134,33 @@
             transition
           >
             <template v-slot:label="{ item }">
-              <b style="color:orange" v-if="isCoreSunject(item.name)">{{
-                item.name
-              }}</b>
-
+              <a
+                v-if="item.father"
+                :href="'https://en.wikipedia.org/wiki/' + item.name"
+                target="blank"
+                ><strong style="color:orange" v-if="isCoreSunject(item.name)">{{
+                  item.name
+                }}</strong
+                ><span v-else>{{ item.name }}</span></a
+              >
               <span v-else>{{ item.name }}</span>
             </template>
             <template v-slot:append="{ item }">
-              <v-btn
-                text
-                small
-                color="primary"
-                target="blank"
-                :href="'https://en.wikipedia.org/wiki/' + item.name"
+              <v-chip
+                v-if="item.nodetype == 'article'"
+                color="success"
+                outlined
+                >{{ arithclBirth[item.name] }}</v-chip
               >
-                <v-icon v-if="item.father">mdi-wikipedia</v-icon>
-              </v-btn>
+              <v-tooltip top v-if="item.father">
+                <template v-slot:activator="{ on }">
+                  <v-btn text small v-on="on" color="primary">
+                    <v-icon>mdi-wikipedia</v-icon>
+                    摘要
+                  </v-btn>
+                </template>
+                <span> {{ paragraph[item.name] }}</span>
+              </v-tooltip>
             </template>
           </v-treeview></v-card
         ></v-col
@@ -147,7 +170,12 @@
 </template>
 
 <script>
-import { getWikiPageTree, getWikiCategoryTree } from "@/api/index";
+import {
+  getWikiPageTree,
+  getWikiCategoryTree,
+  getCacheSummary,
+  getWikiBirthday
+} from "@/api/index";
 import * as Diff2Html from "diff2html";
 import * as diff from "diff";
 import { basiCategorys } from "@/api/data";
@@ -158,6 +186,7 @@ export default {
   name: "Tree_Viewer",
   data() {
     return {
+      paragraph: {},
       showDouble: true,
       openTree2: [],
       openTree1: [],
@@ -187,7 +216,8 @@ export default {
         2019,
         2020
       ],
-      basiCategorys: basiCategorys
+      basiCategorys: basiCategorys,
+      arithclBirth: {}
     };
   },
   computed: {
@@ -357,6 +387,26 @@ export default {
       this.overlay = !this.overlay;
     },
 
+    async getParagraph(name) {
+      let opt = { title: name };
+      let ret = await getCacheSummary(opt);
+      this.paragraph[name] = ret.extract;
+    },
+
+    async _fectch_article_birth(articleArray) {
+      let queryArray = [];
+      for (let title of articleArray) {
+        if (!this.arithclBirth[title]) {
+          queryArray.push(title);
+        }
+      }
+      let ret = await getWikiBirthday(queryArray);
+      for (let key in ret) {
+        this.arithclBirth[key] = ret[key];
+      }
+      console.log(ret);
+    },
+
     async _fetchChildren(treeitem, _wikiDB) {
       if (
         treeitem.name.indexOf("文章") > -1 ||
@@ -373,12 +423,15 @@ export default {
             db: `WIKI${_wikiDB}`
           });
           articleLength = data.childList.length;
+          await this._fectch_article_birth(data.childList);
           articleChildrens = data.childList.map(item => {
+            this.getParagraph(item);
             return {
               id: uuidv4(),
               father: "page",
               name: item,
-              leaf: true
+              leaf: true,
+              nodetype: "article"
             };
           });
 
@@ -391,7 +444,9 @@ export default {
               id: uuidv4(),
               name: item,
               leaf: true,
-              children: []
+              children: [],
+
+              nodetype: "category"
             };
           });
 
@@ -400,7 +455,8 @@ export default {
               id: uuidv4(),
               name: item,
               leaf: true,
-              children: []
+              children: [],
+              nodetype: "category"
             };
           });
 
@@ -408,22 +464,27 @@ export default {
             id: uuidv4(),
             name: `文章 ${articleLength}`,
             children: articleChildrens,
-            file: "article"
+            file: "article",
+            nodetype: "type"
           });
           treeitem.children.push({
             id: uuidv4(),
             name: `子类 ${data.childList.length}`,
             children: categoryChildrens,
-            file: "category"
+            file: "category",
+            nodetype: "type"
           });
           treeitem.children.push({
             id: uuidv4(),
             name: `父类 ${data.parentList.length}`,
             children: categoryParents,
-            file: "category"
+            file: "category",
+            nodetype: "type"
           });
         } catch (error) {
-          this.$emit("emitMesage", `请求失败,${error}`);
+          this.$emit("e ge", `请求失败,${error}`);
+
+          throw error;
         }
       }
     },
@@ -449,4 +510,8 @@ export default {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+a {
+  text-decoration: none;
+}
+</style>

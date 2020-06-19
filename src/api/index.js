@@ -28,10 +28,10 @@ let store3 = localforage.createInstance({
 // 对请求进行缓存
 let cacheRequest = async requestParams => {
   let item = await store1.getItem(JSON.stringify(requestParams));
-  if (!item) {
+  if (!item || typeof item != "object") {
     console.log("无缓存");
     let response = await request(requestParams);
-    if (response.status == 200) {
+    if (response.status == 200 && typeof response.data == "object") {
       await store1.setItem(JSON.stringify(requestParams), response.data);
     }
     item = response.data;
@@ -43,10 +43,10 @@ let cacheRequest = async requestParams => {
 // 对请求进行缓存
 let cacheRequestWiki = async requestParams => {
   let item = await store2.getItem(JSON.stringify(requestParams));
-  if (!item) {
+  if (!item || typeof item != "object") {
     console.log("无缓存");
     let response = await requestwiki(requestParams);
-    if (response.status == 200) {
+    if (response.status == 200 && typeof response.data == "object") {
       await store2.setItem(JSON.stringify(requestParams), response.data);
     }
     item = response.data;
@@ -59,10 +59,10 @@ let cacheRequestWiki = async requestParams => {
 // 对请求进行缓存
 export let cacheRequestGo = async requestParams => {
   let item = await store3.getItem(JSON.stringify(requestParams));
-  if (!item) {
+  if (!item || typeof item != "object") {
     console.log("无缓存");
     let response = await requestgo(requestParams);
-    if (response.status == 200) {
+    if (response.status == 200 && typeof response.data == "object") {
       console.log(response.status);
       await store3.setItem(JSON.stringify(requestParams), response.data);
     }
@@ -104,6 +104,28 @@ export async function getUndirectedByYear(params) {
   // let res = await requestgo(requestParams);
   // return res.data;
   return await cacheRequestGo(requestParams);
+}
+
+export async function getCacheSummary(params) {
+  let requestParams = {
+    url: "/wiki/cache/page/summary",
+    method: "get",
+    params: params
+  };
+  // let res = await requestgo(requestParams);
+  // return res.data;
+  return await cacheRequestGo(requestParams);
+}
+
+export async function getWikiBirthday(params) {
+  let requestParams = {
+    url: "/wiki/birthday",
+    method: "post",
+    data: params
+  };
+  let res = await requestgo(requestParams);
+  return res.data;
+  // return await cacheRequestGo(requestParams);
 }
 
 export async function getWikiData(params) {
