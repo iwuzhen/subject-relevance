@@ -89,6 +89,10 @@ export default {
           text: "top 3000 文章"
         },
         {
+          value: "3500",
+          text: "top 3500 文章"
+        },
+        {
           value: "4000",
           text: "top 4000 文章"
         },
@@ -140,7 +144,10 @@ export default {
     window.onresize = () => {
       this.myChart.resize();
     };
-    this.$store.commit("changeCurentPath", this.$options.name);
+    this.$store.commit(
+      "changeCurentPath",
+      `Core ${this.$route.query.version} Wiki 学科相关度`
+    );
   },
   methods: {
     async getData() {
@@ -162,7 +169,7 @@ export default {
         method: this.methodValue,
         level: this.pageCountSelect,
         levelType: this.levelSelect,
-        btype: "v1"
+        btype: this.$route.query.version
       };
       getDistanceCore(opt)
         .then(res => {

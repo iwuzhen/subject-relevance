@@ -172,7 +172,10 @@ export async function getDistanceCore(params) {
     method: "post",
     data: params
   };
-  return await cacheRequest(requestParams);
+
+  let res = await request(requestParams);
+  return res.data;
+  // return await cacheRequest(requestParams);
 }
 
 export function getMasData(params) {
@@ -205,7 +208,10 @@ export async function getCoreZipfByNodes(params) {
     method: "post",
     data: params
   };
-  return await cacheRequest(requestParams);
+
+  let res = await request(requestParams);
+  return res.data;
+  // return await cacheRequest(requestParams);
 }
 export async function getCoreZipfByNodes_v2(params) {
   let requestParams = {
@@ -213,7 +219,10 @@ export async function getCoreZipfByNodes_v2(params) {
     method: "post",
     data: params
   };
-  return await cacheRequest(requestParams);
+
+  let res = await request(requestParams);
+  return res.data;
+  // return await cacheRequest(requestParams);
 }
 
 export async function getArticlesTotal(params) {

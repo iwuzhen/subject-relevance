@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-05-20 16:17:52
+ * @LastEditTime: 2020-06-22 14:06:18
  * @Description: 
  -->
 
@@ -66,7 +66,6 @@
           :min="nodeMin"
           dense
           hide-details
-          @change="yearChange"
           hint="求斜率范围"
           class="align-center"
         >
@@ -114,7 +113,7 @@
 </template>
 
 <script>
-import { getCoreZipfByNodes } from "@/api/index";
+import { getCoreZipfByNodes, getCoreZipfByNodes_v2 } from "@/api/index";
 import ecStat from "echarts-stat";
 import { coreCategorys, extendEchartsOpts, extendLineSeries } from "@/api/data";
 import { localCache } from "@/api/cache";
@@ -125,7 +124,7 @@ let LC = new localCache({
 // tooyip 位置的x位置
 var tipLegend = 0;
 export default {
-  name: "Core_zipf幂律斜率",
+  name: `Core_zipf_幂律斜率`,
   data() {
     return {
       loading: false,
@@ -180,6 +179,9 @@ export default {
     };
   },
   watch: {
+    nodeRange: function() {
+      this.rangeChange();
+    },
     // 更新图标
     chartOptYear: function(opt) {
       this.myChart1.setOption(opt, true);
@@ -202,7 +204,10 @@ export default {
       this.myChart1.resize();
       this.myChart2.resize();
     };
-    this.$store.commit("changeCurentPath", this.$options.name);
+    this.$store.commit(
+      "changeCurentPath",
+      `Core_zipf_${this.$route.query.version}幂律斜率`
+    );
     this.myChart2.on("click", function(params) {
       console.log(params);
     });
@@ -241,6 +246,22 @@ export default {
     }
   },
   methods: {
+    async handleRequest(opt) {
+      if (this.$route.query.version == "v1") {
+        console.log(this.$route.query.version);
+        return await getCoreZipfByNodes(opt);
+      }
+      if (this.$route.query.version == "v2") {
+        console.log(this.$route.query.version);
+        opt.version = "v2";
+        return await getCoreZipfByNodes_v2(opt);
+      }
+      if (this.$route.query.version == "v3") {
+        console.log(this.$route.query.version);
+        opt.version = "v3";
+        return await getCoreZipfByNodes_v2(opt);
+      }
+    },
     async handleSlopeTrend(subject) {
       // 计算单学科的年度趋势，并缓存
       let opt = {
@@ -252,11 +273,13 @@ export default {
 
       let LCKEY = `${JSON.stringify(opt)}_${this.nodeRange[0]}_${
         this.nodeRange[1]
-      }`;
+      }_${this.$route.query.version}`;
+      // TODO 暂时禁用缓存
       let item = await LC.getItem(LCKEY);
+      item = null;
       if (!item) {
         try {
-          let res = await getCoreZipfByNodes(opt);
+          let res = await this.handleRequest(opt);
           if (res.data) {
             let gradientList = [];
             for (let i = 0; i < res.data.y.length; i++) {
@@ -281,6 +304,7 @@ export default {
                 data: gradientList
               })
             ];
+            console.log("增加缓存：", LCKEY);
             await LC.setItem(LCKEY, item);
           }
         } catch (error) {
@@ -294,10 +318,10 @@ export default {
       if (this.nodeCountSelect < this.nodeRange[1]) {
         this.nodeRange[1] = this.nodeCountSelect;
       }
-      this.yearChange();
+      this.rangeChange();
       this.calZipf();
     },
-    yearChange() {
+    rangeChange() {
       /**
        * @description: 多个学科的斜率历年趋势
        */
@@ -362,7 +386,7 @@ export default {
         level: this.levelSelect,
         type: this.typeSelect
       };
-      await getCoreZipfByNodes(opt)
+      await this.handleRequest(opt)
         .then(res => {
           if (res.data) {
             this.chartOptZipf = this.setOptions_zipf(res.data);
