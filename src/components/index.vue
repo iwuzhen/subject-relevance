@@ -124,7 +124,7 @@ export default {
         ],
         "Core 学科相关度": [
           {
-            title: "WIKI Core",
+            title: "WIKI Core V1",
             text: "各 Core 学科的逐年相关度",
             to: { path: "DisciplineCore", query: { version: "v1" } }
           },
@@ -169,7 +169,7 @@ export default {
         ],
         "Core 幂律": [
           {
-            title: "Core Zipf 幂律斜率",
+            title: "Core V1 Zipf 幂律斜率",
             text: "Core 逐年幂律图，及其斜率曲线",
             to: { path: "CoreZipfByNodes", query: { version: "v1" } }
           },

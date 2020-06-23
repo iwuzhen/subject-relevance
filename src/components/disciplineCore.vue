@@ -74,7 +74,7 @@ export default {
       categorys: coreCategorys,
       methodOptions: ["linksin", "linksout"],
       levelSelect: 3,
-      levelOpt: [3, 4],
+      levelOpt: [3],
       pageCountOpt: [
         {
           value: "1000",
@@ -141,6 +141,14 @@ export default {
     }
   },
   mounted() {
+    console.log(this.$route.query.version);
+    if (this.$route.query.version == "v1") {
+      this.levelOpt = [3, 4];
+    } else if (this.$route.query.version == "v2") {
+      this.levelOpt = [3];
+    } else if (this.$route.query.version == "v3") {
+      this.levelOpt = [2, 3];
+    }
     window.onresize = () => {
       this.myChart.resize();
     };
