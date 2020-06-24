@@ -295,12 +295,12 @@ export default {
         legend: Array.from(legend),
         title: `扩大图谱后的小世界趋势`
       };
-      this.drawChart(data);
-    },
-    drawChart(data) {
+      console.log(data);
       this.chartOpt = this.setOptions(data);
       this.loading = false;
+      console.log(data);
     },
+
     setOptions(data) {
       // 排序
       data.series.sort((x, y) => {

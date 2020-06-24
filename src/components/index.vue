@@ -120,6 +120,12 @@ export default {
             title: "MAG 文章数",
             text: "MAG 文章数查询",
             to: "/MasArticlesTotal"
+          },
+          {
+            title: "MAG 小世界",
+            text:
+              "MAG 逐年趋势:后一年包含前一年的所有范围。  规模趋势:按照排名增大的网络折线图和按照实际规模增大的网络折线图",
+            to: "/MagDirectNet"
           }
         ],
         "Core 学科相关度": [

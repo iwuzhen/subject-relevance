@@ -128,6 +128,17 @@ export async function getWikiBirthday(params) {
   // return await cacheRequestGo(requestParams);
 }
 
+// mag 小世界 api
+export async function getMagUndirectNet(params) {
+  let requestParams = {
+    url: "/mag/magsmallworldundirect",
+    method: "post",
+    data: params
+  };
+  let res = await requestgo(requestParams);
+  return res.data;
+  // return await cacheRequestGo(requestParams);
+}
 export async function getWikiData(params) {
   let requestParams = {
     url: "/wiki/getDistance",
