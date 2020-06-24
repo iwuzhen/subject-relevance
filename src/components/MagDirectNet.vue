@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-06-24 13:14:31
+ * @LastEditTime: 2020-06-24 20:49:09
  * @Description: 
  -->
 
@@ -358,10 +358,10 @@ export default {
     setOptions(data, obj = { xname: "Year", xtype: "category", subtext: "" }) {
       // 排序
       data.series.sort((x, y) => {
-        if (!x.data.slice(-1)[0][1]) {
+        if (x.data.slice(-1).length == 0 || !x.data.slice(-1)[0][1]) {
           return 1;
         }
-        if (!y.data.slice(-1)[0][1]) {
+        if (y.data.slice(-1).length == 0 || !y.data.slice(-1)[0][1]) {
           return -1;
         }
         return y.data.slice(-1)[0][1] - x.data.slice(-1)[0][1];
