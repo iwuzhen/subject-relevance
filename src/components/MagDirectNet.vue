@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-06-24 20:49:09
+ * @LastEditTime: 2020-06-26 12:42:46
  * @Description: 
  -->
 
@@ -186,7 +186,10 @@ export default {
       this.myChart2.resize();
       this.myChart3.resize();
     };
-    this.$store.commit("changeCurentPath", this.$options.name);
+    this.$store.commit(
+      "changeCurentPath",
+      `MAG 小世界网络 ${this.$route.query.version}`
+    );
   },
 
   methods: {
@@ -195,7 +198,8 @@ export default {
       let opt = {
         name: subject,
         year: year,
-        toplimit: this.nodeCountSelect
+        toplimit: this.nodeCountSelect,
+        version: this.$route.query.version
       };
       try {
         if (this.datacache[JSON.stringify(opt)]) {
