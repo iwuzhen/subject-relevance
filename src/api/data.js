@@ -40,7 +40,13 @@ export let magCategory = [
   "Psychology",
   "Quantum computing",
   "Sociology",
-  "Theoretical computer science"
+  "Theoretical computer science",
+  "Materials science", 
+  "Geology", 
+  "Geography", 
+  "Environmental science",
+  "Medicine", 
+  "Engineering disciplines"
 ].sort();
 export let basiCategorys = [
   "Literature",
