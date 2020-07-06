@@ -122,11 +122,16 @@ export default {
             to: "/MasArticlesTotal"
           },
           {
-            title: "MAG 小世界 v1",
-            text:
-              "MAG 逐年趋势:后一年包含前一年的所有范围。  规模趋势:按照排名增大的网络折线图和按照实际规模增大的网络折线图.(此版本只是用2020排名计算)",
-            to: { path: "MagDirectNet", query: { version: "v1" } }
+            title: "MAG 学科自恋度",
+            text: "MAG 学科自恋度",
+            to: "/MagRefSelfRate"
           },
+          // {
+          //   title: "MAG 小世界 v1",
+          //   text:
+          //     "MAG 逐年趋势:后一年包含前一年的所有范围。  规模趋势:按照排名增大的网络折线图和按照实际规模增大的网络折线图.(此版本只是用2020排名计算)",
+          //   to: { path: "MagDirectNet", query: { version: "v1" } }
+          // },
           {
             title: "MAG 小世界 v2",
             text:

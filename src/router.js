@@ -41,6 +41,7 @@ const CoreArticlesTotalV1_plus = () =>
 const SmallWorldDirectedCoreV2 = () =>
   import("@/components/SmallWorldDirectedCoreV2");
 const MagDirectNet = () => import("@/components/MagDirectNet");
+const MagRefSelfRate = () => import("@/components/MagRefSelfRate");
 
 Vue.use(Router);
 
@@ -56,6 +57,11 @@ export default new Router({
       path: "/SmallWorldDirectedCoreV2",
       name: "SmallWorldDirectedCoreV2",
       component: SmallWorldDirectedCoreV2
+    },
+    {
+      path: "/MagRefSelfRate",
+      name: "MagRefSelfRate",
+      component: MagRefSelfRate
     },
     {
       path: "/MagDirectNet",

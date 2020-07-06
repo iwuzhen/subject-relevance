@@ -139,6 +139,19 @@ export async function getMagUndirectNet(params) {
   return res.data;
   // return await cacheRequestGo(requestParams);
 }
+
+// mag 自恋度
+export async function getMagRefSelfRate(params) {
+  let requestParams = {
+    url: "/mag/getMagRefSelfRate",
+    method: "post",
+    data: params
+  };
+  let res = await request(requestParams);
+  return res.data;
+  // return await cacheRequestGo(requestParams);
+}
+
 export async function getWikiData(params) {
   let requestParams = {
     url: "/wiki/getDistance",
