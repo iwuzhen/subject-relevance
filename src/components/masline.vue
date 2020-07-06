@@ -108,7 +108,7 @@ export default {
       methodValue: "linksout",
       years: [1945, 2019],
       categorys: coreCategorys,
-      methodOptions: ["linksout"],
+      methodOptions: ["linksout","linksin"],
       loading: false
     };
   },
