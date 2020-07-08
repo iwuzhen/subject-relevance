@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-06-26 12:42:46
+ * @LastEditTime: 2020-07-08 16:01:04
  * @Description: 
  -->
 
@@ -411,7 +411,9 @@ export default {
               let _text = params[i].seriesName;
               let _data = params[i].data;
               let _marker = params[i].marker;
-              showHtm += `${_marker}${_data[1]}, ${_text} <br>`;
+              if (_data[1] != undefined) {
+                showHtm += `${_marker}${_data[1]}, ${_text} <br>`;
+              }
             }
             return showHtm;
           }

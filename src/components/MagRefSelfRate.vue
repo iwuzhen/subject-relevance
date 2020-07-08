@@ -125,33 +125,26 @@ export default {
         from: this.years[0],
         to: this.years[1]
       };
-      getMagRefSelfRate(opt)
-        .then(res => {
-          if (res.data) {
-            if (this.subjectTarget.length > 1 && this.showAve) {
-              console.log(res.data);
-              let aveLine = [];
-              for (let i in res.data.x) {
-                let ss = 0;
-                for (let row of res.data.y) {
-                  ss += row[i];
-                }
-                aveLine.push(ss / res.data.y.length);
-              }
-              res.data.y.push(aveLine);
-              res.data.legend.push("平均相关度");
-              this.drawChart(res.data);
-            } else this.drawChart(res.data);
-          } else {
-            this.loading = false;
-            this.$emit("emitMesage", "请求失败");
-            return false;
+      try {
+        let res = await getMagRefSelfRate(opt);
+        if (this.subjectTarget.length > 1 && this.showAve) {
+          console.log(res.data);
+          let aveLine = [];
+          for (let i in res.data.x) {
+            let ss = 0;
+            for (let row of res.data.y) {
+              ss += row[i];
+            }
+            aveLine.push(ss / res.data.y.length);
           }
-        })
-        .catch(rej => {
-          this.loading = false;
-          this.$emit("emitMesage", `请求失败:${rej}`);
-        });
+          res.data.y.push(aveLine);
+          res.data.legend.push("平均相关度");
+          this.drawChart(res.data);
+        } else this.drawChart(res.data);
+      } catch (error) {
+        this.loading = false;
+        this.$emit("emitMesage", `请求失败:${error}`);
+      }
     },
     drawChart(data) {
       let myChart = this.$echarts.init(document.getElementById("masChart"));
