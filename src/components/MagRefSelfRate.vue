@@ -95,7 +95,7 @@ export default {
       showAve: true,
       subjectTarget: "",
       methodValue: "linksin",
-      years: [1900, 2000],
+      years: [1900, 2019],
       categorys: coreCategorys,
       methodOptions: ["linksout", "linksin"],
       loading: false
