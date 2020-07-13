@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-05-27 18:52:57
+ * @LastEditTime: 2020-07-13 13:53:32
  * @Description:
  */
 
@@ -41,11 +41,11 @@ export let magCategory = [
   "Quantum computing",
   "Sociology",
   "Theoretical computer science",
-  "Materials science", 
-  "Geology", 
-  "Geography", 
+  "Materials science",
+  "Geology",
+  "Geography",
   "Environmental science",
-  "Medicine", 
+  "Medicine",
   "Engineering disciplines"
 ].sort();
 export let basiCategorys = [
