@@ -47,7 +47,7 @@
                   <v-col
                     cols="6"
                     md="4"
-                    lg="4"
+                    lg="3"
                     v-for="(item, index) in items"
                     :key="index"
                   >
