@@ -99,18 +99,6 @@ export default {
               title: "MAG 学科自恋度",
               text: "MAG 学科自恋度",
               to: "/MagRefSelfRate"
-            },
-            // {
-            //   title: "MAG 小世界 v1",
-            //   text:
-            //     "MAG 逐年趋势:后一年包含前一年的所有范围。  规模趋势:按照排名增大的网络折线图和按照实际规模增大的网络折线图.(此版本只是用2020排名计算)",
-            //   to: { path: "MagDirectNet", query: { version: "v1" } }
-            // },
-            {
-              title: "MAG 小世界 v2",
-              text:
-                "MAG 逐年趋势:后一年包含前一年的所有范围。  规模趋势:按照排名增大的网络折线图和按照实际规模增大的网络折线图。(此版本各年份分别计算排名计算)",
-              to: { path: "MagDirectNet", query: { version: "v2" } }
             }
           ],
           "MAG- 幂律": [
@@ -126,7 +114,25 @@ export default {
             }
           ],
           "MAG- 学科相关度": [
-            { title: "MAG", text: "MAG 中各学科的逐年相关度", to: "/masline" }
+            {
+              title: "MAG学科相关度",
+              text: "MAG 中各学科的逐年相关度",
+              to: "/masline"
+            }
+          ],
+          "MAG- 小世界": [
+            // {
+            //   title: "MAG 小世界 v1",
+            //   text:
+            //     "MAG 逐年趋势:后一年包含前一年的所有范围。  规模趋势:按照排名增大的网络折线图和按照实际规模增大的网络折线图.(此版本只是用2020排名计算)",
+            //   to: { path: "MagDirectNet", query: { version: "v1" } }
+            // },
+            {
+              title: "MAG 小世界 v2",
+              text:
+                "MAG 逐年趋势:后一年包含前一年的所有范围。  规模趋势:按照排名增大的网络折线图和按照实际规模增大的网络折线图。(此版本各年份分别计算排名计算)",
+              to: { path: "MagDirectNet", query: { version: "v2" } }
+            }
           ]
         },
         Wikipedia: {
@@ -246,7 +252,7 @@ export default {
               to: "/disciplinePeople"
             },
             {
-              title: "WIKI",
+              title: "WIKI 学科逐年相关度",
               text: "各学科的逐年相关度",
               to: "/discipline"
             },
@@ -261,7 +267,7 @@ export default {
               to: "/SmallWorldDirectedCoreV2"
             },
             {
-              title: "WIKI 单学科",
+              title: "Cognitive science 相关度",
               text: "Cognitive science 和其他学科的逐年相关度",
               to: "/SubDiscipline"
             }
