@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-07-08 16:01:04
+ * @LastEditTime: 2020-07-15 13:52:59
  * @Description: 
  -->
 
@@ -44,6 +44,17 @@
           dense
           return-object
           label="小世界指标"
+        ></v-select>
+      </v-col>
+
+      <v-col cols="2">
+        <v-select
+          v-model="citationSelect"
+          :items="citationOpt"
+          @change="getData"
+          dense
+          return-object
+          label="引用关系"
         ></v-select>
       </v-col>
 
@@ -91,6 +102,8 @@ export default {
   data() {
     return {
       loading: false,
+      citationSelect: "linksin",
+      citationOpt: ["linksout", "linksin"],
       subjectTarget: [],
       yearSelect: [2015],
       quotaSelect: { text: "平均路径长度", value: "shortest path length" },
@@ -199,7 +212,8 @@ export default {
         name: subject,
         year: year,
         toplimit: this.nodeCountSelect,
-        version: this.$route.query.version
+        version: this.$route.query.version,
+        citation: this.citationSelect
       };
       try {
         if (this.datacache[JSON.stringify(opt)]) {
