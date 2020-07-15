@@ -1,82 +1,79 @@
 <template>
   <v-container>
-    <v-app>
-      <v-navigation-drawer right fixed app>
-        <v-list dense nav>
-          <v-list-item two-line> </v-list-item>
+    <v-navigation-drawer right fixed app>
+      <v-list dense nav>
+        <v-list-item two-line> </v-list-item>
+        <v-divider></v-divider>
+        <v-list-item v-for="obj in hrefArray" :key="obj.name">
+          <a @click="scrollMeTo(obj.href)"
+            ><v-list-item-title v-text="obj.name"></v-list-item-title
+          ></a>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
 
-          <v-divider></v-divider>
+    <!-- Sizes your content based upon application components -->
+    <v-main>
+      <!-- Provides the application the proper gutter -->
+      <v-container fluid>
+        <div>
+          <div
+            v-for="(subitems, h1name) in indexObject"
+            :key="h1name"
+            class="mb-5"
+          >
+            <v-row>
+              <a :ref="h1name"
+                ><h1>{{ h1name }}</h1></a
+              >
+            </v-row>
+            <v-row>
+              <v-divider></v-divider>
+            </v-row>
 
-          <v-list-item v-for="obj in hrefArray" :key="obj.name">
-            <a @click="scrollMeTo(obj.href)"
-              ><v-list-item-title v-text="obj.name"></v-list-item-title
-            ></a>
-          </v-list-item>
-        </v-list>
-      </v-navigation-drawer>
-
-      <!-- Sizes your content based upon application components -->
-      <v-main name="myname">
-        <!-- Provides the application the proper gutter -->
-        <v-container fluid>
-          <div>
-            <div
-              v-for="(subitems, h1name) in indexObject"
-              :key="h1name"
-              class="mb-5"
-            >
-              <v-row>
-                <a :ref="h1name"
-                  ><h1>{{ h1name }}</h1></a
+            <div v-for="(items, name) in subitems" :key="name" class="mb-5">
+              <v-row
+                ><a :ref="name"
+                  ><h3>{{ name }}</h3></a
                 >
               </v-row>
               <v-row>
                 <v-divider></v-divider>
               </v-row>
-
-              <div v-for="(items, name) in subitems" :key="name" class="mb-5">
-                <v-row
-                  ><a :ref="name"
-                    ><h3>{{ name }}</h3></a
-                  >
-                </v-row>
-                <v-row>
-                  <v-divider></v-divider>
-                </v-row>
-                <v-row>
-                  <v-col
-                    cols="6"
-                    md="4"
-                    lg="3"
-                    v-for="(item, index) in items"
-                    :key="index"
-                  >
-                    <v-hover v-slot:default="{ hover }" close-delay="200">
-                      <v-card
-                        class="mx-auto"
-                        max-width="344"
-                        :elevation="hover ? 16 : 2"
-                        min-height="150"
-                        :to="item.to"
-                        :href="item.href"
-                        ><v-card-title>{{ item.title }}</v-card-title
-                        ><v-card-text>{{ item.text }}</v-card-text
-                        ><v-card-actions></v-card-actions
-                      ></v-card>
-                    </v-hover>
-                  </v-col>
-                </v-row>
-              </div>
+              <v-row>
+                <v-col
+                  cols="6"
+                  md="4"
+                  lg="3"
+                  v-for="(item, index) in items"
+                  :key="index"
+                >
+                  <v-hover v-slot:default="{ hover }" close-delay="200">
+                    <v-card
+                      class="mx-auto"
+                      max-width="344"
+                      :elevation="hover ? 16 : 2"
+                      min-height="150"
+                      :to="item.to"
+                      :href="item.href"
+                      ><v-card-title>{{ item.title }}</v-card-title
+                      ><v-card-text>{{ item.text }}</v-card-text
+                      ><v-card-actions></v-card-actions
+                    ></v-card>
+                  </v-hover>
+                </v-col>
+              </v-row>
             </div>
           </div>
-        </v-container>
-      </v-main>
-    </v-app>
+        </div>
+      </v-container>
+    </v-main>
   </v-container>
 </template>
 
 <script>
 export default {
+  name: "index",
   mounted() {
     this.$store.commit("changeCurentPath", null);
   },

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-07-15 13:52:59
+ * @LastEditTime: 2020-07-15 14:38:46
  * @Description: 
  -->
 
@@ -319,9 +319,9 @@ export default {
       };
       this.chartOpt2 = this.setOptions(data, {
         xname: "节点规模数",
+        xtype: "value",
         subtext: "学科内排名前 X 的组成的小世界网络"
       });
-      console.log(this.chartOpt2);
 
       // 实际规模趋势
       for (let x of this.subjectTarget) {
@@ -369,7 +369,6 @@ export default {
         subtext: "学科内头部排名组成的联通节点数为 X 的小世界网络"
       });
 
-      console.log(this.chartOpt3);
       this.loading = false;
     },
 
@@ -377,10 +376,10 @@ export default {
       // 排序
       data.series.sort((x, y) => {
         if (x.data.slice(-1).length == 0 || !x.data.slice(-1)[0][1]) {
-          return 1;
+          return -1;
         }
         if (y.data.slice(-1).length == 0 || !y.data.slice(-1)[0][1]) {
-          return -1;
+          return 1;
         }
         return y.data.slice(-1)[0][1] - x.data.slice(-1)[0][1];
       });
