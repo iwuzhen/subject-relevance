@@ -11,7 +11,7 @@
           label="目标学科"
         ></v-select>
       </v-col>
-      <v-col cols="8">
+      <v-col cols="6">
         <v-select
           v-model="subjectRelevances"
           :items="categorysOptions"
@@ -29,6 +29,15 @@
           dense
           @change="getData"
           label="条件"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="qsValue"
+          :items="qsOptions"
+          dense
+          @change="qsChange"
+          label="学科内 Linksin 大于的值"
         ></v-select>
       </v-col>
     </v-row>
@@ -102,6 +111,8 @@ export default {
   name: "mag学科相关度",
   data() {
     return {
+      qsValue: "不筛选",
+      qsOptions: [0, "不筛选"],
       showAve: true,
       subjectTarget: "",
       subjectRelevances: [],
@@ -135,6 +146,12 @@ export default {
     }
   },
   methods: {
+    qsChange() {
+      if (this.qsValue == 0) {
+        this.methodValue = "linksin";
+      }
+      this.getData();
+    },
     async getData() {
       if (!this.subjectTarget || this.subjectRelevances.length === 0) {
         // this.$message.error("请选择完整");
@@ -156,6 +173,9 @@ export default {
         from: this.years[0],
         to: this.years[1]
       };
+      if (this.qsValue != "不筛选") {
+        opt.qs = this.qsValue;
+      }
       getMasData(opt)
         .then(res => {
           if (res.data.data) {
