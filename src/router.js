@@ -42,6 +42,7 @@ const SmallWorldDirectedCoreV2 = () =>
   import("@/components/SmallWorldDirectedCoreV2");
 const MagDirectNet = () => import("@/components/MagDirectNet");
 const MagRefSelfRate = () => import("@/components/MagRefSelfRate");
+const MagDirectNetV3 = () => import("@/components/MagDirectNetV3");
 
 Vue.use(Router);
 
@@ -67,6 +68,11 @@ export default new Router({
       path: "/MagDirectNet",
       name: "MagDirectNet",
       component: MagDirectNet
+    },
+    {
+      path: "/MagDirectNetV3",
+      name: "MagDirectNetV3",
+      component: MagDirectNetV3
     },
     {
       path: "/MagAAAInfo",

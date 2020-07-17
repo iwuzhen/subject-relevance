@@ -129,6 +129,12 @@ export default {
               text:
                 "MAG 逐年趋势:后一年包含前一年的所有范围。  规模趋势:按照排名增大的网络折线图和按照实际规模增大的网络折线图。(此版本各年份分别计算排名计算)",
               to: { path: "MagDirectNet", query: { version: "v2" } }
+            },
+            {
+              title: "MAG 小世界 v3",
+              text:
+                "MAG 逐年趋势:可以选择5，10，15，20年的范围内的学科内论文，计算出的小世界。 ",
+              to: { path: "MagDirectNetV3", query: { version: "v3" } }
             }
           ]
         },
