@@ -96,6 +96,11 @@ export default {
               title: "MAG 学科自恋度",
               text: "MAG 学科自恋度",
               to: "/MagRefSelfRate"
+            },
+            {
+              title: "MAG 学科引用年份热力图",
+              text: "MAG 学科年份热力图",
+              to: "/MAGRefDist"
             }
           ],
           "MAG- 幂律": [

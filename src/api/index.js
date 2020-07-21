@@ -140,6 +140,16 @@ export async function getMagUndirectNet(params) {
   // return await cacheRequestGo(requestParams);
 }
 
+export async function getMasYearRefDist(params) {
+  let requestParams = {
+    url: "/mag/magyearrefdist",
+    method: "post",
+    data: params
+  };
+  let res = await requestgo(requestParams);
+  return res.data;
+}
+
 // mag 自恋度
 export async function getMagRefSelfRate(params) {
   let requestParams = {
