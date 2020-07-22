@@ -3,19 +3,28 @@
  * @Author: ider
  * @Date: 2019-07-21 13:24:25
  * @LastEditors: ider
- * @LastEditTime: 2020-07-21 18:51:11
+ * @LastEditTime: 2020-07-22 16:11:43
  * @Description: 
 -->
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="8">
+      <v-col cols="7">
         <v-select
           v-model="subjectTarget"
           :items="categorys"
           dense
           @change="getData"
           label="学科"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="limitValue"
+          :items="limitOpt"
+          dense
+          @change="getData"
+          label="学科网络限制"
         ></v-select>
       </v-col>
       <v-col cols="2">
@@ -27,7 +36,7 @@
           label="条件"
         ></v-select>
       </v-col>
-      <v-col cols="2">
+      <v-col cols="1">
         <v-select
           v-model="viewSelect"
           :items="viewOpt"
@@ -67,7 +76,9 @@ export default {
       loading: false,
       viewSelect: "百分比",
       viewOpt: ["百分比", "引用数"],
-      chartOpt: {}
+      chartOpt: {},
+      limitValue: "不限制",
+      limitOpt: ["不限制", 100000]
     };
   },
   watch: {
@@ -91,8 +102,12 @@ export default {
     async getData() {
       let opt = {
         name: this.subjectTarget,
-        refer: this.methodValue
+        refer: this.methodValue,
+        toplimit: this.limitValue
       };
+      if (this.limitValue == "不限制") {
+        opt.toplimit = 100000000;
+      }
       console.log(opt);
       let ret = await getMasYearRefDist(opt);
       let xData = [];
@@ -140,6 +155,7 @@ export default {
       console.log(this.chartOpt);
     },
     setOpt(xData, yData, Data) {
+      let viewSelect = this.viewSelect;
       let option = {
         tooltip: {
           trigger: "item",
@@ -154,7 +170,16 @@ export default {
             }
           },
           formatter: function(params) {
-            let showHtm = ` ${params.seriesName}<br>${params.marker} ${params.name} -> ${params.value[1]}:   ${params.value[2]}`;
+            let showHtm;
+            if (viewSelect == "百分比") {
+              showHtm = ` ${params.seriesName}<br>${params.marker} ${
+                params.name
+              } -> ${params.value[1]}:   ${Math.floor(
+                params.value[2] * 10000000
+              ) / 100000}%`;
+            } else {
+              showHtm = ` ${params.seriesName}<br>${params.marker} ${params.name} -> ${params.value[1]}:   ${params.value[2]}`;
+            }
             return showHtm;
           }
         },
@@ -191,7 +216,7 @@ export default {
               // "#ffffbf",
               // "#fee090",
               // "#fdae61",
-              "#f46d43",
+              // "#f46d43",
               "#d73027",
               "#a50026",
               "#990000"

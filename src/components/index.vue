@@ -104,7 +104,8 @@ export default {
             },
             {
               title: "MAG 学科引用年份热力图",
-              text: "MAG 学科年份热力图",
+              text:
+                "参数说明：不限制学科网络规模，就是统计学科内所有的文章，linksin 或 linsout 的文章年份数量。 限制学科规模数为 10 万，每一年按照 linksout 或 linksin 数量排序 10 万名内的文章，其linksin 或 linsout 的文章年份数量",
               to: "/MAGRefDist"
             }
           ],
