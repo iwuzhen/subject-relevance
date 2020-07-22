@@ -21,7 +21,7 @@ stages:
   - deploy
 
 build:
-  image: node:lts-alpine
+  image: node:alpine
   stage: build
   tags: 
     - builder
