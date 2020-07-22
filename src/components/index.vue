@@ -98,6 +98,11 @@ export default {
               to: "/MagRefSelfRate"
             },
             {
+              title: "MAG 学科逐年引用分布",
+              text: "MAG 学科逐年引用分布",
+              to: "/MasCompositionByYear"
+            },
+            {
               title: "MAG 学科引用年份热力图",
               text: "MAG 学科年份热力图",
               to: "/MAGRefDist"

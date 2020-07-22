@@ -44,6 +44,7 @@ const MagDirectNet = () => import("@/components/MagDirectNet");
 const MagRefSelfRate = () => import("@/components/MagRefSelfRate");
 const MagDirectNetV3 = () => import("@/components/MagDirectNetV3");
 const MAGRefDist = () => import("@/components/MAGRefDist");
+const MasCompositionByYear = () => import("@/components/MasCompositionByYear");
 
 Vue.use(Router);
 
@@ -59,6 +60,11 @@ export default new Router({
       path: "/SmallWorldDirectedCoreV2",
       name: "SmallWorldDirectedCoreV2",
       component: SmallWorldDirectedCoreV2
+    },
+    {
+      path: "/MasCompositionByYear",
+      name: "MasCompositionByYear",
+      component: MasCompositionByYear
     },
     {
       path: "/MAGRefDist",

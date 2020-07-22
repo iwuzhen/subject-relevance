@@ -162,6 +162,17 @@ export async function getMagRefSelfRate(params) {
   // return await cacheRequestGo(requestParams);
 }
 
+// mag 各学科 linkin 逐年引用情况
+export async function getMasCompositionByYear(params) {
+  let requestParams = {
+    url: "/mag/getCompositionByYear",
+    method: "post",
+    data: params
+  };
+  let res = await request(requestParams);
+  return res.data;
+}
+
 export async function getWikiData(params) {
   let requestParams = {
     url: "/wiki/getDistance",
