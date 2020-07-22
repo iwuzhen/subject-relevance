@@ -32,7 +32,6 @@ build:
     --disturl=https://npm.taobao.org/dist \
     --userconfig=$HOME/.cnpmrc"
    - cnpm -v
-   - cnpm install wepy-cli -g
    - cnpm install
    - cnpm run build
    
