@@ -27,7 +27,7 @@
           v-model="methodValue"
           :items="methodOptions"
           dense
-          @change="getData"
+          @change="linksChange"
           label="条件"
         ></v-select>
       </v-col>
@@ -78,7 +78,16 @@
           </template>
         </v-range-slider>
       </v-col>
-      <v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="bfValue"
+          :items="bfOpt"
+          dense
+          @change="bfChange"
+          label="只用该年以前的数据"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
         <v-btn
           :color="showAve ? 'light-green' : 'lime'"
           @click="
@@ -120,6 +129,8 @@ export default {
       years: [1945, 2019],
       categorys: coreCategorys,
       methodOptions: ["linksout", "linksin"],
+      bfValue: "不适用",
+      bfOpt: ["不适用", 1980, 1985, 1990, 1995, 2000, 2005],
       loading: false
     };
   },
@@ -149,9 +160,27 @@ export default {
     qsChange() {
       if (this.qsValue == 0) {
         this.methodValue = "linksin";
+        this.bfValue == "不适用";
       }
       this.getData();
     },
+
+    bfChange() {
+      if (this.bfValue != "不适用") {
+        this.methodValue = "linksin";
+        this.qsValue = "不筛选";
+      }
+      this.getData();
+    },
+
+    linksChange() {
+      if (this.methodValue == "linksout") {
+        this.qsValue = "不筛选";
+        this.bfValue = "不适用";
+      }
+      this.getData();
+    },
+
     async getData() {
       if (!this.subjectTarget || this.subjectRelevances.length === 0) {
         // this.$message.error("请选择完整");
@@ -175,6 +204,9 @@ export default {
       };
       if (this.qsValue != "不筛选") {
         opt.qs = this.qsValue;
+      }
+      if (this.bfValue != "不适用") {
+        opt.bf = this.bfValue;
       }
       getMasData(opt)
         .then(res => {
