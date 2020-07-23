@@ -1,50 +1,50 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-const IndexPage = () => import("@/components/index");
-const Discipline = () => import("@/components/discipline");
-const DisciplineCore = () => import("@/components/disciplineCore");
-const Masline = () => import("@/components/masline");
-const wikiPageCount = () => import("@/components/ArticlesTotal");
-const SubDiscipline = () => import("@/components/SubDiscipline");
-const MasArticlesTotal = () => import("@/components/MasArticlesTotal");
-const PowerLaw = () => import("@/components/powerLaw");
-const ViewAndEdits = () => import("@/components/ViewAndEdits");
-const SmallWorldUndirected = () => import("@/components/SmallWorldUndirected");
+const IndexPage = () => import("@/pages/index");
+const Discipline = () => import("@/pages/discipline");
+const DisciplineCore = () => import("@/pages/disciplineCore");
+const Masline = () => import("@/pages/masline");
+const wikiPageCount = () => import("@/pages/ArticlesTotal");
+const SubDiscipline = () => import("@/pages/SubDiscipline");
+const MasArticlesTotal = () => import("@/pages/MasArticlesTotal");
+const PowerLaw = () => import("@/pages/powerLaw");
+const ViewAndEdits = () => import("@/pages/ViewAndEdits");
+const SmallWorldUndirected = () => import("@/pages/SmallWorldUndirected");
 const SmallWorldUndirectedLimit = () =>
-  import("@/components/SmallWorldUndirectedLimit");
-const SmallWorldDirected = () => import("@/components/SmallWorldDirected");
-const powerLawPageRank = () => import("@/components/powerLawPageRank");
-const DegreeDistribution = () => import("@/components/DegreeDistribution");
-const ZipfByNodes = () => import("@/components/ZipfByNodes");
-const WikiTree = () => import("@/components/WikiTree");
-const BritannicaTree = () => import("@/components/BritannicaTree");
-const BanShuaiQi = () => import("@/components/BanShuaiQi");
-const TopArticles = () => import("@/components/TopArticles");
-const disciplinePeople = () => import("@/components/disciplinePeople");
-const PeopleZipfByNodes = () => import("@/components/PeopleZipfByNodes");
+  import("@/pages/SmallWorldUndirectedLimit");
+const SmallWorldDirected = () => import("@/pages/SmallWorldDirected");
+const powerLawPageRank = () => import("@/pages/powerLawPageRank");
+const DegreeDistribution = () => import("@/pages/DegreeDistribution");
+const ZipfByNodes = () => import("@/pages/ZipfByNodes");
+const WikiTree = () => import("@/pages/WikiTree");
+const BritannicaTree = () => import("@/pages/BritannicaTree");
+const BanShuaiQi = () => import("@/pages/BanShuaiQi");
+const TopArticles = () => import("@/pages/TopArticles");
+const disciplinePeople = () => import("@/pages/disciplinePeople");
+const PeopleZipfByNodes = () => import("@/pages/PeopleZipfByNodes");
 const PeopleInnerZipfByNodes = () =>
-  import("@/components/PeopleInnerZipfByNodes");
-const CoreZipfByNodes = () => import("@/components/CoreZipfByNodes");
-const CoreLinks = () => import("@/components/CoreLinks");
-const CoreArticlesTotal = () => import("@/components/CoreArticlesTotal");
-const MagZipf = () => import("@/components/MagZipf");
-const CoreArticlesTotalV2 = () => import("@/components/CoreArticlesTotalV2");
-const MagInnerZipf = () => import("@/components/MagInnerZipf");
+  import("@/pages/PeopleInnerZipfByNodes");
+const CoreZipfByNodes = () => import("@/pages/CoreZipfByNodes");
+const CoreLinks = () => import("@/pages/CoreLinks");
+const CoreArticlesTotal = () => import("@/pages/CoreArticlesTotal");
+const MagZipf = () => import("@/pages/MagZipf");
+const CoreArticlesTotalV2 = () => import("@/pages/CoreArticlesTotalV2");
+const MagInnerZipf = () => import("@/pages/MagInnerZipf");
 const CoreArticlesTotalNew_v3 = () =>
-  import("@/components/CoreArticlesTotalNew_v3");
-const CoreSWUndirectLimit = () => import("@/components/CoreSWUndirectLimit");
-const CoreSMUndirected = () => import("@/components/CoreSMUndirected");
-const MagAAAInfo = () => import("@/components/MagAAAInfo");
+  import("@/pages/CoreArticlesTotalNew_v3");
+const CoreSWUndirectLimit = () => import("@/pages/CoreSWUndirectLimit");
+const CoreSMUndirected = () => import("@/pages/CoreSMUndirected");
+const MagAAAInfo = () => import("@/pages/MagAAAInfo");
 const CoreArticlesTotalV1_plus = () =>
-  import("@/components/CoreArticlesTotalV1_plus");
+  import("@/pages/CoreArticlesTotalV1_plus");
 const SmallWorldDirectedCoreV2 = () =>
-  import("@/components/SmallWorldDirectedCoreV2");
-const MagDirectNet = () => import("@/components/MagDirectNet");
-const MagRefSelfRate = () => import("@/components/MagRefSelfRate");
-const MagDirectNetV3 = () => import("@/components/MagDirectNetV3");
-const MAGRefDist = () => import("@/components/MAGRefDist");
-const MasCompositionByYear = () => import("@/components/MasCompositionByYear");
+  import("@/pages/SmallWorldDirectedCoreV2");
+const MagDirectNet = () => import("@/pages/MagDirectNet");
+const MagRefSelfRate = () => import("@/pages/MagRefSelfRate");
+const MagDirectNetV3 = () => import("@/pages/MagDirectNetV3");
+const MAGRefDist = () => import("@/pages/MAGRefDist");
+const MasCompositionByYear = () => import("@/pages/MasCompositionByYear");
 
 Vue.use(Router);
 
