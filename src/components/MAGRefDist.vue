@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2019-07-21 13:24:25
  * @LastEditors: ider
- * @LastEditTime: 2020-07-22 16:11:43
+ * @LastEditTime: 2020-07-22 21:32:56
  * @Description: 
 -->
 <template>
@@ -113,36 +113,36 @@ export default {
       let xData = [];
       let retData = [];
       if (this.viewSelect == "引用数") {
-        for (let i = 1970; i <= 2019; i++) {
+        for (let i = 1950; i <= 2019; i++) {
           xData.push(String(i));
 
           if (!ret[i]) {
             // 为空
-            for (let j = 1970; j <= 2019; j++) {
+            for (let j = 1950; j <= 2019; j++) {
               retData.push([String(i), String(j), 0]);
             }
           } else {
-            for (let j = 1970; j <= 2019; j++) {
+            for (let j = 1950; j <= 2019; j++) {
               retData.push([String(i), String(j), ret[i][j] || 0]);
             }
           }
         }
       } else {
         // 百分比
-        for (let i = 1970; i <= 2019; i++) {
+        for (let i = 1950; i <= 2019; i++) {
           xData.push(String(i));
 
           if (!ret[i]) {
             // 为空
-            for (let j = 1970; j <= 2019; j++) {
+            for (let j = 1950; j <= 2019; j++) {
               retData.push([String(i), String(j), 0]);
             }
           } else {
             let sum = 0;
-            for (let j = 1970; j <= 2019; j++) {
+            for (let j = 1950; j <= 2019; j++) {
               sum += ret[i][j] || 0;
             }
-            for (let j = 1970; j <= 2019; j++) {
+            for (let j = 1950; j <= 2019; j++) {
               let da = (ret[i][j] || 0) / sum;
               da = da > 0 ? da.toFixed(5) : da;
               retData.push([String(i), String(j), da]);

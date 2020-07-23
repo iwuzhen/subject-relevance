@@ -56,7 +56,7 @@ export default {
       yearSelect: 1980,
       yearOpt: [1950, 1960, 1970, 1980, 1990, 1995, 2000],
       refSelect: "linksin",
-      refOpt: ["linksin"],
+      refOpt: ["linksin", "linksout"],
       loading: false
     };
   },
