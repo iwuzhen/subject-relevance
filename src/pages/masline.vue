@@ -130,7 +130,7 @@ export default {
       categorys: coreCategorys,
       methodOptions: ["linksout", "linksin"],
       bfValue: "不适用",
-      bfOpt: ["不适用", 1980, 1985, 1990, 1995, 2000, 2005],
+      bfOpt: ["不适用", 1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015],
       loading: false
     };
   },

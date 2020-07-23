@@ -3,6 +3,7 @@
     <v-navigation-drawer right fixed app>
       <v-list dense nav>
         <v-list-item two-line> </v-list-item>
+
         <v-divider></v-divider>
         <v-list-item v-for="obj in hrefArray" :key="obj.name">
           <a @click="scrollMeTo(obj.href)"
@@ -13,7 +14,7 @@
     </v-navigation-drawer>
 
     <!-- Sizes your content based upon application components -->
-    <v-main>
+    <v-main style="padding:0">
       <!-- Provides the application the proper gutter -->
       <v-container fluid>
         <div>

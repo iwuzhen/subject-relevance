@@ -73,6 +73,27 @@ export let cacheRequestGo = async requestParams => {
   return item;
 };
 
+export async function RequestBoard(params, method) {
+  let requestParams;
+  if (method == "get") {
+    requestParams = {
+      url: "/board/noteboard",
+      method: "get",
+      params: params
+    };
+  } else {
+    requestParams = {
+      url: "/board/noteboard",
+      method: method,
+      data: params
+    };
+  }
+
+  let res = await requestgo(requestParams);
+  return res.data;
+  // return await cacheRequestGo(requestParams);
+}
+
 export async function getScaleTrend(params) {
   let requestParams = {
     url: "/smallworld/scaleTrend",
