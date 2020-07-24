@@ -24,6 +24,7 @@
 <script>
 import ToDo from "./ToDo";
 
+import { RequestBoard } from "@/api/index";
 export default {
   name: "NoteBoard",
   data() {
@@ -37,6 +38,25 @@ export default {
     },
     messageCount() {
       return this.$store.state.messageCount;
+    }
+  },
+  mounted() {
+    this.updateCount();
+  },
+  watch: {
+    currentPath() {
+      this.updateCount();
+    }
+  },
+  methods: {
+    async updateCount() {
+      let ret;
+      if (this.currentPath == "/") {
+        ret = await RequestBoard({}, "get");
+      } else {
+        ret = await RequestBoard({ path: this.currentPath }, "get");
+      }
+      this.$store.commit("changemessageCount", ret.length);
     }
   },
   props: {
