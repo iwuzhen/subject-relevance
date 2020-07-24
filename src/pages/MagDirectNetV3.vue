@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-07-17 11:14:32
+ * @LastEditTime: 2020-07-24 14:12:21
  * @Description: 
  -->
 
@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import { extendEchartsOpts, extendLineSeries } from "@/api/data";
+import { extendEchartsOpts, magCategory, extendLineSeries } from "@/api/data";
 import { getMagUndirectNet } from "@/api/index";
 const Limiter = require("async-limiter");
 
@@ -119,7 +119,7 @@ export default {
       quotaSelect: { text: "平均路径长度", value: "shortest path length" },
       yearRangeSelect: 5,
       yearRangeOpt: [5, 10, 15, 20],
-      nodeCountSelect: 40000,
+      nodeCountSelect: 10000,
       nodeCountOpt: [],
       quotaOpt: [
         {
@@ -152,12 +152,7 @@ export default {
         2015,
         2020
       ],
-      categoryOpt: [
-        "Computer engineering",
-        "Chemical engineering",
-        "Physics",
-        "Philosophy"
-      ],
+      categoryOpt: magCategory,
       chartOpt1: {},
       chartOpt2: {},
       chartOpt3: {},

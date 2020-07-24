@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-07-23 13:10:20
  * @LastEditors: ider
- * @LastEditTime: 2020-07-23 18:44:51
+ * @LastEditTime: 2020-07-24 14:09:05
  * @Description: 
 -->
 
@@ -24,7 +24,7 @@
             </v-list-item-action>
 
             <v-list-item-content>
-              <v-list-item-title>{{ item.title }}></v-list-item-title>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
               <v-list-item-subtitle>{{ item.content }} </v-list-item-subtitle>
             </v-list-item-content>
 
