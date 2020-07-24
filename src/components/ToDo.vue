@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-07-23 13:10:20
  * @LastEditors: ider
- * @LastEditTime: 2020-07-24 14:09:05
+ * @LastEditTime: 2020-07-24 14:24:07
  * @Description: 
 -->
 
@@ -222,6 +222,7 @@ export default {
       } else {
         ret = await RequestBoard({ path: this.currentPath }, "get");
       }
+      this.$store.commit("changemessageCount", ret.length);
       for (let row of ret) {
         if (row.active == true) {
           this.fishitems.push(row);

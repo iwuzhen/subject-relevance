@@ -9,9 +9,11 @@
       color="pink"
       @click.stop="dialog = !dialog"
     >
-      <v-icon>mdi-message-bulleted</v-icon>
+      <v-badge color="green" v-if="messageCount > 0" :content="messageCount">
+        <v-icon>mdi-message-bulleted</v-icon>
+      </v-badge>
+      <v-icon v-else>mdi-message-bulleted</v-icon>
     </v-btn>
-
     <v-row justify="center">
       <v-dialog v-model="dialog" scrollable max-width="70vw">
         <keep-alive><ToDo :path="currentPath"/></keep-alive>
@@ -32,6 +34,9 @@ export default {
   computed: {
     currentPath() {
       return this.$route.path;
+    },
+    messageCount() {
+      return this.$store.state.messageCount;
     }
   },
   props: {
