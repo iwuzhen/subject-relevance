@@ -84,7 +84,7 @@ export default {
   data() {
     return {
       girdHeaders: [],
-      nodeRange: [2000, 40000],
+      nodeRange: [100, 40000],
       nodeMax: 100000,
       nodeMin: 1,
       subjectTarget: [],
