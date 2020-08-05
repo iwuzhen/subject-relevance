@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-06-04 10:56:34
  * @LastEditors: ider
- * @LastEditTime: 2020-06-04 17:42:32
+ * @LastEditTime: 2020-08-05 18:24:38
  * @Description: 
 -->
 <template>
@@ -19,13 +19,22 @@
           label="目标学科"
         ></v-select>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="2">
         <v-select
           v-model="limitSelect"
           :items="limitOpt"
           @change="getData"
           clearable
           label="展示数量"
+        ></v-select>
+      </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="queryTypeSelect"
+          :items="queryTypeOpt"
+          @change="getData"
+          clearable
+          label="展示引用数为0的文章"
         ></v-select>
       </v-col>
     </v-row>
@@ -80,6 +89,11 @@ export default {
       loading: false,
       chartOpt1: {},
       chartOpt2: {},
+      queryTypeSelect: "1",
+      queryTypeOpt: [
+        { text: "是", value: "0" },
+        { text: "否", value: "1" }
+      ],
       gridData: []
     };
   },
@@ -132,6 +146,7 @@ export default {
         let opt = {
           str: subject,
           returnType: tr,
+          queryType: this.queryTypeSelect,
           N: this.limitSelect
         };
         try {
