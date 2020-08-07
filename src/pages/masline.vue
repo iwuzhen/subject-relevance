@@ -37,7 +37,7 @@
           :items="qsOptions"
           dense
           @change="qsChange"
-          label="学科内 Linksin 大于的值"
+          label="筛选条件"
         ></v-select>
       </v-col>
     </v-row>
@@ -94,9 +94,8 @@
             showAve = !showAve;
             getData();
           "
-          >{{ showAve ? "关闭平均相关度" : "开启平均相关度" }}</v-btn
-        ></v-col
-      >
+        >{{ showAve ? "关闭平均相关度" : "开启平均相关度" }}</v-btn>
+      </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
@@ -120,8 +119,8 @@ export default {
   name: "mag学科相关度",
   data() {
     return {
-      qsValue: "不筛选",
-      qsOptions: [0, "不筛选"],
+      qsValue: -1,
+      qsOptions: [{ text: "学科内 Linksin 大于的值 0", value: 0 }, { text: "不筛选", value: -1 }, { text: "去掉被引用为0的论文，剩余7000万+", value: -2 }],
       showAve: true,
       subjectTarget: "",
       subjectRelevances: [],
@@ -141,7 +140,7 @@ export default {
     this.$store.commit("changeCurentPath", this.$options.name);
   },
   computed: {
-    categorysOptions: function() {
+    categorysOptions: function () {
       let subjectTarget = this.subjectTarget;
       return this.categorys.map(item => {
         let ret = {
@@ -152,7 +151,7 @@ export default {
         return ret;
       });
     },
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("masChart"));
     }
   },
@@ -168,14 +167,14 @@ export default {
     bfChange() {
       if (this.bfValue != "不适用") {
         this.methodValue = "linksin";
-        this.qsValue = "不筛选";
+        this.qsValue = -1;
       }
       this.getData();
     },
 
     linksChange() {
       if (this.methodValue == "linksout") {
-        this.qsValue = "不筛选";
+        this.qsValue = -1;
         this.bfValue = "不适用";
       }
       this.getData();
@@ -200,11 +199,10 @@ export default {
           .join(","),
         method: this.methodValue,
         from: this.years[0],
-        to: this.years[1]
+        to: this.years[1],
+        qs: this.qsValue
       };
-      if (this.qsValue != "不筛选") {
-        opt.qs = this.qsValue;
-      }
+
       if (this.bfValue != "不适用") {
         opt.bf = this.bfValue;
       }
