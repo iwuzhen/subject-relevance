@@ -6,9 +6,9 @@
 
         <v-divider></v-divider>
         <v-list-item v-for="obj in hrefArray" :key="obj.name">
-          <a @click="scrollMeTo(obj.href)"
-            ><v-list-item-title v-text="obj.name"></v-list-item-title
-          ></a>
+          <a @click="scrollMeTo(obj.href)">
+            <v-list-item-title v-text="obj.name"></v-list-item-title>
+          </a>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -24,9 +24,9 @@
             class="mb-5"
           >
             <v-row>
-              <a :ref="h1name"
-                ><h1>{{ h1name }}</h1></a
-              >
+              <a :ref="h1name">
+                <h1>{{ h1name }}</h1>
+              </a>
             </v-row>
             <v-row>
               <v-divider></v-divider>
@@ -34,9 +34,9 @@
 
             <div v-for="(items, name) in subitems" :key="name" class="mb-5">
               <v-row
-                ><a :ref="name"
-                  ><h3>{{ name }}</h3></a
-                >
+                ><a :ref="name">
+                  <h3>{{ name }}</h3>
+                </a>
               </v-row>
               <v-row>
                 <v-divider></v-divider>
@@ -57,10 +57,11 @@
                       min-height="150"
                       :to="item.to"
                       :href="item.href"
-                      ><v-card-title>{{ item.title }}</v-card-title
-                      ><v-card-text>{{ item.text }}</v-card-text
-                      ><v-card-actions></v-card-actions
-                    ></v-card>
+                    >
+                      <v-card-title>{{ item.title }}</v-card-title>
+                      <v-card-text>{{ item.text }}</v-card-text>
+                      <v-card-actions></v-card-actions>
+                    </v-card>
                   </v-hover>
                 </v-col>
               </v-row>
@@ -81,6 +82,36 @@ export default {
   data() {
     return {
       indexObject: {
+        "MAG v2 (非简介分类)": {
+          "MAG v2- 学科相关度": [
+            {
+              title: "MAGgoogle距离",
+              text: "",
+              to: "/MasDistanceV2"
+            }
+          ],
+
+          "MAG v2- 统计数据": [
+            {
+              title: "MAG文章数",
+              text: "",
+              to: "/MasArticlesTotalV2"
+            }
+          ],
+          "MAG v2- 幂率": [
+            {
+              title: "MAG 小世界幂率",
+              text: "",
+              to: "/MagInnerZipfV2"
+            },
+
+            {
+              title: "MAG 世界幂率",
+              text: "",
+              to: "/MagZipfV2"
+            }
+          ]
+        },
         MAG: {
           "MAG- 统计数据": [
             {

@@ -5,9 +5,13 @@ const IndexPage = () => import("@/pages/index");
 const Discipline = () => import("@/pages/discipline");
 const DisciplineCore = () => import("@/pages/disciplineCore");
 const Masline = () => import("@/pages/masline");
+const MasDistanceV2 = () => import("@/pages/maslinev2");
+
 const wikiPageCount = () => import("@/pages/ArticlesTotal");
 const SubDiscipline = () => import("@/pages/SubDiscipline");
 const MasArticlesTotal = () => import("@/pages/MasArticlesTotal");
+const MasArticlesTotalV2 = () => import("@/pages/MasArticlesTotalV2");
+
 const PowerLaw = () => import("@/pages/powerLaw");
 const ViewAndEdits = () => import("@/pages/ViewAndEdits");
 const SmallWorldUndirected = () => import("@/pages/SmallWorldUndirected");
@@ -23,16 +27,16 @@ const BanShuaiQi = () => import("@/pages/BanShuaiQi");
 const TopArticles = () => import("@/pages/TopArticles");
 const disciplinePeople = () => import("@/pages/disciplinePeople");
 const PeopleZipfByNodes = () => import("@/pages/PeopleZipfByNodes");
-const PeopleInnerZipfByNodes = () =>
-  import("@/pages/PeopleInnerZipfByNodes");
+const PeopleInnerZipfByNodes = () => import("@/pages/PeopleInnerZipfByNodes");
 const CoreZipfByNodes = () => import("@/pages/CoreZipfByNodes");
 const CoreLinks = () => import("@/pages/CoreLinks");
 const CoreArticlesTotal = () => import("@/pages/CoreArticlesTotal");
 const MagZipf = () => import("@/pages/MagZipf");
+const MagZipfV2 = () => import("@/pages/MagZipfV2");
 const CoreArticlesTotalV2 = () => import("@/pages/CoreArticlesTotalV2");
 const MagInnerZipf = () => import("@/pages/MagInnerZipf");
-const CoreArticlesTotalNew_v3 = () =>
-  import("@/pages/CoreArticlesTotalNew_v3");
+const MagInnerZipfV2 = () => import("@/pages/MagInnerZipfV2");
+const CoreArticlesTotalNew_v3 = () => import("@/pages/CoreArticlesTotalNew_v3");
 const CoreSWUndirectLimit = () => import("@/pages/CoreSWUndirectLimit");
 const CoreSMUndirected = () => import("@/pages/CoreSMUndirected");
 const MagAAAInfo = () => import("@/pages/MagAAAInfo");
@@ -112,6 +116,11 @@ export default new Router({
       component: Masline
     },
     {
+      path: "/MasDistanceV2",
+      name: "MasDistanceV2",
+      component: MasDistanceV2
+    },
+    {
       path: "/ArticlesTotal",
       name: "ArticlesTotal",
       component: wikiPageCount
@@ -125,6 +134,11 @@ export default new Router({
       path: "/MasArticlesTotal",
       name: "MasArticlesTotal",
       component: MasArticlesTotal
+    },
+    {
+      path: "/MasArticlesTotalV2",
+      name: "MasArticlesTotalV2",
+      component: MasArticlesTotalV2
     },
     {
       path: "/powerlaw",
@@ -237,9 +251,19 @@ export default new Router({
       component: MagZipf
     },
     {
+      path: "/MagZipfV2",
+      name: "MagZipfV2",
+      component: MagZipfV2
+    },
+    {
       path: "/MagInnerZipf",
       name: "MagInnerZipf",
       component: MagInnerZipf
+    },
+    {
+      path: "/MagInnerZipfV2",
+      name: "MagInnerZipfV2",
+      component: MagInnerZipfV2
     },
     {
       path: "/CoreArticlesTotalV1_plus",

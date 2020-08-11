@@ -223,9 +223,30 @@ export async function getMagZipf(params) {
   return await cacheRequest(requestParams);
 }
 
+export async function getMagZipfV2(params) {
+  let requestParams = {
+    url: "/mag/getMagZipf_v2",
+    method: "post",
+    data: params
+  };
+
+  let res = await request(requestParams);
+  return res.data;
+  // return await cacheRequest(requestParams);
+}
+
 export async function getMagInnerZipf(params) {
   let requestParams = {
     url: "/mag/getMagInnerZipf",
+    method: "post",
+    data: params
+  };
+  return await cacheRequest(requestParams);
+}
+
+export async function getMagInnerZipfV2(params) {
+  let requestParams = {
+    url: "/mag/getMagInnerZipf_v2",
     method: "post",
     data: params
   };
@@ -247,6 +268,14 @@ export async function getDistanceCore(params) {
 export function getMasData(params) {
   return request({
     url: "/wiki/getMasDistance",
+    method: "post",
+    data: params
+  });
+}
+
+export function getMasDatav2(params) {
+  return request({
+    url: "/wiki/getMasDistance_v2",
     method: "post",
     data: params
   });
@@ -352,6 +381,14 @@ export function getDistanceByFile(params) {
 export function getMasArticlesTotal(params) {
   return request({
     url: "/wiki/getMasArticlesTotal",
+    method: "post",
+    data: params
+  });
+}
+
+export function getMasArticlesTotalV2(params) {
+  return request({
+    url: "/wiki/getMasArticlesTotal_v2",
     method: "post",
     data: params
   });
