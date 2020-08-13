@@ -128,7 +128,7 @@ export default {
       methodValue: "linksin",
       years: [1945, 2019],
       categorys: coreCategorys,
-      methodOptions: ["linksin"],
+      methodOptions: ["linksin", "linksout"],
       bfValue: "不适用",
       bfOpt: ["不适用"],
       loading: false
