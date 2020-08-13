@@ -40,6 +40,7 @@ const CoreArticlesTotalNew_v3 = () => import("@/pages/CoreArticlesTotalNew_v3");
 const CoreSWUndirectLimit = () => import("@/pages/CoreSWUndirectLimit");
 const CoreSMUndirected = () => import("@/pages/CoreSMUndirected");
 const MagAAAInfo = () => import("@/pages/MagAAAInfo");
+const MagAAAInfoV2 = () => import("@/pages/MagAAAInfoV2");
 const CoreArticlesTotalV1_plus = () =>
   import("@/pages/CoreArticlesTotalV1_plus");
 const SmallWorldDirectedCoreV2 = () =>
@@ -48,6 +49,7 @@ const MagDirectNet = () => import("@/pages/MagDirectNet");
 const MagRefSelfRate = () => import("@/pages/MagRefSelfRate");
 const MagDirectNetV3 = () => import("@/pages/MagDirectNetV3");
 const MAGRefDist = () => import("@/pages/MAGRefDist");
+const MAGRefDistV2 = () => import("@/pages/MAGRefDistV2");
 const MasCompositionByYear = () => import("@/pages/MasCompositionByYear");
 
 Vue.use(Router);
@@ -76,6 +78,11 @@ export default new Router({
       component: MAGRefDist
     },
     {
+      path: "/MAGRefDistV2",
+      name: "MAGRefDistV2",
+      component: MAGRefDistV2
+    },
+    {
       path: "/MagRefSelfRate",
       name: "MagRefSelfRate",
       component: MagRefSelfRate
@@ -94,6 +101,11 @@ export default new Router({
       path: "/MagAAAInfo",
       name: "MagAAAInfo",
       component: MagAAAInfo
+    },
+    {
+      path: "/MagAAAInfoV2",
+      name: "MagAAAInfoV2",
+      component: MagAAAInfoV2
     },
     {
       path: "/CoreSWUndirectLimit",

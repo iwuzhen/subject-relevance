@@ -85,8 +85,8 @@ export default {
         "MAG v2 (非简介分类)": {
           "MAG v2- 学科相关度": [
             {
-              title: "MAGgoogle距离",
-              text: "",
+              title: "MAG google 距离",
+              text: "Mag 学科相关度",
               to: "/MasDistanceV2"
             }
           ],
@@ -96,6 +96,17 @@ export default {
               title: "MAG文章数",
               text: "",
               to: "/MasArticlesTotalV2"
+            },
+            {
+              title: "MAG 作者文章数",
+              text: "MAG 作者文章数 V2",
+              to: "/MagAAAInfoV2"
+            },
+            {
+              title: "MAG 学科引用年份热力图",
+              text:
+                "参数说明：不限制学科网络规模，就是统计学科内所有的文章，linksin 或 linsout 的文章年份数量。 限制学科规模数为 10 万，每一年按照 linksout 或 linksin 数量排序 10 万名内的文章，其linksin 或 linsout 的文章年份数量",
+              to: "/MAGRefDistV2"
             }
           ],
           "MAG v2- 幂率": [

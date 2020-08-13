@@ -214,6 +214,17 @@ export async function getMagAuthorsAndArticleInfo(params) {
   return await cacheRequest(requestParams);
 }
 
+export async function getMagAuthorsAndArticleInfoV2(params) {
+  let requestParams = {
+    url: "/mag/getMagAuthorsAndArticleInfo_v2",
+    method: "post",
+    data: params
+  };
+  // let res = await request(requestParams);
+  // return res.data;
+  return await cacheRequest(requestParams);
+}
+
 export async function getMagZipf(params) {
   let requestParams = {
     url: "/mag/getMagZipf",
