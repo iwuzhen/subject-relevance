@@ -1,11 +1,21 @@
 <template>
   <v-container>
-    <v-navigation-drawer right fixed app>
-      <v-list dense nav>
+    <v-navigation-drawer
+      right
+      fixed
+      app
+    >
+      <v-list
+        dense
+        nav
+      >
         <v-list-item two-line> </v-list-item>
 
         <v-divider></v-divider>
-        <v-list-item v-for="obj in hrefArray" :key="obj.name">
+        <v-list-item
+          v-for="obj in hrefArray"
+          :key="obj.name"
+        >
           <a @click="scrollMeTo(obj.href)">
             <v-list-item-title v-text="obj.name"></v-list-item-title>
           </a>
@@ -32,9 +42,12 @@
               <v-divider></v-divider>
             </v-row>
 
-            <div v-for="(items, name) in subitems" :key="name" class="mb-5">
-              <v-row
-                ><a :ref="name">
+            <div
+              v-for="(items, name) in subitems"
+              :key="name"
+              class="mb-5"
+            >
+              <v-row><a :ref="name">
                   <h3>{{ name }}</h3>
                 </a>
               </v-row>
@@ -49,7 +62,10 @@
                   v-for="(item, index) in items"
                   :key="index"
                 >
-                  <v-hover v-slot:default="{ hover }" close-delay="200">
+                  <v-hover
+                    v-slot:default="{ hover }"
+                    close-delay="200"
+                  >
                     <v-card
                       class="mx-auto"
                       max-width="344"
@@ -120,6 +136,15 @@ export default {
               title: "MAG 世界幂率",
               text: "",
               to: "/MagZipfV2"
+            }
+          ],
+          "MAG v2- 小世界": [
+
+            {
+              title: "MAG 小世界 v4",
+              text:
+                "重新筛选后计算得到的 MAG 小世界",
+              to: { path: "MagDirectNetV4", query: { version: "v4" } }
             }
           ]
         },
@@ -227,7 +252,7 @@ export default {
             {
               title: "WIKI 分类层次",
               text: "WIKI 分类层次查询",
-              href: "http://wikidb.lambdax.cn:10080/wikidb_web/first.jsp"
+              href: "http://wikidb.knogen.com:10080/wikidb_web/first.jsp"
             }
           ],
           "Wikipedia- Core 学科相关度": [
@@ -395,7 +420,7 @@ export default {
     }
   },
   computed: {
-    hrefArray: function() {
+    hrefArray: function () {
       let retArray = [];
       for (let key in this.indexObject) {
         for (let skey in this.indexObject[key]) {

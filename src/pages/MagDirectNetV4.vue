@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-08-04 10:27:36
+ * @LastEditTime: 2020-08-17 14:35:53
  * @Description: 
  -->
 
@@ -80,22 +80,49 @@
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card class="mx-auto" outlined :loading="loading" height="70vh">
-          <v-container fluid fill-height id="subjectChart1"> </v-container>
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+        >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart1"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card class="mx-auto" outlined :loading="loading" height="70vh">
-          <v-container fluid fill-height id="subjectChart2"> </v-container>
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+        >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart2"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card class="mx-auto" outlined :loading="loading" height="70vh">
-          <v-container fluid fill-height id="subjectChart3"> </v-container>
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+        >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart3"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -108,7 +135,7 @@ import { getMagUndirectNet } from "@/api/index";
 const Limiter = require("async-limiter");
 
 export default {
-  name: "MAG_小世界网络_范围限制",
+  name: "MAG_小世界网络_V4",
   data() {
     return {
       loading: false,
@@ -117,8 +144,8 @@ export default {
       subjectTarget: [],
       yearSelect: [2015],
       quotaSelect: { text: "平均路径长度", value: "shortest path length" },
-      yearRangeSelect: 5,
-      yearRangeOpt: [5, 10, 15, 20],
+      yearRangeSelect: 0,
+      yearRangeOpt: [0, 5, 10, 15, 20],
       nodeCountSelect: 10000,
       nodeCountOpt: [],
       quotaOpt: [
@@ -161,16 +188,16 @@ export default {
   },
   watch: {
     // 更新图标
-    chartOpt1: function(opt) {
+    chartOpt1: function (opt) {
       this.myChart1.setOption(opt, true);
     },
-    chartOpt2: function(opt) {
+    chartOpt2: function (opt) {
       this.myChart2.setOption(opt, true);
     },
-    chartOpt3: function(opt) {
+    chartOpt3: function (opt) {
       this.myChart3.setOption(opt, true);
     },
-    subjectTarget: async function(newValue, oldValue) {
+    subjectTarget: async function (newValue, oldValue) {
       this.loading = true;
       let diffArray = newValue.filter(item => !oldValue.includes(item));
       if (diffArray.length > 0) {
@@ -190,13 +217,13 @@ export default {
     }
   },
   computed: {
-    myChart1: function() {
+    myChart1: function () {
       return this.$echarts.init(document.getElementById("subjectChart1"));
     },
-    myChart2: function() {
+    myChart2: function () {
       return this.$echarts.init(document.getElementById("subjectChart2"));
     },
-    myChart3: function() {
+    myChart3: function () {
       return this.$echarts.init(document.getElementById("subjectChart3"));
     }
   },
@@ -422,7 +449,7 @@ export default {
               backgroundColor: "#505765"
             }
           },
-          formatter: function(params) {
+          formatter: function (params) {
             params.sort((x, y) => {
               if (!x.data[1]) {
                 return 1;

@@ -47,6 +47,7 @@ const SmallWorldDirectedCoreV2 = () =>
   import("@/pages/SmallWorldDirectedCoreV2");
 const MagDirectNet = () => import("@/pages/MagDirectNet");
 const MagRefSelfRate = () => import("@/pages/MagRefSelfRate");
+const MagDirectNetV4 = () => import("@/pages/MagDirectNetV4");
 const MagDirectNetV3 = () => import("@/pages/MagDirectNetV3");
 const MAGRefDist = () => import("@/pages/MAGRefDist");
 const MAGRefDistV2 = () => import("@/pages/MAGRefDistV2");
@@ -56,8 +57,7 @@ Vue.use(Router);
 
 export default new Router({
   mode: "history",
-  routes: [
-    {
+  routes: [{
       path: "/",
       name: "index",
       component: IndexPage
@@ -97,6 +97,13 @@ export default new Router({
       name: "MagDirectNetV3",
       component: MagDirectNetV3
     },
+    {
+      path: "/MagDirectNetV4",
+      name: "MagDirectNetV4",
+      component: MagDirectNetV4
+    },
+
+
     {
       path: "/MagAAAInfo",
       name: "MagAAAInfo",
@@ -287,7 +294,10 @@ export default new Router({
     if (savedPosition) {
       return savedPosition; //滚动到指定位置
     } else {
-      return { x: 0, y: 0 };
+      return {
+        x: 0,
+        y: 0
+      };
     }
   }
 });
