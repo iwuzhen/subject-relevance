@@ -94,8 +94,7 @@
             showAve = !showAve;
             getData();
           "
-          >{{ showAve ? "关闭平均相关度" : "开启平均相关度" }}</v-btn
-        >
+        >{{ showAve ? "关闭平均相关度" : "开启平均相关度" }}</v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -121,7 +120,7 @@ export default {
   data() {
     return {
       qsValue: -1,
-      qsOptions: [{ text: "不筛选", value: -1 }],
+      qsOptions: [{ text: "不筛选", value: -1 }, { text: "去掉被引用为0的文章，剩余7000万+", value: -2 }],
       showAve: true,
       subjectTarget: "",
       subjectRelevances: [],
@@ -141,7 +140,7 @@ export default {
     this.$store.commit("changeCurentPath", this.$options.name);
   },
   computed: {
-    categorysOptions: function() {
+    categorysOptions: function () {
       let subjectTarget = this.subjectTarget;
       return this.categorys.map(item => {
         let ret = {
@@ -152,7 +151,7 @@ export default {
         return ret;
       });
     },
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("masChart"));
     }
   },
