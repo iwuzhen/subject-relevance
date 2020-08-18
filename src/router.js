@@ -6,6 +6,7 @@ const Discipline = () => import("@/pages/discipline");
 const DisciplineCore = () => import("@/pages/disciplineCore");
 const Masline = () => import("@/pages/masline");
 const MasDistanceV2 = () => import("@/pages/maslinev2");
+const MagGraph = () => import("@/pages/MagGraph");
 
 const wikiPageCount = () => import("@/pages/ArticlesTotal");
 const SubDiscipline = () => import("@/pages/SubDiscipline");
@@ -138,6 +139,11 @@ export default new Router({
       path: "/MasDistanceV2",
       name: "MasDistanceV2",
       component: MasDistanceV2
+    },
+    {
+      path: "/MagGraph",
+      name: "MagGraph",
+      component: MagGraph
     },
     {
       path: "/ArticlesTotal",

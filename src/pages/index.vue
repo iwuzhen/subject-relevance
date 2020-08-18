@@ -1,21 +1,10 @@
 <template>
   <v-container>
-    <v-navigation-drawer
-      right
-      fixed
-      app
-    >
-      <v-list
-        dense
-        nav
-      >
+    <v-navigation-drawer right fixed app>
+      <v-list dense nav>
         <v-list-item two-line> </v-list-item>
-
         <v-divider></v-divider>
-        <v-list-item
-          v-for="obj in hrefArray"
-          :key="obj.name"
-        >
+        <v-list-item v-for="obj in hrefArray" :key="obj.name">
           <a @click="scrollMeTo(obj.href)">
             <v-list-item-title v-text="obj.name"></v-list-item-title>
           </a>
@@ -42,12 +31,9 @@
               <v-divider></v-divider>
             </v-row>
 
-            <div
-              v-for="(items, name) in subitems"
-              :key="name"
-              class="mb-5"
-            >
-              <v-row><a :ref="name">
+            <div v-for="(items, name) in subitems" :key="name" class="mb-5">
+              <v-row
+                ><a :ref="name">
                   <h3>{{ name }}</h3>
                 </a>
               </v-row>
@@ -62,10 +48,7 @@
                   v-for="(item, index) in items"
                   :key="index"
                 >
-                  <v-hover
-                    v-slot:default="{ hover }"
-                    close-delay="200"
-                  >
+                  <v-hover v-slot:default="{ hover }" close-delay="200">
                     <v-card
                       class="mx-auto"
                       max-width="344"
@@ -99,6 +82,14 @@ export default {
     return {
       indexObject: {
         "MAG v2 (非简介分类)": {
+          "MAG v2- Graph": [
+            {
+              title: "MagGraph",
+              text:
+                "学科间引用关系引力，学科大小来自学科文章数。边的长度代表相关度",
+              to: "/MagGraph"
+            }
+          ],
           "MAG v2- 学科相关度": [
             {
               title: "MAG google 距离",
@@ -139,11 +130,9 @@ export default {
             }
           ],
           "MAG v2- 小世界": [
-
             {
               title: "MAG 小世界 v4",
-              text:
-                "重新筛选后计算得到的 MAG 小世界",
+              text: "重新筛选后计算得到的 MAG 小世界",
               to: { path: "MagDirectNetV4", query: { version: "v4" } }
             }
           ]
@@ -420,7 +409,7 @@ export default {
     }
   },
   computed: {
-    hrefArray: function () {
+    hrefArray: function() {
       let retArray = [];
       for (let key in this.indexObject) {
         for (let skey in this.indexObject[key]) {

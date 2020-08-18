@@ -1,12 +1,3 @@
-<!--
- * @Version: 0.0.1
- * @Author: ider
- * @Date: 2020-04-13 18:38:54
- * @LastEditors: ider
- * @LastEditTime: 2020-08-17 14:35:53
- * @Description: 
- -->
-
 <template>
   <v-container fluid>
     <v-row>
