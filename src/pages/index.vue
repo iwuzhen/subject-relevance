@@ -88,6 +88,11 @@ export default {
               text:
                 "学科间引用关系引力，学科大小来自学科文章数。边的长度代表相关度",
               to: "/MagGraph"
+            },
+            {
+              title: "Mag 哑铃图",
+              text: "学科间幂律关系（v1）",
+              to: "/MagFunnel"
             }
           ],
           "MAG v2- 学科相关度": [

@@ -165,8 +165,12 @@ export default {
     },
 
     setOptions(nodes, links, title) {
-      let sizeMax = Math.max(...nodes.map(each => Number(each.weight)));
-      let sizeMin = Math.min(...nodes.map(each => Number(each.weight)));
+      let sizeMax = Math.sqrt(
+        Math.max(...nodes.map(each => Number(each.weight)))
+      );
+      let sizeMin = Math.sqrt(
+        Math.min(...nodes.map(each => Number(each.weight)))
+      );
       console.log(sizeMax, sizeMin);
       let graphLink = links.map(each => {
         return {
@@ -183,7 +187,9 @@ export default {
           value: Number(each.weight),
           category: this.subjectRelevances.indexOf(each.Label),
           symbolSize:
-            (20 * (Number(each.weight) - sizeMin)) / (sizeMax - sizeMin) + 5
+            (20 * (Math.sqrt(Number(each.weight)) - sizeMin)) /
+              (sizeMax - sizeMin) +
+            5
         };
       });
 

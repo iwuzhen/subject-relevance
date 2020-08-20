@@ -29,6 +29,7 @@ module.exports = {
       "diff2html": "Diff2Html",
       "diff": "Diff",
       "localforage": "localforage",
+      "d3": "d3",
     }
   },
   "transpileDependencies": [

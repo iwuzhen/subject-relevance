@@ -53,6 +53,7 @@ const MagDirectNetV3 = () => import("@/pages/MagDirectNetV3");
 const MAGRefDist = () => import("@/pages/MAGRefDist");
 const MAGRefDistV2 = () => import("@/pages/MAGRefDistV2");
 const MasCompositionByYear = () => import("@/pages/MasCompositionByYear");
+const MagFunnel = () => import("@/pages/MagFunnel");
 
 Vue.use(Router);
 
@@ -62,6 +63,10 @@ export default new Router({
       path: "/",
       name: "index",
       component: IndexPage
+    }, {
+      path: "/MagFunnel",
+      name: "MagFunnel",
+      component: MagFunnel
     },
     {
       path: "/SmallWorldDirectedCoreV2",
