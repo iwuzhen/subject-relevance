@@ -3,19 +3,20 @@
  * @Author: ider
  * @Date: 2020-04-14 22:23:01
  * @LastEditors: ider
- * @LastEditTime: 2020-04-23 16:10:50
+ * @LastEditTime: 2020-08-25 17:04:34
  * @Description: 
  -->
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="5">
+      <v-col cols="8">
         <v-select
           v-model="currentSubjectSelect"
           :items="categoryOpt"
           @change="getData"
           chips
           multiple
+          deletable-chips
           clearable
           dense
           label="目标学科"
@@ -57,14 +58,24 @@
           outlined
           :loading="loading"
           height="70vh"
-          id="subjectChart"
         >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog
+      v-model="dialog"
+      width="500"
+    >
       <v-card>
-        <v-card-title class="headline grey lighten-2" primary-title>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
+        >
           参数说明
         </v-card-title>
 
@@ -80,13 +91,13 @@
 
 <script>
 import { getBanshuaiqi } from "@/api/index";
-import { basiCategorys } from "@/api/data";
+import { basiCategorys, defaultCategorySelect } from "@/api/data";
 export default {
   name: "wiki子类半衰期",
   data() {
     return {
       dialog: false,
-      currentSubjectSelect: [],
+      currentSubjectSelect: defaultCategorySelect,
       levelSelect: "2",
       levelOpt: ["1", "2"],
       yearSelect: 2007,
@@ -114,9 +125,10 @@ export default {
       this.myChart.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
+    this.getData()
   },
   computed: {
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
@@ -220,7 +232,7 @@ export default {
             type: "pie",
             radius: [0, "30%"],
             center: ["80%", "25%"],
-            data: Object.keys(pieData).map(function(key) {
+            data: Object.keys(pieData).map(function (key) {
               return {
                 name: key,
                 value: pieData[key]

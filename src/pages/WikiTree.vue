@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-06-20 01:37:15
+ * @LastEditTime: 2020-08-25 16:00:31
  * @Description: 
  -->
 <template>
@@ -15,30 +15,45 @@
       transition="dialog-bottom-transition"
     >
       <v-card>
-        <v-toolbar dark color="primary">
-          <v-btn icon dark @click="overlay = false">
+        <v-toolbar
+          dark
+          color="primary"
+        >
+          <v-btn
+            icon
+            dark
+            @click="overlay = false"
+          >
             <v-icon>mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>关闭对比面板</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark text @click="overlay = false">Close</v-btn>
+            <v-btn
+              dark
+              text
+              @click="overlay = false"
+            >Close</v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-col class="diffbox"><div v-html="prettyHtml"/></v-col>
+        <v-col class="diffbox">
+          <div v-html="prettyHtml" />
+        </v-col>
       </v-card>
     </v-dialog>
     <v-row>
       <v-col>
-        <v-btn color="primary" @click="checkNode">对比选中的节点</v-btn>
+        <v-btn
+          color="primary"
+          @click="checkNode"
+        >对比选中的节点</v-btn>
       </v-col>
       <v-col>
         <v-btn
           :color="showDouble ? 'light-green' : 'lime'"
           @click="showDouble = !showDouble"
-          >{{ showDouble ? "单排展示" : "双排对比" }}</v-btn
-        ></v-col
-      >
+        >{{ showDouble ? "单排展示" : "双排对比" }}</v-btn>
+      </v-col>
       <v-col>
         <v-autocomplete
           v-model="searchString"
@@ -55,7 +70,10 @@
     </v-row>
     <v-row justify="space-between">
       <v-col :cols="showDouble ? 6 : 12">
-        <v-card hover flat>
+        <v-card
+          hover
+          flat
+        >
           <v-select
             v-model="yearSelect1"
             :items="yearOptions"
@@ -82,11 +100,12 @@
                 v-if="item.father"
                 :href="'https://en.wikipedia.org/wiki/' + item.name"
                 target="blank"
-                ><strong style="color:orange" v-if="isCoreSunject(item.name)">{{
+              ><strong
+                  style="color:orange"
+                  v-if="isCoreSunject(item.name)"
+                >{{
                   item.name
-                }}</strong
-                ><span v-else>{{ item.name }}</span></a
-              >
+                }}</strong><span v-else>{{ item.name }}</span></a>
               <span v-else>{{ item.name }}</span>
             </template>
             <template v-slot:append="{ item }">
@@ -94,11 +113,18 @@
                 v-if="item.nodetype == 'article'"
                 color="success"
                 outlined
-                >{{ arithclBirth[item.name] }}</v-chip
+              >{{ arithclBirth[item.name] }}</v-chip>
+              <v-tooltip
+                top
+                v-if="item.father"
               >
-              <v-tooltip top v-if="item.father">
                 <template v-slot:activator="{ on }">
-                  <v-btn text small v-on="on" color="primary">
+                  <v-btn
+                    text
+                    small
+                    v-on="on"
+                    color="primary"
+                  >
                     <v-icon>mdi-wikipedia</v-icon>
                     摘要
                   </v-btn>
@@ -108,18 +134,24 @@
               </v-tooltip>
             </template>
           </v-treeview>
-        </v-card></v-col
+        </v-card>
+      </v-col>
+      <v-col
+        cols="6"
+        v-if="showDouble"
       >
-      <v-col cols="6" v-if="showDouble">
-        <v-card hover flat>
+        <v-card
+          hover
+          flat
+        >
           <v-select
             v-model="yearSelect2"
             :items="yearOptions"
             chips
             label="年份"
             @change="yearChange2"
-          ></v-select
-          ><v-treeview
+          ></v-select>
+          <v-treeview
             v-model="selection2"
             :items="treeItems2"
             :load-children="fetchChildren2"
@@ -138,11 +170,12 @@
                 v-if="item.father"
                 :href="'https://en.wikipedia.org/wiki/' + item.name"
                 target="blank"
-                ><strong style="color:orange" v-if="isCoreSunject(item.name)">{{
+              ><strong
+                  style="color:orange"
+                  v-if="isCoreSunject(item.name)"
+                >{{
                   item.name
-                }}</strong
-                ><span v-else>{{ item.name }}</span></a
-              >
+                }}</strong><span v-else>{{ item.name }}</span></a>
               <span v-else>{{ item.name }}</span>
             </template>
             <template v-slot:append="{ item }">
@@ -150,11 +183,18 @@
                 v-if="item.nodetype == 'article'"
                 color="success"
                 outlined
-                >{{ arithclBirth[item.name] }}</v-chip
+              >{{ arithclBirth[item.name] }}</v-chip>
+              <v-tooltip
+                top
+                v-if="item.father"
               >
-              <v-tooltip top v-if="item.father">
                 <template v-slot:activator="{ on }">
-                  <v-btn text small v-on="on" color="primary">
+                  <v-btn
+                    text
+                    small
+                    v-on="on"
+                    color="primary"
+                  >
                     <v-icon>mdi-wikipedia</v-icon>
                     摘要
                   </v-btn>
@@ -162,9 +202,9 @@
                 <span> {{ paragraph[item.name] }}</span>
               </v-tooltip>
             </template>
-          </v-treeview></v-card
-        ></v-col
-      >
+          </v-treeview>
+        </v-card>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -180,7 +220,6 @@ import * as Diff2Html from "diff2html";
 import * as diff from "diff";
 import { basiCategorys } from "@/api/data";
 import { v4 as uuidv4 } from "uuid";
-basiCategorys.push(...["Geography", "Geology"]);
 
 export default {
   name: "Tree_Viewer",
@@ -223,7 +262,8 @@ export default {
   computed: {
     basiccategorys() {
       let ba = ["Contents"];
-      ba.push(...this.basiCategorys);
+      ba.push(...this.basiCategorys.map(each => each.value));
+      ba.push(...["Geography", "Geology"])
       return ba;
     },
     prettyHtml() {
@@ -233,7 +273,7 @@ export default {
         outputFormat: "side-by-side"
       });
     },
-    yearOptions: function() {
+    yearOptions: function () {
       let _data = this.wikiYearOptions.map(item => {
         return {
           value: item,
@@ -242,7 +282,7 @@ export default {
       });
       return _data;
     },
-    baseRegion: function() {
+    baseRegion: function () {
       let _data = this.categorys.map(item => {
         return {
           name: item
@@ -351,7 +391,7 @@ export default {
         };
       });
     },
-    reset() {},
+    reset() { },
     checkNode() {
       let names1 = this.selection1.map(item => {
         return item.name;

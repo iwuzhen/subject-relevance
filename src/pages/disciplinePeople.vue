@@ -18,6 +18,7 @@
           multiple
           dense
           clearable
+          deletable-chips
           label="目标学科"
         ></v-select>
       </v-col>
@@ -29,6 +30,7 @@
           chips
           multiple
           dense
+          deletable-chips
           clearable
           label="目标人"
         ></v-select>
@@ -86,7 +88,7 @@ import {
   peopleCategorys,
   extendEchartsOpts,
   lessPersonCategorys,
-  extendLineSeries
+  extendLineSeries,
 } from "@/api/data";
 export default {
   name: "wiki_人的相关度",
@@ -132,7 +134,7 @@ export default {
     };
   },
   computed: {
-    unionCategory: function() {
+    unionCategory: function () {
       let peopleCategoryValues = new Set(
         peopleCategorys.map(item => {
           return item[0];
@@ -140,7 +142,7 @@ export default {
       );
       return new Set(this.subjectOpt.filter(x => peopleCategoryValues.has(x)));
     },
-    peopleSubjectOpt: function() {
+    peopleSubjectOpt: function () {
       let peopleSubjectSelect = this.peopleSubjectSelect;
       return peopleCategorys.map(item => {
         let ret = {
@@ -151,10 +153,10 @@ export default {
         return ret;
       });
     },
-    myChart1: function() {
+    myChart1: function () {
       return this.$echarts.init(document.getElementById("subjectChart1"));
     },
-    myChart2: function() {
+    myChart2: function () {
       return this.$echarts.init(document.getElementById("subjectChart2"));
     }
   },

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2019-07-21 13:24:25
  * @LastEditors: ider
- * @LastEditTime: 2020-08-13 14:31:04
+ * @LastEditTime: 2020-08-25 16:27:18
  * @Description: 
 -->
 <template>
@@ -65,7 +65,7 @@ import { coreCategorys } from "@/api/data";
 import { getMasYearRefDist } from "@/api/index";
 
 export default {
-  name: "MAG学科引用年份热力图 v2",
+  name: "MAG学科引用年份热力图_v2",
   data() {
     return {
       showAve: true,
@@ -83,12 +83,12 @@ export default {
   },
   watch: {
     // 更新图标
-    chartOpt: function(opt) {
+    chartOpt: function (opt) {
       this.myChart.setOption(opt, true);
     }
   },
   computed: {
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("masChart"));
     }
   },
@@ -170,14 +170,14 @@ export default {
               backgroundColor: "#505765"
             }
           },
-          formatter: function(params) {
+          formatter: function (params) {
             let showHtm;
             if (viewSelect == "百分比") {
               showHtm = ` ${params.seriesName}<br>${params.marker} ${
                 params.name
-              } -> ${params.value[1]}:   ${Math.floor(
-                params.value[2] * 10000000
-              ) / 100000}%`;
+                } -> ${params.value[1]}:   ${Math.floor(
+                  params.value[2] * 10000000
+                ) / 100000}%`;
             } else {
               showHtm = ` ${params.seriesName}<br>${params.marker} ${params.name} -> ${params.value[1]}:   ${params.value[2]}`;
             }
@@ -200,10 +200,10 @@ export default {
             this.viewSelect == "百分比"
               ? 1
               : Math.max(
-                  ...Data.map(each => {
-                    return each[2];
-                  })
-                ),
+                ...Data.map(each => {
+                  return each[2];
+                })
+              ),
           calculable: true,
           realtime: false,
           inRange: {

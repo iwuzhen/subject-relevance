@@ -3,19 +3,21 @@
  * @Author: ider
  * @Date: 2020-04-14 22:23:01
  * @LastEditors: ider
- * @LastEditTime: 2020-06-04 17:44:26
+ * @LastEditTime: 2020-08-25 17:05:40
  * @Description: 
  -->
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="5">
+      <v-col cols="8">
         <v-select
           v-model="currentSubjectSelect"
           :items="categoryOpt"
           @change="getData"
           chips
           multiple
+          deletable-chips
+          clearable
           dense
           label="目标学科"
         ></v-select>
@@ -50,7 +52,11 @@
       </v-col> -->
     </v-row>
     <v-row>
-      <v-col col="4" v-for="(item, index) in gridData" :key="index">
+      <v-col
+        col="4"
+        v-for="(item, index) in gridData"
+        :key="index"
+      >
         <v-card>
           <v-card-title>{{ item.title }}</v-card-title>
           <v-data-table
@@ -63,9 +69,15 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog
+      v-model="dialog"
+      width="500"
+    >
       <v-card>
-        <v-card-title class="headline grey lighten-2" primary-title>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
+        >
           参数说明
         </v-card-title>
 
@@ -81,13 +93,13 @@
 
 <script>
 import { getTopArticles } from "@/api/index";
-import { basiCategorys } from "@/api/data";
+import { basiCategorys, defaultCategorySelect } from "@/api/data";
 export default {
   name: "wiki学科top文章展示",
   data() {
     return {
       dialog: false,
-      currentSubjectSelect: [],
+      currentSubjectSelect: defaultCategorySelect,
       yearsSelect: [2020],
       tableSelect: "按学科组合",
       tableOpt: ["按年组合", "按学科组合"],
@@ -116,9 +128,10 @@ export default {
       this.myChart.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
+    this.getData()
   },
   computed: {
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },

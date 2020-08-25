@@ -1,14 +1,15 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="8">
+      <v-col cols="10">
         <v-select
           v-model="subjectTarget"
           :items="categorys"
           @change="getData"
           small-chips
-          multiple
+          deletable-chips
           clearable
+          multiple
           label="目标学科"
         ></v-select>
       </v-col>
@@ -28,8 +29,12 @@
           outlined
           :loading="loading"
           height="70vh"
-          id="subjectChart"
         >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -39,7 +44,7 @@
 <script>
 import { getZipf } from "@/api/index";
 import ecStat from "echarts-stat";
-import { basiCategorys, extendEchartsOpts, extendLineSeries } from "@/api/data";
+import { basiCategorys, extendEchartsOpts, extendLineSeries, defaultCategorySelect } from "@/api/data";
 
 // tooyip 位置的x位置
 var tipLegend = 0;
@@ -48,9 +53,9 @@ export default {
   name: "zipf幂律",
   data() {
     return {
-      subjectTarget: [],
+      subjectTarget: defaultCategorySelect,
       categorys: basiCategorys,
-      dataYear: null,
+      dataYear: 2019,
       dataYearopt: [
         2007,
         2008,
@@ -95,15 +100,16 @@ export default {
         this.myChart.setOption(this.chartOpt, true);
       }
     });
+    this.getData()
   },
   watch: {
     // 更新图标
-    chartOpt: function(opt) {
+    chartOpt: function (opt) {
       this.myChart.setOption(opt, true);
     }
   },
   computed: {
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
@@ -218,7 +224,7 @@ export default {
               backgroundColor: "#505765"
             }
           },
-          formatter: function(params) {
+          formatter: function (params) {
             params.sort((x, y) => {
               return y.data[1] - x.data[1];
             });

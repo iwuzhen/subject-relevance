@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-06-04 10:56:34
  * @LastEditors: ider
- * @LastEditTime: 2020-08-25 14:34:59
+ * @LastEditTime: 2020-08-25 16:48:37
  * @Description: 
 -->
 <template>
@@ -15,6 +15,7 @@
           :items="categorys"
           small-chips
           multiple
+          deletable-chips
           clearable
           label="目标学科"
         ></v-select>
@@ -24,7 +25,6 @@
           v-model="limitSelect"
           :items="limitOpt"
           @change="getData"
-          clearable
           label="展示数量"
         ></v-select>
       </v-col>
@@ -33,7 +33,6 @@
           v-model="queryTypeSelect"
           :items="queryTypeOpt"
           @change="getData"
-          clearable
           label="展示引用数为0的文章"
         ></v-select>
       </v-col>
@@ -110,7 +109,7 @@
 <script>
 //
 import { getMagAuthorsAndArticleInfoV2, getLinkTjv2 } from "@/api/index";
-import { magCategory, extendEchartsOpts, extendLineSeries } from "@/api/data";
+import { magCategory, extendEchartsOpts, defaultCategorySelect, extendLineSeries } from "@/api/data";
 
 const Limiter = require("async-limiter");
 
@@ -118,7 +117,7 @@ export default {
   name: "MAG数据统计_v2",
   data() {
     return {
-      subjectTarget: [],
+      subjectTarget: defaultCategorySelect,
       limitSelect: 100,
       categorys: magCategory,
       limitOpt: [50, 100, 200, 400, 600, 800, 1000],
@@ -143,6 +142,7 @@ export default {
       this.myChart2.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
+    this.getData()
   },
   computed: {
     myChart1: function () {

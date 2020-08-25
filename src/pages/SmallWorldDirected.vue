@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 19:09:27
  * @LastEditors: ider
- * @LastEditTime: 2020-06-10 16:05:31
+ * @LastEditTime: 2020-08-25 17:32:57
  * @Description: 
  -->
 
@@ -24,6 +24,8 @@
           :items="categoryOpt"
           small-chips
           multiple
+          deletable-chips
+          clearable
           @change="getData"
           label="目标学科"
         ></v-select>
@@ -45,8 +47,15 @@
           @change="getData"
         ></v-select>
       </v-col>
-      <v-col align-self="center" cols="2">
-        <v-btn color="light-blue lighten-2" dark @click.stop="dialog = true">
+      <v-col
+        align-self="center"
+        cols="2"
+      >
+        <v-btn
+          color="light-blue lighten-2"
+          dark
+          @click.stop="dialog = true"
+        >
           <v-icon>mdi-help-circle</v-icon>
           帮助说明
         </v-btn>
@@ -66,9 +75,15 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog
+      v-model="dialog"
+      width="500"
+    >
       <v-card>
-        <v-card-title class="headline grey lighten-2" primary-title>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
+        >
           帮助说明
         </v-card-title>
 
@@ -79,10 +94,8 @@
           <b>网络大小</b>：
           <br />网络大小限定在一定数量下，限定的规则是类距离排序<br />
           <b>图表说明</b> <br />
-          <b>当前学科到目标学科</b
-          >：当前学科下的所有文章，通过多层引用，到达目标学科下的所有文章，计算出来的小世界参数值。值越小，当前学科依赖目标学科越强<br />
-          <b>目标学科到当前学科</b
-          >：交换当前学科和目标学科进行计算，值越小，目标学科依赖当前学科越强<br />
+          <b>当前学科到目标学科</b>：当前学科下的所有文章，通过多层引用，到达目标学科下的所有文章，计算出来的小世界参数值。值越小，当前学科依赖目标学科越强<br />
+          <b>目标学科到当前学科</b>：交换当前学科和目标学科进行计算，值越小，目标学科依赖当前学科越强<br />
           <b>学科间依赖</b>：图A 减去图B 的值，
           正值：目标学科更加依赖当前学科，负值：当前学科更加依赖目标学科<br />
         </v-card-text>
@@ -151,10 +164,10 @@ export default {
   },
   watch: {
     // 更新图标
-    chartOpt: function(opt) {
+    chartOpt: function (opt) {
       this.myChart.setOption(opt, true);
     },
-    targetSubjectSelect: async function(newValue, oldValue) {
+    targetSubjectSelect: async function (newValue, oldValue) {
       if (this.currentSubjectSelect.length === 0) return;
       this.loading = true;
       let diffArray = newValue.filter(item => !oldValue.includes(item));
@@ -173,7 +186,7 @@ export default {
     }
   },
   computed: {
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
@@ -255,12 +268,12 @@ export default {
       ret_data.ymax =
         Math.ceil(
           Math.max(...[].concat(...ret_data.y), ...[].concat(...ret_data.c)) *
-            10
+          10
         ) / 10;
       ret_data.ymin =
         Math.floor(
           Math.min(...[].concat(...ret_data.y), ...[].concat(...ret_data.c)) *
-            10
+          10
         ) / 10;
 
       console.log(ret_data);
@@ -304,7 +317,7 @@ export default {
             align: "left",
             fontSize: 12
           },
-          position: function(pos, params, el, elRect, size) {
+          position: function (pos, params, el, elRect, size) {
             var obj = {};
             obj[["left", "right"][+(pos[0] < size.viewSize[0] / 2)]] = 60;
             obj[["top", "bottom"][+(pos[1] < size.viewSize[1] / 2)]] = 20;
@@ -317,7 +330,7 @@ export default {
               backgroundColor: "#505765"
             }
           },
-          formatter: function(params) {
+          formatter: function (params) {
             let showHtm = `${params[0].name}<br>`;
             let zhenxiang = [];
             let nixiang = [];
@@ -472,7 +485,7 @@ export default {
             nameLocation: "start",
             name: "距离之差",
             type: "value",
-            max: function(value) {
+            max: function (value) {
               return (
                 Math.ceil(
                   Math.max(Math.abs(value.min), Math.abs(value.max)) * 10
@@ -480,7 +493,7 @@ export default {
               );
             },
             gridIndex: 2,
-            min: function(value) {
+            min: function (value) {
               return (
                 -Math.ceil(
                   Math.max(Math.abs(value.min), Math.abs(value.max)) * 10

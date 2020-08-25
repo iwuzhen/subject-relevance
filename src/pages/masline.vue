@@ -94,7 +94,7 @@
             showAve = !showAve;
             getData();
           "
-        >{{ showAve ? "关闭平均相关度" : "开启平均相关度" }}</v-btn>
+        >{{ showAve ? "关闭平均距离" : "开启平均距离" }}</v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -220,7 +220,7 @@ export default {
                 aveLine.push(ss / res.data.data.y.length);
               }
               res.data.data.y.push(aveLine);
-              res.data.data.legend.push("平均相关度");
+              res.data.data.legend.push("平均距离");
               this.drawChart(res.data.data);
             } else this.drawChart(res.data.data);
           } else {

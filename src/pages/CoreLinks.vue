@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-05-14 16:16:27
  * @LastEditors: ider
- * @LastEditTime: 2020-05-15 15:39:12
+ * @LastEditTime: 2020-08-25 17:11:22
  * @Description: 
  -->
 
@@ -25,8 +25,8 @@
           @change="getData"
           small-chips
           multiple
-          clear-icon
           deletable-chips
+          clearable
           label="相关学科"
         ></v-select>
       </v-col>
@@ -88,13 +88,13 @@ import {
   getCoreLinksInData
   //   getDistanceCore
 } from "@/api/index";
-import { extendEchartsOpts, coreCategorys } from "@/api/data";
+import { extendEchartsOpts, coreCategorys, defaultCategorySelect } from "@/api/data";
 export default {
   name: "core_wiki类引用成分图",
   data() {
     return {
       subjectTarget: "",
-      subjectRelevances: [],
+      subjectRelevances: defaultCategorySelect,
       pageCountSelect: "3000",
       categorys: coreCategorys,
       levelSelect: 3,
@@ -161,21 +161,21 @@ export default {
     };
   },
   computed: {
-    categorysOptions: function() {
+    categorysOptions: function () {
       let subjectTarget = this.subjectTarget;
       return this.categorys.map(item => {
         let ret = {
-          value: item,
-          text: item
+          value: item.value,
+          text: item.text
         };
-        if (item == subjectTarget) ret["disabled"] = true;
+        if (item.value == subjectTarget) ret["disabled"] = true;
         return ret;
       });
     },
-    myChart1: function() {
+    myChart1: function () {
       return this.$echarts.init(document.getElementById("subjectChart1"));
     },
-    myChart2: function() {
+    myChart2: function () {
       return this.$echarts.init(document.getElementById("subjectChart2"));
     }
   },

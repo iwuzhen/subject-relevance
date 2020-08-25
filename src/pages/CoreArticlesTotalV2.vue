@@ -9,6 +9,8 @@
           chips
           multiple
           dense
+          deletable-chips
+          clearable
           label="目标学科"
         ></v-select>
       </v-col>
@@ -50,14 +52,14 @@ import { getArticlesTotalByCoreNew } from "@/api/index";
 import {
   extendEchartsOpts,
   wikiArticleCategory,
-  extendLineSeries
+  extendLineSeries, defaultCategorySelect
 } from "@/api/data";
 
 export default {
   name: "CoreArticleTotal_V2",
   data() {
     return {
-      subjectRelevances: [],
+      subjectRelevances: defaultCategorySelect,
       subjectLevel: "0",
       subjecType: "0",
       categorys: wikiArticleCategory,
@@ -76,7 +78,7 @@ export default {
     };
   },
   computed: {
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
@@ -85,6 +87,7 @@ export default {
       this.myChart.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
+    this.getData()
   },
   methods: {
     async getData() {

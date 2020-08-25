@@ -7,6 +7,7 @@
           :items="categorys"
           small-chips
           multiple
+          deletable-chips
           clearable
           label="目标学科"
         ></v-select>
@@ -64,8 +65,17 @@
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card class="mx-auto" outlined :loading="loading" height="70vh"
-          ><v-container fluid fill-height id="subjectChart"> </v-container>
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+        >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -74,21 +84,21 @@
 
 <script>
 import { getMagInnerZipfV2 } from "@/api/index";
-import { magCategory, extendEchartsOpts } from "@/api/data";
+import { magCategory, extendEchartsOpts, defaultCategorySelect } from "@/api/data";
 import ecStat from "echarts-stat";
 const Limiter = require("async-limiter");
 
 // tooyip 位置的x位置
 var tipLegend = 0;
 export default {
-  name: "MAG幂律度分布 v2",
+  name: "MAG幂律度分布_v2",
   data() {
     return {
       girdHeaders: [],
       nodeRange: [100, 35000],
       nodeMax: 100000,
       nodeMin: 1,
-      subjectTarget: [],
+      subjectTarget: defaultCategorySelect,
       loading: false,
       chartOpt: {},
       chartData: {},
@@ -123,28 +133,24 @@ export default {
         this.myChart.setOption(this.chartOpt, true);
       }
     });
+    this.getData()
   },
   computed: {
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("subjectChart"));
     },
-    categorys: function() {
-      let categoryArray = magCategory.map(item => {
-        return {
-          value: item,
-          text: item
-        };
-      });
+    categorys: function () {
+      let categoryArray = magCategory;
       categoryArray.unshift({ text: "All (混合幂律)", value: "all" });
       return categoryArray;
     }
   },
   watch: {
     // 更新图标
-    chartOpt: function(opt) {
+    chartOpt: function (opt) {
       this.myChart.setOption(opt, true);
     },
-    subjectTarget: async function(newValue, oldValue) {
+    subjectTarget: async function (newValue, oldValue) {
       this.loading = true;
       let diffArray = newValue.filter(item => !oldValue.includes(item));
       if (diffArray.length > 0) {
@@ -279,7 +285,7 @@ export default {
               backgroundColor: "#505765"
             }
           },
-          formatter: function(params) {
+          formatter: function (params) {
             params.sort((x, y) => {
               return y.data[1] - x.data[1];
             });

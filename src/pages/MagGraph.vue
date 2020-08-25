@@ -8,6 +8,8 @@
           @change="getData"
           chips
           multiple
+          deletable-chips
+          clearable
           dense
           label="目标学科"
         ></v-select>
@@ -20,8 +22,12 @@
           outlined
           :loading="loading"
           height="70vh"
-          id="subjectChart1"
         >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart1"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -32,8 +38,12 @@
           outlined
           :loading="loading"
           height="70vh"
-          id="subjectChart2"
         >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart2"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -44,8 +54,12 @@
           outlined
           :loading="loading"
           height="70vh"
-          id="subjectChart3"
         >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart3"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -56,8 +70,12 @@
           outlined
           :loading="loading"
           height="70vh"
-          id="subjectChart4"
         >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart4"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -72,33 +90,33 @@ import edge_linksout_2017_echarts from "../assets/data/edge_linksout_2017_v2.jso
 import node_2016 from "../assets/data/node_2016_v2.json";
 import node_2017 from "../assets/data/node_2017_v2.json";
 
+import { defaultCategorySelect } from "@/api/data";
+
 export default {
   name: "Mag_graph",
   data() {
     return {
-      subjectRelevances: [
-        "Physics",
-        "Geology",
-        "Mathematics",
-        "Biology",
-        "Medicine",
-        "History"
-      ],
+      subjectRelevances: defaultCategorySelect,
       loading: false,
-      categorys: node_2016.map(each => each.Label)
+      categorys: node_2016.map(each => each.Label).sort().map(each => {
+        return {
+          text: each == "Engineering disciplines" ? "Engineering" : each,
+          value: each
+        }
+      })
     };
   },
   computed: {
-    myChart1: function() {
+    myChart1: function () {
       return this.$echarts.init(document.getElementById("subjectChart1"));
     },
-    myChart2: function() {
+    myChart2: function () {
       return this.$echarts.init(document.getElementById("subjectChart2"));
     },
-    myChart3: function() {
+    myChart3: function () {
       return this.$echarts.init(document.getElementById("subjectChart3"));
     },
-    myChart4: function() {
+    myChart4: function () {
       return this.$echarts.init(document.getElementById("subjectChart4"));
     }
   },
@@ -114,6 +132,7 @@ export default {
   },
   methods: {
     getData() {
+      console.log(this.subjectRelevances)
       // 过滤节点
       this.drawGraph(
         node_2016,
@@ -176,7 +195,7 @@ export default {
         return {
           source: each.Source,
           target: each.Target,
-          value: Math.floor(Number(each.Weight) * 10000) / 10000
+          value: Math.floor((Number(each.Weight)) * 10000) / 10000
         };
       });
       // 点大小，最大 100，最小10
@@ -188,7 +207,7 @@ export default {
           category: this.subjectRelevances.indexOf(each.Label),
           symbolSize:
             (20 * (Math.sqrt(Number(each.weight)) - sizeMin)) /
-              (sizeMax - sizeMin) +
+            (sizeMax - sizeMin) +
             5
         };
       });
@@ -213,9 +232,9 @@ export default {
             tooltip: { formatter: "{c0}" },
             type: "graph",
             layout: "force",
-            zoom: 3,
+            zoom: 2.5,
             force: {
-              edgeLength: [30, 180]
+              edgeLength: [20, 200]
               // layoutAnimation: false,
             },
             draggable: true,

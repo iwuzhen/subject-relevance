@@ -9,6 +9,8 @@
           chips
           multiple
           dense
+          deletable-chips
+          clearable
           label="目标学科"
         ></v-select>
       </v-col>
@@ -20,8 +22,12 @@
           outlined
           :loading="loading"
           height="70vh"
-          id="subjectChart"
         >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -30,12 +36,12 @@
 
 <script>
 import { getMasArticlesTotal } from "@/api/index";
-import { extendEchartsOpts, coreCategorys, extendLineSeries } from "@/api/data";
+import { extendEchartsOpts, defaultCategorySelect, coreCategorys, extendLineSeries } from "@/api/data";
 export default {
   name: "mag文章数",
   data() {
     return {
-      subjectRelevances: [],
+      subjectRelevances: defaultCategorySelect,
       categorys: coreCategorys,
       typeOptions: [
         {
@@ -56,7 +62,7 @@ export default {
     };
   },
   computed: {
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
@@ -65,6 +71,7 @@ export default {
       this.myChart.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
+    this.getData()
   },
   methods: {
     async getData() {

@@ -1,10 +1,20 @@
 <template>
   <v-container>
-    <v-navigation-drawer right fixed app>
-      <v-list dense nav>
+    <v-navigation-drawer
+      right
+      fixed
+      app
+    >
+      <v-list
+        dense
+        nav
+      >
         <v-list-item two-line> </v-list-item>
         <v-divider></v-divider>
-        <v-list-item v-for="obj in hrefArray" :key="obj.name">
+        <v-list-item
+          v-for="obj in hrefArray"
+          :key="obj.name"
+        >
           <a @click="scrollMeTo(obj.href)">
             <v-list-item-title v-text="obj.name"></v-list-item-title>
           </a>
@@ -31,9 +41,12 @@
               <v-divider></v-divider>
             </v-row>
 
-            <div v-for="(items, name) in subitems" :key="name" class="mb-5">
-              <v-row
-                ><a :ref="name">
+            <div
+              v-for="(items, name) in subitems"
+              :key="name"
+              class="mb-5"
+            >
+              <v-row><a :ref="name">
                   <h3>{{ name }}</h3>
                 </a>
               </v-row>
@@ -48,7 +61,10 @@
                   v-for="(item, index) in items"
                   :key="index"
                 >
-                  <v-hover v-slot:default="{ hover }" close-delay="200">
+                  <v-hover
+                    v-slot:default="{ hover }"
+                    close-delay="200"
+                  >
                     <v-card
                       class="mx-auto"
                       max-width="344"
@@ -86,7 +102,7 @@ export default {
             {
               title: "MagGraph",
               text:
-                "学科间引用关系引力，学科大小来自学科文章数。边的长度代表相关度",
+                "学科间引用关系引力，学科大小来自学科文章数。边的长度代表相关度。力引导布局相关的配置项，力引导布局是模拟弹簧电荷模型在每两个节点之间添加一个斥力，每条边的两个节点之间添加一个引力，每次迭代节点会在各个斥力和引力的作用下移动位置，多次迭代后节点会静止在一个受力平衡的位置，达到整个模型的能量最小化。",
               to: "/MagGraph"
             },
             {
@@ -414,7 +430,7 @@ export default {
     }
   },
   computed: {
-    hrefArray: function() {
+    hrefArray: function () {
       let retArray = [];
       for (let key in this.indexObject) {
         for (let skey in this.indexObject[key]) {

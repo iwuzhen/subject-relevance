@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-06-04 10:56:34
  * @LastEditors: ider
- * @LastEditTime: 2020-08-05 18:24:38
+ * @LastEditTime: 2020-08-25 16:49:47
  * @Description: 
 -->
 <template>
@@ -16,6 +16,7 @@
           small-chips
           multiple
           clearable
+          deletable-chips
           label="目标学科"
         ></v-select>
       </v-col>
@@ -24,7 +25,6 @@
           v-model="limitSelect"
           :items="limitOpt"
           @change="getData"
-          clearable
           label="展示数量"
         ></v-select>
       </v-col>
@@ -33,27 +33,48 @@
           v-model="queryTypeSelect"
           :items="queryTypeOpt"
           @change="getData"
-          clearable
           label="展示引用数为0的文章"
         ></v-select>
       </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card class="mx-auto" outlined :loading="loading" height="60vh"
-          ><v-container fluid fill-height id="chart2"> </v-container>
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="60vh"
+        >
+          <v-container
+            fluid
+            fill-height
+            id="chart2"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card class="mx-auto" outlined :loading="loading" height="120vh"
-          ><v-container fluid fill-height id="chart1"> </v-container>
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="120vh"
+        >
+          <v-container
+            fluid
+            fill-height
+            id="chart1"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
     <v-row>
-      <v-col col="4" v-for="(item, index) in gridData" :key="index">
+      <v-col
+        col="4"
+        v-for="(item, index) in gridData"
+        :key="index"
+      >
         <v-card>
           <v-card-title>{{ item.title }} </v-card-title>
           <v-data-table
@@ -72,7 +93,7 @@
 <script>
 //
 import { getMagAuthorsAndArticleInfo } from "@/api/index";
-import { magCategory, extendEchartsOpts, extendLineSeries } from "@/api/data";
+import { magCategory, defaultCategorySelect, extendEchartsOpts, extendLineSeries } from "@/api/data";
 
 const Limiter = require("async-limiter");
 
@@ -82,7 +103,7 @@ export default {
   name: "MAG数据统计",
   data() {
     return {
-      subjectTarget: [],
+      subjectTarget: defaultCategorySelect,
       limitSelect: 100,
       categorys: magCategory,
       limitOpt: [50, 100, 200, 400, 600, 800, 1000],
@@ -106,24 +127,25 @@ export default {
       this.myChart2.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
+    this.getData()
   },
   computed: {
-    myChart1: function() {
+    myChart1: function () {
       return this.$echarts.init(document.getElementById("chart1"));
     },
-    myChart2: function() {
+    myChart2: function () {
       return this.$echarts.init(document.getElementById("chart2"));
     }
   },
   watch: {
     // 更新图标
-    chartOpt1: function(opt) {
+    chartOpt1: function (opt) {
       this.myChart1.setOption(opt, true);
     },
-    chartOpt2: function(opt) {
+    chartOpt2: function (opt) {
       this.myChart2.setOption(opt, true);
     },
-    subjectTarget: async function(newValue, oldValue) {
+    subjectTarget: async function (newValue, oldValue) {
       this.loading = true;
       let diffArray = newValue.filter(item => !oldValue.includes(item));
       if (diffArray.length > 0) {

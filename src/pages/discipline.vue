@@ -16,6 +16,7 @@
           @change="getData"
           small-chips
           multiple
+          deletable-chips
           clearable
           label="相关学科"
         ></v-select>
@@ -103,19 +104,19 @@ export default {
     };
   },
   computed: {
-    categorysOptions: function() {
+    categorysOptions: function () {
       let subjectTarget = this.subjectTarget;
       return this.categorys.map(item => {
         let ret = {
-          value: item,
-          text: item
+          value: item.value,
+          text: item.text
         };
-        if (item == subjectTarget) ret["disabled"] = true;
+        if (item.value == subjectTarget) ret["disabled"] = true;
 
         return ret;
       });
     },
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },

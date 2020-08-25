@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2019-07-21 13:24:25
  * @LastEditors: ider
- * @LastEditTime: 2020-07-22 21:32:56
+ * @LastEditTime: 2020-08-25 16:55:28
  * @Description: 
 -->
 <template>
@@ -53,8 +53,12 @@
           outlined
           :loading="loading"
           height="70vh"
-          id="masChart"
         >
+          <v-container
+            fluid
+            fill-height
+            id="masChart"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -83,12 +87,12 @@ export default {
   },
   watch: {
     // 更新图标
-    chartOpt: function(opt) {
+    chartOpt: function (opt) {
       this.myChart.setOption(opt, true);
     }
   },
   computed: {
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("masChart"));
     }
   },
@@ -169,14 +173,14 @@ export default {
               backgroundColor: "#505765"
             }
           },
-          formatter: function(params) {
+          formatter: function (params) {
             let showHtm;
             if (viewSelect == "百分比") {
               showHtm = ` ${params.seriesName}<br>${params.marker} ${
                 params.name
-              } -> ${params.value[1]}:   ${Math.floor(
-                params.value[2] * 10000000
-              ) / 100000}%`;
+                } -> ${params.value[1]}:   ${Math.floor(
+                  params.value[2] * 10000000
+                ) / 100000}%`;
             } else {
               showHtm = ` ${params.seriesName}<br>${params.marker} ${params.name} -> ${params.value[1]}:   ${params.value[2]}`;
             }
@@ -199,10 +203,10 @@ export default {
             this.viewSelect == "百分比"
               ? 1
               : Math.max(
-                  ...Data.map(each => {
-                    return each[2];
-                  })
-                ),
+                ...Data.map(each => {
+                  return each[2];
+                })
+              ),
           calculable: true,
           realtime: false,
           inRange: {

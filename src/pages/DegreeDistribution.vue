@@ -8,6 +8,7 @@
           @change="getData"
           small-chips
           multiple
+          deletable-chips
           clearable
           label="目标学科"
         ></v-select>
@@ -31,8 +32,17 @@
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card class="mx-auto" outlined :loading="loading" height="70vh">
-          <v-container fluid fill-height id="subjectChart"> </v-container>
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+        >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -41,16 +51,16 @@
 
 <script>
 import { getDfb } from "@/api/index";
-import { basiCategorys, extendEchartsOpts } from "@/api/data";
+import { basiCategorys, extendEchartsOpts, defaultCategorySelect } from "@/api/data";
 // tooyip 位置的x位置
 var tipLegend = 0;
 export default {
   name: "subject幂律度分布",
   data() {
     return {
-      subjectTarget: [],
+      subjectTarget: defaultCategorySelect,
       categorys: basiCategorys,
-      dataYear: null,
+      dataYear: 2019,
       dataYearopt: [
         2007,
         2008,
@@ -72,7 +82,7 @@ export default {
   },
   watch: {
     // 更新图标
-    chartOpt: function(opt) {
+    chartOpt: function (opt) {
       this.myChart.setOption(opt, true);
     }
   },
@@ -101,16 +111,17 @@ export default {
         this.myChart.setOption(this.chartOpt, true);
       }
     });
+    this.getData()
   },
   computed: {
-    nodeCountOptions: function() {
+    nodeCountOptions: function () {
       let ret_list = [];
       for (let i = 1000; i <= 10000; i += 1000) {
         ret_list.push(i);
       }
       return ret_list;
     },
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
@@ -197,7 +208,7 @@ export default {
               backgroundColor: "#505765"
             }
           },
-          formatter: function(params) {
+          formatter: function (params) {
             params.sort((x, y) => {
               return y.data[1] - x.data[1];
             });

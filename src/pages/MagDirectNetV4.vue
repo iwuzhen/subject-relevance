@@ -1,18 +1,19 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="6">
+      <v-col cols="7">
         <v-select
           v-model="subjectTarget"
           :items="categoryOpt"
           small-chips
           dense
           deletable-chips
+          clearable
           multiple
           label="当前学科"
         ></v-select>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="3">
         <v-select
           v-model="yearSelect"
           :items="yearOpt"
@@ -121,7 +122,7 @@
 </template>
 
 <script>
-import { extendEchartsOpts, magCategory, extendLineSeries } from "@/api/data";
+import { extendEchartsOpts, magCategory, defaultCategorySelect, extendLineSeries } from "@/api/data";
 import { getMagUndirectNet } from "@/api/index";
 const Limiter = require("async-limiter");
 
@@ -132,7 +133,7 @@ export default {
       loading: false,
       citationSelect: "linksin",
       citationOpt: ["linksout", "linksin"],
-      subjectTarget: [],
+      subjectTarget: defaultCategorySelect,
       yearSelect: [2015],
       quotaSelect: { text: "平均路径长度", value: "shortest path length" },
       yearRangeSelect: 0,
@@ -233,6 +234,7 @@ export default {
       "changeCurentPath",
       `MAG 小世界网络 ${this.$route.query.version}`
     );
+    this.getData();
   },
 
   methods: {

@@ -8,6 +8,8 @@
           @change="getData"
           chips
           multiple
+          deletable-chips
+          clearable
           dense
           label="目标学科"
         ></v-select>
@@ -36,8 +38,12 @@
           outlined
           :loading="loading"
           height="70vh"
-          id="subjectChart"
         >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -46,12 +52,12 @@
 
 <script>
 import { getMasCompositionByYear } from "@/api/index";
-import { extendEchartsOpts, coreCategorys, extendLineSeries } from "@/api/data";
+import { extendEchartsOpts, coreCategorys, extendLineSeries, defaultCategorySelect } from "@/api/data";
 export default {
   name: "mag学科引用年度分布",
   data() {
     return {
-      subjectRelevances: [],
+      subjectRelevances: defaultCategorySelect,
       categorys: coreCategorys,
       yearSelect: 1980,
       yearOpt: [1950, 1960, 1970, 1980, 1990, 1995, 2000],
@@ -61,7 +67,7 @@ export default {
     };
   },
   computed: {
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
@@ -70,6 +76,7 @@ export default {
       this.myChart.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
+    this.getData()
   },
   methods: {
     async getData() {

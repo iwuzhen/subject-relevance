@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-08-04 10:27:36
+ * @LastEditTime: 2020-08-25 17:50:41
  * @Description: 
  -->
 
@@ -16,6 +16,7 @@
           :items="categoryOpt"
           small-chips
           dense
+          clearable
           deletable-chips
           multiple
           label="当前学科"
@@ -80,22 +81,49 @@
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card class="mx-auto" outlined :loading="loading" height="70vh">
-          <v-container fluid fill-height id="subjectChart1"> </v-container>
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+        >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart1"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card class="mx-auto" outlined :loading="loading" height="70vh">
-          <v-container fluid fill-height id="subjectChart2"> </v-container>
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+        >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart2"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card class="mx-auto" outlined :loading="loading" height="70vh">
-          <v-container fluid fill-height id="subjectChart3"> </v-container>
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+        >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart3"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -103,7 +131,7 @@
 </template>
 
 <script>
-import { extendEchartsOpts, magCategory, extendLineSeries } from "@/api/data";
+import { extendEchartsOpts, magCategory, extendLineSeries, defaultCategorySelect } from "@/api/data";
 import { getMagUndirectNet } from "@/api/index";
 const Limiter = require("async-limiter");
 
@@ -114,7 +142,7 @@ export default {
       loading: false,
       citationSelect: "linksin",
       citationOpt: ["linksout", "linksin"],
-      subjectTarget: [],
+      subjectTarget: defaultCategorySelect,
       yearSelect: [2015],
       quotaSelect: { text: "平均路径长度", value: "shortest path length" },
       yearRangeSelect: 5,
@@ -161,16 +189,16 @@ export default {
   },
   watch: {
     // 更新图标
-    chartOpt1: function(opt) {
+    chartOpt1: function (opt) {
       this.myChart1.setOption(opt, true);
     },
-    chartOpt2: function(opt) {
+    chartOpt2: function (opt) {
       this.myChart2.setOption(opt, true);
     },
-    chartOpt3: function(opt) {
+    chartOpt3: function (opt) {
       this.myChart3.setOption(opt, true);
     },
-    subjectTarget: async function(newValue, oldValue) {
+    subjectTarget: async function (newValue, oldValue) {
       this.loading = true;
       let diffArray = newValue.filter(item => !oldValue.includes(item));
       if (diffArray.length > 0) {
@@ -190,13 +218,13 @@ export default {
     }
   },
   computed: {
-    myChart1: function() {
+    myChart1: function () {
       return this.$echarts.init(document.getElementById("subjectChart1"));
     },
-    myChart2: function() {
+    myChart2: function () {
       return this.$echarts.init(document.getElementById("subjectChart2"));
     },
-    myChart3: function() {
+    myChart3: function () {
       return this.$echarts.init(document.getElementById("subjectChart3"));
     }
   },
@@ -215,6 +243,7 @@ export default {
       "changeCurentPath",
       `MAG 小世界网络 ${this.$route.query.version}`
     );
+    this.getData()
   },
 
   methods: {
@@ -422,7 +451,7 @@ export default {
               backgroundColor: "#505765"
             }
           },
-          formatter: function(params) {
+          formatter: function (params) {
             params.sort((x, y) => {
               if (!x.data[1]) {
                 return 1;

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-07-13 13:53:32
+ * @LastEditTime: 2020-08-25 16:07:40
  * @Description:
  */
 
@@ -47,7 +47,13 @@ export let magCategory = [
   "Environmental science",
   "Medicine",
   "Engineering disciplines"
-].sort();
+].sort().map(each => {
+  return {
+    text: each == "Engineering disciplines" ? "Engineering" : each,
+    value: each
+  }
+});
+
 export let basiCategorys = [
   "Literature",
   "Psychology",
@@ -83,7 +89,13 @@ export let basiCategorys = [
   "Genome editing",
   "Anthropology",
   "Neuroscience"
-].sort();
+].sort().map(each => {
+  return {
+    text: each == "Engineering disciplines" ? "Engineering" : each,
+    value: each
+  }
+})
+
 export let lessCategorys = [
   "Logic",
   "Philosophy",
@@ -108,7 +120,12 @@ export let lessCategorys = [
   "Computer engineering",
   "Industrial engineering",
   "Environmental engineering"
-].sort();
+].sort().map(each => {
+  return {
+    text: each == "Engineering disciplines" ? "Engineering" : each,
+    value: each
+  }
+})
 
 export let lessPersonCategorys = [
   "Logic",
@@ -131,7 +148,13 @@ export let lessPersonCategorys = [
   "Mechanical engineering",
   "Industrial engineering",
   "Environmental engineering"
-].sort();
+].sort().map(each => {
+  return {
+    text: each == "Engineering disciplines" ? "Engineering" : each,
+    value: each
+  }
+})
+
 export let wikiArticleCategory = [
   "Materials science",
   "Geology",
@@ -173,7 +196,13 @@ export let wikiArticleCategory = [
   "Neuroscience",
   "Literature",
   "Theoretical physics"
-].sort();
+].sort().map(each => {
+  return {
+    text: each == "Engineering disciplines" ? "Engineering" : each,
+    value: each
+  }
+})
+
 export let peopleCategorys = [
   ["Anthropology", "Anthropologist"],
   ["Artificial intelligence", "AI scientist"],
@@ -243,11 +272,17 @@ export let coreCategorys = [
   "Anthropology",
   "Neuroscience",
   "Literature"
-].sort();
+].sort().map(each => {
+  return {
+    text: each == "Engineering disciplines" ? "Engineering" : each,
+    value: each
+  }
+})
+
+export const defaultCategorySelect = ["Physics", "Geology", "Mathematics", "Biology", "Medicine", "History", "Philosophy", "Economics", "Linguistics", "Chemistry", "Sociology", "Political science", "Engineering disciplines", "Computer science"]
 
 export function extendLineSeries(series) {
-  return Object.assign(
-    {
+  return Object.assign({
       symbolSize: 12,
       smooth: false
     },
@@ -273,7 +308,7 @@ export function extendEchartsOpts(opt) {
           backgroundColor: "#505765"
         }
       },
-      formatter: function(params) {
+      formatter: function (params) {
         params.sort((x, y) => {
           return y.data - x.data;
         });

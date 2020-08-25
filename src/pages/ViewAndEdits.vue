@@ -8,6 +8,8 @@
           @change="getData"
           chips
           multiple
+          deletable-chips
+          clearable
           dense
           label="目标学科"
         ></v-select>
@@ -47,12 +49,12 @@
 
 <script>
 import { getViewAndEdits } from "@/api/index";
-import { basiCategorys, extendEchartsOpts, extendLineSeries } from "@/api/data";
+import { basiCategorys, extendEchartsOpts, defaultCategorySelect, extendLineSeries } from "@/api/data";
 export default {
   name: "ve访问量和编辑量",
   data() {
     return {
-      subjectTarget: [],
+      subjectTarget: defaultCategorySelect,
       subjectLevel: 0,
       categorys: basiCategorys,
       levelOptions: [
@@ -88,7 +90,7 @@ export default {
     };
   },
   computed: {
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
@@ -97,6 +99,7 @@ export default {
       this.myChart.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
+    this.getData()
   },
   methods: {
     async getData() {

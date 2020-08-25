@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-06-04 01:37:47
+ * @LastEditTime: 2020-08-25 17:44:39
  * @Description: 
  -->
 
@@ -16,6 +16,8 @@
           :items="categoryOpt"
           chips
           multiple
+          deletable-chips
+          clearable
           dense
           label="目标学科"
         ></v-select>
@@ -44,7 +46,10 @@
           label="网络大小"
         ></v-select>
       </v-col>
-      <v-col align-self="center" cols="2">
+      <v-col
+        align-self="center"
+        cols="2"
+      >
         <v-btn
           color="light-blue lighten-2"
           dark
@@ -63,14 +68,24 @@
           outlined
           :loading="loading"
           height="70vh"
-          id="subjectChart"
         >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog
+      v-model="dialog"
+      width="500"
+    >
       <v-card>
-        <v-card-title class="headline grey lighten-2" primary-title>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
+        >
           参数说明
         </v-card-title>
 
@@ -96,7 +111,7 @@
 </template>
 
 <script>
-import { basiCategorys, extendEchartsOpts, extendLineSeries } from "@/api/data";
+import { basiCategorys, extendEchartsOpts, extendLineSeries, defaultCategorySelect } from "@/api/data";
 import { getUndirectedByYear } from "@/api/index";
 const Limiter = require("async-limiter");
 
@@ -105,7 +120,7 @@ export default {
   data() {
     return {
       dialog: false,
-      subjectTarget: [],
+      subjectTarget: defaultCategorySelect,
       quotaSelect: "average_distance",
       quoteOpt: [
         {
@@ -137,10 +152,10 @@ export default {
   },
   watch: {
     // 更新图标
-    chartOpt: function(opt) {
+    chartOpt: function (opt) {
       this.myChart.setOption(opt, true);
     },
-    subjectTarget: async function(newValue, oldValue) {
+    subjectTarget: async function (newValue, oldValue) {
       this.loading = true;
       let diffArray = newValue.filter(item => !oldValue.includes(item));
       if (diffArray.length > 0) {
@@ -162,9 +177,10 @@ export default {
       this.myChart.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
+    this.getData()
   },
   computed: {
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
@@ -228,7 +244,7 @@ export default {
         for (let year of allSubject[selectSubjectName].x) {
           yArray[allYears.indexOf(year)] =
             allSubject[selectSubjectName].y[
-              allSubject[selectSubjectName].x.indexOf(year)
+            allSubject[selectSubjectName].x.indexOf(year)
             ];
         }
         data.y.push(yArray);

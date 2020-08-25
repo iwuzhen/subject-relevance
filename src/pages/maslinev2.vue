@@ -17,6 +17,8 @@
           :items="categorysOptions"
           dense
           small-chips
+          deletable-chips
+          clearable
           multiple
           @change="getData"
           label="相关学科"
@@ -94,7 +96,7 @@
             showAve = !showAve;
             getData();
           "
-        >{{ showAve ? "关闭平均相关度" : "开启平均相关度" }}</v-btn>
+        >{{ showAve ? "关闭平均距离" : "开启平均距离" }}</v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -104,8 +106,12 @@
           outlined
           :loading="loading"
           height="70vh"
-          id="masChart"
         >
+          <v-container
+            fluid
+            fill-height
+            id="masChart"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -114,7 +120,7 @@
 
 <script>
 import { getMasDatav2 } from "@/api/index";
-import { extendEchartsOpts, coreCategorys, extendLineSeries } from "@/api/data";
+import { extendEchartsOpts, coreCategorys, extendLineSeries, defaultCategorySelect } from "@/api/data";
 export default {
   name: "mag学科相关度v2",
   data() {
@@ -123,7 +129,7 @@ export default {
       qsOptions: [{ text: "不筛选", value: -1 }, { text: "去掉被引用为0的文章，剩余7000万+", value: -2 }],
       showAve: true,
       subjectTarget: "",
-      subjectRelevances: [],
+      subjectRelevances: defaultCategorySelect,
       methodValue: "linksin",
       years: [1945, 2019],
       categorys: coreCategorys,
@@ -144,10 +150,10 @@ export default {
       let subjectTarget = this.subjectTarget;
       return this.categorys.map(item => {
         let ret = {
-          value: item,
-          text: item
+          value: item.value,
+          text: item.text
         };
-        if (item == subjectTarget) ret["disabled"] = true;
+        if (item.value == this.subjectTarget) ret["disabled"] = true;
         return ret;
       });
     },
@@ -220,7 +226,7 @@ export default {
                 aveLine.push(ss / res.data.data.y.length);
               }
               res.data.data.y.push(aveLine);
-              res.data.data.legend.push("平均相关度");
+              res.data.data.legend.push("平均距离");
               this.drawChart(res.data.data);
             } else this.drawChart(res.data.data);
           } else {

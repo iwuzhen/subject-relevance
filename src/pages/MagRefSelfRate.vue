@@ -8,6 +8,8 @@
           dense
           small-chips
           multiple
+          deletable-chips
+          clearable
           @change="getData"
           label="学科"
         ></v-select>
@@ -66,9 +68,8 @@
             showAve = !showAve;
             getData();
           "
-          >{{ showAve ? "关闭平均自恋度" : "开启平均自恋度" }}</v-btn
-        ></v-col
-      >
+        >{{ showAve ? "关闭平均自恋度" : "开启平均自恋度" }}</v-btn>
+      </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
@@ -77,8 +78,12 @@
           outlined
           :loading="loading"
           height="70vh"
-          id="masChart"
         >
+          <v-container
+            fluid
+            fill-height
+            id="masChart"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -86,14 +91,14 @@
 </template>
 
 <script>
-import { getMagRefSelfRate } from "@/api/index";
-import { extendEchartsOpts, coreCategorys, extendLineSeries } from "@/api/data";
+import { getMagRefSelfRate, } from "@/api/index";
+import { extendEchartsOpts, coreCategorys, extendLineSeries, defaultCategorySelect } from "@/api/data";
 export default {
   name: "mag学科自恋度",
   data() {
     return {
       showAve: true,
-      subjectTarget: "",
+      subjectTarget: defaultCategorySelect,
       methodValue: "linksin",
       years: [1900, 2019],
       categorys: coreCategorys,
@@ -106,9 +111,10 @@ export default {
       this.myChart.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
+    this.getData()
   },
   computed: {
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("masChart"));
     }
   },
@@ -138,7 +144,7 @@ export default {
             aveLine.push(ss / res.data.y.length);
           }
           res.data.y.push(aveLine);
-          res.data.legend.push("平均相关度");
+          res.data.legend.push("平均自恋度");
           this.drawChart(res.data);
         } else this.drawChart(res.data);
       } catch (error) {

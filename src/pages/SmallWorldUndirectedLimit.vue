@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:38:54
  * @LastEditors: ider
- * @LastEditTime: 2020-06-03 23:57:29
+ * @LastEditTime: 2020-08-25 17:47:51
  * @Description: 
  -->
 
@@ -17,6 +17,7 @@
           small-chips
           dense
           deletable-chips
+          clearable
           multiple
           label="当前学科"
         ></v-select>
@@ -66,7 +67,10 @@
           label="网络节点上限"
         ></v-select>
       </v-col>
-      <v-col align-self="center" cols="2">
+      <v-col
+        align-self="center"
+        cols="2"
+      >
         <v-btn
           color="light-blue lighten-2"
           dark
@@ -85,14 +89,25 @@
           outlined
           :loading="loading"
           height="70vh"
-          id="subjectChart"
         >
+
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog
+      v-model="dialog"
+      width="500"
+    >
       <v-card>
-        <v-card-title class="headline grey lighten-2" primary-title>
+        <v-card-title
+          class="headline grey lighten-2"
+          primary-title
+        >
           参数说明
         </v-card-title>
 
@@ -101,10 +116,7 @@
             <b>网络扩大方式</b>： <br />按照 Wikipedia
             三层类距离为顺序，不同规模下的网络的小世界属性 <br />按照 google
             距离距离为顺序，不同规模下的网络的小世界属性
-            <br />随机顺序，不同规模下的网络的小世界属性<br /><b>小世界指标</b
-            >： <br />小世界网络指标有两个指标，平均路径长度，集聚系数。<br /><b
-              >节点上限</b
-            >： <br />图表中展示的节点的最大数量<br />
+            <br />随机顺序，不同规模下的网络的小世界属性<br /><b>小世界指标</b>： <br />小世界网络指标有两个指标，平均路径长度，集聚系数。<br /><b>节点上限</b>： <br />图表中展示的节点的最大数量<br />
           </p>
         </v-card-text>
 
@@ -115,7 +127,7 @@
 </template>
 
 <script>
-import { basiCategorys, extendEchartsOpts, extendLineSeries } from "@/api/data";
+import { basiCategorys, extendEchartsOpts, extendLineSeries, defaultCategorySelect } from "@/api/data";
 import { getScaleTrend } from "@/api/index";
 const Limiter = require("async-limiter");
 
@@ -125,7 +137,7 @@ export default {
     return {
       dialog: false,
       loading: false,
-      subjectTarget: [],
+      subjectTarget: defaultCategorySelect,
       yearSelect: [2020],
       methodSelect: ["google"],
       quotaSelect: "average_distance",
@@ -187,10 +199,10 @@ export default {
   },
   watch: {
     // 更新图标
-    chartOpt: function(opt) {
+    chartOpt: function (opt) {
       this.myChart.setOption(opt, true);
     },
-    subjectTarget: async function(newValue, oldValue) {
+    subjectTarget: async function (newValue, oldValue) {
       this.loading = true;
       let diffArray = newValue.filter(item => !oldValue.includes(item));
       if (diffArray.length > 0) {
@@ -212,7 +224,7 @@ export default {
     }
   },
   computed: {
-    myChart: function() {
+    myChart: function () {
       return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
@@ -222,6 +234,7 @@ export default {
       this.myChart.resize();
     };
     this.$store.commit("changeCurentPath", this.$options.name);
+    this.getData()
   },
 
   methods: {
@@ -308,7 +321,11 @@ export default {
     setOptions(data) {
       // 排序
       data.series.sort((x, y) => {
-        return y.data.slice(-1)[0][1] - x.data.slice(-1)[0][1];
+        try {
+          return y.data.slice(-1)[0][1] - x.data.slice(-1)[0][1];
+        } catch (error) {
+          return -1
+        }
       });
 
       // 获取 y 轴的最大最小值

@@ -3,14 +3,14 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-05-20 16:30:28
+ * @LastEditTime: 2020-08-25 17:37:55
  * @Description: 
  -->
 
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="6">
+      <v-col cols="8">
         <v-select
           v-model="subjectSelect"
           :items="categoryOpt"
@@ -18,10 +18,11 @@
           dense
           multiple
           deletable-chips
+          clearable
           label="目标学科"
         ></v-select>
       </v-col>
-      <v-col cols="3">
+      <v-col cols="2">
         <v-select
           v-model="yearSelect"
           :items="yearOpt"
@@ -30,7 +31,7 @@
           label="年份"
         ></v-select>
       </v-col>
-      <v-col cols="3">
+      <v-col cols="2">
         <v-select
           v-model="nodeCountSelect"
           :items="nodeCountOpt"
@@ -80,15 +81,33 @@
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card class="mx-auto" outlined :loading="loading" height="45vh">
-          <v-container fluid fill-height id="subjectChart1"> </v-container>
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="45vh"
+        >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart1"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card class="mx-auto" outlined :loading="loading" height="45vh">
-          <v-container fluid fill-height id="subjectChart2"> </v-container>
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="45vh"
+        >
+          <v-container
+            fluid
+            fill-height
+            id="subjectChart2"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
@@ -98,7 +117,7 @@
 <script>
 import { getZipfByNodes } from "@/api/index";
 import ecStat from "echarts-stat";
-import { basiCategorys, extendEchartsOpts, extendLineSeries } from "@/api/data";
+import { basiCategorys, extendEchartsOpts, extendLineSeries, defaultCategorySelect } from "@/api/data";
 import { localCache } from "@/api/cache";
 
 // tooyip 位置的x位置
@@ -115,7 +134,7 @@ export default {
       loading: false,
       nodeRange: [250, 2500],
       nodeMin: 0,
-      subjectSelect: [],
+      subjectSelect: defaultCategorySelect,
       nodeCountSelect: 10000,
       nodeCountOpt: [
         1000,
@@ -129,7 +148,7 @@ export default {
         9000,
         10000
       ],
-      yearSelect: null,
+      yearSelect: 2020,
       yearOpt: [
         2007,
         2008,
@@ -152,13 +171,13 @@ export default {
   },
   watch: {
     // 更新图标
-    chartOptYear: function(opt) {
+    chartOptYear: function (opt) {
       this.myChart1.setOption(opt, true);
     },
-    chartOptZipf: function(opt) {
+    chartOptZipf: function (opt) {
       this.myChart2.setOption(opt, true);
     },
-    subjectSelect: async function(newValue, oldValue) {
+    subjectSelect: async function (newValue, oldValue) {
       this.loading = true;
       let diffArray = newValue.filter(item => !oldValue.includes(item));
       if (diffArray.length > 0) {
@@ -194,15 +213,16 @@ export default {
         this.myChart2.setOption(this.chartOptZipf, true);
       }
     });
+    this.getData()
   },
   computed: {
-    nodeMax: function() {
+    nodeMax: function () {
       return this.nodeCountSelect;
     },
-    myChart1: function() {
+    myChart1: function () {
       return this.$echarts.init(document.getElementById("subjectChart1"));
     },
-    myChart2: function() {
+    myChart2: function () {
       return this.$echarts.init(document.getElementById("subjectChart2"));
     }
   },
@@ -216,7 +236,7 @@ export default {
 
       let LCKEY = `${JSON.stringify(opt)}_${this.nodeRange[0]}_${
         this.nodeRange[1]
-      }`;
+        }`;
       let item = await LC.getItem(LCKEY);
       if (!item) {
         try {
@@ -297,7 +317,7 @@ export default {
           data: this.yearOpt
         },
         yAxis: {
-          max: (function(seriesTitleArray) {
+          max: (function (seriesTitleArray) {
             let yList = [];
             for (let item of seriesTitleArray) {
               yList = yList.concat(item[1].data);
@@ -416,7 +436,7 @@ export default {
               backgroundColor: "#505765"
             }
           },
-          formatter: function(params) {
+          formatter: function (params) {
             params.sort((x, y) => {
               return y.data[1] - x.data[1];
             });
