@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-06-04 10:56:34
  * @LastEditors: ider
- * @LastEditTime: 2020-08-13 13:46:36
+ * @LastEditTime: 2020-08-25 14:34:59
  * @Description: 
 -->
 <template>
@@ -40,20 +40,58 @@
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card class="mx-auto" outlined :loading="loading" height="60vh"
-          ><v-container fluid fill-height id="chart2"> </v-container>
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="60vh"
+        >
+          <v-container
+            fluid
+            fill-height
+            id="chart2"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
-        <v-card class="mx-auto" outlined :loading="loading" height="120vh"
-          ><v-container fluid fill-height id="chart1"> </v-container>
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="120vh"
+        >
+          <v-container
+            fluid
+            fill-height
+            id="chart1"
+          > </v-container>
         </v-card>
       </v-col>
     </v-row>
     <v-row>
-      <v-col col="4" v-for="(item, index) in gridData" :key="index">
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="50vh"
+        >
+          <v-container
+            fluid
+            fill-height
+            id="chart3"
+          > </v-container>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col
+        col="4"
+        v-for="(item, index) in gridData"
+        :key="index"
+      >
         <v-card>
           <v-card-title>{{ item.title }} </v-card-title>
           <v-data-table
@@ -71,13 +109,13 @@
 
 <script>
 //
-import { getMagAuthorsAndArticleInfoV2 } from "@/api/index";
+import { getMagAuthorsAndArticleInfoV2, getLinkTjv2 } from "@/api/index";
 import { magCategory, extendEchartsOpts, extendLineSeries } from "@/api/data";
 
 const Limiter = require("async-limiter");
 
 export default {
-  name: "MAG数据统计 v2",
+  name: "MAG数据统计_v2",
   data() {
     return {
       subjectTarget: [],
@@ -87,6 +125,7 @@ export default {
       loading: false,
       chartOpt1: {},
       chartOpt2: {},
+      chartOpt3: {},
       queryTypeSelect: "1",
       queryTypeOpt: [
         { text: "是", value: "0" },
@@ -106,22 +145,28 @@ export default {
     this.$store.commit("changeCurentPath", this.$options.name);
   },
   computed: {
-    myChart1: function() {
+    myChart1: function () {
       return this.$echarts.init(document.getElementById("chart1"));
     },
-    myChart2: function() {
+    myChart2: function () {
       return this.$echarts.init(document.getElementById("chart2"));
+    },
+    myChart3: function () {
+      return this.$echarts.init(document.getElementById("chart3"));
     }
   },
   watch: {
     // 更新图标
-    chartOpt1: function(opt) {
+    chartOpt1: function (opt) {
       this.myChart1.setOption(opt, true);
     },
-    chartOpt2: function(opt) {
+    chartOpt2: function (opt) {
       this.myChart2.setOption(opt, true);
     },
-    subjectTarget: async function(newValue, oldValue) {
+    chartOpt3: function (opt) {
+      this.myChart3.setOption(opt, true);
+    },
+    subjectTarget: async function (newValue, oldValue) {
       this.loading = true;
       let diffArray = newValue.filter(item => !oldValue.includes(item));
       if (diffArray.length > 0) {
@@ -131,7 +176,6 @@ export default {
         });
       }
       this.asyncLimier.onDone(() => {
-        console.log("all done:");
         this.getData();
       });
     }
@@ -154,7 +198,17 @@ export default {
           this.$emit("emitMesage", `请求失败:${error}`);
         }
       }
-      return retdata;
+      let retaveData = { linksout: {}, linksin: {} }
+      for (let tr of ["linksout", "linksin"]) {
+        let opt = {
+          str: subject,
+          method: tr,
+          type: 0
+        }
+        let ret = await getLinkTjv2(opt)
+        Object.assign(retaveData[tr], ret.data)
+      }
+      return [retdata, retaveData];
     },
     async getData() {
       // 需要拆分请求
@@ -166,20 +220,25 @@ export default {
       //   let dataset1 = [],
       //     dataset2 = [];
       // 拼接 dataset
-      let dataset1 = {},
-        dataset2 = {},
+      let dataset1 = { dimensions: [], source: [] },
+        dataset2 = { dimensions: [], source: [] },
+        // 写实2个图
+        dataset3 = { dimensions: ["product", "linksin", "linksout"], source: [] },
         dataset2Title = "",
         tabledata = {};
-      dataset1.dimensions = [];
-      dataset1.source = [];
-      dataset2.dimensions = [];
-      dataset2.source = [];
       let allKeys = [];
       for (let subjectName of this.subjectTarget) {
-        //   dataset1
-        let retdata = await this.getOneDate(subjectName);
+        let [retdata, retaveData] = await this.getOneDate(subjectName);
 
-        console.log(retdata);
+        console.log(retaveData)
+        // dataset3
+        dataset3.source.push({
+          linksout: Object.values(retaveData.linksout)[0],
+          linksin: Object.values(retaveData.linksin)[0],
+          product: Object.keys(retaveData.linksout)[0]
+        });
+
+        //   dataset1
         allKeys.push(...Object.keys(retdata[0][subjectName]));
         retdata[0][subjectName].product = subjectName;
         dataset1.source.push(retdata[0][subjectName]);
@@ -200,8 +259,13 @@ export default {
         return y[1].slice(-1) - x[1].slice(-1);
       });
       dataset1.dimensions.push("product", ...Array.from(new Set(allKeys)));
+      console.log("dataset1", dataset1)
       this.chartOpt1 = this.setOptions1(dataset1);
       this.chartOpt2 = this.setOptions2(dataset2, dataset2Title);
+
+      this.chartOpt3 = this.setOptions3(dataset3);
+
+      console.log("dataset3", dataset3)
       this.drawTable(tabledata);
       this.loading = false;
     },
@@ -349,11 +413,63 @@ export default {
         });
       }
 
-      console.log(ret_data);
       this.gridData = ret_data;
-      console.log(this.gridData);
       this.loading = false;
-    }
+    },
+
+    setOptions3(dataset) {
+      let _opt = {
+        dataset: dataset,
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        title: {
+          text: "MAG 引用数/文章数",
+          textStyle: {
+            fontSize: 24
+          }
+        },
+        xAxis: [
+          { type: "category", gridIndex: 0 },
+          { type: "category", gridIndex: 1 }
+        ],
+        yAxis: [
+          {
+            gridIndex: 0,
+            name: "文章平均引用数（linksin）",
+            nameTextStyle: { fontSize: 18 }
+          },
+          {
+            gridIndex: 1,
+            name: "文章平均引用数（linksout）",
+            nameTextStyle: { fontSize: 18 }
+          }
+        ],
+        grid: [
+          { top: "95%", bottom: "80%", right: "55%" },
+          { top: "95%", bottom: "80%", left: "55%" },
+        ],
+        series: [
+          {
+            type: "bar",
+            xAxisIndex: 0,
+            yAxisIndex: 0,
+            encode: { x: "product", y: "linksin" }
+          },
+          {
+            type: "bar",
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+            encode: { x: "product", y: "linksout" }
+          }
+        ]
+      };
+      return _opt;
+    },
   }
 };
 </script>

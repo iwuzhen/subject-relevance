@@ -1,12 +1,19 @@
 <template>
   <v-app>
-    <v-content>
+    <v-main>
       <NoteBoard path="cc" />
-      <v-breadcrumbs :items="items" large> </v-breadcrumbs>
+      <v-breadcrumbs
+        :items="items"
+        large
+      > </v-breadcrumbs>
 
       <router-view v-on:emitMesage="message" />
-    </v-content>
-    <v-snackbar v-model="snackbar" top :timeout="timeout">
+    </v-main>
+    <v-snackbar
+      v-model="snackbar"
+      top
+      :timeout="timeout"
+    >
       {{ text }}
     </v-snackbar>
   </v-app>
@@ -19,7 +26,7 @@ export default {
   name: "App",
 
   data: () => ({ snackbar: false, timeout: 2000, text: "" }),
-  mounted() {},
+  mounted() { },
   methods: {
     message(text) {
       this.text = text;
@@ -27,10 +34,10 @@ export default {
     }
   },
   computed: {
-    currentPath: function() {
+    currentPath: function () {
       return this.$store.state.curentPath;
     },
-    items: function() {
+    items: function () {
       return [
         {
           text: "首页",
