@@ -237,6 +237,30 @@ export async function getLinkTjv2(params) {
   return await cacheRequest(requestParams);
 }
 
+// mag 第一层父类
+export async function getOriginCategories() {
+  let requestParams = {
+    url: "/mag/getOriginCategories",
+    method: "get",
+  };
+  let res = await request(requestParams);
+  return res.data;
+  // return await cacheRequest(requestParams);
+}
+
+// 获取子类
+export async function getChildCategories(params) {
+  let requestParams = {
+    url: "/mag/getChildCategories",
+    method: "post",
+    data: params
+  };
+  // let res = await request(requestParams);
+  // return res.data;
+  return await cacheRequest(requestParams);
+}
+
+
 export async function getFosTjv2(params) {
   let requestParams = {
     url: "/mag/getFosTj_v2",

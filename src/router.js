@@ -54,6 +54,7 @@ const MAGRefDist = () => import("@/pages/MAGRefDist");
 const MAGRefDistV2 = () => import("@/pages/MAGRefDistV2");
 const MasCompositionByYear = () => import("@/pages/MasCompositionByYear");
 const MagFunnel = () => import("@/pages/MagFunnel");
+const MagFosTree = () => import("@/pages/MagFosTree");
 
 Vue.use(Router);
 
@@ -299,6 +300,11 @@ export default new Router({
       path: "/CoreArticlesTotalV1_plus",
       name: "CoreArticlesTotalV1_plus",
       component: CoreArticlesTotalV1_plus
+    },
+    {
+      path: "/MagFosTree",
+      name: "MagFosTree",
+      component: MagFosTree
     }
   ],
   scrollBehavior(to, from, savedPosition) {

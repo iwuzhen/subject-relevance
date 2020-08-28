@@ -97,6 +97,25 @@ export default {
   data() {
     return {
       indexObject: {
+        "Tree View": {
+          "tree  view": [
+            {
+              title: "Tree Viewer",
+              text: "WIKI 分类文章层次浏览",
+              to: "/WikiTree"
+            },
+            {
+              title: "Britannica Tree",
+              text: "大英百科全书分类层次浏览",
+              to: "/BritannicaTree"
+            },
+            {
+              title: "Mag Fos Tree",
+              text: "Mag Fos 层次 tree",
+              to: "/MagFosTree"
+            }
+          ]
+        },
         "MAG v2 (非简介分类)": {
           "MAG v2- Graph": [
             {
@@ -229,11 +248,6 @@ export default {
         },
         Wikipedia: {
           "Wikipedia- 统计数据": [
-            {
-              title: "Tree Viewer",
-              text: "WIKI 分类文章层次浏览",
-              to: "/WikiTree"
-            },
             {
               title: "wiki子类半衰期",
               text: "2007年的N层子类，经过x年，其子类有一半改变了",
@@ -406,15 +420,6 @@ export default {
               title: "逐年趋势",
               text: "小世界",
               to: "/SmallWorldUndirected"
-            }
-          ]
-        },
-        大英百科全书: {
-          "大英百科全书- 统计数据": [
-            {
-              title: "Britannica Tree",
-              text: "大英百科全书分类层次浏览",
-              to: "/BritannicaTree"
             }
           ]
         }
