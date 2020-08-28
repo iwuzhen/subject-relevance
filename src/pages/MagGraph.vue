@@ -89,45 +89,35 @@ import edge_linksin_2017_echarts from "../assets/data/edge_linksin_2017_v2.json"
 import edge_linksout_2017_echarts from "../assets/data/edge_linksout_2017_v2.json";
 import node_2016 from "../assets/data/node_2016_v2.json";
 import node_2017 from "../assets/data/node_2017_v2.json";
+import Base from './Base'
 
 import { defaultCategorySelect } from "@/api/data";
 
 export default {
   name: "Mag_graph",
+  extends: Base,
   data() {
     return {
-      subjectRelevances: defaultCategorySelect,
+      pageName: "Mag 相关度引力图",
+      subjectRelevances: defaultCategorySelect.map(each => {
+        if (each == "Engineering disciplines") {
+          each = "Engineering"
+        }
+        return each
+      }),
       loading: false,
       categorys: node_2016.map(each => each.Label).sort().map(each => {
         return {
           text: each == "Engineering disciplines" ? "Engineering" : each,
           value: each
         }
-      })
+      }),
+      myChartIds: ['subjectChart1', 'subjectChart2', 'subjectChart3', 'subjectChart4'],
     };
   },
   computed: {
-    myChart1: function () {
-      return this.$echarts.init(document.getElementById("subjectChart1"));
-    },
-    myChart2: function () {
-      return this.$echarts.init(document.getElementById("subjectChart2"));
-    },
-    myChart3: function () {
-      return this.$echarts.init(document.getElementById("subjectChart3"));
-    },
-    myChart4: function () {
-      return this.$echarts.init(document.getElementById("subjectChart4"));
-    }
   },
   mounted() {
-    window.onresize = () => {
-      this.myChart1.resize();
-      this.myChart2.resize();
-      this.myChart3.resize();
-      this.myChart4.resize();
-    };
-    this.$store.commit("changeCurentPath", this.$options.name);
     this.getData();
   },
   methods: {
@@ -137,25 +127,25 @@ export default {
       this.drawGraph(
         node_2016,
         edge_linksin_2016_echarts,
-        this.myChart1,
+        this.myChartObjs[0],
         "Mag 2016 linksin"
       );
       this.drawGraph(
         node_2016,
         edge_linksout_2016_echarts,
-        this.myChart2,
+        this.myChartObjs[1],
         "Mag 2016 linksout"
       );
       this.drawGraph(
         node_2017,
         edge_linksin_2017_echarts,
-        this.myChart3,
+        this.myChartObjs[2],
         "Mag 2017 linksin"
       );
       this.drawGraph(
         node_2017,
         edge_linksout_2017_echarts,
-        this.myChart4,
+        this.myChartObjs[3],
         "Mag 2017 linksout"
       );
     },
@@ -218,6 +208,7 @@ export default {
         },
         legend: [
           {
+            left: "15%",
             data: this.subjectRelevances
           }
         ],

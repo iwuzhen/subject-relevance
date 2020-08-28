@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-08-25 16:07:40
+ * @LastEditTime: 2020-08-28 10:58:03
  * @Description:
  */
 
@@ -11,7 +11,8 @@ export let magCategory = [
   "Anthropology",
   "Artificial intelligence",
   "Biological engineering",
-  "Biology",
+  "Biology", "Theoretical physics", "Applied physics", "Experimental physics",
+  "Number theory", "Algebra", "Geometry", "Applied mathematics", "Operating system",
   "Blockchains",
   "Chemical engineering",
   "Chemistry",
@@ -246,6 +247,7 @@ export let coreCategorys = [
   "Chemistry",
   "Biology",
   "Sociology",
+  "Earth science",
   "Economics",
   "Political science",
   "Linguistics",
@@ -279,7 +281,7 @@ export let coreCategorys = [
   }
 })
 
-export const defaultCategorySelect = ["Physics", "Geology", "Mathematics", "Biology", "Medicine", "History", "Philosophy", "Economics", "Linguistics", "Chemistry", "Sociology", "Political science", "Engineering disciplines", "Computer science"]
+export const defaultCategorySelect = ["Physics", "Earth science", "Mathematics", "Biology", "Medicine", "History", "Philosophy", "Economics", "Linguistics", "Chemistry", "Sociology", "Political science", "Engineering disciplines", "Computer science"]
 
 export function extendLineSeries(series) {
   return Object.assign({

@@ -278,6 +278,10 @@ export default {
         if (!repdata) {
           continue;
         }
+
+        if (x === "Engineering disciplines") {
+          x = "Engineering"
+        }
         let _id = `${x}`;
         tmp_dict_year[_id] = {
           data: []
@@ -317,6 +321,9 @@ export default {
           let repdata = await this.getOneDate(x, y);
           if (!repdata) {
             continue;
+          }
+          if (x === "Engineering disciplines") {
+            x = "Engineering"
           }
           let _id = `${y}_${x}`;
           tmp_dict_top[_id] = {
@@ -363,7 +370,9 @@ export default {
           if (!repdata) {
             continue;
           }
-
+          if (x === "Engineering disciplines") {
+            x = "Engineering"
+          }
           let _id = `${y}_${x}`;
           tmp_dict_node[_id] = {
             data: []

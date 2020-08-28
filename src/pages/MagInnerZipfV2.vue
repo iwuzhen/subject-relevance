@@ -88,12 +88,16 @@ import { magCategory, extendEchartsOpts, defaultCategorySelect } from "@/api/dat
 import ecStat from "echarts-stat";
 const Limiter = require("async-limiter");
 
+import Base from './Base'
+
 // tooyip 位置的x位置
 var tipLegend = 0;
 export default {
-  name: "MAG幂律度分布_v2",
+  name: "MA小世界幂律度分布_v2",
+  extends: Base,
   data() {
     return {
+      pageName: "MAG 小世界幂律度分布 v2",
       girdHeaders: [],
       nodeRange: [100, 35000],
       nodeMax: 100000,
@@ -102,22 +106,20 @@ export default {
       loading: false,
       chartOpt: {},
       chartData: {},
-      gridData: []
+      gridData: [],
+      myChartIds: ["subjectChart"]
     };
   },
   mounted() {
     // 队列 初始化
+
     this.asyncLimier = new Limiter({ concurrency: 1 });
 
-    window.onresize = () => {
-      this.myChart.resize();
-    };
-    this.$store.commit("changeCurentPath", this.$options.name);
-    this.myChart.getZr().on("click", params => {
+    this.myChartObjs[0].getZr().on("click", params => {
       var pointInPixel = [params.offsetX, params.offsetY];
 
-      if (this.myChart.containPixel("grid", pointInPixel)) {
-        // var xIndex = this.myChart.convertFromPixel({ seriesIndex: 0 }, [
+      if (this.myChartObjs[0].containPixel("grid", pointInPixel)) {
+        // var xIndex = this.myChartObjs[0].convertFromPixel({ seriesIndex: 0 }, [
         //   params.offsetX,
         //   params.offsetY
         // ])[0];
@@ -130,15 +132,12 @@ export default {
         }
         this.chartOpt.legend.data = tipLegend;
         this.chartOpt.series = series;
-        this.myChart.setOption(this.chartOpt, true);
+        this.myChartObjs[0].setOption(this.chartOpt, true);
       }
     });
     this.getData()
   },
   computed: {
-    myChart: function () {
-      return this.$echarts.init(document.getElementById("subjectChart"));
-    },
     categorys: function () {
       let categoryArray = magCategory;
       categoryArray.unshift({ text: "All (混合幂律)", value: "all" });
@@ -146,23 +145,19 @@ export default {
     }
   },
   watch: {
-    // 更新图标
-    chartOpt: function (opt) {
-      this.myChart.setOption(opt, true);
-    },
     subjectTarget: async function (newValue, oldValue) {
       this.loading = true;
       let diffArray = newValue.filter(item => !oldValue.includes(item));
       if (diffArray.length > 0) {
         this.asyncLimier.push(async cb => {
-          console.log("asyc");
+          // console.log("asyc");
           await this.getOneDate(diffArray[0]);
-          console.log("aover");
+          // console.log("aover");
           cb();
         });
       }
       this.asyncLimier.onDone(() => {
-        console.log("all done:");
+        // console.log("all done:");
         this.getData();
       });
     }
@@ -201,11 +196,11 @@ export default {
       }
       this.gridData = [retData];
       this.girdHeaders = retHeader;
-      console.log(this.gridData);
-      console.log(this.girdHeaders);
+      // console.log(this.gridData);
+      // console.log(this.girdHeaders);
     },
     async getOneDate(subject) {
-      console.log("onedata,", subject);
+      // console.log("onedata,", subject);
       let opt = {
         str: subject
       };
@@ -241,9 +236,11 @@ export default {
         }
       }
 
-      console.log(reqData);
+      // console.log(reqData);
       this.chartData = reqData;
       this.chartOpt = this.setOptions(reqData);
+
+      this.myChartObjs[0].setOption(this.chartOpt, true);
       this.calSlope();
       this.loading = false;
     },
@@ -268,7 +265,7 @@ export default {
         });
       } // 排序;
       seriesList.sort((x, y) => {
-        console.log(y.data.slice(-1)[0][1], x.data.slice(-1)[0][1]);
+        // console.log(y.data.slice(-1)[0][1], x.data.slice(-1)[0][1]);
         return y.data.slice(-1)[0][1] - x.data.slice(-1)[0][1];
       });
 

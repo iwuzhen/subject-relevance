@@ -87,13 +87,16 @@ import { getMagZipfV2 } from "@/api/index";
 import { magCategory, extendEchartsOpts, defaultCategorySelect } from "@/api/data";
 import ecStat from "echarts-stat";
 const Limiter = require("async-limiter");
+import Base from './Base'
 
 // tooyip 位置的x位置
 var tipLegend = 0;
 export default {
   name: "MAG幂律度分布 v2",
+  extends: Base,
   data() {
     return {
+      pageName: "MAG幂律度分布 v2",
       girdHeaders: [],
       nodeRange: [100, 40000],
       nodeMax: 100000,
@@ -102,22 +105,18 @@ export default {
       loading: false,
       chartOpt: {},
       chartData: {},
-      gridData: []
+      gridData: [],
+      myChartIds: ["subjectChart"]
     };
   },
   mounted() {
     // 队列 初始化
     this.asyncLimier = new Limiter({ concurrency: 1 });
-
-    window.onresize = () => {
-      this.myChart.resize();
-    };
-    this.$store.commit("changeCurentPath", this.$options.name);
-    this.myChart.getZr().on("click", params => {
+    this.myChartObjs[0].getZr().on("click", params => {
       var pointInPixel = [params.offsetX, params.offsetY];
 
-      if (this.myChart.containPixel("grid", pointInPixel)) {
-        // var xIndex = this.myChart.convertFromPixel({ seriesIndex: 0 }, [
+      if (this.myChartObjs[0].containPixel("grid", pointInPixel)) {
+        // var xIndex = this.myChartObjs[0].convertFromPixel({ seriesIndex: 0 }, [
         //   params.offsetX,
         //   params.offsetY
         // ])[0];
@@ -130,15 +129,12 @@ export default {
         }
         this.chartOpt.legend.data = tipLegend;
         this.chartOpt.series = series;
-        this.myChart.setOption(this.chartOpt, true);
+        // this.myChartObjs[0].setOption(this.chartOpt, true);
       }
     });
     this.getData();
   },
   computed: {
-    myChart: function () {
-      return this.$echarts.init(document.getElementById("subjectChart"));
-    },
     categorys: function () {
       let categoryArray = magCategory;
       categoryArray.unshift({ text: "All (混合幂律)", value: "all" });
@@ -148,7 +144,7 @@ export default {
   watch: {
     // 更新图标
     chartOpt: function (opt) {
-      this.myChart.setOption(opt, true);
+      this.myChartObjs[0].setOption(opt, true);
     },
     subjectTarget: async function (newValue, oldValue) {
       this.loading = true;

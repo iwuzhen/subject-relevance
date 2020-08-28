@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-06-04 10:56:34
  * @LastEditors: ider
- * @LastEditTime: 2020-08-25 16:48:37
+ * @LastEditTime: 2020-08-28 13:04:51
  * @Description: 
 -->
 <template>
@@ -37,50 +37,21 @@
         ></v-select>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row
+      v-for="(item,index) in myChartIds"
+      :key="index"
+    >
       <v-col col="12">
         <v-card
           class="mx-auto"
           outlined
           :loading="loading"
-          height="60vh"
+          :height="index == 1?'120vh':'60vh'"
         >
           <v-container
             fluid
             fill-height
-            id="chart2"
-          > </v-container>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="120vh"
-        >
-          <v-container
-            fluid
-            fill-height
-            id="chart1"
-          > </v-container>
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="50vh"
-        >
-          <v-container
-            fluid
-            fill-height
-            id="chart3"
+            :id="item"
           > </v-container>
         </v-card>
       </v-col>
@@ -107,65 +78,41 @@
 </template>
 
 <script>
-//
-import { getMagAuthorsAndArticleInfoV2, getLinkTjv2 } from "@/api/index";
+import { getMagAuthorsAndArticleInfoV2, getLinkTjv2, getFosTjv2 } from "@/api/index";
 import { magCategory, extendEchartsOpts, defaultCategorySelect, extendLineSeries } from "@/api/data";
+import Base from './Base'
 
 const Limiter = require("async-limiter");
 
 export default {
   name: "MAG数据统计_v2",
+  extends: Base,
   data() {
     return {
+      pageName: "MAG 数据统计 v2",
       subjectTarget: defaultCategorySelect,
       limitSelect: 100,
       categorys: magCategory,
       limitOpt: [50, 100, 200, 400, 600, 800, 1000],
       loading: false,
-      chartOpt1: {},
-      chartOpt2: {},
-      chartOpt3: {},
       queryTypeSelect: "1",
       queryTypeOpt: [
         { text: "是", value: "0" },
         { text: "否", value: "1" }
       ],
+      myChartIds: ["chart1", "chart2", "chart3", "chart4"],
       gridData: []
     };
   },
   mounted() {
     // 队列 初始化
     this.asyncLimier = new Limiter({ concurrency: 1 });
-
-    window.onresize = () => {
-      this.myChart1.resize();
-      this.myChart2.resize();
-    };
-    this.$store.commit("changeCurentPath", this.$options.name);
     this.getData()
   },
   computed: {
-    myChart1: function () {
-      return this.$echarts.init(document.getElementById("chart1"));
-    },
-    myChart2: function () {
-      return this.$echarts.init(document.getElementById("chart2"));
-    },
-    myChart3: function () {
-      return this.$echarts.init(document.getElementById("chart3"));
-    }
   },
   watch: {
     // 更新图标
-    chartOpt1: function (opt) {
-      this.myChart1.setOption(opt, true);
-    },
-    chartOpt2: function (opt) {
-      this.myChart2.setOption(opt, true);
-    },
-    chartOpt3: function (opt) {
-      this.myChart3.setOption(opt, true);
-    },
     subjectTarget: async function (newValue, oldValue) {
       this.loading = true;
       let diffArray = newValue.filter(item => !oldValue.includes(item));
@@ -208,7 +155,19 @@ export default {
         let ret = await getLinkTjv2(opt)
         Object.assign(retaveData[tr], ret.data)
       }
-      return [retdata, retaveData];
+
+
+      let retFosData = { linksout: {}, linksin: {} }
+      for (let tr of ["linksout", "linksin"]) {
+        let opt = {
+          str: subject,
+        }
+        let ret = await getFosTjv2(opt)
+        retFosData = ret.data
+      }
+
+
+      return [retdata, retaveData, retFosData];
     },
     async getData() {
       // 需要拆分请求
@@ -224,13 +183,21 @@ export default {
         dataset2 = { dimensions: [], source: [] },
         // 写实2个图
         dataset3 = { dimensions: ["product", "linksin", "linksout"], source: [] },
+        dataset4 = { dimensions: ["product", "data"], source: [] },
         dataset2Title = "",
         tabledata = {};
       let allKeys = [];
       for (let subjectName of this.subjectTarget) {
-        let [retdata, retaveData] = await this.getOneDate(subjectName);
+        let [retdata, retaveData, retFosData] = await this.getOneDate(subjectName);
 
-        console.log(retaveData)
+        // dataset4 
+        dataset4.source.push(...Object.entries(retFosData).map(([key, value]) => {
+          return {
+            product: key,
+            data: value
+          }
+        }))
+
         // dataset3
         dataset3.source.push({
           linksout: Object.values(retaveData.linksout)[0],
@@ -239,9 +206,13 @@ export default {
         });
 
         //   dataset1
-        allKeys.push(...Object.keys(retdata[0][subjectName]));
-        retdata[0][subjectName].product = subjectName;
-        dataset1.source.push(retdata[0][subjectName]);
+        try {
+          allKeys.push(...Object.keys(retdata[0][subjectName]));
+          retdata[0][subjectName].product = subjectName;
+          dataset1.source.push(retdata[0][subjectName]);
+        } catch (error) {
+
+        }
 
         //   dataset2
         dataset2Title = retdata[2].title;
@@ -249,21 +220,25 @@ export default {
         dataset2.dimensions = retdata[2].x;
 
         // tabledata
-        tabledata[subjectName] = Object.entries(retdata[1][subjectName]).map(
-          item => {
-            return { name: item[0], count: item[1] };
-          }
-        );
+        try {
+          tabledata[subjectName] = Object.entries(retdata[1][subjectName]).map(
+            item => {
+              return { name: item[0], count: item[1] };
+            }
+          );
+        } catch (e) {
+
+        }
       }
       dataset2.source.sort((x, y) => {
         return y[1].slice(-1) - x[1].slice(-1);
       });
       dataset1.dimensions.push("product", ...Array.from(new Set(allKeys)));
       console.log("dataset1", dataset1)
-      this.chartOpt1 = this.setOptions1(dataset1);
-      this.chartOpt2 = this.setOptions2(dataset2, dataset2Title);
-
-      this.chartOpt3 = this.setOptions3(dataset3);
+      this.myChartObjs[1].setOption(this.setOptions1(dataset1), true);
+      this.myChartObjs[0].setOption(this.setOptions2(dataset2, dataset2Title), true);
+      this.myChartObjs[2].setOption(this.setOptions3(dataset3), true);
+      this.myChartObjs[3].setOption(this.setOptions4(dataset4), true);
 
       console.log("dataset3", dataset3)
       this.drawTable(tabledata);
@@ -287,11 +262,41 @@ export default {
           }
         },
         xAxis: [
-          { type: "category", gridIndex: 0 },
-          { type: "category", gridIndex: 1 },
-          { type: "category", gridIndex: 2 },
-          { type: "category", gridIndex: 3 },
-          { type: "category", gridIndex: 4 }
+          {
+            type: "category", gridIndex: 0,
+            axisLabel: {
+              interval: 0,
+              rotate: -25
+            }
+          },
+          {
+            type: "category", gridIndex: 1,
+            axisLabel: {
+              interval: 0,
+              rotate: -25
+            }
+          },
+          {
+            type: "category", gridIndex: 2,
+            axisLabel: {
+              interval: 0,
+              rotate: -25
+            }
+          },
+          {
+            type: "category", gridIndex: 3,
+            axisLabel: {
+              interval: 0,
+              rotate: -25
+            }
+          },
+          {
+            type: "category", gridIndex: 4,
+            axisLabel: {
+              interval: 0,
+              rotate: -25
+            }
+          }
         ],
         yAxis: [
           {
@@ -321,7 +326,7 @@ export default {
           { top: "10%", bottom: "67%", left: "55%" },
           { top: "41%", bottom: "35%", right: "55%" },
           { top: "41%", bottom: "35%", left: "55%" },
-          { top: "72%", bottom: "3%", right: "55%" }
+          { top: "72%", bottom: "4%", right: "55%" }
         ],
         series: [
           {
@@ -434,8 +439,18 @@ export default {
           }
         },
         xAxis: [
-          { type: "category", gridIndex: 0 },
-          { type: "category", gridIndex: 1 }
+          {
+            type: "category", gridIndex: 0, axisLabel: {
+              interval: 0,
+              rotate: -25
+            }
+          },
+          {
+            type: "category", gridIndex: 1, axisLabel: {
+              interval: 0,
+              rotate: -25
+            }
+          }
         ],
         yAxis: [
           {
@@ -450,8 +465,8 @@ export default {
           }
         ],
         grid: [
-          { top: "95%", bottom: "80%", right: "55%" },
-          { top: "95%", bottom: "80%", left: "55%" },
+          { top: "90%", bottom: "80%", right: "55%" },
+          { top: "90%", bottom: "80%", left: "55%" },
         ],
         series: [
           {
@@ -465,6 +480,54 @@ export default {
             xAxisIndex: 1,
             yAxisIndex: 1,
             encode: { x: "product", y: "linksout" }
+          }
+        ]
+      };
+      return _opt;
+    },
+
+
+    setOptions4(dataset) {
+      let _opt = {
+        dataset: dataset,
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        title: {
+          text: "学科平均FOS数量",
+          textStyle: {
+            fontSize: 24
+          }
+        },
+        xAxis: [
+          {
+            type: "category", gridIndex: 0, axisLabel: {
+              interval: 0,
+              rotate: -25
+            }
+          },
+        ],
+        yAxis: [
+          {
+            gridIndex: 0,
+            name: "Fos",
+            nameTextStyle: { fontSize: 18 }
+          }
+        ],
+        // grid: [
+        //   { top: "95%", bottom: "80%", right: "55%" },
+        //   { top: "95%", bottom: "80%", left: "55%" },
+        // ],
+        series: [
+          {
+            type: "bar",
+            xAxisIndex: 0,
+            yAxisIndex: 0,
+            encode: { x: "product", y: "data" }
           }
         ]
       };

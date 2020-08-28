@@ -237,6 +237,18 @@ export async function getLinkTjv2(params) {
   return await cacheRequest(requestParams);
 }
 
+export async function getFosTjv2(params) {
+  let requestParams = {
+    url: "/mag/getFosTj_v2",
+    method: "post",
+    data: params
+  };
+  // let res = await request(requestParams);
+  // return res.data;
+  return await cacheRequest(requestParams);
+}
+
+
 
 export async function getMagZipf(params) {
   let requestParams = {

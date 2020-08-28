@@ -34,6 +34,7 @@
 <script>
 import * as d3 from "d3";
 import Chart from "@/utils/chart.js";
+import Base from './Base'
 
 let data = [
   { value: 130, name: "政治" },
@@ -46,21 +47,17 @@ let data = [
 
 export default {
   name: "Mag_funnel",
+  extends: Base,
   data() {
     return {
-      loading: false
+      pageName: "学科幂律哑铃图",
+      loading: false,
+      myChartIds: ["subjectChart"]
     };
   },
   computed: {
-    myChart: function() {
-      return this.$echarts.init(document.getElementById("subjectChart"));
-    }
   },
   mounted() {
-    window.onresize = () => {
-      this.myChart.resize();
-    };
-    this.$store.commit("changeCurentPath", this.$options.name);
     // this.getData();
     this.testd3();
   },
@@ -109,7 +106,7 @@ export default {
       };
 
       chart.margins(config.margins);
-      chart.renderTrapezoid = function() {
+      chart.renderTrapezoid = function () {
         let trapezoids = chart
           .body()
           .append("g")
@@ -161,7 +158,7 @@ export default {
       };
 
       /* ----------------------------渲染文本标签------------------------  */
-      chart.renderText = function() {
+      chart.renderText = function () {
         let texts = d3
           .select(".traps")
           .selectAll(".label")
@@ -187,7 +184,7 @@ export default {
       };
 
       /* ----------------------------渲染图标题------------------------  */
-      chart.renderTitle = function() {
+      chart.renderTitle = function () {
         chart
           .svg()
           .append("text")
@@ -202,14 +199,14 @@ export default {
       };
 
       /* ----------------------------绑定鼠标交互事件------------------------  */
-      chart.addMouseOn = function() {
+      chart.addMouseOn = function () {
         d3.selectAll(".trap")
-          .on("mouseover", function() {
+          .on("mouseover", function () {
             const e = d3.event;
 
             d3.select(e.target).attr("fill", config.hoverColor);
           })
-          .on("mouseleave", function(d, i) {
+          .on("mouseleave", function (d, i) {
             const e = d3.event;
 
             d3.select(e.target).attr("fill", chart._colors(i));
@@ -230,7 +227,7 @@ export default {
           .append("div")
           .attr("class", "box")
       );
-      chart.render = function() {
+      chart.render = function () {
         chart.renderTitle();
 
         chart.renderTrapezoid();
