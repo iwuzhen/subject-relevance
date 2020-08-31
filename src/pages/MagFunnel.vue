@@ -34,7 +34,7 @@
 <script>
 import * as d3 from "d3";
 import Chart from "@/utils/chart.js";
-import Base from './Base'
+import Base from '@/utils/base'
 
 let data = [
   { value: 130, name: "政治" },

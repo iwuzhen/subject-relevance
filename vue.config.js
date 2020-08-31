@@ -30,6 +30,7 @@ module.exports = {
       "diff": "Diff",
       "localforage": "localforage",
       "d3": "d3",
+      "lodash": "_",
     }
   },
   "transpileDependencies": [

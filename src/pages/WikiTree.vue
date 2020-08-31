@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-08-25 16:00:31
+ * @LastEditTime: 2020-08-31 23:19:26
  * @Description: 
  -->
 <template>
@@ -96,17 +96,22 @@
             transition
           >
             <template v-slot:label="{ item }">
-              <a
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">     
+              <a  v-on="on"
                 v-if="item.father"
                 :href="'https://en.wikipedia.org/wiki/' + item.name"
                 target="blank"
-              ><strong
+              ><strong  
                   style="color:orange"
                   v-if="isCoreSunject(item.name)"
                 >{{
                   item.name
                 }}</strong><span v-else>{{ item.name }}</span></a>
-              <span v-else>{{ item.name }}</span>
+              <span  v-on="on" v-else>{{ item.name }}</span>
+                </template>
+                <span>{{ en2zhdict[item.name]===undefined?'Loading...': en2zhdict[item.name]}}</span>
+              </v-tooltip>
             </template>
             <template v-slot:append="{ item }">
               <v-chip
@@ -166,17 +171,22 @@
             transition
           >
             <template v-slot:label="{ item }">
-              <a
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">     
+              <a  v-on="on"
                 v-if="item.father"
                 :href="'https://en.wikipedia.org/wiki/' + item.name"
                 target="blank"
-              ><strong
+              ><strong  
                   style="color:orange"
                   v-if="isCoreSunject(item.name)"
                 >{{
                   item.name
                 }}</strong><span v-else>{{ item.name }}</span></a>
-              <span v-else>{{ item.name }}</span>
+              <span  v-on="on" v-else>{{ item.name }}</span>
+                </template>
+                <span>{{ en2zhdict[item.name]===undefined?'Loading...': en2zhdict[item.name]}}</span>
+              </v-tooltip>
             </template>
             <template v-slot:append="{ item }">
               <v-chip
@@ -220,11 +230,14 @@ import * as Diff2Html from "diff2html";
 import * as diff from "diff";
 import { basiCategorys } from "@/api/data";
 import { v4 as uuidv4 } from "uuid";
+import Base from '@/utils/base'
 
 export default {
   name: "Tree_Viewer",
+  extends: Base,
   data() {
     return {
+      pageName:"wikipedia 分类树",
       paragraph: {},
       showDouble: true,
       openTree2: [],
@@ -293,7 +306,6 @@ export default {
   },
   mounted() {
     this.reset();
-    this.$store.commit("changeCurentPath", this.$options.name);
     this.loadDefauleCategory();
   },
   watch: {
@@ -359,6 +371,7 @@ export default {
     },
     loadDefauleCategory() {
       this.treeItems1 = this.basiccategorys.map(item => {
+         this.addTranslateChan(item)
         return {
           id: uuidv4(),
           name: item,
@@ -430,7 +443,7 @@ export default {
     async getParagraph(name) {
       let opt = { title: name };
       let ret = await getCacheSummary(opt);
-      this.paragraph[name] = ret.extract;
+      this.$set(this.paragraph,name,ret == null?"failed!!!":ret.extract)
     },
 
     async _fectch_article_birth(articleArray) {
@@ -466,6 +479,7 @@ export default {
           await this._fectch_article_birth(data.childList);
           articleChildrens = data.childList.map(item => {
             this.getParagraph(item);
+            this.addTranslateChan(item)
             return {
               id: uuidv4(),
               father: "page",
@@ -480,12 +494,12 @@ export default {
             db: `WIKI${_wikiDB}`
           });
           categoryChildrens = data.childList.map(item => {
+            this.addTranslateChan(item)
             return {
               id: uuidv4(),
               name: item,
               leaf: true,
               children: [],
-
               nodetype: "category"
             };
           });
@@ -499,7 +513,7 @@ export default {
               nodetype: "category"
             };
           });
-
+        
           treeitem.children.push({
             id: uuidv4(),
             name: `文章 ${articleLength}`,

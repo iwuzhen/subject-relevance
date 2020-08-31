@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-08-28 14:32:14
+ * @LastEditTime: 2020-08-31 22:39:51
  * @Description: 
  -->
 <template>
@@ -52,7 +52,7 @@
                 <template v-slot:activator="{ on }">
                   <span v-on="on">{{ item.name }}</span>
                 </template>
-                <span>{{ item.name }}</span>
+                <span>{{en2zhdict[item.name]===undefined?'Loading...': en2zhdict[item.name]}}</span>
               </v-tooltip>
             </template>
             <template v-slot:append="{ item }">
@@ -71,7 +71,7 @@
 import { getBritannicaTree } from "@/api/index";
 import * as diff from "diff";
 import { v4 as uuidv4 } from "uuid";
-import Base from './Base'
+import Base from '@/utils/base'
 
 export default {
   name: "Britannica_Tree_大英百科全书",
@@ -130,6 +130,7 @@ export default {
   methods: {
     loadDefauleCategory() {
       this.treeItems1 = this.basiccategorys.map(item => {
+        this.addTranslateChan(item)
         return {
           id: uuidv4(),
           name: item,
@@ -158,6 +159,7 @@ export default {
           if (res.data) {
             categoryLength = res.data.childList.length;
             categoryChildrens = res.data.childList.map(item => {
+              this.addTranslateChan(item)
               return {
                 id: uuidv4(),
                 name: item,

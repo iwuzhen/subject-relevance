@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-06-04 10:56:34
  * @LastEditors: ider
- * @LastEditTime: 2020-08-28 13:04:51
+ * @LastEditTime: 2020-08-31 21:40:03
  * @Description: 
 -->
 <template>
@@ -80,7 +80,7 @@
 <script>
 import { getMagAuthorsAndArticleInfoV2, getLinkTjv2, getFosTjv2 } from "@/api/index";
 import { magCategory, extendEchartsOpts, defaultCategorySelect, extendLineSeries } from "@/api/data";
-import Base from './Base'
+import Base from '@/utils/base'
 
 const Limiter = require("async-limiter");
 

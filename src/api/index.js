@@ -105,6 +105,18 @@ export async function getScaleTrend(params) {
   return await cacheRequestGo(requestParams);
 }
 
+
+export async function getTranslate(params) {
+  let requestParams = {
+    url: "/utils/translate",
+    method: "post",
+    data: params
+  };
+  // let res = await requestgo(requestParams);
+  // return res.data;
+  return await cacheRequestGo(requestParams);
+}
+
 export async function getDirectedByYear(params) {
   let requestParams = {
     url: "/smallworld/directedByYear",

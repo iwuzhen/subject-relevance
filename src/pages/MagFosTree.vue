@@ -3,15 +3,12 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-08-28 15:35:52
+ * @LastEditTime: 2020-08-31 22:31:42
  * @Description: 
  -->
 <template>
   <v-container fluid>
     <v-row>
-      <!-- <v-col>
-        <v-btn color="primary" @click="checkNode">对比选中的节点</v-btn>
-      </v-col> -->
       <v-col>
         <v-autocomplete
           v-model="searchString"
@@ -53,7 +50,7 @@
                 <template v-slot:activator="{ on }">
                   <span v-on="on">{{ item.name }}</span>
                 </template>
-                <span>{{ item.name }}</span>
+                <span>{{ en2zhdict[item.name]===undefined?'Loading...': en2zhdict[item.name]}}</span>
               </v-tooltip>
             </template>
             <template v-slot:append="{ item }">
@@ -72,7 +69,8 @@
 import { getOriginCategories, getChildCategories } from "@/api/index";
 import * as diff from "diff";
 import { v4 as uuidv4 } from "uuid";
-import Base from './Base'
+import Base from '@/utils/base'
+
 
 export default {
   name: "MAG_Fos",
@@ -87,7 +85,6 @@ export default {
       searchItems: [],
       search: null,
       searchString: "",
-      diffs: "",
     };
   },
   computed: {
@@ -129,6 +126,7 @@ export default {
     async loadDefauleCategory() {
       let data = await getOriginCategories()
       this.treeItems1 = data.data.map(item => {
+        this.addTranslateChan(item.name)
         return {
           id: item.id,
           name: item.name,
@@ -157,6 +155,7 @@ export default {
         .then(res => {
           if (res.data) {
             categoryChildrens = res.data.map(item => {
+              this.addTranslateChan(item.name)
               return {
                 id: item.id,
                 name: item.name,

@@ -89,7 +89,7 @@ import edge_linksin_2017_echarts from "../assets/data/edge_linksin_2017_v2.json"
 import edge_linksout_2017_echarts from "../assets/data/edge_linksout_2017_v2.json";
 import node_2016 from "../assets/data/node_2016_v2.json";
 import node_2017 from "../assets/data/node_2017_v2.json";
-import Base from './Base'
+import Base from '@/utils/base'
 
 import { defaultCategorySelect } from "@/api/data";
 

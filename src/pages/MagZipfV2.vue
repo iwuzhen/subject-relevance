@@ -87,7 +87,7 @@ import { getMagZipfV2 } from "@/api/index";
 import { magCategory, extendEchartsOpts, defaultCategorySelect } from "@/api/data";
 import ecStat from "echarts-stat";
 const Limiter = require("async-limiter");
-import Base from './Base'
+import Base from '@/utils/base'
 
 // tooyip 位置的x位置
 var tipLegend = 0;
