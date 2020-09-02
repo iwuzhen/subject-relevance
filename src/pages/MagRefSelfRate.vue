@@ -23,6 +23,15 @@
           label="条件"
         ></v-select>
       </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="versionValue"
+          :items="versionOptions"
+          dense
+          @change="getData"
+          label="版本"
+        ></v-select>
+      </v-col>
     </v-row>
     <v-row>
       <!-- <v-col cols="8">
@@ -82,7 +91,7 @@
           <v-container
             fluid
             fill-height
-            id="masChart"
+            id="masChart1"
           > </v-container>
         </v-card>
       </v-col>
@@ -93,30 +102,30 @@
 <script>
 import { getMagRefSelfRate, } from "@/api/index";
 import { extendEchartsOpts, coreCategorys, extendLineSeries, defaultCategorySelect } from "@/api/data";
+import Base from '@/utils/base'
+
 export default {
   name: "mag学科自恋度",
+  extends: Base,
   data() {
     return {
+      versionValue:"v2",
+      versionOptions:["v1","v2"],
+      pageName: "MAG 学科自恋度 v1&v2",
       showAve: true,
       subjectTarget: defaultCategorySelect,
       methodValue: "linksin",
       years: [1900, 2019],
       categorys: coreCategorys,
       methodOptions: ["linksout", "linksin"],
-      loading: false
+      loading: false,
+      myChartIds: ["masChart1"]
     };
   },
   mounted() {
-    window.onresize = () => {
-      this.myChart.resize();
-    };
-    this.$store.commit("changeCurentPath", this.$options.name);
     this.getData()
   },
   computed: {
-    myChart: function () {
-      return this.$echarts.init(document.getElementById("masChart"));
-    }
   },
   methods: {
     async getData() {
@@ -129,7 +138,8 @@ export default {
         str: this.subjectTarget.join(","),
         method: this.methodValue,
         from: this.years[0],
-        to: this.years[1]
+        to: this.years[1],
+        version:this.versionValue,
       };
       try {
         let res = await getMagRefSelfRate(opt);
@@ -153,9 +163,8 @@ export default {
       }
     },
     drawChart(data) {
-      let myChart = this.$echarts.init(document.getElementById("masChart"));
       let options = this.setOptions(data);
-      myChart.setOption(options, true);
+      this.myChartObjs[0].setOption(options, true);
       this.loading = false;
     },
     setOptions(data) {

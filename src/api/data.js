@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-08-28 10:58:03
+ * @LastEditTime: 2020-09-02 22:39:39
  * @Description:
  */
 
@@ -235,7 +235,6 @@ export let peopleCategorys = [
 
 export let coreCategorys = [
   "Materials science",
-  "Geology",
   "Geography",
   "Environmental science",
   "Medicine",
@@ -248,6 +247,7 @@ export let coreCategorys = [
   "Biology",
   "Sociology",
   "Earth science",
+  "Geology",
   "Economics",
   "Political science",
   "Linguistics",
@@ -281,7 +281,7 @@ export let coreCategorys = [
   }
 })
 
-export const defaultCategorySelect = ["Physics", "Earth science", "Mathematics", "Biology", "Medicine", "History", "Philosophy", "Economics", "Linguistics", "Chemistry", "Sociology", "Political science", "Engineering disciplines", "Computer science"]
+export const defaultCategorySelect = ["Physics", "Earth science", "Geology", "Mathematics", "Biology", "Medicine", "History", "Philosophy", "Economics", "Linguistics", "Chemistry", "Sociology", "Political science", "Engineering disciplines", "Computer science"]
 
 export function extendLineSeries(series) {
   return Object.assign({
