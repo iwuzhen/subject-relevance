@@ -23,6 +23,25 @@
           :loading="loading"
           height="70vh"
         >
+          <v-card-title>
+            MAG 2016 linksin 测试 3D 引力图
+          </v-card-title>
+          <v-container
+            id="3d-graph"
+            fluid
+            fill-height
+          />
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+        >
           <v-container
             id="subjectChart1"
             fluid
@@ -90,6 +109,7 @@ import edge_linksout_2017_echarts from '../assets/data/edge_linksout_2017_v2.jso
 import node_2016 from '../assets/data/node_2016_v2.json'
 import node_2017 from '../assets/data/node_2017_v2.json'
 import Base from '@/utils/base'
+import ForceGraph3D from '3d-force-graph'
 
 import { defaultCategorySelect } from '@/api/data'
 
@@ -119,8 +139,72 @@ export default {
     this.getData()
   },
   methods: {
+    draw3DForceGraph() {
+      const nodes = []
+      const links = []
+      const nodeIds = []
+      for (const doc of node_2016) {
+        if (this.subjectRelevances.indexOf(doc.Label) >= 0) {
+          nodes.push(doc)
+          nodeIds.push(doc.Id)
+        }
+      }
+      for (const doc of edge_linksin_2016_echarts) {
+        if (
+          nodeIds.indexOf(doc.Source) >= 0 &&
+          nodeIds.indexOf(doc.Target) >= 0
+        ) {
+          links.push(doc)
+        }
+      }
+
+      const sizeMax = Math.pow(
+        Math.max(...nodes.map(each => Number(each.weight))), 1 / 3
+      )
+      const sizeMin = Math.pow(
+        Math.min(...nodes.map(each => Number(each.weight))), 1 / 3
+      )
+
+      const gData = {
+        nodes: nodes.map(each => ({ id: each.Id, name: each.Label,
+          value: (2 * (Math.pow(Number(each.weight), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.05
+
+        })),
+        links: links
+          .map(each => ({
+            source: each.Source,
+            target: each.Target,
+            value: Number(each.Weight)
+          }))
+      }
+
+      console.log(gData)
+      const elem = document.getElementById('3d-graph')
+      const Graph = ForceGraph3D()(elem).width(1500).height(700)
+        .graphData(gData)
+        .nodeResolution(30)
+        .nodeVal('value')
+        .nodeLabel('name')
+        .nodeAutoColorBy('name')
+        .zoomToFit(100, 100, node => true)
+        // eslint-disable-next-line no-return-assign
+        .onNodeHover(node => elem.style.cursor = node ? 'pointer' : null)
+        .onNodeClick(node => {
+          // Aim at node from outside it
+          const distance = 40
+          const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z)
+          Graph.cameraPosition(
+            { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }, // new position
+            node, // lookAt ({ x, y, z })
+            3000 // ms transition duration
+          )
+        })
+      Graph
+        .d3Force('link')
+        .strength(link => { return link.value })
+    },
     getData() {
-      console.log(this.subjectRelevances)
+      this.draw3DForceGraph()
       // 过滤节点
       this.drawGraph(
         node_2016,
@@ -160,7 +244,7 @@ export default {
       }
       for (const doc of linlsJson) {
         if (
-          nodeIds.indexOf(doc.Source) >= 0 ||
+          nodeIds.indexOf(doc.Source) >= 0 &&
           nodeIds.indexOf(doc.Target) >= 0
         ) {
           links.push(doc)
