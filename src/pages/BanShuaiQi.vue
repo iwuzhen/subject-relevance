@@ -3,8 +3,8 @@
  * @Author: ider
  * @Date: 2020-04-14 22:23:01
  * @LastEditors: ider
- * @LastEditTime: 2020-08-25 17:04:34
- * @Description: 
+ * @LastEditTime: 2020-09-04 12:31:56
+ * @Description:
  -->
 <template>
   <v-container fluid>
@@ -13,30 +13,30 @@
         <v-select
           v-model="currentSubjectSelect"
           :items="categoryOpt"
-          @change="getData"
           chips
           multiple
           deletable-chips
           clearable
           dense
           label="目标学科"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
       <v-col cols="2">
         <v-select
           v-model="levelSelect"
           :items="levelOpt"
-          @change="getData"
           label="level"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
       <v-col cols="2">
         <v-select
           v-model="yearSelect"
           :items="yearOpt"
-          @change="getData"
           label="year"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
       <!-- <v-col align-self="center" cols="2">
         <v-btn
@@ -60,10 +60,10 @@
           height="70vh"
         >
           <v-container
+            id="subjectChart"
             fluid
             fill-height
-            id="subjectChart"
-          > </v-container>
+          />
         </v-card>
       </v-col>
     </v-row>
@@ -80,26 +80,30 @@
         </v-card-title>
 
         <v-card-text>
-          <p></p>
+          <p />
         </v-card-text>
 
-        <v-divider></v-divider>
+        <v-divider />
       </v-card>
     </v-dialog>
   </v-container>
 </template>
 
 <script>
-import { getBanshuaiqi } from "@/api/index";
-import { basiCategorys, defaultCategorySelect } from "@/api/data";
+import { getBanshuaiqi } from '@/api/index'
+import Base from '@/utils/base'
+import { basiCategorys, defaultCategorySelect } from '@/api/data'
+
 export default {
-  name: "wiki子类半衰期",
+  name: 'WikiBanshuaiqi',
+  extends: Base,
   data() {
     return {
+      pageName: 'wiki 子类半衰期',
       dialog: false,
       currentSubjectSelect: defaultCategorySelect,
-      levelSelect: "2",
-      levelOpt: ["1", "2"],
+      levelSelect: '2',
+      levelOpt: ['1', '2'],
       yearSelect: 2007,
       yearOpt: [
         2007,
@@ -117,84 +121,76 @@ export default {
         2020
       ],
       categoryOpt: basiCategorys,
-      loading: false
-    };
+      loading: false,
+      myChartIds: ['subjectChart']
+    }
   },
   mounted() {
-    window.onresize = () => {
-      this.myChart.resize();
-    };
-    this.$store.commit("changeCurentPath", this.$options.name);
     this.getData()
-  },
-  computed: {
-    myChart: function () {
-      return this.$echarts.init(document.getElementById("subjectChart"));
-    }
   },
   methods: {
     async getData() {
       if (this.currentSubjectSelect.length === 0) {
-        return false;
+        return false
       }
-      this.loading = true;
-      let opt = {
-        cats: this.currentSubjectSelect.join(","),
+      this.loading = true
+      const opt = {
+        cats: this.currentSubjectSelect.join(','),
         level: this.levelSelect,
         year: this.yearSelect
-      };
+      }
       //   let data;
-      let response = await getBanshuaiqi(opt);
+      const response = await getBanshuaiqi(opt)
       if (response.data.data) {
-        this.drawChart(response.data.data);
+        this.drawChart(response.data.data)
       } else {
-        this.$emit("emitMesage", `请求失败`);
+        this.$emit('emitMesage', `请求失败`)
       }
     },
     drawChart(data) {
-      let options = this.setOptions(data);
-      console.log(options);
-      console.log("draw");
-      this.myChart.setOption(options, true);
-      this.loading = false;
+      const options = this.setOptions(data)
+      console.log(options)
+      console.log('draw')
+      this.myChartObjs[0].setOption(options, true)
+      this.loading = false
     },
     setOptions(data) {
-      let pieData = {};
-      for (let year of data.y) {
+      const pieData = {}
+      for (const year of data.y) {
         if (!pieData[`${year}年`]) {
-          pieData[`${year}年`] = 1;
+          pieData[`${year}年`] = 1
         } else {
-          pieData[`${year}年`] = pieData[`${year}年`] + 1;
+          pieData[`${year}年`] = pieData[`${year}年`] + 1
         }
       }
-      console.log(pieData);
-      let _opt = {
+      console.log(pieData)
+      const _opt = {
         tooltip: {},
         title: [
           {
-            text: "衰减学科分布",
-            left: "35%",
-            textAlign: "center"
+            text: '衰减学科分布',
+            left: '35%',
+            textAlign: 'center'
           },
           {
-            text: "衰减年份分布",
-            left: "80%",
-            textAlign: "center"
+            text: '衰减年份分布',
+            left: '80%',
+            textAlign: 'center'
           }
         ],
         grid: [
           {
             top: 50,
-            width: "70%",
-            bottom: "45%",
+            width: '70%',
+            bottom: '45%',
             left: 10,
             containLabel: true
           }
         ],
         xAxis: [
           {
-            type: "value",
-            name: "衰减需要的年数",
+            type: 'value',
+            name: '衰减需要的年数',
             max: Math.max(...data.y) + 1,
             splitLine: {
               show: false
@@ -203,8 +199,8 @@ export default {
         ],
         yAxis: [
           {
-            name: "学科",
-            type: "category",
+            name: '学科',
+            type: 'category',
             data: data.x,
             axisLabel: {
               interval: 0,
@@ -217,32 +213,32 @@ export default {
         ],
         series: [
           {
-            type: "bar",
-            stack: "chart",
+            type: 'bar',
+            stack: 'chart',
             z: 3,
             label: {
               normal: {
-                position: "right",
+                position: 'right',
                 show: true
               }
             },
             data: data.y
           },
           {
-            type: "pie",
-            radius: [0, "30%"],
-            center: ["80%", "25%"],
-            data: Object.keys(pieData).map(function (key) {
+            type: 'pie',
+            radius: [0, '30%'],
+            center: ['80%', '25%'],
+            data: Object.keys(pieData).map(function(key) {
               return {
                 name: key,
                 value: pieData[key]
-              };
+              }
             })
           }
         ]
-      };
-      return _opt;
+      }
+      return _opt
     }
   }
-};
+}
 </script>

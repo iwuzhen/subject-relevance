@@ -5,14 +5,14 @@
         <v-select
           v-model="subjectRelevances"
           :items="categorys"
-          @change="getData"
           chips
           multiple
           dense
           deletable-chips
           clearable
           label="目标学科"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
     </v-row>
     <v-row>
@@ -24,10 +24,10 @@
           height="70vh"
         >
           <v-container
+            id="subjectChart"
             fluid
             fill-height
-            id="subjectChart"
-          > </v-container>
+          />
         </v-card>
       </v-col>
     </v-row>
@@ -35,107 +35,101 @@
 </template>
 
 <script>
-import { getMasArticlesTotal } from "@/api/index";
-import { extendEchartsOpts, defaultCategorySelect, coreCategorys, extendLineSeries } from "@/api/data";
+import { getMasArticlesTotal } from '@/api/index'
+import { extendEchartsOpts, defaultCategorySelect, coreCategorys, extendLineSeries } from '@/api/data'
+import Base from '@/utils/base'
+
 export default {
-  name: "mag文章数",
+  name: 'Mag',
+  extends: Base,
   data() {
     return {
+      pageName: 'MAG 文章数',
       subjectRelevances: defaultCategorySelect,
       categorys: coreCategorys,
       typeOptions: [
         {
-          value: "0",
-          text: "否"
+          value: '0',
+          text: '否'
         },
         {
-          value: "1",
-          text: "是"
+          value: '1',
+          text: '是'
         },
         {
-          value: "mas",
-          text: "mag"
+          value: 'mas',
+          text: 'mag'
         }
       ],
-      levelOptions: ["0", "1", "2"],
+      levelOptions: ['0', '1', '2'],
+      myChartIds: ['subjectChart'],
       loading: false
-    };
-  },
-  computed: {
-    myChart: function () {
-      return this.$echarts.init(document.getElementById("subjectChart"));
     }
   },
   mounted() {
-    window.onresize = () => {
-      this.myChart.resize();
-    };
-    this.$store.commit("changeCurentPath", this.$options.name);
     this.getData()
   },
   methods: {
     async getData() {
       if (this.subjectRelevances.length === 0) {
-        return false;
+        return false
       }
-      this.loading = true;
-      let opt = {
-        subjects: this.subjectRelevances.join(",")
-      };
+      this.loading = true
+      const opt = {
+        subjects: this.subjectRelevances.join(',')
+      }
       getMasArticlesTotal(opt)
         .then(res => {
           if (res.data) {
-            console.log(res.data);
-            this.drawChart(res.data);
+            console.log(res.data)
+            this.drawChart(res.data)
           } else {
-            this.loading = false;
-            this.$emit("emitMesage", "请求失败");
-            return false;
+            this.loading = false
+            this.$emit('emitMesage', '请求失败')
+            return false
           }
         })
         .catch(rej => {
-          this.loading = false;
-          this.$emit("emitMesage", `请求失败:${rej}`);
-        });
+          this.loading = false
+          this.$emit('emitMesage', `请求失败:${rej}`)
+        })
     },
     drawChart(data) {
-      console.log(this.subjectRelevances);
-      let options = this.setOptions(data);
-      this.myChart.setOption(options, true);
-      this.loading = false;
+      console.log(this.subjectRelevances)
+      const options = this.setOptions(data)
+      this.myChartObjs[0].setOption(options, true)
+      this.loading = false
     },
     setOptions(data) {
-      let years = Object.keys(Object.values(data)[0]);
-      let _opt = extendEchartsOpts({
+      const years = Object.keys(Object.values(data)[0])
+      const _opt = extendEchartsOpts({
         title: {
-          text: "学科 article 数量"
+          text: '学科 article 数量'
         },
         legend: {
           data: Object.keys(data)
         },
         xAxis: {
-          name: "Year",
-          type: "category",
+          name: 'Year',
+          type: 'category',
           boundaryGap: false,
           data: years
         },
         yAxis: {
-          name: "Count",
-          type: "value"
+          name: 'Count',
+          type: 'value'
         },
         series: Object.entries(data).map(item => {
           return extendLineSeries({
             name: item[0],
-            type: "line",
+            type: 'line',
             smooth: false,
             data: Object.values(item[1])
-          });
+          })
         })
-      });
-      return _opt;
+      })
+      return _opt
     }
   }
-};
+}
 </script>
-
-<style lang="less" scoped></style>

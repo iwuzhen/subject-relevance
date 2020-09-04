@@ -3,8 +3,8 @@
  * @Author: ider
  * @Date: 2020-04-14 22:23:01
  * @LastEditors: ider
- * @LastEditTime: 2020-08-25 17:05:40
- * @Description: 
+ * @LastEditTime: 2020-09-04 16:10:28
+ * @Description:
  -->
 <template>
   <v-container fluid>
@@ -13,31 +13,31 @@
         <v-select
           v-model="currentSubjectSelect"
           :items="categoryOpt"
-          @change="getData"
           chips
           multiple
           deletable-chips
           clearable
           dense
           label="目标学科"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
       <v-col cols="2">
         <v-select
           v-model="yearsSelect"
           :items="yearsOpt"
-          @change="getData"
           multiple
           label="year"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
       <v-col cols="2">
         <v-select
           v-model="tableSelect"
           :items="tableOpt"
-          @change="getData"
           label="表格类型"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
       <!-- <v-col align-self="center" cols="2">
         <v-btn
@@ -53,9 +53,9 @@
     </v-row>
     <v-row>
       <v-col
-        col="4"
         v-for="(item, index) in gridData"
         :key="index"
+        col="4"
       >
         <v-card>
           <v-card-title>{{ item.title }}</v-card-title>
@@ -65,7 +65,7 @@
             dense
             sort-desc
             class="elevation-1"
-          ></v-data-table>
+          />
         </v-card>
       </v-col>
     </v-row>
@@ -82,27 +82,31 @@
         </v-card-title>
 
         <v-card-text>
-          <p></p>
+          <p />
         </v-card-text>
 
-        <v-divider></v-divider>
+        <v-divider />
       </v-card>
     </v-dialog>
   </v-container>
 </template>
 
 <script>
-import { getTopArticles } from "@/api/index";
-import { basiCategorys, defaultCategorySelect } from "@/api/data";
+import { getTopArticles } from '@/api/index'
+import { basiCategorys, defaultCategorySelect } from '@/api/data'
+import Base from '@/utils/base'
+
 export default {
-  name: "wiki学科top文章展示",
+  name: 'WikiTop',
+  extends: Base,
   data() {
     return {
+      pageName: 'wiki 学科top文章展示',
       dialog: false,
       currentSubjectSelect: defaultCategorySelect,
       yearsSelect: [2020],
-      tableSelect: "按学科组合",
-      tableOpt: ["按年组合", "按学科组合"],
+      tableSelect: '按学科组合',
+      tableOpt: ['按年组合', '按学科组合'],
       yearsOpt: [
         2007,
         2008,
@@ -120,20 +124,12 @@ export default {
       ],
       categoryOpt: basiCategorys,
       loading: false,
-      gridData: []
-    };
+      gridData: [],
+      myChartIds: ['subjectChart']
+    }
   },
   mounted() {
-    window.onresize = () => {
-      this.myChart.resize();
-    };
-    this.$store.commit("changeCurentPath", this.$options.name);
     this.getData()
-  },
-  computed: {
-    myChart: function () {
-      return this.$echarts.init(document.getElementById("subjectChart"));
-    }
   },
   methods: {
     async getData() {
@@ -141,142 +137,144 @@ export default {
         this.currentSubjectSelect.length === 0 ||
         this.yearsSelect.length === 0
       ) {
-        return false;
+        return false
       }
-      this.loading = true;
-      let opt = {
-        cats: this.currentSubjectSelect.join(","),
-        years: this.yearsSelect.join(",")
-      };
+      this.loading = true
+      const opt = {
+        cats: this.currentSubjectSelect.join(','),
+        years: this.yearsSelect.join(',')
+      }
       //   let data;
-      let response = await getTopArticles(opt);
+      const response = await getTopArticles(opt)
       if (response.data.data) {
-        this.drawTable(response.data.data);
+        this.drawTable(response.data.data)
       } else {
-        this.$emit("emitMesage", "请求失败");
+        this.$emit('emitMesage', '请求失败')
       }
     },
     drawTable(data) {
-      let ret_data = [];
-      if (this.tableSelect == "按年组合") {
-        let headers = [
+      const ret_data = []
+      if (this.tableSelect === '按年组合') {
+        const headers = [
           {
-            text: "article name",
-            align: "start",
+            text: 'article name',
+            align: 'start',
             sortable: false,
-            value: "name"
+            value: 'name'
           },
           {
-            text: "links count",
-            align: "start",
-            value: "links"
+            text: 'links count',
+            align: 'start',
+            value: 'links'
           }
-        ];
+        ]
         // 组合 header
-        for (let catename of this.currentSubjectSelect) {
+        for (const catename of this.currentSubjectSelect) {
           headers.push({
             text: `${catename} 排名`,
-            align: "center",
+            align: 'center',
             value: catename,
             sort: (a, b) => {
               if (!a) {
-                return 1;
+                return 1
               } else if (!b) {
-                return -1;
+                return -1
               }
-              return a - b;
+              return a - b
             }
-          });
+          })
         }
-        for (let year of this.yearsSelect) {
-          let desserts = {};
-          for (let catename of this.currentSubjectSelect) {
-            let sortedItems = Object.entries(data[year][catename]).sort(
+        for (const year of this.yearsSelect) {
+          const desserts = {}
+          for (const catename of this.currentSubjectSelect) {
+            const sortedItems = Object.entries(data[year][catename]).sort(
               (x, y) => {
-                return Number(y[1]) - Number(x[1]);
+                return Number(y[1]) - Number(x[1])
               }
-            );
-            let sortedNameArray = Object.entries(data[year][catename])
+            )
+            const sortedNameArray = Object.entries(data[year][catename])
               .sort((x, y) => {
-                return Number(y[1]) - Number(x[1]);
+                return Number(y[1]) - Number(x[1])
               })
               .map(item => {
-                return item[0];
-              });
-            for (let item of sortedItems) {
+                return item[0]
+              })
+            for (const item of sortedItems) {
               if (!desserts[item[0]]) {
-                desserts[item[0]] = {};
+                desserts[item[0]] = {}
               }
-              desserts[item[0]]["name"] = item[0];
-              desserts[item[0]]["links"] = item[1];
+              desserts[item[0]]['name'] = item[0]
+              desserts[item[0]]['links'] = item[1]
               desserts[item[0]][catename] =
-                sortedNameArray.indexOf(item[0]) + 1;
+                sortedNameArray.indexOf(item[0]) + 1
             }
           }
           ret_data.push({
             title: `${year} 各学科文章`,
             headers: headers,
             desserts: Object.values(desserts)
-          });
+          })
         }
       } else {
         // 年为表头
-        let headers = [
+        const headers = [
           {
-            text: "article name",
-            align: "start",
+            text: 'article name',
+            align: 'start',
             sortable: false,
-            value: "name"
+            value: 'name'
           }
-        ];
+        ]
         // 组合 header
 
-        for (let year of this.yearsSelect) {
+        for (const year of this.yearsSelect) {
           headers.push({
             text: `${year} count`,
-            align: "center",
+            align: 'center',
             value: `y${year}`,
             sort: (a, b) => {
               if (!a) {
-                return -1;
+                return -1
               } else if (!b) {
-                return 1;
+                return 1
               }
-              return a - b;
+              return a - b
             }
-          });
+          })
         }
         for (let catename of this.currentSubjectSelect) {
           // 二次循环出
-
-          let desserts = {};
-          for (let year of this.yearsSelect) {
-            let sortedItems = Object.entries(data[year][catename]).sort(
+          // 补丁
+          if (catename === 'Engineering disciplines') {
+            catename = 'Engineering'
+          }
+          const desserts = {}
+          for (const year of this.yearsSelect) {
+            console.log(data, catename)
+            const sortedItems = Object.entries(data[year][catename]).sort(
               (x, y) => {
-                return Number(y[1]) - Number(x[1]);
+                return Number(y[1]) - Number(x[1])
               }
-            );
-            for (let articleCount of sortedItems) {
+            )
+            for (const articleCount of sortedItems) {
               if (!desserts[articleCount[0]]) {
-                desserts[articleCount[0]] = {};
+                desserts[articleCount[0]] = {}
               }
-              desserts[articleCount[0]]["name"] = articleCount[0];
-              desserts[articleCount[0]][`y${year}`] = articleCount[1];
+              desserts[articleCount[0]]['name'] = articleCount[0]
+              desserts[articleCount[0]][`y${year}`] = articleCount[1]
             }
           }
           ret_data.push({
             title: `${catename} 各年文章`,
             headers: headers,
             desserts: Object.values(desserts)
-          });
+          })
         }
       }
 
-      console.log(ret_data);
-      this.gridData = ret_data;
-      console.log(this.gridData);
-      this.loading = false;
+      this.gridData = ret_data
+      this.loading = false
     }
   }
-};
+}
 </script>

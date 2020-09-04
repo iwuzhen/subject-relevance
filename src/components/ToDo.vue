@@ -3,14 +3,14 @@
  * @Author: ider
  * @Date: 2020-07-23 13:10:20
  * @LastEditors: ider
- * @LastEditTime: 2020-07-24 14:41:21
- * @Description: 
+ * @LastEditTime: 2020-09-04 16:20:34
+ * @Description:
 -->
 
 <template>
   <v-card max-width="70vw">
     <v-card-title>Public Note</v-card-title>
-    <v-divider></v-divider>
+    <v-divider />
     <v-card-text style="height: 60vh;">
       <v-list three-line>
         <v-subheader>todo</v-subheader>
@@ -20,7 +20,7 @@
               <v-checkbox
                 v-model="item.active"
                 @change="finshTodo"
-              ></v-checkbox>
+              />
             </v-list-item-action>
 
             <v-list-item-content>
@@ -31,7 +31,7 @@
             <v-list-item-action>
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn v-bind="attrs" v-on="on" icon :to="item.path">
+                  <v-btn v-bind="attrs" icon :to="item.path" v-on="on">
                     <v-icon color="grey lighten-1">mdi-file-find</v-icon>
                   </v-btn>
                 </template>
@@ -57,7 +57,7 @@
               </v-btn>
             </v-list-item-action>
           </v-list-item>
-          <v-divider :key="index + 'divider'" inset></v-divider>
+          <v-divider :key="index + 'divider'" inset />
         </template>
       </v-list>
       <v-list three-line>
@@ -68,23 +68,23 @@
               <v-checkbox
                 v-model="item.active"
                 @change="finshTodo"
-              ></v-checkbox>
+              />
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title
                 class="text-decoration-line-through"
                 v-html="item.title"
-              ></v-list-item-title>
+              />
               <v-list-item-subtitle
                 class="text-decoration-line-through"
                 v-html="item.content"
-              ></v-list-item-subtitle>
+              />
             </v-list-item-content>
 
             <v-list-item-action>
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn v-bind="attrs" v-on="on" icon :to="item.path">
+                  <v-btn v-bind="attrs" icon :to="item.path" v-on="on">
                     <v-icon color="grey lighten-1">mdi-file-find</v-icon>
                   </v-btn>
                 </template>
@@ -111,11 +111,11 @@
             </v-list-item-action>
           </v-list-item>
 
-          <v-divider :key="index + 'divider'" inset></v-divider>
+          <v-divider :key="index + 'divider'" inset />
         </template>
       </v-list>
     </v-card-text>
-    <v-divider></v-divider>
+    <v-divider />
     <v-card-actions>
       <v-btn color="blue darken-1" text @click="updateList">刷新</v-btn>
       <v-btn color="blue darken-1" text @click="newItem">New</v-btn>
@@ -129,25 +129,23 @@
             <v-form ref="form">
               <v-row>
                 <v-col cols="12" sm="6" md="7">
-                  <v-text-field v-model="editOpt.title" label="标题" required>
-                  </v-text-field>
+                  <v-text-field v-model="editOpt.title" label="标题" required />
                 </v-col>
 
                 <v-col cols="12" sm="5" md="4">
                   <v-text-field
-                    class="mb-5"
                     v-model="editOpt.path"
+                    class="mb-5"
                     label="主题位置"
                     required
                     disabled
-                  ></v-text-field> </v-col
-              ></v-row>
+                  /> </v-col></v-row>
 
               <v-textarea
                 v-model="editOpt.content"
                 label="细节"
                 placeholder="more..."
-              ></v-textarea>
+              />
               <v-btn color="success" class="mr-4" @click="SubmitBoard">
                 提交
               </v-btn>
@@ -155,7 +153,7 @@
                 撤销
               </v-btn>
             </v-form>
-            <v-row> </v-row>
+            <v-row />
           </v-container>
         </v-card-text>
       </v-card>
@@ -177,10 +175,17 @@
   </v-card>
 </template>
 <script>
-import { RequestBoard } from "@/api/index";
+import { RequestBoard } from '@/api/index'
 
 export default {
-  name: "ToDo",
+  name: 'ToDo',
+  props: {
+    path: {
+      type: String,
+      require: true,
+      default: '/'
+    }
+  },
   data() {
     return {
       dialogEdit: false,
@@ -188,110 +193,104 @@ export default {
       delItem: null,
       editOpt: {
         id: 0,
-        title: "",
-        content: "",
-        path: "",
+        title: '',
+        content: '',
+        path: '',
         stars: 0,
         active: false
       },
       todoitems: [],
       fishitems: []
-    };
+    }
   },
   computed: {
     currentPath() {
-      return this.$route.path;
+      return this.$route.path
     }
   },
   watch: {
     currentPath() {
-      this.updateList();
+      this.updateList()
     }
   },
   mounted() {
-    console.log("mount");
-    this.updateList();
+    console.log('mount')
+    this.updateList()
   },
   methods: {
     async updateList() {
-      this.fishitems = [];
-      this.todoitems = [];
-      let ret;
-      if (this.currentPath == "/") {
-        ret = await RequestBoard({}, "get");
+      this.fishitems = []
+      this.todoitems = []
+      let ret
+      if (this.currentPath === '/') {
+        ret = await RequestBoard({}, 'get')
       } else {
-        ret = await RequestBoard({ path: this.currentPath }, "get");
+        ret = await RequestBoard({ path: this.currentPath }, 'get')
       }
-      this.$store.commit("changemessageCount", ret.length);
-      for (let row of ret) {
-        if (row.active == true) {
-          this.fishitems.push(row);
+      this.$store.commit('changemessageCount', ret.length)
+      for (const row of ret) {
+        if (row.active === true) {
+          this.fishitems.push(row)
         } else {
-          this.todoitems.push(row);
+          this.todoitems.push(row)
         }
       }
     },
 
     editItem(item) {
-      console.log(item);
-      console.log(this.changeFlag);
-      this.editOpt = item;
-      this.dialogEdit = true;
+      console.log(item)
+      console.log(this.changeFlag)
+      this.editOpt = item
+      this.dialogEdit = true
     },
     newItem() {
       this.editOpt = {
-        title: "",
-        content: "",
+        title: '',
+        content: '',
         path: this.currentPath,
         stars: 0,
         active: false
-      };
-      this.dialogEdit = true;
+      }
+      this.dialogEdit = true
     },
     async deleteItem() {
       if (this.delItem) {
-        await RequestBoard(this.delItem, "delete");
-        await this.updateList();
-        this.dialogRemove = false;
+        await RequestBoard(this.delItem, 'delete')
+        await this.updateList()
+        this.dialogRemove = false
       }
-      this.delItem = null;
+      this.delItem = null
     },
     async SubmitBoard() {
-      await RequestBoard(this.editOpt, "post");
-      await this.updateList();
-      this.dialogEdit = false;
+      await RequestBoard(this.editOpt, 'post')
+      await this.updateList()
+      this.dialogEdit = false
     },
     dolog(value) {
-      console.log(value);
-      console.log(this.todoitems);
+      console.log(value)
+      console.log(this.todoitems)
     },
     finshTodo() {
       setTimeout(() => {
-        for (let i in this.todoitems) {
-          if (this.todoitems[i].active == true) {
-            RequestBoard(this.todoitems[i], "post");
-            this.fishitems.unshift(this.todoitems[i]);
-            this.todoitems.splice(i, 1);
-            break;
+        for (const i in this.todoitems) {
+          if (this.todoitems[i].active === true) {
+            RequestBoard(this.todoitems[i], 'post')
+            this.fishitems.unshift(this.todoitems[i])
+            this.todoitems.splice(i, 1)
+            break
           }
         }
 
-        for (let i in this.fishitems) {
-          if (this.fishitems[i].active == false) {
-            RequestBoard(this.fishitems[i], "post");
-            this.todoitems.unshift(this.fishitems[i]);
-            this.fishitems.splice(i, 1);
-            break;
+        for (const i in this.fishitems) {
+          if (this.fishitems[i].active === false) {
+            RequestBoard(this.fishitems[i], 'post')
+            this.todoitems.unshift(this.fishitems[i])
+            this.fishitems.splice(i, 1)
+            break
           }
         }
-      }, 100);
-    }
-  },
-  props: {
-    path: {
-      type: String,
-      require: true
+      }, 100)
     }
   }
-};
+}
 </script>

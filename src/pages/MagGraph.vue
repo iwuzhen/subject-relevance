@@ -5,14 +5,14 @@
         <v-select
           v-model="subjectRelevances"
           :items="categorys"
-          @change="getData"
           chips
           multiple
           deletable-chips
           clearable
           dense
           label="目标学科"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
     </v-row>
     <v-row>
@@ -24,10 +24,10 @@
           height="70vh"
         >
           <v-container
-            fluid
-            fill-height
             id="subjectChart1"
-          > </v-container>
+            fluid
+            fill-height
+          />
         </v-card>
       </v-col>
     </v-row>
@@ -40,10 +40,10 @@
           height="70vh"
         >
           <v-container
-            fluid
-            fill-height
             id="subjectChart2"
-          > </v-container>
+            fluid
+            fill-height
+          />
         </v-card>
       </v-col>
     </v-row>
@@ -56,10 +56,10 @@
           height="70vh"
         >
           <v-container
-            fluid
-            fill-height
             id="subjectChart3"
-          > </v-container>
+            fluid
+            fill-height
+          />
         </v-card>
       </v-col>
     </v-row>
@@ -72,10 +72,10 @@
           height="70vh"
         >
           <v-container
+            id="subjectChart4"
             fluid
             fill-height
-            id="subjectChart4"
-          > </v-container>
+          />
         </v-card>
       </v-col>
     </v-row>
@@ -83,42 +83,40 @@
 </template>
 
 <script>
-import edge_linksin_2016_echarts from "../assets/data/edge_linksin_2016_v2.json";
-import edge_linksout_2016_echarts from "../assets/data/edge_linksout_2016_v2.json";
-import edge_linksin_2017_echarts from "../assets/data/edge_linksin_2017_v2.json";
-import edge_linksout_2017_echarts from "../assets/data/edge_linksout_2017_v2.json";
-import node_2016 from "../assets/data/node_2016_v2.json";
-import node_2017 from "../assets/data/node_2017_v2.json";
+import edge_linksin_2016_echarts from '../assets/data/edge_linksin_2016_v2.json'
+import edge_linksout_2016_echarts from '../assets/data/edge_linksout_2016_v2.json'
+import edge_linksin_2017_echarts from '../assets/data/edge_linksin_2017_v2.json'
+import edge_linksout_2017_echarts from '../assets/data/edge_linksout_2017_v2.json'
+import node_2016 from '../assets/data/node_2016_v2.json'
+import node_2017 from '../assets/data/node_2017_v2.json'
 import Base from '@/utils/base'
 
-import { defaultCategorySelect } from "@/api/data";
+import { defaultCategorySelect } from '@/api/data'
 
 export default {
-  name: "Mag_graph",
+  name: 'MagGraph',
   extends: Base,
   data() {
     return {
-      pageName: "Mag 相关度引力图",
+      pageName: 'Mag 相关度引力图',
       subjectRelevances: defaultCategorySelect.map(each => {
-        if (each == "Engineering disciplines") {
-          each = "Engineering"
+        if (each === 'Engineering disciplines') {
+          each = 'Engineering'
         }
         return each
       }),
       loading: false,
       categorys: node_2016.map(each => each.Label).sort().map(each => {
         return {
-          text: each == "Engineering disciplines" ? "Engineering" : each,
+          text: each === 'Engineering disciplines' ? 'Engineering' : each,
           value: each
         }
       }),
-      myChartIds: ['subjectChart1', 'subjectChart2', 'subjectChart3', 'subjectChart4'],
-    };
-  },
-  computed: {
+      myChartIds: ['subjectChart1', 'subjectChart2', 'subjectChart3', 'subjectChart4']
+    }
   },
   mounted() {
-    this.getData();
+    this.getData()
   },
   methods: {
     getData() {
@@ -128,68 +126,68 @@ export default {
         node_2016,
         edge_linksin_2016_echarts,
         this.myChartObjs[0],
-        "Mag 2016 linksin"
-      );
+        'Mag 2016 linksin'
+      )
       this.drawGraph(
         node_2016,
         edge_linksout_2016_echarts,
         this.myChartObjs[1],
-        "Mag 2016 linksout"
-      );
+        'Mag 2016 linksout'
+      )
       this.drawGraph(
         node_2017,
         edge_linksin_2017_echarts,
         this.myChartObjs[2],
-        "Mag 2017 linksin"
-      );
+        'Mag 2017 linksin'
+      )
       this.drawGraph(
         node_2017,
         edge_linksout_2017_echarts,
         this.myChartObjs[3],
-        "Mag 2017 linksout"
-      );
+        'Mag 2017 linksout'
+      )
     },
 
     drawGraph(nodesJson, linlsJson, chart, title) {
-      let nodes = [],
-        links = [],
-        nodeIds = [];
-      for (let doc of nodesJson) {
+      const nodes = []
+      const links = []
+      const nodeIds = []
+      for (const doc of nodesJson) {
         if (this.subjectRelevances.indexOf(doc.Label) >= 0) {
-          nodes.push(doc);
-          nodeIds.push(doc.Id);
+          nodes.push(doc)
+          nodeIds.push(doc.Id)
         }
       }
-      for (let doc of linlsJson) {
+      for (const doc of linlsJson) {
         if (
           nodeIds.indexOf(doc.Source) >= 0 ||
           nodeIds.indexOf(doc.Target) >= 0
         ) {
-          links.push(doc);
+          links.push(doc)
         }
       }
 
-      let options = this.setOptions(nodes, links, title);
-      chart.setOption(options, true);
+      const options = this.setOptions(nodes, links, title)
+      chart.setOption(options, true)
     },
 
     setOptions(nodes, links, title) {
-      let sizeMax = Math.sqrt(
+      const sizeMax = Math.sqrt(
         Math.max(...nodes.map(each => Number(each.weight)))
-      );
-      let sizeMin = Math.sqrt(
+      )
+      const sizeMin = Math.sqrt(
         Math.min(...nodes.map(each => Number(each.weight)))
-      );
-      console.log(sizeMax, sizeMin);
-      let graphLink = links.map(each => {
+      )
+      console.log(sizeMax, sizeMin)
+      const graphLink = links.map(each => {
         return {
           source: each.Source,
           target: each.Target,
           value: Math.floor((Number(each.Weight)) * 10000) / 10000
-        };
-      });
+        }
+      })
       // 点大小，最大 100，最小10
-      let graphData = nodes.map((each, index) => {
+      const graphData = nodes.map((each, index) => {
         return {
           id: each.Id,
           name: each.Label,
@@ -199,30 +197,30 @@ export default {
             (20 * (Math.sqrt(Number(each.weight)) - sizeMin)) /
             (sizeMax - sizeMin) +
             5
-        };
-      });
+        }
+      })
 
-      let _opt = {
+      const _opt = {
         title: {
           text: title
         },
         legend: [
           {
-            left: "15%",
+            left: '15%',
             data: this.subjectRelevances
           }
         ],
         animationDuration: 1500,
-        animationEasingUpdate: "quinticInOut",
+        animationEasingUpdate: 'quinticInOut',
         tooltip: {
-          trigger: "item"
+          trigger: 'item'
         },
         series: [
           {
-            name: "Les Miserables",
-            tooltip: { formatter: "{c0}" },
-            type: "graph",
-            layout: "force",
+            name: 'Les Miserables',
+            tooltip: { formatter: '{c0}' },
+            type: 'graph',
+            layout: 'force',
             zoom: 2.5,
             force: {
               edgeLength: [20, 200]
@@ -235,15 +233,15 @@ export default {
             focusNodeAdjacency: true,
             itemStyle: {
               color: null,
-              borderColor: "#fff",
+              borderColor: '#fff',
               borderWidth: 1,
               shadowBlur: 10,
-              shadowColor: "rgba(0, 0, 0, 0.3)"
+              shadowColor: 'rgba(0, 0, 0, 0.3)'
             },
             label: {
               show: true,
-              color: "#000",
-              position: "inside",
+              color: '#000',
+              position: 'inside',
               fontSize: 16
             },
             lineStyle: {
@@ -252,7 +250,7 @@ export default {
               curveness: 0
             },
             categories: this.subjectRelevances.map(each => {
-              return { name: each };
+              return { name: each }
             }),
             emphasis: {
               lineStyle: {
@@ -261,9 +259,9 @@ export default {
             }
           }
         ]
-      };
-      return _opt;
+      }
+      return _opt
     }
   }
-};
+}
 </script>

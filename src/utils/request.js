@@ -1,11 +1,11 @@
-import axios from "axios";
+import axios from 'axios'
 
 // 创建axios实例
 const service = axios.create({
   timeout: 150000000 // 请求超时时间
-});
+})
 
-service.defaults.baseURL = "/api";
+service.defaults.baseURL = '/api'
 
 // request拦截器
 // service.interceptors.request.use(
@@ -76,19 +76,13 @@ service.interceptors.response.use(
     /**
      * msg为非success是抛错 可结合自己业务进行修改
      */
-    response.data = JSON.parse(JSON.stringify(response.data).replace(/Engineering disciplines/g, "Engineering"))
+    response.data = JSON.parse(JSON.stringify(response.data).replace(/Engineering disciplines/g, 'Engineering'))
 
     return response
   },
   error => {
-    Message({
-      message: error.msg,
-      type: 'error',
-      duration: 5 * 1000
-    })
     return Promise.reject(error)
   }
 )
 
-
-export default service;
+export default service

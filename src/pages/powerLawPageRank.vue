@@ -5,21 +5,21 @@
         <v-select
           v-model="subjectTarget"
           :items="categorys"
-          @change="getData"
           small-chips
           multiple
           clearable
           deletable-chips
           label="目标学科"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
       <v-col cols="2">
         <v-select
           v-model="dataYear"
           :items="dataYearopt"
-          @change="getData"
           label="年份"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
     </v-row>
     <v-row>
@@ -29,26 +29,31 @@
           outlined
           :loading="loading"
           height="70vh"
+        />
+        <v-container
           id="subjectChart"
-        >
-        </v-card>
+          fluid
+          fill-height
+        />
       </v-col>
     </v-row>
   </v-container>
 </template>
 6
 <script>
-import { getPagerankZipf } from "@/api/index";
-import ecStat from "echarts-stat";
-import { basiCategorys, extendEchartsOpts, extendLineSeries, defaultCategorySelect } from "@/api/data";
-
+import { getPagerankZipf } from '@/api/index'
+import ecStat from 'echarts-stat'
+import { basiCategorys, extendEchartsOpts, extendLineSeries, defaultCategorySelect } from '@/api/data'
+import Base from '@/utils/base'
 // tooyip 位置的x位置
-var tipLegend = 0;
+var tipLegend = 0
 
 export default {
-  name: "PageRank幂律分布",
+  name: 'PageRank',
+  extends: Base,
   data() {
     return {
+      pageName: 'PageRank 幂律分布',
       subjectTarget: defaultCategorySelect,
       categorys: basiCategorys,
       dataYear: 2019,
@@ -64,142 +69,134 @@ export default {
         2017,
         2018,
         2019,
-        "历年总和"
+        '历年总和'
       ],
       loading: false,
-      chartOpt: {}
-    };
+      chartOpt: {},
+      myChartIds: ['subjectChart']
+    }
   },
   watch: {
     // 更新图标
-    chartOpt: function (opt) {
-      this.myChart.setOption(opt, true);
+    chartOpt: function(opt) {
+      this.myChartObjs[0].setOption(opt, true)
     }
   },
   mounted() {
-    window.onresize = () => {
-      this.myChart.resize();
-    };
-    this.$store.commit("changeCurentPath", this.$options.name);
-    this.myChart.getZr().on("click", params => {
-      var pointInPixel = [params.offsetX, params.offsetY];
+    this.myChartObjs[0].getZr().on('click', params => {
+      var pointInPixel = [params.offsetX, params.offsetY]
 
-      if (this.myChart.containPixel("grid", pointInPixel)) {
+      if (this.myChartObjs[0].containPixel('grid', pointInPixel)) {
         // var xIndex = this.myChart2.convertFromPixel({ seriesIndex: 0 }, [
         //   params.offsetX,
         //   params.offsetY
         // ])[0];
         // console.log(xIndex);
-        let series = [];
-        for (let ix in this.chartOpt.legend.data) {
+        const series = []
+        for (const ix in this.chartOpt.legend.data) {
           series[
             tipLegend.indexOf(this.chartOpt.legend.data[ix])
-          ] = this.chartOpt.series[ix];
+          ] = this.chartOpt.series[ix]
         }
-        this.chartOpt.legend.data = tipLegend;
-        this.chartOpt.series = series;
-        this.myChart.setOption(this.chartOpt, true);
+        this.chartOpt.legend.data = tipLegend
+        this.chartOpt.series = series
+        this.myChartObjs[0].setOption(this.chartOpt, true)
       }
-    });
+    })
     this.getData()
-  },
-  computed: {
-    myChart: function () {
-      return this.$echarts.init(document.getElementById("subjectChart"));
-    }
   },
   methods: {
     subjectChange() {
       //   this.subjectRelevances = []
-      this.yearChange();
+      this.yearChange()
     },
     yearChange() {
-      if (this.dataYear === "历年总和" && this.subjectTarget.length > 1) {
-        this.subjectTarget = [];
-        this.$message.error("历年总和只能选择一个学科");
-        return;
+      if (this.dataYear === '历年总和' && this.subjectTarget.length > 1) {
+        this.subjectTarget = []
+        this.$message.error('历年总和只能选择一个学科')
+        return
       }
-      this.getData();
+      this.getData()
     },
     async getData() {
       if (this.subjectTarget.length < 1 || !this.dataYear) {
         // this.$message.error("请选择完整");
-        return false;
+        return false
       }
-      this.loading = true;
-      let opt = {
-        str: this.subjectTarget.join(",")
-      };
-      if (this.dataYear !== "历年总和") {
-        opt["year"] = this.dataYear;
+      this.loading = true
+      const opt = {
+        str: this.subjectTarget.join(',')
+      }
+      if (this.dataYear !== '历年总和') {
+        opt['year'] = this.dataYear
       }
 
       getPagerankZipf(opt)
         .then(res => {
           if (res.data.data) {
-            this.drawChart(res.data.data);
+            this.drawChart(res.data.data)
           } else {
-            this.loading = false;
-            this.$emit("emitMesage", "请求失败");
-            return false;
+            this.loading = false
+            this.$emit('emitMesage', '请求失败')
+            return false
           }
         })
         .catch(rej => {
-          this.loading = false;
-          this.$emit("emitMesage", `请求失败:${rej}`);
-        });
+          this.loading = false
+          this.$emit('emitMesage', `请求失败:${rej}`)
+        })
     },
     drawChart(data) {
-      this.chartOpt = this.setOptions(data);
-      this.loading = false;
+      this.chartOpt = this.setOptions(data)
+      this.loading = false
     },
     setOptions(data) {
-      let ymax = Math.max(...[].concat(...data.y));
-      ymax = Math.ceil(ymax * 10) / 10;
-      let xmax = Math.max(...data.x);
-      xmax = Math.ceil(xmax * 10) / 10;
+      let ymax = Math.max(...[].concat(...data.y))
+      ymax = Math.ceil(ymax * 10) / 10
+      let xmax = Math.max(...data.x)
+      xmax = Math.ceil(xmax * 10) / 10
       // 设置
-      let seriesList = [];
+      const seriesList = []
       for (let i = 0; i < data.y.length; i++) {
-        let dataItem = [];
+        const dataItem = []
         for (let j = 0; j < data.y[i].length; j++) {
-          dataItem.push([data.x[j], data.y[i][j]]);
+          dataItem.push([data.x[j], data.y[i][j]])
         }
         seriesList.push({
           name: data.legend[i],
-          type: "scatter",
+          type: 'scatter',
           symbolSize: 2,
           large: true,
           data: dataItem
-        });
+        })
       }
       // 排序;
       seriesList.sort((x, y) => {
-        return y.data.slice(-1)[0][1] - x.data.slice(-1)[0][1];
-      });
+        return y.data.slice(-1)[0][1] - x.data.slice(-1)[0][1]
+      })
       // 趋势线
-      let myRegression = ecStat.regression("linear", seriesList[0].data);
+      const myRegression = ecStat.regression('linear', seriesList[0].data)
       if (data.y.length === 1) {
         seriesList.push(
           extendLineSeries({
-            name: "回归线",
-            type: "line",
+            name: '回归线',
+            type: 'line',
             showSymbol: false,
             smooth: false,
             data: myRegression.points,
             markPoint: {
               itemStyle: {
                 normal: {
-                  color: "transparent"
+                  color: 'transparent'
                 }
               },
               label: {
                 normal: {
                   show: true,
-                  position: "left",
+                  position: 'left',
                   formatter: myRegression.expression,
                   textStyle: {
-                    color: "#333",
+                    color: '#333',
                     fontSize: 14
                   }
                 }
@@ -211,34 +208,34 @@ export default {
               ]
             }
           })
-        );
+        )
       }
-      let _opt = extendEchartsOpts({
+      const _opt = extendEchartsOpts({
         tooltip: {
-          trigger: "axis",
+          trigger: 'axis',
           textStyle: {
-            align: "left"
+            align: 'left'
           },
           axisPointer: {
-            type: "cross",
+            type: 'cross',
             animation: true,
             label: {
-              backgroundColor: "#505765"
+              backgroundColor: '#505765'
             }
           },
-          formatter: function (params) {
+          formatter: function(params) {
             params.sort((x, y) => {
-              return y.data[1] - x.data[1];
-            });
-            let showHtm = ` ${params[0].name}<br>`;
+              return y.data[1] - x.data[1]
+            })
+            let showHtm = ` ${params[0].name}<br>`
             for (let i = 0; i < params.length; i++) {
-              let _text = params[i].seriesName;
-              let _data = params[i].data;
-              let _marker = params[i].marker;
-              showHtm += `${_marker}${_text}：x${_data[0]},y：${_data[1]} <br>`;
+              const _text = params[i].seriesName
+              const _data = params[i].data
+              const _marker = params[i].marker
+              showHtm += `${_marker}${_text}：x${_data[0]},y：${_data[1]} <br>`
             }
-            tipLegend = params.map(item => item.seriesName);
-            return showHtm;
+            tipLegend = params.map(item => item.seriesName)
+            return showHtm
           }
         },
         title: {
@@ -246,25 +243,25 @@ export default {
         },
         legend: {
           data: seriesList.map(item => {
-            return item.name;
+            return item.name
           })
         },
         xAxis: {
-          name: "log (rank)",
-          type: "value",
+          name: 'log (rank)',
+          type: 'value',
           max: xmax
         },
         yAxis: {
-          name: "log (citation)",
-          type: "value",
+          name: 'log (citation)',
+          type: 'value',
           max: ymax
         },
         series: seriesList
-      });
-      return _opt;
+      })
+      return _opt
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped></style>

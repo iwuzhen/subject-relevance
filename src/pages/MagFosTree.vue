@@ -3,8 +3,8 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-08-31 22:31:42
- * @Description: 
+ * @LastEditTime: 2020-09-04 14:51:23
+ * @Description:
  -->
 <template>
   <v-container fluid>
@@ -20,8 +20,7 @@
           no-data-text="没有匹配值"
           :search-input.sync="search"
           :items="searchItems"
-        >
-        </v-autocomplete>
+        />
       </v-col>
     </v-row>
     <v-row justify="space-between">
@@ -50,7 +49,7 @@
                 <template v-slot:activator="{ on }">
                   <span v-on="on">{{ item.name }}</span>
                 </template>
-                <span>{{ en2zhdict[item.name]===undefined?'Loading...': en2zhdict[item.name]}}</span>
+                <span>{{ en2zhdict[item.name]===undefined?'Loading...': en2zhdict[item.name] }}</span>
               </v-tooltip>
             </template>
             <template v-slot:append="{ item }">
@@ -66,36 +65,31 @@
 </template>
 
 <script>
-import { getOriginCategories, getChildCategories } from "@/api/index";
-import * as diff from "diff";
-import { v4 as uuidv4 } from "uuid";
+import { getOriginCategories, getChildCategories } from '@/api/index'
+import { v4 as uuidv4 } from 'uuid'
 import Base from '@/utils/base'
 
-
 export default {
-  name: "MAG_Fos",
+  name: 'MAGFos',
   extends: Base,
   data() {
     return {
-      pageName: "MAG Fos 层次 Tree",
+      pageName: 'MAG Fos 层次 Tree',
       selection1: [],
       treeItems1: [],
       overlay: false,
       isLoadingButton: false,
       searchItems: [],
       search: null,
-      searchString: "",
-    };
+      searchString: ''
+    }
   },
   computed: {
-  },
-  mounted() {
-    this.loadDefauleCategory();
   },
   watch: {
     searchString() {
       if (!this.searchString) {
-        this.loadDefauleCategory();
+        this.loadDefauleCategory()
       } else {
         this.treeItems1 = [
           {
@@ -103,28 +97,31 @@ export default {
             name: this.searchString,
             children: []
           }
-        ];
+        ]
       }
     },
     async search(val) {
-      if (!val) return;
-      this.isLoadingButton = true;
+      if (!val) return
+      this.isLoadingButton = true
 
-      let response = await getChildCategories({
+      const response = await getChildCategories({
         id: val
-      });
+      })
 
-      if (response.data.length == 0) {
-        this.searchItems = [];
+      if (response.data.length === 0) {
+        this.searchItems = []
       } else {
-        this.searchItems = [val];
+        this.searchItems = [val]
       }
-      this.isLoadingButton = false;
+      this.isLoadingButton = false
     }
+  },
+  mounted() {
+    this.loadDefauleCategory()
   },
   methods: {
     async loadDefauleCategory() {
-      let data = await getOriginCategories()
+      const data = await getOriginCategories()
       this.treeItems1 = data.data.map(item => {
         this.addTranslateChan(item.name)
         return {
@@ -132,23 +129,14 @@ export default {
           name: item.name,
           cLength: item.size,
           children: []
-        };
-      });
-    },
-    checkNode() {
-      let names1 = this.selection1.map(item => {
-        return item.name;
-      });
-      names1 = names1.filter(item => {
-        if (item.indexOf("子类") > -1) return false;
-        return true;
-      });
+        }
+      })
     },
 
     async getChildren(itemId) {
       //  本地缓存
-      let categoryChildrens;
-      console.log(`扩展 tree,${itemId}`);
+      let categoryChildrens
+      console.log(`扩展 tree,${itemId}`)
       await getChildCategories({
         id: itemId
       })
@@ -162,28 +150,28 @@ export default {
                 leaf: true,
                 cLength: item.size,
                 children: item.size > 0 ? [] : null
-              };
-            });
+              }
+            })
           } else {
-            this.loading = false;
-            this.$emit("emitMesage", "请求失败");
-            return false;
+            this.loading = false
+            this.$emit('emitMesage', '请求失败')
+            return false
           }
         })
         .catch(rej => {
-          this.loading = false;
-          this.$emit("emitMesage", `请求失败:${rej}`);
-        });
+          this.loading = false
+          this.$emit('emitMesage', `请求失败:${rej}`)
+        })
 
-      return categoryChildrens;
+      return categoryChildrens
     },
 
     async fetchChildren(treeitem) {
-      let categoryChildrens = await this.getChildren(
+      const categoryChildrens = await this.getChildren(
         treeitem.id
-      );
-      treeitem.children.push(...categoryChildrens);
-    },
+      )
+      treeitem.children.push(...categoryChildrens)
+    }
   }
-};
+}
 </script>

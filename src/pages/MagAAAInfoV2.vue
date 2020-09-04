@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-06-04 10:56:34
  * @LastEditors: ider
- * @LastEditTime: 2020-09-04 11:46:32
+ * @LastEditTime: 2020-09-04 14:37:48
  * @Description:
 -->
 <template>
@@ -172,9 +172,6 @@ export default {
         return false
       }
       this.loading = true
-      //   let reqData = null;
-      //   let dataset1 = [],
-      //     dataset2 = [];
       // 拼接 dataset
       const dataset1 = { dimensions: [], source: [] }
       const dataset2 = { dimensions: [], source: [] }

@@ -10,27 +10,27 @@
           multiple
           deletable-chips
           clearable
-          @change="getData"
           label="学科"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
       <v-col cols="2">
         <v-select
           v-model="methodValue"
           :items="methodOptions"
           dense
-          @change="getData"
           label="条件"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
       <v-col cols="2">
         <v-select
           v-model="versionValue"
           :items="versionOptions"
           dense
-          @change="getData"
           label="版本"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
     </v-row>
     <v-row>
@@ -89,10 +89,10 @@
           height="70vh"
         >
           <v-container
+            id="masChart1"
             fluid
             fill-height
-            id="masChart1"
-          > </v-container>
+          />
         </v-card>
       </v-col>
     </v-row>
@@ -100,75 +100,75 @@
 </template>
 
 <script>
-import { getMagRefSelfRate, } from "@/api/index";
-import { extendEchartsOpts, coreCategorys, extendLineSeries, defaultCategorySelect } from "@/api/data";
+import { getMagRefSelfRate } from '@/api/index'
+import { extendEchartsOpts, coreCategorys, extendLineSeries, defaultCategorySelect } from '@/api/data'
 import Base from '@/utils/base'
 
 export default {
-  name: "mag学科自恋度",
+  name: 'Mag',
   extends: Base,
   data() {
     return {
-      versionValue:"v2",
-      versionOptions:["v1","v2"],
-      pageName: "MAG 学科自恋度 v1&v2",
+      versionValue: 'v2',
+      versionOptions: ['v1', 'v2'],
+      pageName: 'MAG 学科自恋度 v1&v2',
       showAve: true,
       subjectTarget: defaultCategorySelect,
-      methodValue: "linksin",
+      methodValue: 'linksin',
       years: [1900, 2019],
       categorys: coreCategorys,
-      methodOptions: ["linksout", "linksin"],
+      methodOptions: ['linksout', 'linksin'],
       loading: false,
-      myChartIds: ["masChart1"]
-    };
+      myChartIds: ['masChart1']
+    }
+  },
+  computed: {
   },
   mounted() {
     this.getData()
-  },
-  computed: {
   },
   methods: {
     async getData() {
       if (this.subjectTarget.length < 1) {
         // this.$message.error("请选择完整");
-        return false;
+        return false
       }
-      this.loading = true;
-      let opt = {
-        str: this.subjectTarget.join(","),
+      this.loading = true
+      const opt = {
+        str: this.subjectTarget.join(','),
         method: this.methodValue,
         from: this.years[0],
         to: this.years[1],
-        version:this.versionValue,
-      };
+        version: this.versionValue
+      }
       try {
-        let res = await getMagRefSelfRate(opt);
+        const res = await getMagRefSelfRate(opt)
         if (this.subjectTarget.length > 1 && this.showAve) {
-          console.log(res.data);
-          let aveLine = [];
-          for (let i in res.data.x) {
-            let ss = 0;
-            for (let row of res.data.y) {
-              ss += row[i];
+          console.log(res.data)
+          const aveLine = []
+          for (const i in res.data.x) {
+            let ss = 0
+            for (const row of res.data.y) {
+              ss += row[i]
             }
-            aveLine.push(ss / res.data.y.length);
+            aveLine.push(ss / res.data.y.length)
           }
-          res.data.y.push(aveLine);
-          res.data.legend.push("平均自恋度");
-          this.drawChart(res.data);
-        } else this.drawChart(res.data);
+          res.data.y.push(aveLine)
+          res.data.legend.push('平均自恋度')
+          this.drawChart(res.data)
+        } else this.drawChart(res.data)
       } catch (error) {
-        this.loading = false;
-        this.$emit("emitMesage", `请求失败:${error}`);
+        this.loading = false
+        this.$emit('emitMesage', `请求失败:${error}`)
       }
     },
     drawChart(data) {
-      let options = this.setOptions(data);
-      this.myChartObjs[0].setOption(options, true);
-      this.loading = false;
+      const options = this.setOptions(data)
+      this.myChartObjs[0].setOption(options, true)
+      this.loading = false
     },
     setOptions(data) {
-      let _opt = extendEchartsOpts({
+      const _opt = extendEchartsOpts({
         title: {
           text: data.title
         },
@@ -176,29 +176,29 @@ export default {
           data: data.legend
         },
         xAxis: {
-          name: "Year",
-          type: "category",
+          name: 'Year',
+          type: 'category',
           boundaryGap: false,
           data: data.x
         },
         yAxis: {
-          name: "RefSelfRate",
-          type: "value",
+          name: 'RefSelfRate',
+          type: 'value',
           max: 1
         },
         series: data.y.map((item, index) => {
           return extendLineSeries({
             name: data.legend[index],
-            type: "line",
+            type: 'line',
             smooth: false,
             data: item
-          });
+          })
         })
-      });
-      return _opt;
+      })
+      return _opt
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped></style>

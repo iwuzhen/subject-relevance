@@ -5,9 +5,9 @@
       <v-breadcrumbs
         :items="items"
         large
-      > </v-breadcrumbs>
+      />
 
-      <router-view v-on:emitMesage="message" />
+      <router-view @emitMesage="message" />
     </v-main>
     <v-snackbar
       v-model="snackbar"
@@ -20,39 +20,39 @@
 </template>
 
 <script>
-import NoteBoard from "./components/NoteBoard";
+import NoteBoard from './components/NoteBoard'
 
 export default {
-  name: "App",
-
-  data: () => ({ snackbar: false, timeout: 2000, text: "" }),
-  mounted() { },
-  methods: {
-    message(text) {
-      this.text = text;
-      this.snackbar = true;
-    }
+  name: 'App',
+  components: {
+    NoteBoard
   },
+
+  data: () => ({ snackbar: false, timeout: 2000, text: '' }),
   computed: {
-    currentPath: function () {
-      return this.$store.state.curentPath;
+    currentPath: function() {
+      return this.$store.state.curentPath
     },
-    items: function () {
+    items: function() {
       return [
         {
-          text: "首页",
+          text: '首页',
           disabled: false,
-          to: "/"
+          to: '/'
         },
         {
           text: this.$store.state.curentPath,
           disabled: true
         }
-      ];
+      ]
     }
   },
-  components: {
-    NoteBoard
+  mounted() { },
+  methods: {
+    message(text) {
+      this.text = text
+      this.snackbar = true
+    }
   }
-};
+}
 </script>

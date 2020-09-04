@@ -5,100 +5,95 @@
         <v-select
           v-model="subjectTarget"
           :items="categorys"
-          @change="getData"
           chips
           multiple
           deletable-chips
           clearable
           dense
           label="目标学科"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
       <v-col cols="2">
         <v-select
           v-model="dataType"
           :items="dataTypeOptions"
-          @change="getData"
           label="数据类型"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
 
       <v-col cols="2">
         <v-select
           v-model="subjectLevel"
           :items="levelOptions"
-          @change="getData"
           label="level"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
         <v-card
+          id="subjectChart"
           class="mx-auto"
           outlined
           :loading="loading"
           height="70vh"
-          id="subjectChart"
-        >
-        </v-card>
+        />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { getViewAndEdits } from "@/api/index";
-import { basiCategorys, extendEchartsOpts, defaultCategorySelect, extendLineSeries } from "@/api/data";
+import { getViewAndEdits } from '@/api/index'
+import { basiCategorys, extendEchartsOpts, defaultCategorySelect, extendLineSeries } from '@/api/data'
+import Base from '@/utils/base'
+
 export default {
-  name: "ve访问量和编辑量",
+  name: 'Ve',
+  extends: Base,
   data() {
     return {
+      pageName: '访问量和编辑量',
       subjectTarget: defaultCategorySelect,
       subjectLevel: 0,
       categorys: basiCategorys,
       levelOptions: [
         {
           value: 0,
-          text: "0"
+          text: '0'
         },
         {
           value: 1,
-          text: "1"
+          text: '1'
         },
         {
           value: 2,
-          text: "2"
+          text: '2'
         },
         {
-          value: "1000",
-          text: "top 1000"
+          value: '1000',
+          text: 'top 1000'
         }
       ],
       dataType: 0,
       dataTypeOptions: [
         {
           value: 0,
-          text: "访问量"
+          text: '访问量'
         },
         {
           value: 1,
-          text: "编辑量"
+          text: '编辑量'
         }
       ],
-      loading: false
-    };
-  },
-  computed: {
-    myChart: function () {
-      return this.$echarts.init(document.getElementById("subjectChart"));
+      loading: false,
+      myChartIds: ['subjectChart']
     }
   },
   mounted() {
-    window.onresize = () => {
-      this.myChart.resize();
-    };
-    this.$store.commit("changeCurentPath", this.$options.name);
     this.getData()
   },
   methods: {
@@ -109,39 +104,39 @@ export default {
         this.subjectLevel.length < 1
       ) {
         // this.$message.error("请选择完整");
-        return false;
+        return false
       }
-      this.loading = true;
-      let opt = {
-        str: this.subjectTarget.join(","),
+      this.loading = true
+      const opt = {
+        str: this.subjectTarget.join(','),
         type: this.dataType,
         level: this.subjectLevel
-      };
+      }
       getViewAndEdits(opt)
         .then(res => {
           if (res.data.data) {
-            this.drawChart(res.data.data);
+            this.drawChart(res.data.data)
           } else {
-            this.loading = false;
-            this.$emit("emitMesage", "请求失败");
-            return false;
+            this.loading = false
+            this.$emit('emitMesage', '请求失败')
+            return false
           }
         })
         .catch(rej => {
-          this.loading = false;
-          this.$emit("emitMesage", `请求失败:${rej}`);
-        });
+          this.loading = false
+          this.$emit('emitMesage', `请求失败:${rej}`)
+        })
     },
     drawChart(data) {
-      let options = this.setOptions(data);
-      this.myChart.setOption(options, true);
-      this.loading = false;
+      const options = this.setOptions(data)
+      this.myChartObjs[0].setOption(options, true)
+      this.loading = false
     },
     setOptions(data) {
-      let ymax = Math.max(...[].concat(...data.y));
-      let digit = Math.floor(ymax).toString().length;
-      ymax = Math.ceil(ymax / 10 ** (digit - 2)) * 10 ** (digit - 2);
-      let _opt = extendEchartsOpts({
+      let ymax = Math.max(...[].concat(...data.y))
+      const digit = Math.floor(ymax).toString().length
+      ymax = Math.ceil(ymax / 10 ** (digit - 2)) * 10 ** (digit - 2)
+      const _opt = extendEchartsOpts({
         title: {
           text: data.title
         },
@@ -149,29 +144,29 @@ export default {
           data: data.legend
         },
         xAxis: {
-          name: "Date",
-          type: "category",
+          name: 'Date',
+          type: 'category',
           boundaryGap: false,
           data: data.x
         },
         yAxis: {
-          name: "Count",
-          type: "value",
+          name: 'Count',
+          type: 'value',
           max: ymax
         },
         series: data.y.map((item, index) => {
           return extendLineSeries({
             name: data.legend[index],
-            type: "line",
+            type: 'line',
             smooth: false,
             data: item
-          });
+          })
         })
-      });
-      return _opt;
+      })
+      return _opt
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped></style>

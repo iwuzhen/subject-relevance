@@ -3,8 +3,8 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-08-25 17:16:08
- * @Description: 
+ * @LastEditTime: 2020-09-04 14:08:01
+ * @Description:
  -->
 
 <template>
@@ -20,43 +20,43 @@
           deletable-chips
           clearable
           label="目标学科"
-        ></v-select>
+        />
       </v-col>
       <v-col cols="2">
         <v-select
           v-model="yearSelect"
           :items="yearOpt"
           dense
-          @change="calZipf"
           label="年份"
-        ></v-select>
+          @change="calZipf"
+        />
       </v-col>
       <v-col cols="2">
         <v-select
           v-model="nodeCountSelect"
           :items="nodeCountOpt"
           dense
-          @change="getData"
           label="节点数量"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
       <v-col cols="2">
         <v-select
           v-model="typeSelect"
           :items="typeOpt"
           dense
-          @change="getData"
           label="网络类型"
-        ></v-select>
+          @change="getData"
+        />
       </v-col>
       <v-col cols="1">
         <v-select
           v-model="levelSelect"
           :items="levelOpt"
           dense
-          @change="calZipf"
           label="层数"
-        ></v-select>
+          @change="calZipf"
+        />
       </v-col>
       <v-col cols="8">
         <v-range-slider
@@ -78,7 +78,7 @@
               type="number"
               style="width: 60px"
               @change="$set(nodeRange, 0, $event)"
-            ></v-text-field>
+            />
           </template>
           <template v-slot:append>
             <v-text-field
@@ -89,7 +89,7 @@
               type="number"
               style="width: 60px"
               @change="$set(nodeRange, 1, $event)"
-            ></v-text-field>
+            />
           </template>
         </v-range-slider>
       </v-col>
@@ -103,10 +103,10 @@
           height="45vh"
         >
           <v-container
+            id="subjectChart1"
             fluid
             fill-height
-            id="subjectChart1"
-          > </v-container>
+          />
         </v-card>
       </v-col>
     </v-row>
@@ -119,10 +119,10 @@
           height="45vh"
         >
           <v-container
+            id="subjectChart2"
             fluid
             fill-height
-            id="subjectChart2"
-          > </v-container>
+          />
         </v-card>
       </v-col>
     </v-row>
@@ -130,24 +130,29 @@
 </template>
 
 <script>
-import { getCoreZipfByNodes, getCoreZipfByNodes_v2 } from "@/api/index";
-import ecStat from "echarts-stat";
-import { coreCategorys, extendEchartsOpts, extendLineSeries, defaultCategorySelect } from "@/api/data";
-import { localCache } from "@/api/cache";
-let LC = new localCache({
-  storeName: "corezipfbynodes", // Should be alphanumeric, with underscores.
-  description: "store api"
-});
+import { getCoreZipfByNodes, getCoreZipfByNodes_v2 } from '@/api/index'
+import ecStat from 'echarts-stat'
+import { coreCategorys, extendEchartsOpts, extendLineSeries, defaultCategorySelect1 } from '@/api/data'
+import { localCache } from '@/api/cache'
+import Base from '@/utils/base'
+
+// eslint-disable-next-line new-cap
+const LC = new localCache({
+  storeName: 'corezipfbynodes', // Should be alphanumeric, with underscores.
+  description: 'store api'
+})
 // tooyip 位置的x位置
-var tipLegend = 0;
+var tipLegend = 0
 export default {
   name: `Core_zipf_幂律斜率`,
+  extends: Base,
   data() {
     return {
+      pageName: `Core zipf 幂律斜率 ${this.$route.query.version}`,
       loading: false,
       nodeRange: [250, 2500],
       nodeMin: 0,
-      subjectSelect: defaultCategorySelect,
+      subjectSelect: defaultCategorySelect1,
       nodeCountSelect: 10000,
       nodeCountOpt: [
         1000,
@@ -179,292 +184,273 @@ export default {
       ],
       levelSelect: 3,
       levelOpt: [3, 4],
-      typeSelect: "zipf",
+      typeSelect: 'zipf',
       typeOpt: [
         {
-          value: "zipf",
-          text: "世界幂律"
+          value: 'zipf',
+          text: '世界幂律'
         },
         {
-          value: "innerzipf",
-          text: "小世界幂律"
+          value: 'innerzipf',
+          text: '小世界幂律'
         }
       ],
       categoryOpt: coreCategorys,
       chartOptYear: {},
-      chartOptZipf: {}
-    };
+      chartOptZipf: {},
+      myChartIds: ['subjectChart1', 'subjectChart2']
+    }
+  },
+  computed: {
+    nodeMax: function() {
+      return this.nodeCountSelect
+    }
   },
   watch: {
-    nodeRange: function () {
-      this.rangeChange();
+    nodeRange: function() {
+      this.rangeChange()
     },
     // 更新图标
-    chartOptYear: function (opt) {
-      this.myChart1.setOption(opt, true);
+    chartOptYear: function(opt) {
+      this.myChartObjs[0].setOption(opt, true)
     },
-    chartOptZipf: function (opt) {
-      this.myChart2.setOption(opt, true);
+    chartOptZipf: function(opt) {
+      this.myChartObjs[1].setOption(opt, true)
     },
-    subjectSelect: async function (newValue, oldValue) {
-      this.loading = true;
-      let diffArray = newValue.filter(item => !oldValue.includes(item));
+    subjectSelect: async function(newValue, oldValue) {
+      this.loading = true
+      const diffArray = newValue.filter(item => !oldValue.includes(item))
       if (diffArray.length > 0) {
-        await this.handleSlopeTrend(diffArray[0]);
+        await this.handleSlopeTrend(diffArray[0])
       }
-      await this.calMulitYear(newValue);
-      await this.calZipf();
+      await this.calMulitYear(newValue)
+      await this.calZipf()
     }
   },
   mounted() {
-    window.onresize = () => {
-      this.myChart1.resize();
-      this.myChart2.resize();
-    };
-    this.$store.commit(
-      "changeCurentPath",
-      `Core_zipf_${this.$route.query.version}幂律斜率`
-    );
-    this.myChart2.on("click", function (params) {
-      console.log(params);
-    });
-    this.myChart2.getZr().on("click", params => {
-      var pointInPixel = [params.offsetX, params.offsetY];
+    this.myChartObjs[1].getZr().on('click', params => {
+      var pointInPixel = [params.offsetX, params.offsetY]
 
-      if (this.myChart2.containPixel("grid", pointInPixel)) {
-        // var xIndex = this.myChart2.convertFromPixel({ seriesIndex: 0 }, [
+      if (this.myChartObjs[1].containPixel('grid', pointInPixel)) {
+        // var xIndex = this.myChartObjs[1].convertFromPixel({ seriesIndex: 0 }, [
         //   params.offsetX,
         //   params.offsetY
         // ])[0];
         // console.log(xIndex);
-        let series = [];
-        for (let ix in this.chartOptZipf.legend.data) {
+        const series = []
+        for (const ix in this.chartOptZipf.legend.data) {
           series[
             tipLegend.indexOf(this.chartOptZipf.legend.data[ix])
-          ] = this.chartOptZipf.series[ix];
+          ] = this.chartOptZipf.series[ix]
         }
-        this.chartOptZipf.legend.data = tipLegend;
-        this.chartOptZipf.series = series;
-        // console.log(this.chartOptZipf);
-        this.myChart2.setOption(this.chartOptZipf, true);
-        // console.log("set");
+        this.chartOptZipf.legend.data = tipLegend
+        this.chartOptZipf.series = series
       }
-    });
+    })
     this.getData()
-  },
-  computed: {
-    nodeMax: function () {
-      return this.nodeCountSelect;
-    },
-    myChart1: function () {
-      return this.$echarts.init(document.getElementById("subjectChart1"));
-    },
-    myChart2: function () {
-      return this.$echarts.init(document.getElementById("subjectChart2"));
-    }
   },
   methods: {
     async handleRequest(opt) {
-      if (this.$route.query.version == "v1") {
-        console.log(this.$route.query.version);
-        return await getCoreZipfByNodes(opt);
+      if (this.$route.query.version === 'v1') {
+        console.log(this.$route.query.version)
+        return await getCoreZipfByNodes(opt)
       }
-      if (this.$route.query.version == "v2") {
-        console.log(this.$route.query.version);
-        opt.version = "v2";
-        return await getCoreZipfByNodes_v2(opt);
+      if (this.$route.query.version === 'v2') {
+        console.log(this.$route.query.version)
+        opt.version = 'v2'
+        return await getCoreZipfByNodes_v2(opt)
       }
-      if (this.$route.query.version == "v3") {
-        console.log(this.$route.query.version);
-        opt.version = "v3";
-        return await getCoreZipfByNodes_v2(opt);
+      if (this.$route.query.version === 'v3') {
+        console.log(this.$route.query.version)
+        opt.version = 'v3'
+        return await getCoreZipfByNodes_v2(opt)
       }
     },
     async handleSlopeTrend(subject) {
       // 计算单学科的年度趋势，并缓存
-      let opt = {
+      const opt = {
         str: subject,
         N: this.nodeCountSelect,
         level: this.levelSelect,
         type: this.typeSelect
-      };
+      }
 
-      let LCKEY = `${JSON.stringify(opt)}_${this.nodeRange[0]}_${
+      const LCKEY = `${JSON.stringify(opt)}_${this.nodeRange[0]}_${
         this.nodeRange[1]
-        }_${this.$route.query.version}`;
+      }_${this.$route.query.version}`
       // TODO 暂时禁用缓存
-      let item = await LC.getItem(LCKEY);
-      item = null;
+      let item = await LC.getItem(LCKEY)
+      item = null
       if (!item) {
         try {
-          let res = await this.handleRequest(opt);
+          const res = await this.handleRequest(opt)
           if (res.data) {
-            let gradientList = [];
+            const gradientList = []
             for (let i = 0; i < res.data.y.length; i++) {
-              let dataItem = [];
+              const dataItem = []
               for (let j = 0; j < res.data.y[i].length; j++) {
-                dataItem.push([res.data.x[j], res.data.y[i][j]]);
+                dataItem.push([res.data.x[j], res.data.y[i][j]])
               }
-              let myRegression = ecStat.regression(
-                "linear",
+              const myRegression = ecStat.regression(
+                'linear',
                 dataItem.slice(this.nodeRange[0], this.nodeRange[1])
-              );
-              gradientList.push(myRegression.parameter.gradient.toFixed(4));
+              )
+              gradientList.push(myRegression.parameter.gradient.toFixed(4))
             }
 
-            let title = res.data.title.replace(" zipf分布", "");
+            const title = res.data.title.replace(' zipf分布', '')
             item = [
               title,
               extendLineSeries({
                 name: title,
-                type: "line",
+                type: 'line',
                 smooth: false,
                 data: gradientList
               })
-            ];
-            console.log("增加缓存：", LCKEY);
-            await LC.setItem(LCKEY, item);
+            ]
+            console.log('增加缓存：', LCKEY)
+            await LC.setItem(LCKEY, item)
           }
         } catch (error) {
-          this.$emit("emitMesage", `请求失败:${error}`);
-          return;
+          this.$emit('emitMesage', `请求失败:${error}`)
+          return
         }
       }
-      return item;
+      return item
     },
     getData() {
       if (this.nodeCountSelect < this.nodeRange[1]) {
-        this.nodeRange[1] = this.nodeCountSelect;
+        this.nodeRange[1] = this.nodeCountSelect
       }
-      this.rangeChange();
-      this.calZipf();
+      this.rangeChange()
+      this.calZipf()
     },
     rangeChange() {
       /**
        * @description: 多个学科的斜率历年趋势
        */
       if (this.subjectSelect.length < 1) {
-        return;
+        return
       }
-      this.calMulitYear();
+      this.calMulitYear()
     },
     async calMulitYear() {
-      let seriesTitleArray = [];
-      this.loading = true;
-      for (let subject of this.subjectSelect) {
-        let item = await this.handleSlopeTrend(subject);
-        console.log(item);
-        seriesTitleArray.push(item);
+      const seriesTitleArray = []
+      this.loading = true
+      for (const subject of this.subjectSelect) {
+        const item = await this.handleSlopeTrend(subject)
+        console.log(item)
+        seriesTitleArray.push(item)
       }
       seriesTitleArray.sort((x, y) => {
-        return y[1].data.slice(-1) - x[1].data.slice(-1);
-      });
+        return y[1].data.slice(-1) - x[1].data.slice(-1)
+      })
 
       this.chartOptYear = extendEchartsOpts({
         title: {
-          text: "斜率趋势"
+          text: '斜率趋势'
         },
         legend: {
           data: seriesTitleArray.map(item => {
-            return item[0];
+            return item[0]
           })
         },
         xAxis: {
-          type: "category",
-          name: "Year",
+          type: 'category',
+          name: 'Year',
           data: this.yearOpt
         },
         yAxis: {
-          max: (function (seriesTitleArray) {
-            let yList = [];
-            for (let item of seriesTitleArray) {
-              yList = yList.concat(item[1].data);
+          max: (function(seriesTitleArray) {
+            let yList = []
+            for (const item of seriesTitleArray) {
+              yList = yList.concat(item[1].data)
             }
-            return (Math.floor(Math.max(...yList) * 10) + 1) / 10;
+            return (Math.floor(Math.max(...yList) * 10) + 1) / 10
           })(seriesTitleArray),
-          type: "value",
-          name: "Slope"
+          type: 'value',
+          name: 'Slope'
         },
         series: seriesTitleArray.map(item => {
-          return item[1];
+          return item[1]
         })
-      });
+      })
 
-      this.loading = false;
+      this.loading = false
     },
     async calZipf() {
       if (this.subjectSelect.length < 1 || !this.yearSelect) {
-        return false;
+        return false
       }
-      this.loading = true;
-      let opt = {
-        str: this.subjectSelect.join(","),
+      this.loading = true
+      const opt = {
+        str: this.subjectSelect.join(','),
         N: this.nodeCountSelect,
         year: this.yearSelect,
         level: this.levelSelect,
         type: this.typeSelect
-      };
+      }
       await this.handleRequest(opt)
         .then(res => {
           if (res.data) {
-            this.chartOptZipf = this.setOptions_zipf(res.data);
-            this.loading = false;
+            this.chartOptZipf = this.setOptions_zipf(res.data)
+            this.loading = false
           } else {
-            this.loading = false;
-            this.$emit("emitMesage", "请求失败");
-            return false;
+            this.loading = false
+            this.$emit('emitMesage', '请求失败')
+            return false
           }
         })
         .catch(rej => {
-          this.loading = false;
-          this.$emit("emitMesage", `请求失败:${rej}`);
-        });
+          this.loading = false
+          this.$emit('emitMesage', `请求失败:${rej}`)
+        })
     },
 
     setOptions_zipf(data) {
       // 设置
-      let seriesList = [];
+      const seriesList = []
       for (let i = 0; i < data.y.length; i++) {
-        let dataItem = [];
+        const dataItem = []
         for (let j = 0; j < data.y[i].length; j++) {
-          dataItem.push([data.x[j], data.y[i][j]]);
+          dataItem.push([data.x[j], data.y[i][j]])
         }
         seriesList.push({
           name: data.legend[i],
-          type: "scatter",
+          type: 'scatter',
           symbolSize: 2,
           large: true,
           data: dataItem
-        });
+        })
       }
 
       // 趋势线
-      let myRegression = ecStat.regression(
-        "linear",
+      const myRegression = ecStat.regression(
+        'linear',
         seriesList[0].data.slice(this.nodeRange[0], this.nodeRange[1])
-      );
-      console.log(this.nodeRange);
+      )
+      console.log(this.nodeRange)
       if (data.y.length === 1) {
         seriesList.push(
           extendLineSeries({
-            name: "回归线",
-            type: "line",
+            name: '回归线',
+            type: 'line',
             showSymbol: false,
             smooth: false,
             data: myRegression.points,
             markPoint: {
               itemStyle: {
                 normal: {
-                  color: "transparent"
+                  color: 'transparent'
                 }
               },
               label: {
                 normal: {
                   show: true,
-                  position: "left",
+                  position: 'left',
                   formatter: myRegression.expression,
                   textStyle: {
-                    color: "#333",
+                    color: '#333',
                     fontSize: 14
                   }
                 }
@@ -476,38 +462,38 @@ export default {
               ]
             }
           })
-        );
+        )
       }
       // let ymax = Math.floor(Math.max(...[].concat(...data.y)) * 10) + 1;
-      let xmax = Math.floor(Math.max(...data.x) * 10) + 1;
+      const xmax = Math.floor(Math.max(...data.x) * 10) + 1
 
-      console.log(data);
-      let _opt = extendEchartsOpts({
+      console.log(data)
+      const _opt = extendEchartsOpts({
         tooltip: {
-          trigger: "axis",
+          trigger: 'axis',
           textStyle: {
-            align: "left"
+            align: 'left'
           },
           axisPointer: {
-            type: "cross",
+            type: 'cross',
             animation: true,
             label: {
-              backgroundColor: "#505765"
+              backgroundColor: '#505765'
             }
           },
-          formatter: function (params) {
+          formatter: function(params) {
             params.sort((x, y) => {
-              return y.data[1] - x.data[1];
-            });
-            let showHtm = ` ${params[0].name}<br>`;
+              return y.data[1] - x.data[1]
+            })
+            let showHtm = ` ${params[0].name}<br>`
             for (let i = 0; i < params.length; i++) {
-              let _text = params[i].seriesName;
-              let _data = params[i].data;
-              let _marker = params[i].marker;
-              showHtm += `${_marker}${_text}：x${_data[0]},y：${_data[1]} <br>`;
+              const _text = params[i].seriesName
+              const _data = params[i].data
+              const _marker = params[i].marker
+              showHtm += `${_marker}${_text}：x${_data[0]},y：${_data[1]} <br>`
             }
-            tipLegend = params.map(item => item.seriesName);
-            return showHtm;
+            tipLegend = params.map(item => item.seriesName)
+            return showHtm
           }
         },
         title: {
@@ -517,20 +503,20 @@ export default {
           data: data.legend
         },
         xAxis: {
-          type: "value",
+          type: 'value',
           max: xmax / 10,
-          name: "log (rank)"
+          name: 'log (rank)'
         },
         yAxis: {
-          type: "value",
+          type: 'value',
           // max: ymax / 10,
-          name: "log (citation)",
+          name: 'log (citation)',
           min: 0
         },
         series: seriesList
-      });
-      return _opt;
+      })
+      return _opt
     }
   }
-};
+}
 </script>
