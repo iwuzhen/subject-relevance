@@ -44,7 +44,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="8">
+      <v-col cols="7">
         <v-range-slider
           v-model="years"
           :max="2019"
@@ -89,7 +89,7 @@
           @change="bfChange"
         />
       </v-col>
-      <v-col cols="2">
+      <v-col cols="1">
         <v-btn
           :color="showAve ? 'light-green' : 'lime'"
           @click="
@@ -97,6 +97,20 @@
             getData();
           "
         >{{ showAve ? "关闭平均距离" : "开启平均距离" }}</v-btn>
+      </v-col>
+      <v-col cols="1">
+        <v-btn
+          color="light-green"
+          :disabled="currentAverageLine.name===null"
+          @click="recordAveLine"
+        >记录当前平均距离</v-btn>
+      </v-col>
+      <v-col cols="1">
+        <v-btn
+          :disabled="averageLinedata.legend.length===0"
+          color="light-green"
+          @click="initAverageLinedata"
+        >清空平均距离图</v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -108,7 +122,23 @@
           height="70vh"
         >
           <v-container
-            id="masChart"
+            id="masChart1"
+            fluid
+            fill-height
+          />
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+        >
+          <v-container
+            id="masChart2"
             fluid
             fill-height
           />
@@ -141,7 +171,10 @@ export default {
       bfValue: '不适用',
       bfOpt: ['不适用', 1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015],
       loading: false,
-      myChartIds: ['masChart']
+      myChartIds: ['masChart1', 'masChart2'],
+      averageLinedata: { title: '平均逐年距离图', legend: [], x: [], y: [] },
+      currentAverageLine: { name: null, line: [] },
+      count: 0
     }
   },
   computed: {
@@ -157,6 +190,20 @@ export default {
     }
   },
   methods: {
+    initAverageLinedata() {
+      this.averageLinedata = { title: '平均逐年距离图', legend: [], x: [], y: [] }
+      const options = this.setOptions(this.averageLinedata)
+      this.myChartObjs[1].setOption(options, true)
+      this.count = 0
+    },
+    recordAveLine() {
+      this.count += 1
+      this.averageLinedata.legend.push(this.currentAverageLine.name + `（${this.count}）`)
+      this.averageLinedata.y.push(this.currentAverageLine.line)
+      const options = this.setOptions(this.averageLinedata)
+      this.myChartObjs[1].setOption(options, true)
+      console.log(this.averageLinedata)
+    },
     qsChange() {
       if (this.qsValue === 0) {
         this.methodValue = 'linksin'
@@ -212,6 +259,7 @@ export default {
           if (res.data.data) {
             if (this.subjectRelevances.length > 1 && this.showAve) {
               console.log(res.data.data)
+              this.averageLinedata.x = res.data.data.x
               const aveLine = []
               for (const i in res.data.data.x) {
                 let ss = 0
@@ -220,6 +268,8 @@ export default {
                 }
                 aveLine.push(ss / res.data.data.y.length)
               }
+              this.currentAverageLine.line = aveLine
+              this.currentAverageLine.name = this.subjectTarget
               res.data.data.y.push(aveLine)
               res.data.data.legend.push('平均距离')
               this.drawChart(res.data.data)
@@ -236,6 +286,7 @@ export default {
         })
     },
     drawChart(data) {
+      console.log(data)
       const options = this.setOptions(data)
       this.myChartObjs[0].setOption(options, true)
       this.loading = false
