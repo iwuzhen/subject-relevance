@@ -72,6 +72,44 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col cols="10">
+        <v-range-slider
+          v-model="node"
+          :max="100000"
+          :min="1"
+          dense
+          hide-details
+          hint="节点范围"
+          class="align-center"
+          @change="getData"
+        >
+          <template v-slot:prepend>
+            <p style="width: 100px">节点范围</p>
+            <v-text-field
+              :value="node[0]"
+              class="mt-0 pt-0"
+              hide-details
+              single-line
+              type="number"
+              style="width: 60px"
+              @change="$set(node, 0, $event)"
+            />
+          </template>
+          <template v-slot:append>
+            <v-text-field
+              :value="node[1]"
+              class="mt-0 pt-0"
+              hide-details
+              single-line
+              type="number"
+              style="width: 60px"
+              @change="$set(node, 1, $event)"
+            />
+          </template>
+        </v-range-slider>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col col="12">
         <v-card
           class="mx-auto"
@@ -157,6 +195,7 @@ export default {
       subjectTarget: defaultCategorySelect,
       methodValue: 'linksin',
       years: [1900, 2018],
+      node: [1, 10000],
       categorysOptions: magCategory,
       ctypeValue: 0,
       ctypeOptions: [{
@@ -189,7 +228,9 @@ export default {
           type: this.typeValue,
           ctype: this.ctypeOptions[i].value,
           from: this.years[0],
-          to: this.years[1]
+          to: this.years[1],
+          node_from: this.node[0],
+          node_to: this.node[1]
         }
 
         getZipfAndInnerZipfTjData(opt)
