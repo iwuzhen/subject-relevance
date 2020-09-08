@@ -137,6 +137,10 @@ export default {
 
           'MAG v2- 统计数据': [
             {
+              title: 'MAG level1层和父类的交集比例',
+              text: 'MAG level1层和父类的交集比例 柱状图',
+              to: '/MAGBLLevel'
+            }, {
               title: 'MAG文章数',
               text: '',
               to: '/MasArticlesTotalV2'
@@ -154,6 +158,11 @@ export default {
             }
           ],
           'MAG v2- 幂率': [
+            {
+              title: '幂率相关统计数据',
+              text: 'mag v2幂律相关统计数据',
+              to: '/MAGInnerZipTj'
+            },
             {
               title: 'MAG 小世界幂率',
               text: '',

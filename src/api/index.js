@@ -247,11 +247,34 @@ export async function getLinkTjv2(params) {
   return await cacheRequest(requestParams)
 }
 
+export async function getBL_level1(params) {
+  const requestParams = {
+    url: '/mag/getBL_level1',
+    method: 'post',
+    data: params
+  }
+  // let res = await request(requestParams);
+  // return res.data;
+  return await cacheRequest(requestParams)
+}
+
 // mag 第一层父类
 export async function getOriginCategories() {
   const requestParams = {
     url: '/mag/getOriginCategories',
     method: 'get'
+  }
+  const res = await request(requestParams)
+  return res.data
+  // return await cacheRequest(requestParams);
+}
+
+// mag v2幂律相关统计数据
+export async function getZipfAndInnerZipfTjData(data) {
+  const requestParams = {
+    url: '/mag/getZipfAndInnerZipfTjData',
+    method: 'post',
+    data
   }
   const res = await request(requestParams)
   return res.data

@@ -55,6 +55,7 @@ const MAGRefDistV2 = () => import('@/pages/MAGRefDistV2')
 const MasCompositionByYear = () => import('@/pages/MasCompositionByYear')
 const MagFunnel = () => import('@/pages/MagFunnel')
 const MagFosTree = () => import('@/pages/MagFosTree')
+const MAGBLLevel = () => import('@/pages/MAGBLLevel')
 
 Vue.use(Router)
 
@@ -65,9 +66,17 @@ export default new Router({
     name: 'index',
     component: IndexPage
   }, {
+    path: '/MAGInnerZipTj',
+    name: 'MAGInnerZipTj',
+    component: () => import('@/pages/MAGInnerZipTj')
+  }, {
     path: '/MagFunnel',
     name: 'MagFunnel',
     component: MagFunnel
+  }, {
+    path: '/MAGBLLevel',
+    name: 'MAGBLLevel',
+    component: MAGBLLevel
   },
   {
     path: '/SmallWorldDirectedCoreV2',
