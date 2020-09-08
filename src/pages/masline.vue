@@ -45,7 +45,7 @@
       <v-col cols="8">
         <v-range-slider
           v-model="years"
-          :max="2019"
+          :max="2018"
           :min="1900"
           dense
           hide-details

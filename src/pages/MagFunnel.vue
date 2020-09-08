@@ -112,13 +112,13 @@ export default {
       loading: false,
       myChartIds: ['subjectChart'],
       chartData: [
-        { value: 130, name: '政治' },
-        { value: 100, name: '社会' },
-        { value: 70, name: '生物' },
-        { value: 60, name: '工程' },
-        { value: 40, name: '化学' },
-        { value: 60, name: '物理' },
-        { value: 80, name: '数学' }
+        { value: 130, name: 'Politics' },
+        { value: 100, name: 'Sociology' },
+        { value: 70, name: 'Biology' },
+        { value: 60, name: 'engineering' },
+        { value: 40, name: 'Chemistry' },
+        { value: 60, name: 'Physics' },
+        { value: 80, name: 'Mathematics' }
       ].map(each => {
         this.$set(each, 'valueEdit', false)
         this.$set(each, 'nameEdit', false)
@@ -197,7 +197,7 @@ export default {
       const config = {
         margins: { top: 80, left: 80, bottom: 50, right: 80 },
         textColor: 'black',
-        title: '哑铃图',
+        title: 'Funnel',
         animateDuration: 1000,
         trapezoidPadding: 3,
         hoverColor: 'white'

@@ -165,7 +165,7 @@ export default {
       subjectTarget: '',
       subjectRelevances: defaultCategorySelect,
       methodValue: 'linksin',
-      years: [1945, 2019],
+      years: [1945, 2018],
       categorys: coreCategorys,
       methodOptions: ['linksin', 'linksout'],
       bfValue: '不适用',
