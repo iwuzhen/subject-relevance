@@ -12,6 +12,14 @@
           label="目标学科"
         />
       </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="yearTarget"
+          :items="yearOpts"
+          label="活跃期"
+          @click="getData"
+        />
+      </v-col>
     </v-row>
     <v-row>
       <v-col cols="10">
@@ -98,6 +106,20 @@ export default {
     return {
       pageName: 'MAG幂律度分布 v2',
       girdHeaders: [],
+      yearTarget: null,
+      yearOpts: [{
+        text: '全集合',
+        value: null
+      }, {
+        text: '1980-2019',
+        value: 1980
+      }, {
+        text: '1990-2019',
+        value: 1990
+      }, {
+        text: '2000-2019',
+        value: 2000
+      }],
       nodeRange: [100, 40000],
       nodeMax: 100000,
       nodeMin: 1,
@@ -221,6 +243,9 @@ export default {
       for (const subjectName of this.subjectTarget) {
         const opt = {
           str: subjectName
+        }
+        if (this.yearTarget !== null) {
+          opt.year = this.yearTarget
         }
         try {
           const res = await getMagZipfV2(opt)
