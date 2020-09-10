@@ -14,7 +14,7 @@
           @change="getData"
         />
       </v-col>
-      <v-col cols="2">
+      <v-col cols="1">
         <v-select
           v-model="yearSelect"
           :items="yearOpt"
@@ -22,11 +22,27 @@
           @change="getData"
         />
       </v-col>
-      <v-col cols="2">
+      <v-col cols="1">
         <v-select
           v-model="refSelect"
           :items="refOpt"
           label="引用关系"
+          @change="getData"
+        />
+      </v-col>
+      <v-col cols="1">
+        <v-select
+          v-model="refRangeSelect"
+          :items="refRangeOpt"
+          label="引用范围"
+          @change="getData"
+        />
+      </v-col>
+      <v-col cols="1">
+        <v-select
+          v-model="versionSelect"
+          :items="versionOpt"
+          label="版本"
           @change="getData"
         />
       </v-col>
@@ -68,7 +84,11 @@ export default {
       refSelect: 'linksin',
       refOpt: ['linksin', 'linksout'],
       myChartIds: ['subjectChart'],
-      loading: false
+      loading: false,
+      versionSelect: 'v2',
+      versionOpt: ['v1', 'v2'],
+      refRangeSelect: 0,
+      refRangeOpt: [{ text: '全集引用', value: 0 }, { text: '学科内部引用', value: 1 }]
     }
   },
   mounted() {
@@ -76,6 +96,10 @@ export default {
   },
   methods: {
     async getData() {
+      if (this.versionSelect === 'v1' && this.refRangeSelect === 1) {
+        this.$emit('emitMesage', 'v1 版本没有计算学科内部引用')
+      }
+
       if (this.subjectRelevances.length === 0) {
         return false
       }
@@ -83,7 +107,9 @@ export default {
       const opt = {
         str: this.subjectRelevances.join(','),
         year: this.yearSelect,
-        method: this.refSelect
+        method: this.refSelect,
+        version: this.versionSelect,
+        type: this.refRangeSelect
       }
       getMasCompositionByYear(opt)
         .then(res => {
@@ -129,12 +155,11 @@ export default {
             type: 'line',
             smooth: false,
             data: item.map(each => {
-              console.log(each)
               // eslint-disable-next-line eqeqeq
               if (each == Infinity) {
                 return 0
               }
-              return each.toFixed(5)
+              return each
             })
           })
         })
