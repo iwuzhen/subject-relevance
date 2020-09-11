@@ -70,6 +70,10 @@ export default new Router({
     name: 'MAGInnerZipTj',
     component: () => import('@/pages/MAGInnerZipTj')
   }, {
+    path: '/GoogleDistance',
+    name: 'GoogleDistance',
+    component: () => import('@/pages/GoogleDistance')
+  }, {
     path: '/MagFunnel',
     name: 'MagFunnel',
     component: MagFunnel

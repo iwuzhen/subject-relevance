@@ -132,6 +132,11 @@ export default {
               title: 'MAG google 距离',
               text: 'Mag 学科相关度',
               to: '/MasDistanceV2'
+            },
+            {
+              title: 'google距离中间数据',
+              text: 'google距离中间数据',
+              to: '/GoogleDistance'
             }
           ],
 

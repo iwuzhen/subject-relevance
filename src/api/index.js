@@ -194,6 +194,17 @@ export async function getMagRefSelfRate(params) {
   // return await cacheRequestGo(requestParams);
 }
 
+// mag google距离中间数据
+export async function getGoogleDistance_tempdata(params) {
+  const requestParams = {
+    url: '/mag/getGoogleDistance_tempdata',
+    method: 'post',
+    data: params
+  }
+  const res = await request(requestParams)
+  return res.data
+}
+
 // mag 各学科 linkin 逐年引用情况
 export async function getMasCompositionByYear(params) {
   const requestParams = {
