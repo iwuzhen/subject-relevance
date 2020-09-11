@@ -213,12 +213,11 @@ export default {
         return false
       }
       this.loading = true
-      const subjectTarget = this.subjectTarget
       const opt = {
         strA: this.subjectTarget,
         strB: this.subjectRelevances
           .filter(item => {
-            if (item === subjectTarget) {
+            if (item === this.subjectTarget && this.typeValue === 1) {
               return false
             }
             return true
