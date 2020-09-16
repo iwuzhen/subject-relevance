@@ -196,7 +196,7 @@ export default {
       versionOptions: ['v3'],
       versionValue: 'v3',
       levelValue: 1000,
-      levelOpt: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000],
+      levelOpt: [1000, 2000, 3000, 3500, 4000, 5000, 6000, 7000, 8000, 9000, 10000],
       levelTypeValue: 2,
       levelTypeOpt: [2, 3]
     }
