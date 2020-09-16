@@ -11,7 +11,7 @@
           @change="getData"
         />
       </v-col>
-      <v-col cols="6">
+      <v-col cols="5">
         <v-select
           v-model="subjectRelevances"
           :items="categorysOptions"
@@ -42,7 +42,7 @@
           @change="getData"
         />
       </v-col>
-      <v-col cols="2">
+      <v-col cols="1">
         <v-select
           v-model="versionValue"
           :items="versionOptions"
@@ -51,13 +51,31 @@
           @change="getData"
         />
       </v-col>
+      <v-col cols="1">
+        <v-select
+          v-model="levelValue"
+          :items="levelOpt"
+          dense
+          label="level"
+          @change="getData"
+        />
+      </v-col>
+      <v-col cols="1">
+        <v-select
+          v-model="levelTypeValue"
+          :items="levelTypeOpt"
+          dense
+          label="level type"
+          @change="getData"
+        />
+      </v-col>
     </v-row>
     <v-row>
       <v-col cols="7">
         <v-range-slider
           v-model="years"
-          :max="2019"
-          :min="1900"
+          :max="2020"
+          :min="2007"
           dense
           hide-details
           hint="年份范围"
@@ -103,14 +121,14 @@
           color="light-green"
           :disabled="currentAverageLine.name===null"
           @click="recordAveLine"
-        >记录当前平均距离</v-btn>
+        >记录平均距离</v-btn>
       </v-col>
       <v-col cols="1">
         <v-btn
           :disabled="averageLinedata.legend.length===0"
           color="light-green"
           @click="initAverageLinedata"
-        >清空平均距离图</v-btn>
+        >清空距离图</v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -150,23 +168,23 @@
 
 <script>
 import { getGoogleDistance_tempdata } from '@/api/index'
-import { extendEchartsOpts, coreCategorys, extendLineSeries, defaultCategorySelect } from '@/api/data'
+import { extendEchartsOpts, coreCategorys1, extendLineSeries, defaultCategorySelect1 } from '@/api/data'
 import Base from '@/utils/base'
 
 export default {
-  name: 'MagV2',
+  name: 'WIKIGraph',
   extends: Base,
   data() {
     return {
-      pageName: 'MAG Google 距离中间数据',
+      pageName: 'WIKI Google 距离中间数据',
       typeValue: 1,
       typeOptions: [{ text: '引用数', value: 0 }, { text: '引用交集数', value: 1 }],
       showAve: true,
       subjectTarget: '',
-      subjectRelevances: defaultCategorySelect,
+      subjectRelevances: defaultCategorySelect1,
       methodValue: 'linksin',
-      years: [1945, 2018],
-      categorys: coreCategorys,
+      years: [2007, 2020],
+      categorys: coreCategorys1,
       methodOptions: ['linksin', 'linksout'],
       bfValue: '不适用',
       bfOpt: ['不适用', 1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015],
@@ -175,8 +193,12 @@ export default {
       averageLinedata: { title: '平均逐年距离图', legend: [], x: [], y: [] },
       currentAverageLine: { name: null, line: [] },
       count: 0,
-      versionOptions: [{ text: '未去掉引用为0的数据', value: 'v2' }, { text: '去掉引用为0的数据', value: 'delete_noref_v2' }],
-      versionValue: 'v2'
+      versionOptions: ['v3'],
+      versionValue: 'v3',
+      levelValue: 1000,
+      levelOpt: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000],
+      levelTypeValue: 2,
+      levelTypeOpt: [2, 3]
     }
   },
   computed: {
@@ -225,10 +247,12 @@ export default {
           .join(','),
         version: this.versionValue,
         method: this.methodValue,
-        dbtype: 'mag',
+        dbtype: 'wiki',
         from: this.years[0],
         to: this.years[1],
-        type: this.typeValue
+        type: this.typeValue,
+        level: this.levelValue,
+        levelType: this.levelTypeValue
       }
       getGoogleDistance_tempdata(opt)
         .then(res => {
