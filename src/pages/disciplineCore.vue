@@ -65,6 +65,11 @@ import { getDistanceCore } from '@/api/index'
 import { extendEchartsOpts, coreCategorys1, extendLineSeries, defaultCategorySelect1 } from '@/api/data'
 import Base from '@/utils/base'
 
+coreCategorys1.push({
+  text: 'Theoretical physics',
+  value: 'Theoretical physics'
+})
+
 export default {
   name: 'CoreWiki',
   extends: Base,
