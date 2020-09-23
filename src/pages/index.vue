@@ -16,7 +16,16 @@
           :key="obj.name"
         >
           <a @click="scrollMeTo(obj.href)">
-            <v-list-item-title v-text="obj.name" />
+            <v-list-item-title v-if="obj.badgeCount>0">
+              <v-badge
+                color="orange"
+                :content="obj.badgeCount"
+                inline
+              >
+                {{ obj.name }}
+              </v-badge>
+            </v-list-item-title>
+            <v-list-item-title v-else v-html="obj.name" />
           </a>
         </v-list-item>
       </v-list>
@@ -26,63 +35,67 @@
     <v-main style="padding:0">
       <!-- Provides the application the proper gutter -->
       <v-container fluid>
-        <div>
+        <v-row class="light-blue lighten-5">
+          <aside>30 天内新增的图表标记为橘色</aside>
+        </v-row>
+        <div
+          v-for="(subitems, h1name) in indexObject"
+          :key="h1name"
+          class="mb-5"
+        >
+          <v-row>
+            <a :ref="h1name">
+              <h1>{{ h1name }}</h1>
+            </a>
+          </v-row>
+          <v-row>
+            <v-divider />
+          </v-row>
+
           <div
-            v-for="(subitems, h1name) in indexObject"
-            :key="h1name"
+            v-for="(items, name) in subitems"
+            :key="name"
             class="mb-5"
           >
-            <v-row>
-              <a :ref="h1name">
-                <h1>{{ h1name }}</h1>
-              </a>
+            <v-row><a :ref="name">
+              <h3>{{ name }}</h3>
+            </a>
             </v-row>
             <v-row>
               <v-divider />
             </v-row>
-
-            <div
-              v-for="(items, name) in subitems"
-              :key="name"
-              class="mb-5"
-            >
-              <v-row><a :ref="name">
-                <h3>{{ name }}</h3>
-              </a>
-              </v-row>
-              <v-row>
-                <v-divider />
-              </v-row>
-              <v-row>
-                <v-col
-                  v-for="(item, index) in items"
-                  :key="index"
-                  cols="6"
-                  md="4"
-                  lg="3"
+            <v-row>
+              <v-col
+                v-for="(item, index) in items"
+                :key="index"
+                cols="6"
+                md="4"
+                lg="3"
+              >
+                <v-hover
+                  v-slot:default="{ hover }"
+                  close-delay="200"
                 >
-                  <v-hover
-                    v-slot:default="{ hover }"
-                    close-delay="200"
+                  <v-card
+                    class="mx-auto"
+                    max-width="344"
+                    :elevation="hover ? 16 : 2"
+                    min-height="150"
+                    :to="item.to"
+                    :href="item.href"
+                    :class="(item.update!=null)&&(new Date().getTime()-new Date(item.update).getTime()<2497466968)?'orange':'white'"
                   >
-                    <v-card
-                      class="mx-auto"
-                      max-width="344"
-                      :elevation="hover ? 16 : 2"
-                      min-height="150"
-                      :to="item.to"
-                      :href="item.href"
-                    >
-                      <v-card-title>{{ item.title }}</v-card-title>
-                      <v-card-text>{{ item.text }}</v-card-text>
-                      <v-card-actions />
-                    </v-card>
-                  </v-hover>
-                </v-col>
-              </v-row>
-            </div>
+                    <v-card-title>{{ item.title }}</v-card-title>
+                    <v-card-subtitle v-if="item.update!=null">{{ new Date(item.update).toDateString() }}</v-card-subtitle>
+                    <v-card-text>{{ item.text }}</v-card-text>
+                    <v-card-actions />
+                  </v-card>
+                </v-hover>
+              </v-col>
+            </v-row>
           </div>
         </div>
+
       </v-container>
     </v-main>
   </v-container>
@@ -305,6 +318,12 @@ export default {
               title: 'WIKI Core V3',
               text: '各 Core V3 学科的逐年相关度',
               to: { path: 'DisciplineCore', query: { version: 'v3' }}
+            },
+            {
+              title: 'WIKI Google 中间距离',
+              text: 'WIKI Google 中间距离',
+              to: { path: 'WikiGoogleDistance' },
+              update: '2020-09-16T09:43:03.429Z'
             }
           ],
           'Wikipedia- Core 幂律': [
@@ -442,9 +461,16 @@ export default {
       const retArray = []
       for (const key in this.indexObject) {
         for (const skey in this.indexObject[key]) {
+          let badgeCount = 0
+          for (const item of this.indexObject[key][skey]) {
+            if ((item.update != null) && (new Date().getTime() - new Date(item.update).getTime() < 1297466968)) {
+              badgeCount += 1
+            }
+          }
           retArray.push({
             name: skey,
-            href: `${skey}`
+            href: `${skey}`,
+            badgeCount: badgeCount
           })
         }
       }

@@ -70,6 +70,10 @@ export default new Router({
     name: 'MAGInnerZipTj',
     component: () => import('@/pages/MAGInnerZipTj')
   }, {
+    path: '/WikiGoogleDistance',
+    name: 'WikiGoogleDistance',
+    component: () => import('@/pages/WikiGoogleDistance')
+  }, {
     path: '/GoogleDistance',
     name: 'GoogleDistance',
     component: () => import('@/pages/GoogleDistance')

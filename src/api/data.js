@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-09-04 13:47:55
+ * @LastEditTime: 2020-09-17 00:27:08
  * @Description:
  */
 
@@ -284,7 +284,7 @@ export const coreCategorys = [
 export const defaultCategorySelect = ['Physics', 'Earth science', 'Mathematics', 'Biology', 'Medicine', 'History', 'Philosophy', 'Economics', 'Linguistics', 'Chemistry', 'Sociology', 'Political science', 'Engineering disciplines', 'Computer science']
 
 // 去掉 Earth science 使用 Geology
-export const defaultCategorySelect1 = ['Physics', 'Geology', 'Mathematics', 'Biology', 'Medicine', 'History', 'Philosophy', 'Economics', 'Linguistics', 'Chemistry', 'Sociology', 'Political science', 'Engineering disciplines', 'Computer science']
+export const defaultCategorySelect1 = ['Physics', 'Geology', 'Mathematics', 'Biology', 'Medicine', 'Philosophy', 'Economics', 'Linguistics', 'Chemistry', 'Sociology', 'Political science', 'Engineering disciplines', 'Computer science']
 export const coreCategorys1 = [
   'Materials science',
   'Geography',
@@ -302,7 +302,6 @@ export const coreCategorys1 = [
   'Economics',
   'Political science',
   'Linguistics',
-  'History',
   'Computer science',
   'Artificial intelligence',
   'Engineering disciplines',
