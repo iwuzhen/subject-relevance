@@ -152,6 +152,10 @@
 import { getMasDatav2 } from '@/api/index'
 import { extendEchartsOpts, coreCategorys, extendLineSeries, defaultCategorySelect } from '@/api/data'
 import Base from '@/utils/base'
+coreCategorys.push({
+  text: 'Theoretical physics',
+  value: 'Theoretical physics'
+})
 
 export default {
   name: 'MagV2',
