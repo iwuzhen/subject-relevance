@@ -142,6 +142,12 @@ export default {
           ],
           'MAG v2- 学科相关度': [
             {
+              title: '因果关系-贸易比例',
+              text: ' mag 因果关系-贸易比例',
+              to: '/MagTrade',
+              update: '2020-09-24T09:43:03.429Z'
+            },
+            {
               title: 'MAG google 距离',
               text: 'Mag 学科相关度',
               to: '/MasDistanceV2'

@@ -66,6 +66,10 @@ export default new Router({
     name: 'index',
     component: IndexPage
   }, {
+    path: '/MagTrade',
+    name: 'MagTrade',
+    component: () => import('@/pages/MagTrade')
+  }, {
     path: '/MAGInnerZipTj',
     name: 'MAGInnerZipTj',
     component: () => import('@/pages/MAGInnerZipTj')

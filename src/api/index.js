@@ -172,6 +172,18 @@ export async function getMagUndirectNet(params) {
   // return await cacheRequestGo(requestParams);
 }
 
+//  mag 因果关系-贸易比例
+export async function getYinguoData(params) {
+  const requestParams = {
+    url: '/mag/getYinguoData',
+    method: 'post',
+    data: params
+  }
+  const res = await request(requestParams)
+  return res.data
+  // return await cacheRequestGo(requestParams);
+}
+
 export async function getMasYearRefDist(params) {
   const requestParams = {
     url: '/mag/magyearrefdist',
