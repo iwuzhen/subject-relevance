@@ -177,7 +177,7 @@ export default {
               this.currentAverageLine.name = this.subjectTarget
               res.data.y.push(aveLine)
               res.data.legend.push('平均距离')
-              this.drawChart(res.data, 0, '相关度')
+              this.drawChart(res.data, 0, '比例')
             } else this.drawChart(res.data)
           } else {
             this.loading = false
