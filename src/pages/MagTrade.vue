@@ -156,7 +156,7 @@ export default {
         to: this.years[1]
       }
       // 趋势图
-      getYinguoData(opt)
+      await getYinguoData(opt)
         .then(res => {
           if (res.data) {
             if (this.subjectRelevances.length > 1 && this.showAve) {
@@ -188,7 +188,7 @@ export default {
         })
         // 正负图
       opt.type = 1
-      getYinguoData(opt)
+      await getYinguoData(opt)
         .then(res => {
           if (res.data) {
             this.drawChart(res.data, 1, '影响力')
