@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-09-04 14:08:01
+ * @LastEditTime: 2020-10-13 20:32:26
  * @Description:
  -->
 
@@ -96,6 +96,18 @@
     </v-row>
     <v-row>
       <v-col col="12">
+        <v-card>
+          <v-data-table
+            :headers="girdHeaders"
+            hide-default-footer
+            :items="gridData"
+            class="elevation-1"
+          />
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12">
         <v-card
           class="mx-auto"
           outlined
@@ -150,6 +162,8 @@ export default {
     return {
       pageName: `Core zipf 幂律斜率 ${this.$route.query.version}`,
       loading: false,
+      girdHeaders: [],
+      gridData: [],
       nodeRange: [250, 2500],
       nodeMin: 0,
       subjectSelect: defaultCategorySelect1,
@@ -210,7 +224,7 @@ export default {
     nodeRange: function() {
       this.rangeChange()
     },
-    // 更新图标
+    // 更新图表
     chartOptYear: function(opt) {
       this.myChartObjs[0].setOption(opt, true)
     },
@@ -335,13 +349,39 @@ export default {
       this.calMulitYear()
     },
     async calMulitYear() {
+      // 表头初始化
+      this.girdHeaders = [
+        {
+          text: 'name',
+          align: 'start',
+          value: 'name'
+        }
+      ]
+      for (const year of this.yearOpt) {
+        this.girdHeaders.push(
+          {
+            text: year,
+            align: 'start',
+            value: `${year}`
+          }
+        )
+      }
+      // 表数据初始化
+      this.gridData = []
       const seriesTitleArray = []
       this.loading = true
       for (const subject of this.subjectSelect) {
         const item = await this.handleSlopeTrend(subject)
         console.log(item)
         seriesTitleArray.push(item)
+        const girditem = { name: subject }
+        for (const index in this.yearOpt) {
+          girditem[`${this.yearOpt[index]}`] = item[1].data[index]
+        }
+        this.gridData.push(girditem)
       }
+      console.log('gridData', this.gridData)
+      console.log('girdHeaders', this.girdHeaders)
       seriesTitleArray.sort((x, y) => {
         return y[1].data.slice(-1) - x[1].data.slice(-1)
       })

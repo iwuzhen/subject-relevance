@@ -471,7 +471,7 @@ export default {
           console.log(skey)
           let badgeCount = 0
           for (const item of this.indexObject[key][skey]) {
-            if ((item.update != null) && (new Date().getTime() - new Date(item.update).getTime() < 1297466968)) {
+            if ((item.update != null) && (new Date().getTime() - new Date(item.update).getTime() < 2497466968)) {
               console.log(new Date(item.update).getTime())
               badgeCount += 1
             }
