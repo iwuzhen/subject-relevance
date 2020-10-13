@@ -157,6 +157,11 @@ coreCategorys.push({
   value: 'Theoretical physics'
 })
 
+coreCategorys.push({
+  text: 'Discrete mathematics',
+  value: 'Discrete mathematics'
+})
+
 export default {
   name: 'MagV2',
   extends: Base,
