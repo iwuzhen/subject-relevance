@@ -97,6 +97,7 @@ import ecStat from 'echarts-stat'
 import Base from '@/utils/base'
 const Limiter = require('async-limiter')
 
+magCategory.push('Discrete mathematics')
 // tooyip 位置的x位置
 var tipLegend = 0
 export default {

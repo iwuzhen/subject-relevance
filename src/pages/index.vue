@@ -466,10 +466,13 @@ export default {
     hrefArray: function() {
       const retArray = []
       for (const key in this.indexObject) {
+        console.log(key)
         for (const skey in this.indexObject[key]) {
+          console.log(skey)
           let badgeCount = 0
           for (const item of this.indexObject[key][skey]) {
             if ((item.update != null) && (new Date().getTime() - new Date(item.update).getTime() < 1297466968)) {
+              console.log(new Date(item.update).getTime())
               badgeCount += 1
             }
           }
