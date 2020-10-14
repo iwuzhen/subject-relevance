@@ -62,6 +62,16 @@
           </template>
         </v-range-slider>
       </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="methodSelect"
+          :items="methodOpt"
+          dense
+          deletable-chips
+          label="统计因子"
+          @change="getData"
+        />
+      </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
@@ -117,7 +127,9 @@ export default {
   extends: Base,
   data() {
     return {
-      pageName: ' mag 因果关系-贸易比例 ',
+      pageName: 'mag 因果关系-贸易比例',
+      methodSelect: 'article',
+      methodOpt: ['article', 'linksin', 'linksout'],
       showAve: true,
       subjectTarget: '',
       subjectRelevances: defaultCategorySelect,
@@ -160,6 +172,7 @@ export default {
           })
           .join(','),
         db: 'mag',
+        method: this.methodSelect,
         type: 0,
         from: this.years[0],
         to: this.years[1]
