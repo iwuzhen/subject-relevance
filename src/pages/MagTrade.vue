@@ -129,7 +129,7 @@ export default {
     return {
       pageName: 'mag 因果关系-贸易比例',
       methodSelect: 'article',
-      methodOpt: ['article', 'linksin', 'linksout'],
+      methodOpt: ['article', 'linksin', 'linksout', { text: 'Import_and_export', value: 'Import_and_export' }],
       showAve: true,
       subjectTarget: '',
       subjectRelevances: defaultCategorySelect,
