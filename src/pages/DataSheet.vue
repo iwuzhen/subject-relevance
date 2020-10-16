@@ -7,19 +7,13 @@
       <v-spacer />
     </v-row>
 
-    <v-row>
+    <v-row v-for="year in graphDepYears" :key="year">
       <v-spacer />
       <v-col>
-        <Sheet v-if="gflag2" title="2000年贸易度依赖" desc="通过 贸易度 距离得出的相关度关系" :storagekey="gridkey2" :data="gridData2" @sheetSave="sheetSave" /></v-col>
+        <SheetX v-if="graphDepSetting['flag_'+year]" :title="''+ year + '年贸易度依赖'" desc="通过 贸易度 距离得出的相关度关系。" :storagekey="'subjectDep_'+year" :data="graphDepSetting['gridData_'+year]" @sheetSave="sheetSave" /></v-col>
       <v-spacer />
     </v-row>
 
-    <v-row>
-      <v-spacer />
-      <v-col>
-        <Sheet v-if="gflag3" title="2020年贸易度依赖" desc="通过 贸易度 距离得出的相关度关系" :storagekey="gridkey3" :data="gridData3" @sheetSave="sheetSave" /></v-col>
-      <v-spacer />
-    </v-row>
   </v-container>
 </template>
 
@@ -28,11 +22,13 @@ import { getStorage, createStorage } from '@/api/index'
 import Base from '@/utils/base'
 
 import Sheet from '@/components/Sheet'
+import SheetX from '@/components/SheetX'
 
 export default {
   name: 'DataSheel',
   components: {
-    Sheet
+    Sheet,
+    SheetX
   },
   extends: Base,
   data() {
@@ -41,13 +37,14 @@ export default {
       gridData1: [['']],
       gflag1: false,
       gridkey1: 'subjectLevel',
-      gridData2: [['']],
-      gflag2: false,
-      gridkey2: 'subjectdep2000',
-      gridData3: [['']],
-      gflag3: false,
-      gridkey3: 'subjectdep2020'
-
+      graphDepYears: [1986, 1996, 2006, 2016],
+      graphDepSetting: {}
+      // gridData2: [['']],
+      // gflag2: false,
+      // gridkey2: 'subjectdepX2000',
+      // gridData3: [['']],
+      // gflag3: false,
+      // gridkey3: 'subjectdepX2020'
     }
   },
   mounted() {
@@ -59,14 +56,11 @@ export default {
       let retData = await this.getStorageData(this.gridkey1)
       this.gridData1 = retData !== null ? retData : [['']]
       this.gflag1 = true
-
-      retData = await this.getStorageData(this.gridkey2)
-      this.gridData2 = retData !== null ? retData : [['']]
-      this.gflag2 = true
-
-      retData = await this.getStorageData(this.gridkey3)
-      this.gridData3 = retData !== null ? retData : [['']]
-      this.gflag3 = true
+      for (const year of this.graphDepYears) {
+        retData = await this.getStorageData('subjectDep_' + year)
+        this.$set(this.graphDepSetting, 'gridData_' + year, retData !== null ? retData : [['']])
+        this.$set(this.graphDepSetting, 'flag_' + year, true)
+      }
     },
     async getStorageData(key) {
       const opt = {
@@ -76,7 +70,6 @@ export default {
       return data.data.Data
     },
     async sheetSave(arg) {
-      console.log(arg)
       const opt = {
         path: arg[0],
         data: arg[1]

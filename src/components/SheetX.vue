@@ -9,6 +9,7 @@
     <v-card-text>
       <aside>{{ desc }}</aside>
     </v-card-text>
+    <v-card-text> <p><code>.</code>:&lt;0.05 <code>*</code>:0.05~0.1 <code>**</code>:0.1~0.15 <code>***</code>:&gt;0.15</p></v-card-text>
     <v-card-text>
       <HotTable ref="hotTableComponent" :cells="cell" :data="data" :manual-column-move="true" :row-headers="false" :col-headers="false" license-key="non-commercial-and-evaluation" />
     </v-card-text>
@@ -40,30 +41,39 @@ function firstRowRenderer(instance, td, row, col, prop, value, cellProperties) {
   td.style.color = 'green'
   td.style.background = '#CEC'
 }
-function negativeValueRenderer(instance, td, row, col, prop, value, cellProperties) {
+function SheetXValueRenderer(instance, td, row, col, prop, value, cellProperties) {
   Handsontable.renderers.TextRenderer.apply(this, arguments)
 
   // if row contains negative number
-  if (parseInt(value, 10) < 0) {
-    // add class "negative"
-    td.className = 'make-me-red'
-  }
+  const nm = parseFloat(value)
 
+  td.style.color = 'black'
   if (!value || value === '') {
     td.style.background = '#EEE'
+  } else if (nm < 0.05) {
+    td.innerHTML = '.'
+    // const textNode = document.createTextNode('x')
+    // td.replaceChild(textNode)
+  } else if (nm < 0.1 && nm > 0.05) {
+    td.innerHTML = '*'
+    // const textNode = document.createTextNode('xx')
+    // td.replaceChild(textNode)
+  } else if (nm < 0.15 && nm > 0.1) {
+    td.innerHTML = '**'
+    // const textNode = document.createTextNode('xx')
+    // td.replaceChild(textNode)
+  } else if (nm > 0.15) {
+    td.innerHTML = '***'
+    // const textNode = document.createTextNode('xx')
+    // td.replaceChild(textNode)
   } else {
-    if (value === 'Nissan') {
-      td.style.fontStyle = 'italic'
-    }
-    // td.style.fontWeight = 'bold'
-    td.style.color = 'black'
     td.style.background = ''
   }
 }
-Handsontable.renderers.registerRenderer('negativeValueRenderer', negativeValueRenderer)
+Handsontable.renderers.registerRenderer('SheetXValueRenderer', SheetXValueRenderer)
 
 export default {
-  name: 'Sheet',
+  name: 'SheetX',
   components: {
     HotTable
   },
@@ -100,7 +110,7 @@ export default {
       if (row === 0) {
         cellProperties.renderer = firstRowRenderer // uses function directly
       } else {
-        cellProperties.renderer = 'negativeValueRenderer' // uses lookup map
+        cellProperties.renderer = 'SheetXValueRenderer' // uses lookup map
       }
       return cellProperties
     },
