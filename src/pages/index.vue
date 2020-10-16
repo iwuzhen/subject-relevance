@@ -107,8 +107,8 @@ export default {
   data() {
     return {
       indexObject: {
-        'Tree View': {
-          'tree  view': [
+        'Structure': {
+          'Tree  View': [
             {
               title: 'Tree Viewer',
               text: 'WIKI 分类文章层次浏览',
@@ -123,6 +123,14 @@ export default {
               title: 'Mag Fos Tree',
               text: 'Mag Fos 层次 tree',
               to: '/MagFosTree'
+            }
+          ],
+          '学科层次归纳': [
+            {
+              title: '学科依赖层次',
+              text: '学科依赖层次等 3 个表格，比引力图层次鲜明',
+              to: '/DataSheet',
+              update: '2020-10-14T09:43:03.429Z'
             }
           ]
         },
@@ -466,13 +474,10 @@ export default {
     hrefArray: function() {
       const retArray = []
       for (const key in this.indexObject) {
-        console.log(key)
         for (const skey in this.indexObject[key]) {
-          console.log(skey)
           let badgeCount = 0
           for (const item of this.indexObject[key][skey]) {
             if ((item.update != null) && (new Date().getTime() - new Date(item.update).getTime() < 2497466968)) {
-              console.log(new Date(item.update).getTime())
               badgeCount += 1
             }
           }

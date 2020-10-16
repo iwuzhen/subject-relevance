@@ -12,11 +12,13 @@
   },
   "dependencies": {
     "3d-force-graph": "^1.66.7",
+    "@handsontable/vue": "^5.1.0",
     "async-limiter": "^2.0.0",
     "axios": "^0.19.0",
     "core-js": "^3.5.0",
     "echarts": "^4.8.0",
     "echarts-stat": "^1.1.1",
+    "handsontable": "^8.1.0",
     "rxjs": "^6.6.2",
     "uuid": "^7.0.3",
     "vue": "^2.6.12",

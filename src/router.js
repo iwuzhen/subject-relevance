@@ -70,6 +70,10 @@ export default new Router({
     name: 'MagTrade',
     component: () => import('@/pages/MagTrade')
   }, {
+    path: '/DataSheet',
+    name: 'DataSheet',
+    component: () => import('@/pages/DataSheet')
+  }, {
     path: '/MAGInnerZipTj',
     name: 'MAGInnerZipTj',
     component: () => import('@/pages/MAGInnerZipTj')

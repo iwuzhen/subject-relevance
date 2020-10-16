@@ -103,7 +103,7 @@
           color="light-green"
           :disabled="currentAverageLine.name===null"
           @click="recordAveLine"
-        >记录当前平均距离</v-btn>
+        >记录平均距离</v-btn>
       </v-col>
       <v-col cols="1">
         <v-btn
@@ -169,7 +169,10 @@ export default {
     return {
       pageName: 'MAG 学科相关度 v2',
       qsValue: -1,
-      qsOptions: [{ text: '不筛选', value: -1 }, { text: '去掉被引用为0的文章，剩余7000万+', value: -2 }],
+      qsOptions: [{ text: '不筛选', value: -1 },
+        { text: '去掉被引用为0的文章，剩余7000万+', value: -2 },
+        { text: '引用top百分之十文章', value: 10 },
+        { text: '引用top百分之三十文章', value: 30 }],
       showAve: true,
       subjectTarget: '',
       subjectRelevances: defaultCategorySelect,

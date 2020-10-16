@@ -105,6 +105,28 @@ export async function getScaleTrend(params) {
   return await cacheRequestGo(requestParams)
 }
 
+// 非结构化数据服务器简易存储
+export async function getStorage(params) {
+  const requestParams = {
+    url: '/storage/first',
+    method: 'get',
+    params: params
+  }
+  const res = await requestgo(requestParams)
+  return res.data
+}
+
+// 非结构化数据服务器简易存储
+export async function createStorage(params) {
+  const requestParams = {
+    url: '/storage/create',
+    method: 'post',
+    data: params
+  }
+  const res = await requestgo(requestParams)
+  return res.data
+}
+
 export async function getTranslate(params) {
   const requestParams = {
     url: '/utils/translate',
