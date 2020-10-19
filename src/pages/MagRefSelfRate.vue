@@ -34,16 +34,16 @@
       </v-col>
     </v-row>
     <v-row>
-      <!-- <v-col cols="8">
+      <v-col cols="8">
         <v-range-slider
           v-model="years"
           :max="2019"
           :min="1900"
           dense
           hide-details
-          @change="getData"
           hint="年份范围"
           class="align-center"
+          @change="getData"
         >
           <template v-slot:prepend>
             <p style="width: 100px">年份范围</p>
@@ -55,7 +55,7 @@
               type="number"
               style="width: 60px"
               @change="$set(years, 0, $event)"
-            ></v-text-field>
+            />
           </template>
           <template v-slot:append>
             <v-text-field
@@ -66,10 +66,10 @@
               type="number"
               style="width: 60px"
               @change="$set(years, 1, $event)"
-            ></v-text-field>
+            />
           </template>
         </v-range-slider>
-      </v-col> -->
+      </v-col>
       <v-col>
         <v-btn
           :color="showAve ? 'light-green' : 'lime'"
@@ -130,21 +130,38 @@ export default {
   methods: {
     async getData() {
       if (this.subjectTarget.length < 1) {
-        // this.$message.error("请选择完整");
         return false
       }
       this.loading = true
       const opt = {
         str: this.subjectTarget.join(','),
         method: this.methodValue,
-        from: this.years[0],
-        to: this.years[1],
+        from: 1900,
+        to: 2019,
         version: this.versionValue
       }
       try {
         const res = await getMagRefSelfRate(opt)
+        console.log(res.data)
+        const yearX = res.data.x
+        let first = -1; let last = 10000
+        for (const i in yearX) {
+          if (first === -1 && yearX[i] >= this.years[0]) {
+            first = i
+          }
+          if (last === 10000 && yearX[i] >= this.years[1]) {
+            last = i
+          }
+        }
+        // 年份分割
+        res.data.x = yearX.slice(first, last)
+        // 数据分割
+        const datatmp = []
+        for (const row of res.data.y) {
+          datatmp.push(row.slice(first, last))
+        }
+        res.data.y = datatmp
         if (this.subjectTarget.length > 1 && this.showAve) {
-          console.log(res.data)
           const aveLine = []
           for (const i in res.data.x) {
             let ss = 0
