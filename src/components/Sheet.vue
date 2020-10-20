@@ -48,7 +48,11 @@ function negativeValueRenderer(instance, td, row, col, prop, value, cellProperti
     // add class "negative"
     td.className = 'make-me-red'
   }
-
+  if (row === 6) {
+    td.style['border-top-color'] = 'orange'
+    td.style['border-top-width'] = '4px'
+    td.style['border-top-style'] = 'solid'
+  }
   if (!value || value === '') {
     td.style.background = '#EEE'
   } else {
@@ -87,6 +91,25 @@ export default {
   },
   data() {
     return {
+      customBorders: [
+        {
+          range: {
+            from: {
+              row: 7,
+              col: 0
+            },
+            to: {
+              row: 7,
+              col: 10
+            }
+          },
+          left: {},
+          right: {},
+          top: { width: 2,
+            color: '#5292F7' },
+          bottom: {}
+        }
+      ]
     }
   },
   computed: {

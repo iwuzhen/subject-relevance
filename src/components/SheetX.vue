@@ -9,7 +9,7 @@
     <v-card-text>
       <aside>{{ desc }}</aside>
     </v-card-text>
-    <v-card-text> <p><code>.</code>:&lt;0.05 <code>*</code>:0.05~0.1 <code>**</code>:0.1~0.15 <code>***</code>:&gt;0.15</p></v-card-text>
+    <v-card-text> <p><code>*</code>:&lt;0.05 <code>**</code>:0.05~0.1 <code>***</code>:0.1~0.15 <code>****</code>:&gt;0.15</p></v-card-text>
     <v-card-text>
       <HotTable ref="hotTableComponent" :cells="cell" :data="data" :manual-column-move="true" :row-headers="false" :col-headers="false" license-key="non-commercial-and-evaluation" />
     </v-card-text>
@@ -46,24 +46,28 @@ function SheetXValueRenderer(instance, td, row, col, prop, value, cellProperties
 
   // if row contains negative number
   const nm = parseFloat(value)
-
+  if (col !== 0) {
+    td.className = 'htCenter'
+  } else {
+    td.className = 'htLeft'
+  }
   td.style.color = 'black'
   if (!value || value === '') {
     td.style.background = '#EEE'
   } else if (nm < 0.05) {
-    td.innerHTML = '.'
+    td.innerHTML = '*'
     // const textNode = document.createTextNode('x')
     // td.replaceChild(textNode)
   } else if (nm < 0.1 && nm > 0.05) {
-    td.innerHTML = '*'
-    // const textNode = document.createTextNode('xx')
-    // td.replaceChild(textNode)
-  } else if (nm < 0.15 && nm > 0.1) {
     td.innerHTML = '**'
     // const textNode = document.createTextNode('xx')
     // td.replaceChild(textNode)
-  } else if (nm > 0.15) {
+  } else if (nm < 0.15 && nm > 0.1) {
     td.innerHTML = '***'
+    // const textNode = document.createTextNode('xx')
+    // td.replaceChild(textNode)
+  } else if (nm > 0.15) {
+    td.innerHTML = '****'
     // const textNode = document.createTextNode('xx')
     // td.replaceChild(textNode)
   } else {
