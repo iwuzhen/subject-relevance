@@ -169,7 +169,7 @@ export default {
     return {
       pageName: 'MAG 学科相关度 v2',
       qsValue: -1,
-      qsOptions: [{ text: '不筛选', value: -1 },
+      qsOptions: [{ text: '去掉引用为0的。不去重的', value: -100 }, { text: '不筛选', value: -1 },
         { text: '去掉被引用为0的文章，剩余7000万+', value: -2 },
         { text: '引用top百分之十文章', value: 10 },
         { text: '引用top百分之三十文章', value: 30 }],
