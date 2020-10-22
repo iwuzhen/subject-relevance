@@ -72,6 +72,16 @@
           @change="getData"
         />
       </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="versionSelect"
+          :items="versionOpt"
+          dense
+          deletable-chips
+          label="基础数据"
+          @change="getData"
+        />
+      </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
@@ -130,6 +140,8 @@ export default {
       pageName: 'mag 因果关系-贸易比例',
       methodSelect: 'article',
       methodOpt: ['article', 'linksin', 'linksout', { text: 'Import_and_export', value: 'Import_and_export' }],
+      versionSelect: 'v2',
+      versionOpt: [{ text: 'v2 全集,去重', value: 'v2' }, { text: 'v2 全集,不去重', value: 'v2_distinct' }, { text: 'v2 去 0,不去重', value: 'delete_noref_v2_distinct' }],
       showAve: true,
       subjectTarget: '',
       subjectRelevances: defaultCategorySelect,
@@ -175,14 +187,14 @@ export default {
         method: this.methodSelect,
         type: 0,
         from: this.years[0],
-        to: this.years[1]
+        to: this.years[1],
+        version: this.versionSelect
       }
       // 趋势图
       await getYinguoData(opt)
         .then(res => {
           if (res.data) {
             if (this.subjectRelevances.length > 1 && this.showAve) {
-              console.log(res.data)
               this.averageLinedata.x = res.data.x
               const aveLine = []
               for (const i in res.data.x) {
@@ -226,7 +238,6 @@ export default {
         })
     },
     drawChart(data, chartindex, yname) {
-      console.log(data)
       const options = this.setOptions(data, yname)
       this.myChartObjs[chartindex].setOption(options, true)
       this.loading = false
