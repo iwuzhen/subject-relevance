@@ -130,6 +130,11 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col>
+        <comment storagekey="Maslinev2_Chart_2" />
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col col="12">
         <v-card
           class="mx-auto"
@@ -145,6 +150,11 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <comment storagekey="Maslinev2_Chart_2" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -152,6 +162,8 @@
 import { getMasDatav2 } from '@/api/index'
 import { extendEchartsOpts, coreCategorys, extendLineSeries, defaultCategorySelect } from '@/api/data'
 import Base from '@/utils/base'
+import comment from '@/components/comment'
+
 coreCategorys.push({
   text: 'Theoretical physics',
   value: 'Theoretical physics'
@@ -164,6 +176,9 @@ coreCategorys.push({
 
 export default {
   name: 'MagV2',
+  components: {
+    comment
+  },
   extends: Base,
   data() {
     return {

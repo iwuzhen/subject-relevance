@@ -1,6 +1,11 @@
 <template>
   <v-container fluid>
     <v-row>
+      <v-col>
+        <comment storagekey="testComment" />
+      </v-col>
+    </v-row>
+    <v-row>
       <v-spacer />
       <v-col>
         <Sheet v-if="gflag1" title="学科亲密度" desc="通过 Google 距离得出的相关度关系" :storagekey="gridkey1" :data="gridData1" @sheetSave="sheetSave" /></v-col>
@@ -51,6 +56,7 @@ import Base from '@/utils/base'
 
 import Sheet from '@/components/Sheet'
 import SheetX from '@/components/SheetX'
+import comment from '@/components/comment'
 
 const zip = (...rows) => [...rows[0]].map((_, c) => rows.map(row => row[c]))
 async function calYearDepData(year) {
@@ -101,7 +107,8 @@ export default {
   name: 'DataSheel',
   components: {
     Sheet,
-    SheetX
+    SheetX,
+    comment
   },
   extends: Base,
   data() {

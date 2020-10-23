@@ -19,6 +19,7 @@
     "echarts": "^4.8.0",
     "echarts-stat": "^1.1.1",
     "handsontable": "^8.1.0",
+    "markdown-it-vue": "^1.1.4",
     "rxjs": "^6.6.2",
     "uuid": "^7.0.3",
     "vue": "^2.6.12",

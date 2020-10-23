@@ -100,6 +100,11 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col>
+        <comment storagekey="MagTrade_Chart_1" />
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col col="12">
         <v-card
           class="mx-auto"
@@ -115,6 +120,11 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <comment storagekey="MagTrade_Chart_2" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -122,6 +132,8 @@
 import { getYinguoData } from '@/api/index'
 import { extendEchartsOpts, coreCategorys, extendLineSeries, defaultCategorySelect } from '@/api/data'
 import Base from '@/utils/base'
+import comment from '@/components/comment'
+
 coreCategorys.push({
   text: 'Theoretical physics',
   value: 'Theoretical physics'
@@ -134,6 +146,9 @@ coreCategorys.push({
 
 export default {
   name: 'MagTrade',
+  components: {
+    comment
+  },
   extends: Base,
   data() {
     return {
