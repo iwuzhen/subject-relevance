@@ -5,13 +5,18 @@
   >
     <v-container>
       <v-row>
-        <v-col>note</v-col>
-        <v-btn v-show="!textAreaStatus" small color="primary" @click="doEdit">
-          编辑笔记
-        </v-btn>
-        <v-btn v-show="textAreaStatus" small color="success" @click="saveGirdData">
-          保存笔记
-        </v-btn>
+        <v-col cols="auto">note</v-col>
+        <v-spacer />
+        <v-col v-if="textAreaStatus" cols="auto"><a href="http://www.aqcoder.com/markdown" target="_blank" rel="noopener noreferrer">Markdown example</a></v-col>
+
+        <v-col cols="auto">
+          <v-btn v-if="!textAreaStatus" small color="primary" @click="doEdit">
+            编辑笔记
+          </v-btn>
+          <v-btn v-if="textAreaStatus" small color="success" @click="saveGirdData">
+            保存笔记
+          </v-btn>
+        </v-col>
       </v-row>
       <v-row>
         <v-scroll-x-transition>

@@ -1,11 +1,6 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col>
-        <comment storagekey="testComment" />
-      </v-col>
-    </v-row>
-    <v-row>
       <v-spacer />
       <v-col>
         <Sheet v-if="gflag1" title="学科亲密度" desc="通过 Google 距离得出的相关度关系" :storagekey="gridkey1" :data="gridData1" @sheetSave="sheetSave" /></v-col>
@@ -46,7 +41,11 @@
         <SheetX v-if="graphDepSetting['flag_'+year]" :title="''+ year + '年贸易度依赖'" desc="通过 贸易度 距离得出的相关度关系。" :storagekey="'subjectDep_'+year" :data="graphDepSetting['gridData_'+year]" @sheetSave="sheetSave" /></v-col>
       <v-spacer />
     </v-row>
-
+    <v-row>
+      <v-col>
+        <comment storagekey="DataSheet_graph_1" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 

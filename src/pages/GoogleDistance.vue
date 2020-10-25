@@ -103,14 +103,14 @@
           color="light-green"
           :disabled="currentAverageLine.name===null"
           @click="recordAveLine"
-        >记录当前平均距离</v-btn>
+        >记录平均距离</v-btn>
       </v-col>
       <v-col cols="1">
         <v-btn
           :disabled="averageLinedata.legend.length===0"
           color="light-green"
           @click="initAverageLinedata"
-        >清空平均距离图</v-btn>
+        >清空平均距离</v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -130,6 +130,11 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col>
+        <comment storagekey="GoogleDistance_graph_1" />
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col col="12">
         <v-card
           class="mx-auto"
@@ -145,6 +150,11 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <comment storagekey="GoogleDistance_graph_2" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -152,9 +162,13 @@
 import { getGoogleDistance_tempdata } from '@/api/index'
 import { extendEchartsOpts, coreCategorys, extendLineSeries, defaultCategorySelect } from '@/api/data'
 import Base from '@/utils/base'
+import comment from '@/components/comment'
 
 export default {
   name: 'MagV2',
+  components: {
+    comment
+  },
   extends: Base,
   data() {
     return {

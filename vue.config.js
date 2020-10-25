@@ -2,21 +2,21 @@ module.exports = {
   "devServer": {
     "proxy": {
       "/api": {
-        "target": "https://lmd.wiki.knogen.com:10443/api/",
+        "target": "https://wiki.lmd.knogen.com:10443/api/",
         "changeOrigin": true,
         "pathRewrite": {
           "^/api": "/"
         }
       },
       "/wapi": {
-        "target": "https://lmd.wiki.knogen.com:10443/wapi/",
+        "target": "https://wiki.lmd.knogen.com:10443/wapi/",
         "changeOrigin": true,
         "pathRewrite": {
           "^/wapi": "/"
         }
       },
       "/goapi": {
-        "target": "https://lmd.wiki.knogen.com:10443/goapi/",
+        "target": "https://wiki.lmd.knogen.com:10443/goapi/",
         "changeOrigin": true,
         "pathRewrite": {
           "^/goapi": "/"
