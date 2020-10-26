@@ -119,7 +119,7 @@ export default {
   data() {
     return {
       versionValue: 'v2',
-      versionOptions: ['v1', 'v2'],
+      versionOptions: ['v1', { text: 'v2全集,去重', value: 'v2' }, { text: 'v2全集,不去重', value: 'v2_distinct' }, { text: 'v2去0,不去重', value: 'delete_noref_v2_distinct' }],
       pageName: 'MAG 学科自恋度 v1&v2',
       showAve: true,
       subjectTarget: defaultCategorySelect,
