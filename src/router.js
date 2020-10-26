@@ -74,6 +74,10 @@ export default new Router({
     name: 'DataSheet',
     component: () => import('@/pages/DataSheet')
   }, {
+    path: '/MAGSankey',
+    name: 'MAGSankey',
+    component: () => import('@/pages/MAGSankey')
+  }, {
     path: '/MAGInnerZipTj',
     name: 'MAGInnerZipTj',
     component: () => import('@/pages/MAGInnerZipTj')

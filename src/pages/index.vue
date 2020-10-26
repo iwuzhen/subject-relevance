@@ -146,6 +146,12 @@ export default {
               title: 'Mag 哑铃图',
               text: '学科间幂律关系（v1）',
               to: '/MagFunnel'
+            },
+            {
+              title: 'MAG 学科桑基图',
+              text: 'MAG 学科桑基图',
+              to: '/MAGSankey',
+              update: '2020-10-26T09:43:03.429Z'
             }
           ],
           'MAG v2- 学科相关度': [
