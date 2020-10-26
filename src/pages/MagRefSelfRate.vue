@@ -96,6 +96,11 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <comment storagekey="MagRefSelfRate_Chart_1" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -103,9 +108,13 @@
 import { getMagRefSelfRate } from '@/api/index'
 import { extendEchartsOpts, coreCategorys, extendLineSeries, defaultCategorySelect } from '@/api/data'
 import Base from '@/utils/base'
+import comment from '@/components/comment'
 
 export default {
   name: 'Mag',
+  components: {
+    comment
+  },
   extends: Base,
   data() {
     return {
@@ -117,7 +126,7 @@ export default {
       methodValue: 'linksin',
       years: [1900, 2019],
       categorys: coreCategorys,
-      methodOptions: ['linksout', 'linksin'],
+      methodOptions: ['article', 'linksout', 'linksin'],
       loading: false,
       myChartIds: ['masChart1']
     }

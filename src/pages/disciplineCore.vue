@@ -57,6 +57,11 @@
         />
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <comment storagekey="disciplineCore_Chart_2" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -64,6 +69,7 @@
 import { getDistanceCore } from '@/api/index'
 import { extendEchartsOpts, coreCategorys1, extendLineSeries, defaultCategorySelect1 } from '@/api/data'
 import Base from '@/utils/base'
+import comment from '@/components/comment'
 
 coreCategorys1.push({
   text: 'Theoretical physics',
@@ -72,6 +78,9 @@ coreCategorys1.push({
 
 export default {
   name: 'CoreWiki',
+  components: {
+    comment
+  },
   extends: Base,
   data() {
     return {
@@ -154,6 +163,10 @@ export default {
       this.levelOpt = [3]
     } else if (this.$route.query.version === 'v3') {
       this.levelOpt = [2, 3]
+    } else if (this.$route.query.version === 'v4') {
+      this.levelOpt = [2]
+      this.levelSelect = 2
+      this.methodValue = 'linksout'
     }
   },
   methods: {
