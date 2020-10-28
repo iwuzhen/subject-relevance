@@ -57,284 +57,295 @@ const MagFunnel = () => import('@/pages/MagFunnel')
 const MagFosTree = () => import('@/pages/MagFosTree')
 const MAGBLLevel = () => import('@/pages/MAGBLLevel')
 
+import { ChartMap } from '@/api/chartData'
+
 Vue.use(Router)
+const routes = [{
+  path: '/',
+  name: 'index',
+  component: IndexPage
+}, {
+  path: '/MagTrade',
+  name: 'MagTrade',
+  component: () => import('@/pages/MagTrade')
+}, {
+  path: '/DataSheet',
+  name: 'DataSheet',
+  component: () => import('@/pages/DataSheet')
+}, {
+  path: '/MAGSankey',
+  name: 'MAGSankey',
+  component: () => import('@/pages/MAGSankey')
+}, {
+  path: '/MAGInnerZipTj',
+  name: 'MAGInnerZipTj',
+  component: () => import('@/pages/MAGInnerZipTj')
+}, {
+  path: '/WikiGoogleDistance',
+  name: 'WikiGoogleDistance',
+  component: () => import('@/pages/WikiGoogleDistance')
+}, {
+  path: '/GoogleDistance',
+  name: 'GoogleDistance',
+  component: () => import('@/pages/GoogleDistance')
+}, {
+  path: '/MagFunnel',
+  name: 'MagFunnel',
+  component: MagFunnel
+}, {
+  path: '/MAGBLLevel',
+  name: 'MAGBLLevel',
+  component: MAGBLLevel
+},
+{
+  path: '/SmallWorldDirectedCoreV2',
+  name: 'SmallWorldDirectedCoreV2',
+  component: SmallWorldDirectedCoreV2
+},
+{
+  path: '/MasCompositionByYear',
+  name: 'MasCompositionByYear',
+  component: MasCompositionByYear
+},
+{
+  path: '/MAGRefDist',
+  name: 'MAGRefDist',
+  component: MAGRefDist
+},
+{
+  path: '/MAGRefDistV2',
+  name: 'MAGRefDistV2',
+  component: MAGRefDistV2
+},
+{
+  path: '/MagRefSelfRate',
+  name: 'MagRefSelfRate',
+  component: MagRefSelfRate
+},
+{
+  path: '/MagDirectNet',
+  name: 'MagDirectNet',
+  component: MagDirectNet
+},
+{
+  path: '/MagDirectNetV3',
+  name: 'MagDirectNetV3',
+  component: MagDirectNetV3
+},
+{
+  path: '/MagDirectNetV4',
+  name: 'MagDirectNetV4',
+  component: MagDirectNetV4
+},
+
+{
+  path: '/MagAAAInfo',
+  name: 'MagAAAInfo',
+  component: MagAAAInfo
+},
+{
+  path: '/MagAAAInfoV2',
+  name: 'MagAAAInfoV2',
+  component: MagAAAInfoV2
+},
+{
+  path: '/CoreSWUndirectLimit',
+  name: 'CoreSWUndirectLimit',
+  component: CoreSWUndirectLimit
+},
+{
+  path: '/CoreSMUndirected',
+  name: 'CoreSMUndirected',
+  component: CoreSMUndirected
+},
+{
+  path: '/discipline',
+  name: 'discipline',
+  component: Discipline
+},
+{
+  path: '/masline',
+  name: 'masline',
+  component: Masline
+},
+{
+  path: '/MasDistanceV2',
+  name: 'MasDistanceV2',
+  component: MasDistanceV2
+},
+{
+  path: '/MagGraph',
+  name: 'MagGraph',
+  component: MagGraph
+},
+{
+  path: '/ArticlesTotal',
+  name: 'ArticlesTotal',
+  component: wikiPageCount
+},
+{
+  path: '/SubDiscipline',
+  name: 'SubDiscipline',
+  component: SubDiscipline
+},
+{
+  path: '/MasArticlesTotal',
+  name: 'MasArticlesTotal',
+  component: MasArticlesTotal
+},
+{
+  path: '/MasArticlesTotalV2',
+  name: 'MasArticlesTotalV2',
+  component: MasArticlesTotalV2
+},
+{
+  path: '/powerlaw',
+  name: 'powerlaw',
+  component: PowerLaw
+},
+{
+  path: '/viewandedits',
+  name: 'viewandedits',
+  component: ViewAndEdits
+},
+{
+  path: '/SmallWorldUndirected',
+  name: 'SmallWorldUndirected',
+  component: SmallWorldUndirected
+},
+{
+  path: '/SmallWorldDirected',
+  name: 'SmallWorldDirected',
+  component: SmallWorldDirected
+},
+{
+  path: '/powerLawPageRank',
+  name: 'powerLawPageRank',
+  component: powerLawPageRank
+},
+{
+  path: '/SmallWorldUndirectedLimit',
+  name: 'SmallWorldUndirectedLimit',
+  component: SmallWorldUndirectedLimit
+},
+{
+  path: '/DegreeDistribution',
+  name: 'DegreeDistribution',
+  component: DegreeDistribution
+},
+{
+  path: '/ZipfByNodes',
+  name: 'ZipfByNodes',
+  component: ZipfByNodes
+},
+{
+  path: '/WikiTree',
+  name: 'WikiTree',
+  component: WikiTree
+},
+{
+  path: '/BanShuaiQi',
+  name: 'BanShuaiQi',
+  component: BanShuaiQi
+},
+{
+  path: '/TopArticles',
+  name: 'TopArticles',
+  component: TopArticles
+},
+{
+  path: '/BritannicaTree',
+  name: 'BritannicaTree',
+  component: BritannicaTree
+},
+{
+  path: '/disciplinePeople',
+  name: 'disciplinePeople',
+  component: disciplinePeople
+},
+{
+  path: '/PeopleZipfByNodes',
+  name: 'PeopleZipfByNodes',
+  component: PeopleZipfByNodes
+},
+{
+  path: '/PeopleInnerZipfByNodes',
+  name: 'PeopleInnerZipfByNodes',
+  component: PeopleInnerZipfByNodes
+},
+{
+  path: '/DisciplineCore',
+  name: 'DisciplineCore',
+  component: DisciplineCore
+},
+{
+  path: '/CoreZipfByNodes',
+  name: 'CoreZipfByNodes',
+  component: CoreZipfByNodes
+},
+{
+  path: '/CoreLinks',
+  name: 'CoreLinks',
+  component: CoreLinks
+},
+{
+  path: '/CoreArticlesTotal',
+  name: 'CoreArticlesTotal',
+  component: CoreArticlesTotal
+},
+{
+  path: '/CoreArticlesTotalV2',
+  name: 'CoreArticlesTotalV2',
+  component: CoreArticlesTotalV2
+},
+{
+  path: '/CoreArticlesTotalNew_v3',
+  name: 'CoreArticlesTotalNew_v3',
+  component: CoreArticlesTotalNew_v3
+},
+{
+  path: '/MagZipf',
+  name: 'MagZipf',
+  component: MagZipf
+},
+{
+  path: '/MagZipfV2',
+  name: 'MagZipfV2',
+  component: MagZipfV2
+},
+{
+  path: '/MagInnerZipf',
+  name: 'MagInnerZipf',
+  component: MagInnerZipf
+},
+{
+  path: '/MagInnerZipfV2',
+  name: 'MagInnerZipfV2',
+  component: MagInnerZipfV2
+},
+{
+  path: '/CoreArticlesTotalV1_plus',
+  name: 'CoreArticlesTotalV1_plus',
+  component: CoreArticlesTotalV1_plus
+},
+{
+  path: '/MagFosTree',
+  name: 'MagFosTree',
+  component: MagFosTree
+}
+]
+// 自动化映入模板
+for (const [k, v] of Object.entries(ChartMap)) {
+  routes.push({
+    path: '/' + k,
+    name: k,
+    component: () => import('@/pages/' + v.componentName)
+  })
+}
 
 export default new Router({
   mode: 'history',
-  routes: [{
-    path: '/',
-    name: 'index',
-    component: IndexPage
-  }, {
-    path: '/MagTrade',
-    name: 'MagTrade',
-    component: () => import('@/pages/MagTrade')
-  }, {
-    path: '/DataSheet',
-    name: 'DataSheet',
-    component: () => import('@/pages/DataSheet')
-  }, {
-    path: '/MAGSankey',
-    name: 'MAGSankey',
-    component: () => import('@/pages/MAGSankey')
-  }, {
-    path: '/MAGInnerZipTj',
-    name: 'MAGInnerZipTj',
-    component: () => import('@/pages/MAGInnerZipTj')
-  }, {
-    path: '/WikiGoogleDistance',
-    name: 'WikiGoogleDistance',
-    component: () => import('@/pages/WikiGoogleDistance')
-  }, {
-    path: '/GoogleDistance',
-    name: 'GoogleDistance',
-    component: () => import('@/pages/GoogleDistance')
-  }, {
-    path: '/MagFunnel',
-    name: 'MagFunnel',
-    component: MagFunnel
-  }, {
-    path: '/MAGBLLevel',
-    name: 'MAGBLLevel',
-    component: MAGBLLevel
-  },
-  {
-    path: '/SmallWorldDirectedCoreV2',
-    name: 'SmallWorldDirectedCoreV2',
-    component: SmallWorldDirectedCoreV2
-  },
-  {
-    path: '/MasCompositionByYear',
-    name: 'MasCompositionByYear',
-    component: MasCompositionByYear
-  },
-  {
-    path: '/MAGRefDist',
-    name: 'MAGRefDist',
-    component: MAGRefDist
-  },
-  {
-    path: '/MAGRefDistV2',
-    name: 'MAGRefDistV2',
-    component: MAGRefDistV2
-  },
-  {
-    path: '/MagRefSelfRate',
-    name: 'MagRefSelfRate',
-    component: MagRefSelfRate
-  },
-  {
-    path: '/MagDirectNet',
-    name: 'MagDirectNet',
-    component: MagDirectNet
-  },
-  {
-    path: '/MagDirectNetV3',
-    name: 'MagDirectNetV3',
-    component: MagDirectNetV3
-  },
-  {
-    path: '/MagDirectNetV4',
-    name: 'MagDirectNetV4',
-    component: MagDirectNetV4
-  },
-
-  {
-    path: '/MagAAAInfo',
-    name: 'MagAAAInfo',
-    component: MagAAAInfo
-  },
-  {
-    path: '/MagAAAInfoV2',
-    name: 'MagAAAInfoV2',
-    component: MagAAAInfoV2
-  },
-  {
-    path: '/CoreSWUndirectLimit',
-    name: 'CoreSWUndirectLimit',
-    component: CoreSWUndirectLimit
-  },
-  {
-    path: '/CoreSMUndirected',
-    name: 'CoreSMUndirected',
-    component: CoreSMUndirected
-  },
-  {
-    path: '/discipline',
-    name: 'discipline',
-    component: Discipline
-  },
-  {
-    path: '/masline',
-    name: 'masline',
-    component: Masline
-  },
-  {
-    path: '/MasDistanceV2',
-    name: 'MasDistanceV2',
-    component: MasDistanceV2
-  },
-  {
-    path: '/MagGraph',
-    name: 'MagGraph',
-    component: MagGraph
-  },
-  {
-    path: '/ArticlesTotal',
-    name: 'ArticlesTotal',
-    component: wikiPageCount
-  },
-  {
-    path: '/SubDiscipline',
-    name: 'SubDiscipline',
-    component: SubDiscipline
-  },
-  {
-    path: '/MasArticlesTotal',
-    name: 'MasArticlesTotal',
-    component: MasArticlesTotal
-  },
-  {
-    path: '/MasArticlesTotalV2',
-    name: 'MasArticlesTotalV2',
-    component: MasArticlesTotalV2
-  },
-  {
-    path: '/powerlaw',
-    name: 'powerlaw',
-    component: PowerLaw
-  },
-  {
-    path: '/viewandedits',
-    name: 'viewandedits',
-    component: ViewAndEdits
-  },
-  {
-    path: '/SmallWorldUndirected',
-    name: 'SmallWorldUndirected',
-    component: SmallWorldUndirected
-  },
-  {
-    path: '/SmallWorldDirected',
-    name: 'SmallWorldDirected',
-    component: SmallWorldDirected
-  },
-  {
-    path: '/powerLawPageRank',
-    name: 'powerLawPageRank',
-    component: powerLawPageRank
-  },
-  {
-    path: '/SmallWorldUndirectedLimit',
-    name: 'SmallWorldUndirectedLimit',
-    component: SmallWorldUndirectedLimit
-  },
-  {
-    path: '/DegreeDistribution',
-    name: 'DegreeDistribution',
-    component: DegreeDistribution
-  },
-  {
-    path: '/ZipfByNodes',
-    name: 'ZipfByNodes',
-    component: ZipfByNodes
-  },
-  {
-    path: '/WikiTree',
-    name: 'WikiTree',
-    component: WikiTree
-  },
-  {
-    path: '/BanShuaiQi',
-    name: 'BanShuaiQi',
-    component: BanShuaiQi
-  },
-  {
-    path: '/TopArticles',
-    name: 'TopArticles',
-    component: TopArticles
-  },
-  {
-    path: '/BritannicaTree',
-    name: 'BritannicaTree',
-    component: BritannicaTree
-  },
-  {
-    path: '/disciplinePeople',
-    name: 'disciplinePeople',
-    component: disciplinePeople
-  },
-  {
-    path: '/PeopleZipfByNodes',
-    name: 'PeopleZipfByNodes',
-    component: PeopleZipfByNodes
-  },
-  {
-    path: '/PeopleInnerZipfByNodes',
-    name: 'PeopleInnerZipfByNodes',
-    component: PeopleInnerZipfByNodes
-  },
-  {
-    path: '/DisciplineCore',
-    name: 'DisciplineCore',
-    component: DisciplineCore
-  },
-  {
-    path: '/CoreZipfByNodes',
-    name: 'CoreZipfByNodes',
-    component: CoreZipfByNodes
-  },
-  {
-    path: '/CoreLinks',
-    name: 'CoreLinks',
-    component: CoreLinks
-  },
-  {
-    path: '/CoreArticlesTotal',
-    name: 'CoreArticlesTotal',
-    component: CoreArticlesTotal
-  },
-  {
-    path: '/CoreArticlesTotalV2',
-    name: 'CoreArticlesTotalV2',
-    component: CoreArticlesTotalV2
-  },
-  {
-    path: '/CoreArticlesTotalNew_v3',
-    name: 'CoreArticlesTotalNew_v3',
-    component: CoreArticlesTotalNew_v3
-  },
-  {
-    path: '/MagZipf',
-    name: 'MagZipf',
-    component: MagZipf
-  },
-  {
-    path: '/MagZipfV2',
-    name: 'MagZipfV2',
-    component: MagZipfV2
-  },
-  {
-    path: '/MagInnerZipf',
-    name: 'MagInnerZipf',
-    component: MagInnerZipf
-  },
-  {
-    path: '/MagInnerZipfV2',
-    name: 'MagInnerZipfV2',
-    component: MagInnerZipfV2
-  },
-  {
-    path: '/CoreArticlesTotalV1_plus',
-    name: 'CoreArticlesTotalV1_plus',
-    component: CoreArticlesTotalV1_plus
-  },
-  {
-    path: '/MagFosTree',
-    name: 'MagFosTree',
-    component: MagFosTree
-  }
-  ],
+  routes: routes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition // 滚动到指定位置

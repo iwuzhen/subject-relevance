@@ -26,7 +26,7 @@ const store3 = localforage.createInstance({
 })
 
 // 对请求进行缓存
-const cacheRequest = async requestParams => {
+export const cacheRequest = async requestParams => {
   let item = await store1.getItem(JSON.stringify(requestParams))
   if (!item || typeof item !== 'object') {
     console.log('无缓存')
@@ -41,7 +41,7 @@ const cacheRequest = async requestParams => {
   return item
 }
 // 对请求进行缓存
-const cacheRequestWiki = async requestParams => {
+export const cacheRequestWiki = async requestParams => {
   let item = await store2.getItem(JSON.stringify(requestParams))
   if (!item || typeof item !== 'object') {
     console.log('无缓存')
@@ -71,6 +71,17 @@ export const cacheRequestGo = async requestParams => {
     // console.log("命中缓存");
   }
   return item
+}
+
+//  mag 包裹
+export async function requestWrap(url, method, params) {
+  const requestParams = {
+    url: url,
+    method: method,
+    data: params
+  }
+  const res = await request(requestParams)
+  return res.data
 }
 
 export async function RequestBoard(params, method) {

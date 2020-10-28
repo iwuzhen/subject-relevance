@@ -193,7 +193,20 @@ export default {
               text:
                 '参数说明：不限制学科网络规模，就是统计学科内所有的文章，linksin 或 linsout 的文章年份数量。 限制学科规模数为 10 万，每一年按照 linksout 或 linksin 数量排序 10 万名内的文章，其linksin 或 linsout 的文章年份数量',
               to: '/MAGRefDistV2'
+            },
+            {
+              title: '作者数逐年统计',
+              text: '',
+              to: '/AuthorsAndArticleInfoByYear',
+              update: '2020-10-28T09:43:03.429Z'
+            },
+            {
+              title: 'fos学科领域逐年统计',
+              text: '',
+              to: '/LinkTjByYear',
+              update: '2020-10-28T09:43:03.429Z'
             }
+
           ],
           'MAG v2- 幂率': [
             {
