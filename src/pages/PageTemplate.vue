@@ -79,11 +79,8 @@
 
 <script>
 import { ChartMap } from '@/api/chartData'
-import { extendEchartsOpts, extendLineSeries } from '@/api/data'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
-
-const zip = (...rows) => [...rows[0]].map((_, c) => rows.map(row => row[c]))
 
 export default {
   name: 'Template',
@@ -131,42 +128,10 @@ export default {
         opt[row.endName] = this.options[row.name][1]
       }
       const data = await this.ChartObj.RequestFunc(opt)
-      console.log(data)
-
-      const options = this.setOptions(data.data)
+      const options = this.ChartObj.HandleResponseFunc(data, this.ChartObj)
       this.myChartObjs[0].setOption(options, true)
 
       this.loading = false
-    },
-
-    setOptions(data) {
-      const _opt = extendEchartsOpts({
-        title: {
-          text: data.title
-        },
-        legend: {
-          data: data.legend
-        },
-        xAxis: {
-          name: this.ChartObj.xAxisName,
-          type: 'category',
-          boundaryGap: false,
-          data: data.x
-        },
-        yAxis: {
-          name: this.ChartObj.yAxisName,
-          type: 'value'
-        },
-        series: zip(data.legend, data.y).map(item => {
-          return extendLineSeries({
-            name: item[0],
-            type: 'line',
-            smooth: false,
-            data: item[1]
-          })
-        })
-      })
-      return _opt
     }
   }
 }
