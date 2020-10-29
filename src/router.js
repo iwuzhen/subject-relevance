@@ -67,6 +67,10 @@ const routes = [{
   name: 'MagTrade',
   component: () => import('@/pages/MagTrade')
 }, {
+  path: '/MagJJByCat',
+  name: 'MagJJByCat',
+  component: () => import('@/pages/MagJJByCat')
+}, {
   path: '/DataSheet',
   name: 'DataSheet',
   component: () => import('@/pages/DataSheet')

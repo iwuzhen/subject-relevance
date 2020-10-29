@@ -205,6 +205,18 @@ export default {
               text: '',
               to: '/LinkTjByYear',
               update: '2020-10-28T09:43:03.429Z'
+            },
+            {
+              title: 'fos学科领域逐年分布',
+              text: '',
+              to: '/FosTjByYearV2',
+              update: '2020-10-29T09:43:03.429Z'
+            },
+            {
+              title: '学科文章交集分布',
+              text: '',
+              to: '/MagJJByCat',
+              update: '2020-10-29T09:43:03.429Z'
             }
 
           ],

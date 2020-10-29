@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-10-28 21:41:24
+ * @LastEditTime: 2020-10-29 17:48:32
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -181,6 +181,49 @@ export const ChartMap = {
       name: 'yearRange',
       startName: 'from',
       rangeDefault: [1945, 2018],
+      endName: 'to',
+      label: '年份范围',
+      cols: 8,
+      max: 2019,
+      min: 1900
+    }],
+    xAxisName: 'Count',
+    yAxisName: 'Year'
+  },
+  'FosTjByYearV2': {
+    ChName: 'fos学科领域逐年分布',
+    componentName: 'PageTemplate',
+    HandleResponseFunc: setChartOption_1,
+    RequestFunc: async(params) => {
+      return await requestWrap('mag/getFosTj_year_v2', 'post', params)
+    },
+    Select: [
+      {
+        name: 'str',
+        default: defaultCategorySelect,
+        multiple: true,
+        label: '目标学科',
+        cols: 10,
+        items: magCategory
+      }, {
+        name: 'version',
+        default: 'v2',
+        label: '数据集',
+        multiple: false,
+        cols: 2,
+        items: [{
+          text: '全集',
+          value: 'v2'
+        }, {
+          text: '去掉引用为0的数据',
+          value: 'delete_noref_v2'
+        }]
+      }
+    ],
+    RangeSlider: [{
+      name: 'yearRange',
+      startName: 'from',
+      rangeDefault: [2016, 2018],
       endName: 'to',
       label: '年份范围',
       cols: 8,
