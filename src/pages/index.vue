@@ -201,7 +201,7 @@ export default {
               update: '2020-10-28T09:43:03.429Z'
             },
             {
-              title: 'fos学科领域逐年统计',
+              title: '引用关系逐年统计',
               text: '',
               to: '/LinkTjByYear',
               update: '2020-10-28T09:43:03.429Z'

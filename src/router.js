@@ -10,8 +10,6 @@ const MagGraph = () => import('@/pages/MagGraph')
 
 const wikiPageCount = () => import('@/pages/ArticlesTotal')
 const SubDiscipline = () => import('@/pages/SubDiscipline')
-const MasArticlesTotal = () => import('@/pages/MasArticlesTotal')
-const MasArticlesTotalV2 = () => import('@/pages/MasArticlesTotalV2')
 
 const PowerLaw = () => import('@/pages/powerLaw')
 const ViewAndEdits = () => import('@/pages/ViewAndEdits')
@@ -187,16 +185,6 @@ const routes = [{
   path: '/SubDiscipline',
   name: 'SubDiscipline',
   component: SubDiscipline
-},
-{
-  path: '/MasArticlesTotal',
-  name: 'MasArticlesTotal',
-  component: MasArticlesTotal
-},
-{
-  path: '/MasArticlesTotalV2',
-  name: 'MasArticlesTotalV2',
-  component: MasArticlesTotalV2
 },
 {
   path: '/powerlaw',

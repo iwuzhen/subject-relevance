@@ -3,12 +3,75 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-10-28 19:48:12
+ * @LastEditTime: 2020-10-28 21:41:24
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
 import { requestWrap } from '@/api/index'
-import { magCategory, defaultCategorySelect } from '@/api/data'
+import { coreCategorys, magCategory, defaultCategorySelect, extendEchartsOpts, extendLineSeries } from '@/api/data'
+
+const zip = (...rows) => [...rows[0]].map((_, c) => rows.map(row => row[c]))
+
+const setChartOption_1 = (responseData, ChartObj) => {
+  const _opt = extendEchartsOpts({
+    title: {
+      text: responseData.data.title
+    },
+    legend: {
+      data: responseData.data.legend
+    },
+    xAxis: {
+      name: ChartObj.xAxisName,
+      type: 'category',
+      boundaryGap: false,
+      data: responseData.data.x
+    },
+    yAxis: {
+      name: ChartObj.yAxisName,
+      type: 'value'
+    },
+    series: zip(responseData.data.legend, responseData.data.y).map(item => {
+      return extendLineSeries({
+        name: item[0],
+        type: 'line',
+        smooth: false,
+        data: item[1]
+      })
+    })
+  })
+  return _opt
+}
+
+const setChartOption_2 = (responseData, ChartObj) => {
+  const years = Object.keys(Object.values(responseData)[0])
+  const _opt = extendEchartsOpts({
+    title: {
+      text: '学科 article 数量'
+    },
+    legend: {
+      data: Object.keys(responseData)
+    },
+    xAxis: {
+      name: ChartObj.xAxisName,
+      type: 'category',
+      boundaryGap: false,
+      data: years
+    },
+    yAxis: {
+      name: ChartObj.yAxisName,
+      type: 'value'
+    },
+    series: Object.entries(responseData).map(item => {
+      return extendLineSeries({
+        name: item[0],
+        type: 'line',
+        smooth: false,
+        data: Object.values(item[1])
+      })
+    })
+  })
+  return _opt
+}
 
 export const ChartMap = {
   'AuthorsAndArticleInfoByYear': {
@@ -17,6 +80,7 @@ export const ChartMap = {
     RequestFunc: async(params) => {
       return await requestWrap('mag/getMagAuthorsAndArticleInfo_year_v2', 'post', params)
     },
+    HandleResponseFunc: setChartOption_1,
     Select: [
       {
         name: 'str',
@@ -77,8 +141,9 @@ export const ChartMap = {
 
   },
   'LinkTjByYear': {
-    ChName: 'fos学科领域逐年统计',
+    ChName: '引用关系逐年统计',
     componentName: 'PageTemplate',
+    HandleResponseFunc: setChartOption_1,
     RequestFunc: async(params) => {
       return await requestWrap('mag/getLinkTj_year_v2', 'post', params)
     },
@@ -122,6 +187,48 @@ export const ChartMap = {
       max: 2019,
       min: 1900
     }],
+    xAxisName: 'Count',
+    yAxisName: 'Year'
+  },
+  'MasArticlesTotalV2': {
+    ChName: 'MAG 文章数 v2',
+    componentName: 'PageTemplate',
+    HandleResponseFunc: setChartOption_2,
+    RequestFunc: async(params) => {
+      return await requestWrap('wiki/getMasArticlesTotal_v2', 'post', params)
+    },
+    Select: [
+      {
+        name: 'subjects',
+        default: defaultCategorySelect,
+        multiple: true,
+        label: '目标学科',
+        cols: 12,
+        items: coreCategorys
+      }
+    ],
+    RangeSlider: [],
+    xAxisName: 'Count',
+    yAxisName: 'Year'
+  },
+  'MasArticlesTotal': {
+    ChName: 'MAG 文章数',
+    componentName: 'PageTemplate',
+    HandleResponseFunc: setChartOption_2,
+    RequestFunc: async(params) => {
+      return await requestWrap('wiki/getMasArticlesTotal', 'post', params)
+    },
+    Select: [
+      {
+        name: 'subjects',
+        default: defaultCategorySelect,
+        multiple: true,
+        label: '目标学科',
+        cols: 12,
+        items: coreCategorys
+      }
+    ],
+    RangeSlider: [],
     xAxisName: 'Count',
     yAxisName: 'Year'
   }
