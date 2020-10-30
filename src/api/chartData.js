@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-10-29 17:48:32
+ * @LastEditTime: 2020-10-30 10:19:13
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -87,7 +87,7 @@ export const ChartMap = {
         default: defaultCategorySelect,
         multiple: true,
         label: '目标学科',
-        cols: 8,
+        cols: 6,
         items: magCategory
       }, {
         name: 'returnType',
@@ -122,6 +122,22 @@ export const ChartMap = {
           value: 0
         }, {
           text: '去除引用为0的数据',
+          value: 1
+        }]
+      }, {
+        name: 'yearType',
+        default: -1,
+        label: '作者数筛选',
+        multiple: false,
+        cols: 2,
+        items: [{
+          text: '不筛选',
+          value: -1
+        }, {
+          text: '作者数在100内的论文',
+          value: 0
+        }, {
+          text: '作者数超过100的论文',
           value: 1
         }]
       }

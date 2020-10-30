@@ -143,7 +143,7 @@ export default {
         'Computer engineering', 'Industrial engineering', 'Environmental engineering', 'Cognitive science',
         'Machine learning', 'Blockchains', 'Deep learning', 'Theoretical computer science',
         'Quantum computing', 'Genetic engineering', 'Genome editing', 'Anthropology', 'Neuroscience',
-        'Literature'],
+        'Literature'].sort(),
       versionSelect: [{
         text: '全集',
         value: 'v2'
