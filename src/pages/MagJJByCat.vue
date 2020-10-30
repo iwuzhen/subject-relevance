@@ -152,7 +152,7 @@ export default {
         value: 'delete_noref_v2'
       }],
       version: 'v2',
-      years: [2016, 2018],
+      years: [1945, 2018],
       myChartIds: ['chart1', 'chart2', 'chart3', 'chart4', 'chart5', 'chart6'],
       gridData: [],
       loading: false

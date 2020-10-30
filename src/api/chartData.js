@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-10-30 10:19:13
+ * @LastEditTime: 2020-10-30 12:02:49
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -169,7 +169,7 @@ export const ChartMap = {
         default: defaultCategorySelect,
         multiple: true,
         label: '目标学科',
-        cols: 8,
+        cols: 6,
         items: magCategory
       }, {
         name: 'method',
@@ -190,6 +190,19 @@ export const ChartMap = {
         }, {
           text: '去掉引用为0的数据',
           value: 'delete_noref_v2'
+        }]
+      }, {
+        name: 'yearType',
+        default: 0,
+        label: '作者数筛选',
+        multiple: false,
+        cols: 2,
+        items: [{
+          text: '不筛选',
+          value: 0
+        }, {
+          text: '作者数超过100的论文',
+          value: 1
         }]
       }
     ],
@@ -239,7 +252,7 @@ export const ChartMap = {
     RangeSlider: [{
       name: 'yearRange',
       startName: 'from',
-      rangeDefault: [2016, 2018],
+      rangeDefault: [1945, 2018],
       endName: 'to',
       label: '年份范围',
       cols: 8,
