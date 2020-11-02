@@ -55,7 +55,6 @@
     <v-row>
       <v-col col="12">
         <v-card
-          id="subjectChart"
           class="mx-auto"
           outlined
           :loading="loading"
