@@ -217,6 +217,12 @@ export default {
               text: '',
               to: '/MagJJByCat',
               update: '2020-10-29T09:43:03.429Z'
+            },
+            {
+              title: 'Mag 学科颠覆度',
+              text: '',
+              to: '/MagDisruption',
+              update: '2020-11-02T09:43:03.429Z'
             }
 
           ],
