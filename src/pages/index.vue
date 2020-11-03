@@ -160,6 +160,11 @@ export default {
               text: ' mag 因果关系-贸易比例',
               to: '/MagTrade',
               update: '2020-09-24T09:43:03.429Z'
+            }, {
+              title: 'topN因果关系-贸易比例',
+              text: 'mag topN因果关系-贸易比例',
+              to: '/MagTopTrade',
+              update: '2020-11-03T09:43:03.429Z'
             },
             {
               title: 'MAG google 距离',
@@ -255,27 +260,33 @@ export default {
         MAG: {
           'MAG- 统计数据': [
             {
-              title: 'MAG 作者文章数',
+              title: '作者文章数',
               text: 'MAG 作者文章数 统计',
               to: '/MagAAAInfo'
             },
             {
-              title: 'MAG 文章数',
+              title: '文章数',
               text: 'MAG 文章数查询',
               to: '/MasArticlesTotal'
             },
             {
-              title: 'MAG 学科自恋度',
+              title: '学科自恋度',
               text: 'MAG 学科自恋度',
               to: '/MagRefSelfRate'
             },
             {
-              title: 'MAG 学科逐年引用分布',
+              title: 'topN 学科自恋度',
+              text: 'mag topN 学科自恋度',
+              to: '/MagTopNRefSelfRate',
+              update: '2020-11-03T09:43:03.429Z'
+            },
+            {
+              title: '学科逐年引用分布',
               text: 'MAG 学科逐年引用分布',
               to: '/MasCompositionByYear'
             },
             {
-              title: 'MAG 学科引用年份热力图',
+              title: '学科引用年份热力图',
               text:
                 '参数说明：不限制学科网络规模，就是统计学科内所有的文章，linksin 或 linsout 的文章年份数量。 限制学科规模数为 10 万，每一年按照 linksout 或 linksin 数量排序 10 万名内的文章，其linksin 或 linsout 的文章年份数量',
               to: '/MAGRefDist'

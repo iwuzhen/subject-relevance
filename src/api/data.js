@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-10-13 16:00:47
+ * @LastEditTime: 2020-11-03 15:05:17
  * @Description:
  */
 
@@ -344,7 +344,7 @@ export function extendLineSeries(series) {
 export function extendEchartsOpts(opt) {
   const basicEchartsOption = {
     title: {
-      left: '40%'
+      left: 'center'
     },
     tooltip: {
       trigger: 'axis',
@@ -373,7 +373,8 @@ export function extendEchartsOpts(opt) {
       }
     },
     legend: {
-      left: '83%',
+      type: 'scroll',
+      left: 'right',
       top: 'middle',
       textStyle: {
         fontSize: 15
@@ -381,7 +382,7 @@ export function extendEchartsOpts(opt) {
       orient: 'vertical'
     },
     grid: {
-      left: '8%',
+      left: 'left',
       right: '20%',
       bottom: '5%',
       containLabel: true
