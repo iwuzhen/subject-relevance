@@ -145,31 +145,13 @@ export default {
       const opt = {
         str: this.subjectTarget.join(','),
         method: this.methodValue,
-        from: 1900,
-        to: 2019,
+        from: this.years[0],
+        to: this.years[1],
         version: this.versionValue
       }
       try {
         const res = await getMagRefSelfRate(opt)
         console.log(res.data)
-        const yearX = res.data.x
-        let first = -1; let last = 10000
-        for (const i in yearX) {
-          if (first === -1 && yearX[i] >= this.years[0]) {
-            first = i
-          }
-          if (last === 10000 && yearX[i] >= this.years[1]) {
-            last = i
-          }
-        }
-        // 年份分割
-        res.data.x = yearX.slice(first, last)
-        // 数据分割
-        const datatmp = []
-        for (const row of res.data.y) {
-          datatmp.push(row.slice(first, last))
-        }
-        res.data.y = datatmp
         if (this.subjectTarget.length > 1 && this.showAve) {
           const aveLine = []
           for (const i in res.data.x) {

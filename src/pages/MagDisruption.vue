@@ -26,15 +26,25 @@
         />
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <comment storagekey="MagDisruption_graph_1" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
 import { extendEchartsOpts } from '@/api/data'
 import Base from '@/utils/base'
+import comment from '@/components/comment'
+
 const all_subject_data = [['Engineering disciplines', -0.3442484895001789], ['Medicine', -0.32031742808782326], ['Chemistry', -0.2901915798802886], ['Biology', -0.28343739257192563], ['Mathematics', -0.22101136639630437], ['Computer science', -0.19841437256428804], ['Physics', -0.19706696888006128], ['Materials science', -0.1760090997629796], ['Psychology', -0.1564162700447593], ['Neuroscience', -0.11829556687574033], ['Sociology', -0.11705077847570598], ['Artificial intelligence', -0.11561346170672761], ['Electrical engineering', -0.1148178368084955], ['Economics', -0.1118533396560675], ['Chemical engineering', -0.09710595974392938], ['Discrete mathematics', -0.0929787002801311], ['Environmental science', -0.08964060855227929], ['Theoretical computer science', -0.08786765159842216], ['Geology', -0.07934056191774995], ['Machine learning', -0.0755754348458528], ['Mechanical engineering', -0.07418761524430925], ['Geography', -0.07154609446101935], ['Political science', -0.06786383627415186], ['Computer engineering', -0.06219970696154213], ['Environmental engineering', -0.06075334922709353], ['Civil engineering', -0.05319386693924246], ['Earth science', -0.05252529288064279], ['Applied mathematics', -0.04801105335799575], ['Algebra', -0.04756704193445342], ['Biological engineering', -0.04696132963627269], ['Anthropology', -0.04668249050474774], ['Cognitive science', -0.0442475401647108], ['Applied physics', -0.040893139611822726], ['Theoretical physics', -0.0406948028208771], ['Linguistics', -0.03754258265338411], ['Geometry', -0.03549393526359173], ['History', -0.03515563165652671], ['Industrial engineering', -0.03048531925364342], ['Operating system', -0.02501928740160561], ['Genetic engineering', -0.0196518628756365], ['Philosophy', -0.01915371358338393], ['Literature', -0.018451094009862726], ['Number theory', -0.013744293109706011], ['Experimental physics', -0.011645890754196944], ['Quantum computing', -0.011512929273592518], ['Logic', -0.010142236048268362], ['Deep learning', -0.009599457936372369], ['Genome editing', -0.006543094393840373]]
 export default {
   name: 'MagDisruption',
+  components: {
+    comment
+  },
   extends: Base,
   data() {
     return {

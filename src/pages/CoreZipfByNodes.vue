@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-10-13 20:32:26
+ * @LastEditTime: 2020-11-02 21:07:51
  * @Description:
  -->
 
@@ -72,7 +72,8 @@
             <p style="width: 100px">求斜率范围</p>
             <v-text-field
               :value="nodeRange[0]"
-              class="mt-0 pt-0"
+              class="mt-0
+              -0"
               hide-details
               single-line
               type="number"
