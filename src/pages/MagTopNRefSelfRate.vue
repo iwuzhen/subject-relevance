@@ -43,6 +43,16 @@
           @change="getData"
         />
       </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="ranktypeSelect"
+          :items="ranktypeOpt"
+          dense
+          deletable-chips
+          label="排名方式"
+          @change="getData"
+        />
+      </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
@@ -92,6 +102,8 @@ export default {
       methodOptions: ['linksout', 'linksin'],
       topNValue: 5000,
       topNOptions: [5000],
+      ranktypeSelect: 'zipf',
+      ranktypeOpt: [{ text: '按世界排名', value: 'zipf' }, { text: '按小世界排名', value: 'innerzipf' }],
       loading: false,
       myChartIds: ['masChart1']
     }
@@ -111,7 +123,8 @@ export default {
         str: this.subjectTarget.join(','),
         method: this.methodValue,
         topN: this.topNValue,
-        version: this.versionValue
+        version: this.versionValue,
+        ranktype: this.ranktypeSelect
       }
       try {
         const res = await requestWrap('/mag/getMagRefSelfRate_top', 'post', opt)

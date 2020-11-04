@@ -58,6 +58,16 @@
           @change="getData"
         />
       </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="ranktypeSelect"
+          :items="ranktypeOpt"
+          dense
+          deletable-chips
+          label="排名方式"
+          @change="getData"
+        />
+      </v-col>
     </v-row>
     <v-row>
       <v-col col="12">
@@ -138,6 +148,8 @@ export default {
       subjectTarget: '',
       subjectRelevances: defaultCategorySelect,
       categorys: coreCategorys,
+      ranktypeSelect: 'zipf',
+      ranktypeOpt: [{ text: '按世界排名', value: 'zipf' }, { text: '按小世界排名', value: 'innerzipf' }],
       loading: false,
       myChartIds: ['masChart1', 'masChart2']
     }
@@ -174,7 +186,8 @@ export default {
         method: this.methodSelect,
         topN: this.topNSelect,
         type: 0,
-        version: this.versionSelect
+        version: this.versionSelect,
+        ranktype: this.ranktypeSelect
       }
       // 趋势图,柱状图
       await requestWrap('/mag/getYinguoData_top', 'post', opt)
