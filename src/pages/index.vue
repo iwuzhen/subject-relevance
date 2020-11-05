@@ -228,6 +228,12 @@ export default {
               text: '',
               to: '/MagDisruption',
               update: '2020-11-02T09:43:03.429Z'
+            },
+            {
+              title: 'topN学科逐年分布',
+              text: 'Mag topN学科逐年分布',
+              to: '/TjYearByTopN',
+              update: '2020-11-04T09:43:03.429Z'
             }
 
           ],

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-10-30 12:02:49
+ * @LastEditTime: 2020-11-05 10:44:07
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -301,6 +301,49 @@ export const ChartMap = {
       }
     ],
     RangeSlider: [],
+    xAxisName: 'Count',
+    yAxisName: 'Year'
+  },
+  'TjYearByTopN': {
+    ChName: 'fos学科领域逐年分布',
+    componentName: 'PageTemplate',
+    HandleResponseFunc: setChartOption_1,
+    RequestFunc: async(params) => {
+      return await requestWrap('mag/getTjYearByTopN', 'post', params)
+    },
+    Select: [
+      {
+        name: 'str',
+        default: defaultCategorySelect,
+        multiple: true,
+        label: '目标学科',
+        cols: 10,
+        items: magCategory
+      }, {
+        name: 'type',
+        default: 'zipf',
+        label: '排名规则',
+        multiple: false,
+        cols: 2,
+        items: [{
+          text: '按世界排名',
+          value: 'zipf'
+        }, {
+          text: '按小世界排名',
+          value: 'innerzipf'
+        }]
+      }
+    ],
+    RangeSlider: [{
+      name: 'yearRange',
+      startName: 'from',
+      rangeDefault: [2000, 2018],
+      endName: 'to',
+      label: '年份范围',
+      cols: 8,
+      max: 2019,
+      min: 1900
+    }],
     xAxisName: 'Count',
     yAxisName: 'Year'
   }
