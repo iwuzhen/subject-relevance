@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-11-05 10:44:07
+ * @LastEditTime: 2020-11-05 11:13:06
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -305,7 +305,7 @@ export const ChartMap = {
     yAxisName: 'Year'
   },
   'TjYearByTopN': {
-    ChName: 'fos学科领域逐年分布',
+    ChName: 'mag topN学科逐年分布',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_1,
     RequestFunc: async(params) => {
@@ -317,7 +317,7 @@ export const ChartMap = {
         default: defaultCategorySelect,
         multiple: true,
         label: '目标学科',
-        cols: 10,
+        cols: 8,
         items: magCategory
       }, {
         name: 'type',
@@ -332,12 +332,18 @@ export const ChartMap = {
           text: '按小世界排名',
           value: 'innerzipf'
         }]
-      }
-    ],
+      }, {
+        name: 'N',
+        default: 20000,
+        label: 'TopN',
+        multiple: false,
+        cols: 2,
+        items: [10000, 20000, 30000, 40000, 50000]
+      }],
     RangeSlider: [{
       name: 'yearRange',
       startName: 'from',
-      rangeDefault: [2000, 2018],
+      rangeDefault: [1945, 2018],
       endName: 'to',
       label: '年份范围',
       cols: 8,
