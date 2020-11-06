@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-11-03 15:05:17
+ * @LastEditTime: 2020-11-06 12:15:59
  * @Description:
  */
 
@@ -24,6 +24,7 @@ export const magCategory = [
   'Economics',
   'Electrical engineering',
   'Environmental engineering',
+  'Earth science',
   'Genetic engineering',
   'Genome editing',
   'History',

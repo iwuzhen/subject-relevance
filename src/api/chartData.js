@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-11-05 11:13:06
+ * @LastEditTime: 2020-11-06 12:13:54
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -152,8 +152,8 @@ export const ChartMap = {
       max: 2019,
       min: 1900
     }],
-    xAxisName: 'Count',
-    yAxisName: 'Year'
+    xAxisName: 'Year',
+    yAxisName: 'Count'
 
   },
   'LinkTjByYear': {
@@ -216,8 +216,8 @@ export const ChartMap = {
       max: 2019,
       min: 1900
     }],
-    xAxisName: 'Count',
-    yAxisName: 'Year'
+    xAxisName: 'Year',
+    yAxisName: 'Count'
   },
   'FosTjByYearV2': {
     ChName: 'fos学科领域逐年分布',
@@ -259,8 +259,8 @@ export const ChartMap = {
       max: 2019,
       min: 1900
     }],
-    xAxisName: 'Count',
-    yAxisName: 'Year'
+    xAxisName: 'Year',
+    yAxisName: 'Count'
   },
   'MasArticlesTotalV2': {
     ChName: 'MAG 文章数 v2',
@@ -280,8 +280,8 @@ export const ChartMap = {
       }
     ],
     RangeSlider: [],
-    xAxisName: 'Count',
-    yAxisName: 'Year'
+    xAxisName: 'Year',
+    yAxisName: 'Count'
   },
   'MasArticlesTotal': {
     ChName: 'MAG 文章数',
@@ -301,8 +301,8 @@ export const ChartMap = {
       }
     ],
     RangeSlider: [],
-    xAxisName: 'Count',
-    yAxisName: 'Year'
+    xAxisName: 'Year',
+    yAxisName: 'Count'
   },
   'TjYearByTopN': {
     ChName: 'mag topN学科逐年分布',
@@ -350,7 +350,7 @@ export const ChartMap = {
       max: 2019,
       min: 1900
     }],
-    xAxisName: 'Count',
-    yAxisName: 'Year'
+    xAxisName: 'Year',
+    yAxisName: 'Count'
   }
 }
