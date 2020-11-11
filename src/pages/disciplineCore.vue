@@ -29,7 +29,7 @@
           @change="getData"
         />
       </v-col>
-      <v-col cols="2">
+      <v-col v-if="pageCountOpt.length>1" cols="2">
         <v-select
           v-model="pageCountSelect"
           :items="pageCountOpt"
@@ -45,7 +45,7 @@
           @change="getData"
         />
       </v-col>
-      <v-col cols="1">
+      <v-col v-if="levelOpt.length>1" cols="1">
         <v-select
           v-model="levelSelect"
           :items="levelOpt"
