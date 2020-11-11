@@ -9,7 +9,7 @@
           @change="getData"
         />
       </v-col>
-      <v-col cols="5">
+      <v-col cols="10">
         <v-select
           v-model="subjectRelevances"
           :items="categorysOptions"
@@ -34,6 +34,14 @@
           v-model="pageCountSelect"
           :items="pageCountOpt"
           label="文章数"
+          @change="getData"
+        />
+      </v-col>
+      <v-col v-if="versionOpt.length>1" cols="2">
+        <v-select
+          v-model="versionSelect"
+          :items="versionOpt"
+          label="version"
           @change="getData"
         />
       </v-col>
@@ -93,6 +101,8 @@ export default {
       methodOptions: ['linksin', 'linksout'],
       levelSelect: 3,
       levelOpt: [3],
+      versionSelect: '',
+      versionOpt: [],
       pageCountOpt: [
         {
           value: '1000',
@@ -157,17 +167,46 @@ export default {
     }
   },
   mounted() {
+    const v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+      'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+      'Literature', 'History']
     if (this.$route.query.version === 'v1') {
       this.levelOpt = [3, 4]
+      this.versionSelect = 'v1'
+      this.versionOpt = ['v1']
     } else if (this.$route.query.version === 'v2') {
       this.levelOpt = [3]
+      this.versionSelect = 'v2'
+      this.versionOpt = ['v2']
     } else if (this.$route.query.version === 'v3') {
       this.levelOpt = [2, 3]
+      this.versionSelect = 'v3'
+      this.versionOpt = ['v3']
     } else if (this.$route.query.version === 'v4') {
       this.levelOpt = [2]
       this.levelSelect = 2
       this.methodValue = 'linksout'
+      this.versionSelect = 'v4'
+      this.versionOpt = ['v4']
+    } else if (this.$route.query.version === 'v5') {
+      this.levelOpt = [3]
+      this.levelSelect = 3
+      this.methodValue = 'linksout'
+      this.pageCountSelect = -1
+      this.pageCountOpt = [-1]
+      this.versionSelect = 'v5_node'
+      this.versionOpt = ['v5_node', 'v5_edge']
+
+      this.categorys = v5Subject.map(item => {
+        return {
+          text: item,
+          value: item
+        }
+      })
     }
+    this.subjectRelevances = this.subjectRelevances.filter(item =>
+      v5Subject.includes(item)
+    )
   },
   methods: {
     async getData() {
@@ -189,7 +228,7 @@ export default {
         method: this.methodValue,
         level: this.pageCountSelect,
         levelType: this.levelSelect,
-        btype: this.$route.query.version
+        btype: this.versionSelect
       }
       getDistanceCore(opt)
         .then(res => {
