@@ -202,7 +202,7 @@ export default {
           text: item,
           value: item
         }
-      })
+      }).sort()
     }
     this.subjectRelevances = this.subjectRelevances.filter(item =>
       v5Subject.includes(item)
