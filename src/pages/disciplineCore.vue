@@ -169,7 +169,7 @@ export default {
   mounted() {
     const v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
       'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-      'Literature', 'History']
+      'Literature', 'History'].sort()
     if (this.$route.query.version === 'v1') {
       this.levelOpt = [3, 4]
       this.versionSelect = 'v1'
@@ -202,7 +202,7 @@ export default {
           text: item,
           value: item
         }
-      }).sort()
+      })
     }
     this.subjectRelevances = this.subjectRelevances.filter(item =>
       v5Subject.includes(item)
