@@ -45,7 +45,7 @@
           @change="getData"
         />
       </v-col>
-      <v-col v-if="levelOpt.length>1" cols="1">
+      <v-col cols="1">
         <v-select
           v-model="levelSelect"
           :items="levelOpt"
