@@ -53,6 +53,11 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col>
+        <comment storagekey="MagDisruption_graph_1" />
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col col="12">
         <v-card
           id="subjectChart2"
@@ -61,6 +66,11 @@
           :loading="loading"
           height="70vh"
         />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <comment storagekey="MagDisruption_graph_2" />
       </v-col>
     </v-row>
     <v-row>
@@ -87,7 +97,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <comment storagekey="MagDisruption_graph_1" />
+        <comment storagekey="MagDisruption_graph_4" />
       </v-col>
     </v-row>
   </v-container>
@@ -109,7 +119,7 @@ export default {
   data() {
     return {
       pageName: 'MAG 学科颠覆度',
-      subjectTarget: ['Quantum computing', 'Literature', 'Geometry', 'Philosophy', 'Linguistics', 'Anthropology', 'History', 'Geography', 'Machine learning', 'Sociology', 'Neuroscience', 'Artificial intelligence', 'Geology', 'Economics', 'Mathematics', 'Physics', 'Psychology', 'Materials science', 'Computer science', 'Chemistry', 'Biology', 'Medicine'],
+      subjectTarget: ['Quantum computing', 'Literature', 'Geometry', 'Philosophy', 'Linguistics', 'Anthropology', 'History', 'Geography', 'Machine learning', 'Sociology', 'Neuroscience', 'Artificial intelligence', 'Geology', 'Economics', 'Mathematics', 'Physics', 'Psychology', 'Materials science', 'Computer science', 'Chemistry', 'Biology', 'Medicine'].sort(),
       categorys: '',
       loading: false,
       TopPercent: 20,
@@ -118,7 +128,7 @@ export default {
   },
   mounted() {
     const subject = all_subject_data.map(item => item[0])
-    this.categorys = subject
+    this.categorys = subject.sort()
     this.getData()
   },
   methods: {
@@ -181,7 +191,7 @@ export default {
           data: xaxis
         },
         yAxis: {
-          name: 'Distance',
+          name: 'Average Distance',
           type: 'value',
           max: 1
         },
@@ -196,10 +206,6 @@ export default {
       })
 
       this.myChartObjs[1].setOption(opt, true)
-
-      // {
-      //   source, target: `${target} `, value: linksDict[key]
-      // }
 
       // 图3
       let links = []
@@ -277,7 +283,6 @@ export default {
       }
       this.myChartObjs[3].setOption(opt, true)
     }
-
   }
 }
 </script>

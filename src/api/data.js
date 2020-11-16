@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-11-06 12:15:59
+ * @LastEditTime: 2020-11-16 13:58:05
  * @Description:
  */
 
@@ -383,7 +383,7 @@ export function extendEchartsOpts(opt) {
       orient: 'vertical'
     },
     grid: {
-      left: 'left',
+      left: '5%',
       right: '20%',
       bottom: '5%',
       containLabel: true
