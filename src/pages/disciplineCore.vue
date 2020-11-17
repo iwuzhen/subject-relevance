@@ -72,7 +72,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <comment storagekey="disciplineCore_Chart_2" />
+        <comment v-if="storagekey!=''" :storagekey="storagekey" />
       </v-col>
     </v-row>
   </v-container>
@@ -108,6 +108,7 @@ export default {
       levelOpt: [3],
       versionSelect: '',
       versionOpt: [],
+      storagekey: '',
       pageCountOpt: [
         {
           value: '1000',
@@ -175,6 +176,8 @@ export default {
     const v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
       'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
       'Literature', 'History'].sort()
+
+    this.storagekey = `disciplineCore_Chart_${this.$route.query.version}`
     if (this.$route.query.version === 'v1') {
       this.levelOpt = [3, 4]
       this.versionSelect = 'v1'

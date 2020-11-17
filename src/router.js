@@ -11,17 +11,9 @@ const MagGraph = () => import('@/pages/MagGraph')
 const wikiPageCount = () => import('@/pages/ArticlesTotal')
 const SubDiscipline = () => import('@/pages/SubDiscipline')
 
-const PowerLaw = () => import('@/pages/powerLaw')
 const ViewAndEdits = () => import('@/pages/ViewAndEdits')
-const SmallWorldUndirected = () => import('@/pages/SmallWorldUndirected')
-const SmallWorldUndirectedLimit = () =>
-  import('@/pages/SmallWorldUndirectedLimit')
-const SmallWorldDirected = () => import('@/pages/SmallWorldDirected')
-const powerLawPageRank = () => import('@/pages/powerLawPageRank')
 const DegreeDistribution = () => import('@/pages/DegreeDistribution')
 const ZipfByNodes = () => import('@/pages/ZipfByNodes')
-const WikiTree = () => import('@/pages/WikiTree')
-const BritannicaTree = () => import('@/pages/BritannicaTree')
 const BanShuaiQi = () => import('@/pages/BanShuaiQi')
 const TopArticles = () => import('@/pages/TopArticles')
 const disciplinePeople = () => import('@/pages/disciplinePeople')
@@ -40,10 +32,6 @@ const CoreSWUndirectLimit = () => import('@/pages/CoreSWUndirectLimit')
 const CoreSMUndirected = () => import('@/pages/CoreSMUndirected')
 const MagAAAInfo = () => import('@/pages/MagAAAInfo')
 const MagAAAInfoV2 = () => import('@/pages/MagAAAInfoV2')
-const CoreArticlesTotalV1_plus = () =>
-  import('@/pages/CoreArticlesTotalV1_plus')
-const SmallWorldDirectedCoreV2 = () =>
-  import('@/pages/SmallWorldDirectedCoreV2')
 const MagDirectNet = () => import('@/pages/MagDirectNet')
 const MagRefSelfRate = () => import('@/pages/MagRefSelfRate')
 const MagDirectNetV4 = () => import('@/pages/MagDirectNetV4')
@@ -51,9 +39,6 @@ const MagDirectNetV3 = () => import('@/pages/MagDirectNetV3')
 const MAGRefDist = () => import('@/pages/MAGRefDist')
 const MAGRefDistV2 = () => import('@/pages/MAGRefDistV2')
 const MasCompositionByYear = () => import('@/pages/MasCompositionByYear')
-const MagFunnel = () => import('@/pages/MagFunnel')
-const MagFosTree = () => import('@/pages/MagFosTree')
-const MAGBLLevel = () => import('@/pages/MAGBLLevel')
 
 import { ChartMap } from '@/api/chartData'
 
@@ -106,16 +91,16 @@ const routes = [{
 }, {
   path: '/MagFunnel',
   name: 'MagFunnel',
-  component: MagFunnel
+  component: () => import('@/pages/MagFunnel')
 }, {
   path: '/MAGBLLevel',
   name: 'MAGBLLevel',
-  component: MAGBLLevel
+  component: () => import('@/pages/MAGBLLevel')
 },
 {
   path: '/SmallWorldDirectedCoreV2',
   name: 'SmallWorldDirectedCoreV2',
-  component: SmallWorldDirectedCoreV2
+  component: () => import('@/pages/SmallWorldDirectedCoreV2')
 },
 {
   path: '/MasCompositionByYear',
@@ -206,7 +191,7 @@ const routes = [{
 {
   path: '/powerlaw',
   name: 'powerlaw',
-  component: PowerLaw
+  component: () => import('@/pages/powerLaw')
 },
 {
   path: '/viewandedits',
@@ -216,22 +201,22 @@ const routes = [{
 {
   path: '/SmallWorldUndirected',
   name: 'SmallWorldUndirected',
-  component: SmallWorldUndirected
+  component: () => import('@/pages/SmallWorldUndirected')
 },
 {
   path: '/SmallWorldDirected',
   name: 'SmallWorldDirected',
-  component: SmallWorldDirected
+  component: () => import('@/pages/SmallWorldDirected')
 },
 {
   path: '/powerLawPageRank',
   name: 'powerLawPageRank',
-  component: powerLawPageRank
+  component: () => import('@/pages/powerLawPageRank')
 },
 {
   path: '/SmallWorldUndirectedLimit',
   name: 'SmallWorldUndirectedLimit',
-  component: SmallWorldUndirectedLimit
+  component: () => import('@/pages/SmallWorldUndirectedLimit')
 },
 {
   path: '/DegreeDistribution',
@@ -246,7 +231,7 @@ const routes = [{
 {
   path: '/WikiTree',
   name: 'WikiTree',
-  component: WikiTree
+  component: () => import('@/pages/WikiTree')
 },
 {
   path: '/BanShuaiQi',
@@ -261,7 +246,7 @@ const routes = [{
 {
   path: '/BritannicaTree',
   name: 'BritannicaTree',
-  component: BritannicaTree
+  component: () => import('@/pages/BritannicaTree')
 },
 {
   path: '/disciplinePeople',
@@ -331,12 +316,12 @@ const routes = [{
 {
   path: '/CoreArticlesTotalV1_plus',
   name: 'CoreArticlesTotalV1_plus',
-  component: CoreArticlesTotalV1_plus
+  component: () => import('@/pages/CoreArticlesTotalV1_plus')
 },
 {
   path: '/MagFosTree',
   name: 'MagFosTree',
-  component: MagFosTree
+  component: () => import('@/pages/MagFosTree')
 }
 ]
 // 自动化映入模板
