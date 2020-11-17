@@ -57,12 +57,17 @@
     <v-row>
       <v-col col="12">
         <v-card
-          id="subjectChart"
           class="mx-auto"
           outlined
           :loading="loading"
           height="70vh"
-        />
+        >
+          <v-container
+            id="subjectChart"
+            fluid
+            fill-height
+          />
+        </v-card>
       </v-col>
     </v-row>
     <v-row>
@@ -203,6 +208,15 @@ export default {
           value: item
         }
       })
+    } else if (this.$route.query.version === 'article') {
+      this.levelOpt = [-1]
+      this.levelSelect = -1
+      this.methodValue = 'linksin'
+      this.methodOptions = ['linksin']
+      this.pageCountSelect = -1
+      this.pageCountOpt = [-1]
+      this.versionSelect = 'article'
+      this.versionOpt = ['article']
     }
     this.subjectRelevances = this.subjectRelevances.filter(item =>
       v5Subject.includes(item)

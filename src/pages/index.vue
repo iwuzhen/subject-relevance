@@ -400,6 +400,12 @@ export default {
               update: '2020-11-11T09:43:03.429Z'
             },
             {
+              title: 'WIKI Core 基准线',
+              text: '各 Core 学科的基准学科相关度',
+              to: { path: 'DisciplineCore', query: { version: 'article' }},
+              update: '2020-11-17T09:43:03.429Z'
+            },
+            {
               title: 'WIKI Google 中间距离',
               text: 'WIKI Google 中间距离',
               to: { path: 'WikiGoogleDistance' },
