@@ -236,7 +236,7 @@ export default {
           data: xaxis
         },
         yAxis: {
-          name: 'Average Distance',
+          name: 'Average Disruption',
           type: 'value',
           max: 1
         },
@@ -254,9 +254,9 @@ export default {
       this.myChartObjs[1].setOption(opt, true)
 
       // p3 幂律图
-      const MAGDisruptionPowerLow = {}
+      const MAGDisruptionPowerLaw = {}
       for (const name of this.subjectTarget) {
-        MAGDisruptionPowerLow[name] = await this.getStorageData(`Disruption_PowerLow_${name}`)
+        MAGDisruptionPowerLaw[name] = await this.getStorageData(`Disruption_PowerLow_${name}`)
       }
       xaxis = []
       for (let i = 1; i <= 100000; i++) {
@@ -280,9 +280,10 @@ export default {
           type: 'value',
           min: 'dataMin'
         },
+        animation: false,
         series: this.subjectTarget.map(name => {
           const nodes = []
-          const tmp_node = MAGDisruptionPowerLow[name].map((item, index) => {
+          const tmp_node = MAGDisruptionPowerLaw[name].map((item, index) => {
             return [xaxis[index], item]
           })
           // 过滤，先后差值小于 0.00001, 且 step 小于 5 的
