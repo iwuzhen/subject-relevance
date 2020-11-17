@@ -82,3 +82,5 @@ export function formatNumberRgx(num) {
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   return parts.join('.')
 }
+
+export const zip = (...rows) => [...rows[0]].map((_, c) => rows.map(row => row[c]))
