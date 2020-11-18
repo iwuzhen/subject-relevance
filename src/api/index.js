@@ -2,6 +2,8 @@ import request from '@/utils/request'
 import requestwiki from '@/utils/requestwiki'
 import requestgo from '@/utils/requestgo'
 import * as localforage from 'localforage'
+const qs = require('qs')
+
 localforage.setDriver([localforage.INDEXEDDB, localforage.WEBSQL])
 
 const store1 = localforage.createInstance({
@@ -122,6 +124,20 @@ export async function getStorage(params) {
     url: '/storage/first',
     method: 'get',
     params: params
+  }
+  const res = await requestgo(requestParams)
+  return res.data
+}
+
+// 非结构化数据服务器简易存储多条获取
+export async function getMultipleStorage(params) {
+  const requestParams = {
+    url: '/storage/multiplefirst',
+    method: 'get',
+    params: params,
+    paramsSerializer: function(params) {
+      return qs.stringify(params, { arrayFormat: 'repeat' })
+    }
   }
   const res = await requestgo(requestParams)
   return res.data

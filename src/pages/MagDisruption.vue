@@ -44,7 +44,6 @@
     <v-row>
       <v-col col="12">
         <v-card
-          id="subjectChart1"
           class="mx-auto"
           outlined
           :loading="loading"
@@ -101,17 +100,12 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col>
-        <comment storagekey="MagDisruption_graph_3" />
-      </v-col>
-    </v-row>
-    <v-row>
       <v-col col="12">
         <v-card
           class="mx-auto"
           outlined
           :loading="loading"
-          height="140vh"
+          height="70vh"
         >
           <v-container
             id="subjectChart4"
@@ -119,6 +113,11 @@
             fill-height
           />
         </v-card>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <comment storagekey="MagDisruption_graph_3" />
       </v-col>
     </v-row>
     <v-row>
@@ -138,6 +137,22 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="140vh"
+        >
+          <v-container
+            id="subjectChart6"
+            fluid
+            fill-height
+          />
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col>
         <comment storagekey="MagDisruption_graph_4" />
       </v-col>
@@ -150,7 +165,7 @@ import { extendEchartsOpts, extendLineSeries } from '@/api/data'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 import Disruption from '../assets/data/disruption.json'
-import { getStorage } from '@/api/index'
+import { getMultipleStorage } from '@/api/index'
 import _ from 'lodash'
 
 const all_subject_data = [['Engineering disciplines', -0.3442484895001789], ['Medicine', -0.32031742808782326], ['Chemistry', -0.2901915798802886], ['Biology', -0.28343739257192563], ['Mathematics', -0.22101136639630437], ['Computer science', -0.19841437256428804], ['Physics', -0.19706696888006128], ['Materials science', -0.1760090997629796], ['Psychology', -0.1564162700447593], ['Neuroscience', -0.11829556687574033], ['Sociology', -0.11705077847570598], ['Artificial intelligence', -0.11561346170672761], ['Electrical engineering', -0.1148178368084955], ['Economics', -0.1118533396560675], ['Chemical engineering', -0.09710595974392938], ['Discrete mathematics', -0.0929787002801311], ['Environmental science', -0.08964060855227929], ['Theoretical computer science', -0.08786765159842216], ['Geology', -0.07934056191774995], ['Machine learning', -0.0755754348458528], ['Mechanical engineering', -0.07418761524430925], ['Geography', -0.07154609446101935], ['Political science', -0.06786383627415186], ['Computer engineering', -0.06219970696154213], ['Environmental engineering', -0.06075334922709353], ['Civil engineering', -0.05319386693924246], ['Earth science', -0.05252529288064279], ['Applied mathematics', -0.04801105335799575], ['Algebra', -0.04756704193445342], ['Biological engineering', -0.04696132963627269], ['Anthropology', -0.04668249050474774], ['Cognitive science', -0.0442475401647108], ['Applied physics', -0.040893139611822726], ['Theoretical physics', -0.0406948028208771], ['Linguistics', -0.03754258265338411], ['Geometry', -0.03549393526359173], ['History', -0.03515563165652671], ['Industrial engineering', -0.03048531925364342], ['Operating system', -0.02501928740160561], ['Genetic engineering', -0.0196518628756365], ['Philosophy', -0.01915371358338393], ['Literature', -0.018451094009862726], ['Number theory', -0.013744293109706011], ['Experimental physics', -0.011645890754196944], ['Quantum computing', -0.011512929273592518], ['Logic', -0.010142236048268362], ['Deep learning', -0.009599457936372369], ['Genome editing', -0.006543094393840373]]
@@ -164,11 +179,11 @@ export default {
     return {
       pageName: 'MAG 学科颠覆度',
       subjectTarget: ['Literature', 'Geometry', 'Philosophy', 'Linguistics', 'Anthropology', 'History', 'Geography', 'Sociology', 'Neuroscience', 'Geology', 'Economics', 'Mathematics', 'Physics', 'Psychology', 'Materials science', 'Computer science', 'Chemistry', 'Biology', 'Medicine'].sort(),
-      // subjectTarget: ['Computer science', 'Chemistry', 'Biology', 'Medicine'].sort(),
+      // subjectTarget: ['Computer science', 'Medicine', 'Chemistry', 'Biology'].sort(),
       categorys: [],
       loading: false,
       TopPercent: 20,
-      myChartIds: ['subjectChart1', 'subjectChart2', 'subjectChart3', 'subjectChart4', 'subjectChart5']
+      myChartIds: ['subjectChart1', 'subjectChart2', 'subjectChart3', 'subjectChart4', 'subjectChart5', 'subjectChart6']
     }
   },
   mounted() {
@@ -178,7 +193,6 @@ export default {
   },
   methods: {
     getData: _.debounce(async function() {
-      console.log('start')
       const current_subject_data = all_subject_data.filter(item => this.subjectTarget.includes(item[0])).map(item => { return [item[0], item[1].toFixed(5)] })
       let opt = extendEchartsOpts({
         title: {
@@ -249,71 +263,213 @@ export default {
           })
         })
       })
-      console.log(opt)
 
       this.myChartObjs[1].setOption(opt, true)
 
       // p3 幂律图
-      const MAGDisruptionPowerLaw = {}
-      for (const name of this.subjectTarget) {
-        MAGDisruptionPowerLaw[name] = await this.getStorageData(`Disruption_PowerLow_${name}`)
-      }
+      let names = []
+      let datasets = []
+
+      // x轴坐标
       xaxis = []
       for (let i = 1; i <= 100000; i++) {
-        xaxis.push(Number(Math.log10(i).toFixed(4)))
+        xaxis.push(Number(Math.log10(i)))
       }
+
+      // 一次获取所有data
+      let pargs = []
+      for (const name of this.subjectTarget) {
+        names.push(name)
+        pargs.push(`Disruption_PowerLow_${name}`)
+      }
+      let itemdata = await this.getStorageData(pargs)
+      console.log(itemdata)
+      datasets = itemdata.map(item => item.Data)
+
+      // lendge
+      let fuseData = _.zip(names, datasets)
+      fuseData.sort((x, y) =>
+        y[1][y[1].length - 1] - x[1][x[1].length - 1]
+      )
+      let tp = _.unzip(fuseData)
+      names = tp[0]
+      datasets = tp[1]
+      // 加入 x 轴
+      datasets.unshift(xaxis.slice(0, 100000))
+
       opt = extendEchartsOpts({
+        tooltip: {
+          trigger: 'axis',
+          textStyle: {
+            align: 'left'
+          },
+          axisPointer: {
+            type: 'cross',
+            animation: true,
+            label: {
+              backgroundColor: '#505765'
+            }
+          },
+          formatter: function(params) {
+            params.sort((x, y) => {
+              return y.data[y.encode.y[0]] - x.data[x.encode.y[0]]
+            })
+            let showHtm = ` ${params[0].axisValueLabel}<br>`
+            for (let i = 0; i < params.length; i++) {
+              const _text = params[i].seriesName
+              const _data = params[i].data[i + 1]
+              if (_data === undefined) {
+                continue
+              }
+              const _marker = params[i].marker
+              showHtm += `${_marker}${_text}：${_data}<br>`
+            }
+            return showHtm
+          }
+        },
         title: {
-          text: 'Subject Disruption PowerLow'
+          text: 'Subject Disruption PowerLaw'
         },
         legend: {
-          data: this.subjectTarget
+          data: names
         },
         xAxis: {
-          name: 'Percent',
+          name: 'Rank log',
           type: 'value',
-          boundaryGap: false,
-          max: 'dataMax'
+          boundaryGap: false
+          // max: 'dataMax'
         },
         yAxis: {
-          name: 'PowerLow',
-          type: 'value',
-          min: 'dataMin'
+          name: 'PowerLaw',
+          type: 'value'
+          // min: 'dataMin'
+        },
+        dataset: {
+          source: datasets,
+          sourceHeader: false
         },
         animation: false,
-        series: this.subjectTarget.map(name => {
-          const nodes = []
-          const tmp_node = MAGDisruptionPowerLaw[name].map((item, index) => {
-            return [xaxis[index], item]
-          })
-          // 过滤，先后差值小于 0.00001, 且 step 小于 5 的
-          let lastIndex = 0; let lastValue = 0
-          for (const index in tmp_node) {
-            if (lastIndex === 0) {
-              lastIndex = index
-              lastValue = tmp_node[index]
-            } else if (index > 100 && index - lastIndex < 50 && lastValue[1] - tmp_node[index][1] < 0.01) {
-              continue
-            } else {
-              lastIndex = index
-              lastValue = tmp_node[index]
-            }
-            nodes.push(tmp_node[index])
-          }
-          console.log(tmp_node.length, nodes.length)
-          return extendLineSeries({
+        series: names.map((name, index) => {
+          return {
             name: name,
-            type: 'line',
+            type: 'scatter',
             smooth: false,
-            data: nodes,
             symbolSize: 5,
+            seriesLayoutBy: 'row',
+            encode: {
+              x: 0,
+              y: index + 1
+            },
             large: true
-          })
+          }
         })
+
       })
+      console.log(opt)
       this.myChartObjs[2].setOption(opt, true)
 
-      // 图4
+      // p4
+      names = []
+      datasets = []
+
+      // x轴坐标
+      xaxis = []
+      for (let i = 1; i <= 100000; i++) {
+        xaxis.push(Number(i))
+      }
+
+      // 一次获取所有data
+      pargs = []
+      for (const name of this.subjectTarget) {
+        names.push(name)
+        pargs.push(`Disruption_page_${name}`)
+      }
+      itemdata = await this.getStorageData(pargs)
+      datasets = itemdata.map(item => item.Data)
+
+      // lendge
+      fuseData = _.zip(names, datasets)
+      fuseData.sort((x, y) =>
+        y[1][y[1].length - 1] - x[1][x[1].length - 1]
+      )
+      tp = _.unzip(fuseData)
+      names = tp[0]
+      datasets = tp[1]
+      // 加入 x 轴
+      datasets.unshift(xaxis.slice(0, 100000))
+
+      opt = extendEchartsOpts({
+        tooltip: {
+          trigger: 'axis',
+          textStyle: {
+            align: 'left'
+          },
+          axisPointer: {
+            type: 'cross',
+            animation: true,
+            label: {
+              backgroundColor: '#505765'
+            }
+          },
+          formatter: function(params) {
+            params.sort((x, y) => {
+              return y.data[y.encode.y[0]] - x.data[x.encode.y[0]]
+            })
+            let showHtm = ` ${params[0].axisValueLabel}<br>`
+            for (let i = 0; i < params.length; i++) {
+              const _text = params[i].seriesName
+              const _data = params[i].data[i + 1]
+              if (_data === undefined) {
+                continue
+              }
+              const _marker = params[i].marker
+              showHtm += `${_marker}${_text}：${_data}<br>`
+            }
+            return showHtm
+          }
+        },
+        title: {
+          text: 'Subject Disruption Page Rank'
+        },
+        legend: {
+          data: names
+        },
+        xAxis: {
+          name: 'Rank',
+          type: 'value',
+          boundaryGap: false
+          // max: 'dataMax'
+        },
+        yAxis: {
+          name: 'Disruption',
+          type: 'value'
+          // min: 'dataMin'
+        },
+        dataset: {
+          source: datasets,
+          sourceHeader: false
+        },
+        animation: false,
+        series: names.map((name, index) => {
+          return {
+            name: name,
+            type: 'scatter',
+            smooth: false,
+            symbolSize: 5,
+            seriesLayoutBy: 'row',
+            encode: {
+              x: 0,
+              y: index + 1
+            },
+            large: true
+          }
+        })
+
+      })
+      console.log(opt)
+      this.myChartObjs[3].setOption(opt, true)
+
+      // 图5
       let links = []
       let data = [{ name: 'empty ' }]
       // 存储 node name
@@ -349,9 +505,9 @@ export default {
           links
         }
       }
-      this.myChartObjs[3].setOption(opt, true)
+      this.myChartObjs[4].setOption(opt, true)
 
-      // P5
+      // P6
       links = []
       data = [{ name: 'empty ' }]
       // 存储 node name
@@ -387,14 +543,16 @@ export default {
           links
         }
       }
-      this.myChartObjs[4].setOption(opt, true)
+      this.myChartObjs[5].setOption(opt, true)
     }, 2000),
-    async getStorageData(key) {
+
+    async getStorageData(keys) {
       const opt = {
-        path: key
+        paths: keys
       }
-      const data = await getStorage(opt)
-      return data.data.Data
+      console.log(opt)
+      const data = await getMultipleStorage(opt)
+      return data.data
     }
   }
 }
