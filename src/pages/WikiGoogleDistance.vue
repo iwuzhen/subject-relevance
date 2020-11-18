@@ -170,6 +170,7 @@
 import { getGoogleDistance_tempdata } from '@/api/index'
 import { extendEchartsOpts, coreCategorys1, extendLineSeries, defaultCategorySelect1 } from '@/api/data'
 import Base from '@/utils/base'
+import _ from 'lodash'
 
 export default {
   name: 'WIKIGraph',
@@ -193,10 +194,10 @@ export default {
       averageLinedata: { title: '平均逐年距离图', legend: [], x: [], y: [] },
       currentAverageLine: { name: null, line: [] },
       count: 0,
-      versionOptions: ['v3'],
+      versionOptions: ['v3', 'v4', 'v5_node', 'v5_edge'],
       versionValue: 'v3',
       levelValue: 1000,
-      levelOpt: [1000, 2000, 3000, 3500, 4000, 5000, 6000, 7000, 8000, 9000, 10000],
+      levelOpt: [{ text: '不选择', value: -1 }, 1000, 2000, 3000, 3500, 4000, 5000, 6000, 7000, 8000, 9000, 10000],
       levelTypeValue: 2,
       levelTypeOpt: [2, 3]
     }
@@ -229,12 +230,25 @@ export default {
       console.log(this.averageLinedata)
     },
 
-    async getData() {
+    getData: _.debounce(async function() {
       if (!this.subjectTarget || this.subjectRelevances.length === 0) {
         // this.$message.error("请选择完整");
         return false
       }
+      // 补丁
       this.loading = true
+      if (this.versionValue === 'v5_node' || this.versionValue === 'v5_edge') {
+        this.levelValue = -1
+        this.levelTypeValue = 3
+      } else if (this.versionValue === 'v4' && this.levelValue === -1) {
+        this.levelValue = 1000
+        this.levelTypeValue = 2
+      } else if (this.versionValue === 'v3' && this.levelValue === -1) {
+        this.levelValue = 1000
+        this.levelTypeValue = 2
+      } else if (this.versionValue === 'v4') {
+        this.levelTypeValue = 2
+      }
       const opt = {
         strA: this.subjectTarget,
         strB: this.subjectRelevances
@@ -284,7 +298,7 @@ export default {
           this.loading = false
           this.$emit('emitMesage', `请求失败:${rej}`)
         })
-    },
+    }, 500),
     drawChart(data) {
       console.log(data)
       const options = this.setOptions(data)

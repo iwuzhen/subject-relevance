@@ -409,7 +409,7 @@ export default {
               title: 'WIKI Google 中间距离',
               text: 'WIKI Google 中间距离',
               to: { path: 'WikiGoogleDistance' },
-              update: '2020-09-16T09:43:03.429Z'
+              update: '2020-11-18T09:43:03.429Z'
             }
           ],
           'Wikipedia- Core 幂律': [
