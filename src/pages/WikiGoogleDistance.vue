@@ -329,7 +329,7 @@ export default {
           data: data.x
         },
         yAxis: {
-          name: 'Semantic Distance',
+          name: 'Count',
           type: 'value'
         },
         series: data.y.map((item, index) => {
