@@ -163,6 +163,11 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <comment storagekey="WikiGoogleDistance_chart_1" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -171,9 +176,13 @@ import { getGoogleDistance_tempdata } from '@/api/index'
 import { extendEchartsOpts, coreCategorys1, extendLineSeries, defaultCategorySelect1 } from '@/api/data'
 import Base from '@/utils/base'
 import _ from 'lodash'
+import comment from '@/components/comment'
 
 export default {
   name: 'WIKIGraph',
+  components: {
+    comment
+  },
   extends: Base,
   data() {
     return {
