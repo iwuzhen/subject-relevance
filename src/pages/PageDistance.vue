@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-11-19 13:17:37
  * @LastEditors: ider
- * @LastEditTime: 2020-11-19 14:38:17
+ * @LastEditTime: 2020-11-19 14:46:48
  * @Description:计算 page distacne
 -->
 
@@ -148,8 +148,11 @@ export default {
           strB: this.subjectRelevances.join(','),
           method: 'linksin'
         }
-        const ret = await requestWrap('wiki/getWikiMHTitle', 'POST', opt)
-        this.categorys = ret.data
+        const ret = await requestWrap('wiki/getGoogleDistance', 'POST', opt)
+        console.log(ret)
+        const options = this.setOptions(ret.data)
+        this.myChartObjs[0].setOption(options, true)
+        this.loading = false
       } catch (error) {
         this.$emit('emitMesage', '请求失败')
       }
@@ -157,11 +160,6 @@ export default {
     //   this.loading = true
     }, 500),
 
-    drawChart(data) {
-      const options = this.setOptions(data)
-      this.myChartObjs[0].setOption(options, true)
-      this.loading = false
-    },
     setOptions(data) {
       const _opt = extendEchartsOpts({
         title: {

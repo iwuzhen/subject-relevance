@@ -125,12 +125,18 @@ export default {
               to: '/MagFosTree'
             }
           ],
-          '学科层次归纳': [
+          'Import': [
             {
               title: '学科依赖层次',
               text: '学科依赖层次等 3 个表格，比引力图层次鲜明',
               to: '/DataSheet',
               update: '2020-10-14T09:43:03.429Z'
+            },
+            {
+              title: 'wiki 文章间距离计算',
+              text: '学科文章间距离计算',
+              to: '/PageDistance',
+              update: '2020-11-19T09:43:03.429Z'
             }
           ]
         },

@@ -203,12 +203,12 @@ export default {
       averageLinedata: { title: '平均逐年距离图', legend: [], x: [], y: [] },
       currentAverageLine: { name: null, line: [] },
       count: 0,
-      versionOptions: ['v3', 'v4', 'v5_node', 'v5_edge'],
+      versionOptions: ['v3', 'v4', 'v5_node', 'v5_edge', 'article'],
       versionValue: 'v3',
       levelValue: 1000,
       levelOpt: [{ text: '不选择', value: -1 }, 1000, 2000, 3000, 3500, 4000, 5000, 6000, 7000, 8000, 9000, 10000],
       levelTypeValue: 2,
-      levelTypeOpt: [2, 3]
+      levelTypeOpt: [{ value: -1, text: '不选择' }, 2, 3]
     }
   },
   computed: {
@@ -249,14 +249,28 @@ export default {
       if (this.versionValue === 'v5_node' || this.versionValue === 'v5_edge') {
         this.levelValue = -1
         this.levelTypeValue = 3
-      } else if (this.versionValue === 'v4' && this.levelValue === -1) {
-        this.levelValue = 1000
-        this.levelTypeValue = 2
-      } else if (this.versionValue === 'v3' && this.levelValue === -1) {
-        this.levelValue = 1000
-        this.levelTypeValue = 2
+      } else if (this.versionValue === 'v4') {
+        if (this.levelValue === -1) {
+          this.levelValue = 1000
+          this.levelTypeValue = 2
+        }
+        if (this.levelTypeValue === -1) {
+          this.levelTypeValue = 2
+        }
+      } else if (this.versionValue === 'v3') {
+        if (this.levelValue === -1) {
+          this.levelValue = 1000
+          this.levelTypeValue = 2
+        }
+        if (this.levelTypeValue === -1) {
+          this.levelTypeValue = 2
+        }
       } else if (this.versionValue === 'v4') {
         this.levelTypeValue = 2
+      } else if (this.versionValue === 'article') {
+        this.levelValue = -1
+        this.methodValue = 'linksin'
+        this.levelTypeValue = -1
       }
       const opt = {
         strA: this.subjectTarget,

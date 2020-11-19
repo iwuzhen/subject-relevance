@@ -193,6 +193,7 @@ export default {
   },
   methods: {
     getData: _.debounce(async function() {
+      this.loading = true
       const current_subject_data = all_subject_data.filter(item => this.subjectTarget.includes(item[0])).map(item => { return [item[0], item[1].toFixed(5)] })
       let opt = extendEchartsOpts({
         title: {
@@ -544,6 +545,7 @@ export default {
         }
       }
       this.myChartObjs[5].setOption(opt, true)
+      this.loading = false
     }, 2000),
 
     async getStorageData(keys) {

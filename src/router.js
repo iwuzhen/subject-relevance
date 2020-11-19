@@ -52,6 +52,10 @@ const routes = [{
   name: 'MagTrade',
   component: () => import('@/pages/MagTrade')
 }, {
+  path: '/PageDistance',
+  name: 'PageDistance',
+  component: () => import('@/pages/PageDistance')
+}, {
   path: '/MagTopTrade',
   name: 'MagTopTrade',
   component: () => import('@/pages/MagTopTrade')
