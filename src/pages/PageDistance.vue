@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-11-19 13:17:37
  * @LastEditors: ider
- * @LastEditTime: 2020-11-19 16:22:11
+ * @LastEditTime: 2020-11-19 17:53:19
  * @Description:计算 page distacne
 -->
 
@@ -72,6 +72,11 @@
     <v-row>
       <v-col>
         <comment v-if="storagekey!=''" :storagekey="storagekey" />
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <comment storagekey="PageDistance_graph_1" />
       </v-col>
     </v-row>
   </v-container>
