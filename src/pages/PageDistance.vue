@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-11-19 13:17:37
  * @LastEditors: ider
- * @LastEditTime: 2020-11-19 15:00:17
+ * @LastEditTime: 2020-11-19 16:21:09
  * @Description:计算 page distacne
 -->
 
@@ -139,7 +139,7 @@ export default {
       }
     }, 200),
     getData: _.debounce(async function() {
-      if (this.subjectRelevances.length === 0 || this.subjectTarget === '') {
+      if (this.subjectRelevances.length === 0 || this.subjectTarget === '' || this.subjectTarget === null) {
         return
       }
       try {
