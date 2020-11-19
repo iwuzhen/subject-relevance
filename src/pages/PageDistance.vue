@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-11-19 13:17:37
  * @LastEditors: ider
- * @LastEditTime: 2020-11-19 14:46:48
+ * @LastEditTime: 2020-11-19 15:00:17
  * @Description:计算 page distacne
 -->
 
@@ -145,7 +145,7 @@ export default {
       try {
         const opt = {
           strA: this.subjectTarget,
-          strB: this.subjectRelevances.join(','),
+          strB: this.subjectRelevances,
           method: 'linksin'
         }
         const ret = await requestWrap('wiki/getGoogleDistance', 'POST', opt)
