@@ -30,22 +30,6 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <div
-      v-for="(item) in recentArray"
-      :key="item.to"
-      class="mb-5"
-    >
-      <v-snackbar
-        :timeout="-1"
-        :value="true"
-        left
-        shaped
-        top
-      >
-        {{ item.title }}
-      </v-snackbar>
-
-    </div>
     <!-- Sizes your content based upon application components -->
     <v-main style="padding:0">
       <!-- Provides the application the proper gutter -->
@@ -117,6 +101,9 @@
 </template>
 
 <script>
+
+import dayjs from 'dayjs'
+
 export default {
   name: 'Index',
   data() {
@@ -588,25 +575,34 @@ export default {
         }
       }
       return retArray
-    },
-    // 最近更新的图表，用作消息条提示
-    recentArray: function() {
-      const retArray = []
-      for (const key in this.indexObject) {
-        for (const skey in this.indexObject[key]) {
-          for (const item of this.indexObject[key][skey]) {
-            if ((item.update != null) && (new Date().getTime() - new Date(item.update).getTime() < 2497466968)) {
-              retArray.push(item)
-            }
-          }
-        }
-      }
-      retArray.sort((a, b) => { return new Date(b.update).getTime() - new Date(a.update).getTime() })
-      return retArray
     }
+    // 最近更新的图表，用作消息条提示
   },
   mounted() {
     this.$store.commit('changeCurentPath', null)
+
+    // 最近更新的内容提醒
+    const retArray = []
+    for (const key in this.indexObject) {
+      for (const skey in this.indexObject[key]) {
+        for (const item of this.indexObject[key][skey]) {
+          if ((item.update != null) && (new Date().getTime() - new Date(item.update).getTime() < 2497466968)) {
+            retArray.push(item)
+          }
+        }
+      }
+    }
+    retArray.sort((a, b) => { return new Date(b.update).getTime() - new Date(a.update).getTime() })
+    for (const item of retArray.slice(0, 5)) {
+      console.log(item)
+      this.$notify({
+        group: 'foo',
+        duration: 10000,
+        title: `<a href="${item.to}" style="color: orange;">${item.title} </a>`,
+        type: 'success',
+        text: item.text + '<br> 更新：' + dayjs().from(dayjs(item.update))
+      })
+    }
   },
   methods: {
     scrollMeTo(refName) {

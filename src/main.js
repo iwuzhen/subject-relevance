@@ -7,11 +7,12 @@ import echarts from 'echarts'
 // import ecStat from "echarts-stat";
 import store from './store.js'
 import vuetify from './plugins/vuetify'
-
+import Notifications from 'vue-notification'
 // import VueRx from 'vue-rx';
 // Vue.use(VueRx);
 
 Vue.use(echarts)
+Vue.use(Notifications)
 // Vue.use(ecStat);
 Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false

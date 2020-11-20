@@ -9,6 +9,7 @@
 
       <router-view @emitMesage="message" />
     </v-main>
+    <notifications group="foo" />
     <v-snackbar
       v-model="snackbar"
       top

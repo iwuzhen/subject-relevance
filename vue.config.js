@@ -31,6 +31,7 @@ module.exports = {
       "localforage": "localforage",
       "d3": "d3",
       "lodash": "_",
+      "dayjs": "dayjs",
     }
   },
   "transpileDependencies": [
