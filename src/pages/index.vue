@@ -30,7 +30,22 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
+    <div
+      v-for="(item) in recentArray"
+      :key="item.to"
+      class="mb-5"
+    >
+      <v-snackbar
+        :timeout="-1"
+        :value="true"
+        left
+        shaped
+        top
+      >
+        {{ item.title }}
+      </v-snackbar>
 
+    </div>
     <!-- Sizes your content based upon application components -->
     <v-main style="padding:0">
       <!-- Provides the application the proper gutter -->
@@ -572,6 +587,21 @@ export default {
           })
         }
       }
+      return retArray
+    },
+    // 最近更新的图表，用作消息条提示
+    recentArray: function() {
+      const retArray = []
+      for (const key in this.indexObject) {
+        for (const skey in this.indexObject[key]) {
+          for (const item of this.indexObject[key][skey]) {
+            if ((item.update != null) && (new Date().getTime() - new Date(item.update).getTime() < 2497466968)) {
+              retArray.push(item)
+            }
+          }
+        }
+      }
+      retArray.sort((a, b) => { return new Date(b.update).getTime() - new Date(a.update).getTime() })
       return retArray
     }
   },

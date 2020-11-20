@@ -3,25 +3,25 @@ Engineering disciplines 修改为 Engineering
 图标网站 https://materialdesignicons.com/
 ## Project setup
 ```
-npm install --registry=https://registry.npm.taobao.org
+yarn install --registry=https://registry.yarn.taobao.org
 ```
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+yarn run serve
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
+yarn run build
 ```
 
 ### Lints and fixes files
 ```
-npm run lint
+yarn run lint
 ```
 
 ### Run your unit tests
 ```
-npm run test:unit
+yarn run test:unit
 ```
