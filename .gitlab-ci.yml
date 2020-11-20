@@ -38,7 +38,7 @@ build:
       - dist
 
 deploy_master:
-  image: alpine
+  image: registry.cn-hangzhou.aliyuncs.com/ider/node:lts-alpine
   stage: deploy
   only:
     - master
