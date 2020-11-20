@@ -240,6 +240,12 @@ export default {
               text: 'Mag topN学科逐年分布',
               to: '/TjYearByTopN',
               update: '2020-11-04T09:43:03.429Z'
+            },
+            {
+              title: '逐年点边统计数据',
+              text: 'Mag 逐年点边统计数据',
+              to: '/NodeAndEdgeByYear',
+              update: '2020-11-20T09:43:03.429Z'
             }
 
           ],

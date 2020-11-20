@@ -3,6 +3,7 @@
     <v-row>
       <v-col v-for="(item,index) in ChartObj.Select" :key="index" :cols="item.cols">
         <v-select
+          v-if="item.show!==false"
           v-model="options[item.name]"
           :items="item.items"
           :multiple="item.multiple"
