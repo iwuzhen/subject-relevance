@@ -21,7 +21,7 @@ stages:
   - deploy
 
 build:
-  image: node:lts-alpine
+  image: registry.cn-hangzhou.aliyuncs.com/ider/node:lts-alpine
   stage: build
   tags:
     - builder
