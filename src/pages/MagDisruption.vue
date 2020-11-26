@@ -84,6 +84,91 @@
       </v-col>
     </v-row>
     <v-row>
+      <v-col cols="7">
+        <v-slider
+          v-model="ByYearTopPercent"
+          :max="100"
+          :min="5"
+          dense
+          hide-details
+          step="5"
+          hint="top percent"
+          class="align-center"
+          @change="getP7Graph"
+        >
+          <template v-slot:prepend>
+            <p style="width: 6rem">top percent</p>
+            <v-text-field
+              :value="ByYearTopPercent"
+              class="mt-0 pt-0"
+              hide-details
+              single-line
+              type="number"
+              style="width: 60px"
+              @change="TopPercent=$event"
+            />
+          </template>
+        </v-slider>
+      </v-col>
+      <v-col cols="7">
+        <v-range-slider
+          v-model="years"
+          :max="2019"
+          :min="1945"
+          dense
+          hide-details
+          hint="年份范围"
+          class="align-center"
+          @change="getP7Graph"
+        >
+          <template v-slot:prepend>
+            <p style="width: 100px">年份范围</p>
+            <v-text-field
+              :value="years[0]"
+              class="mt-0 pt-0"
+              hide-details
+              single-line
+              type="number"
+              style="width: 60px"
+              @change="$set(years, 0, $event)"
+            />
+          </template>
+          <template v-slot:append>
+            <v-text-field
+              :value="years[1]"
+              class="mt-0 pt-0"
+              hide-details
+              single-line
+              type="number"
+              style="width: 60px"
+              @change="$set(years, 1, $event)"
+            />
+          </template>
+        </v-range-slider>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col col="12">
+        <v-card
+          class="mx-auto"
+          outlined
+          :loading="loading"
+          height="70vh"
+        >
+          <v-container
+            id="subjectChart7"
+            fluid
+            fill-height
+          />
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <comment storagekey="MagDisruption_graph_5" />
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col col="12">
         <v-card
           class="mx-auto"
@@ -183,7 +268,9 @@ export default {
       categorys: [],
       loading: false,
       TopPercent: 20,
-      myChartIds: ['subjectChart1', 'subjectChart2', 'subjectChart3', 'subjectChart4', 'subjectChart5', 'subjectChart6']
+      years: [2000, 2019],
+      ByYearTopPercent: 20,
+      myChartIds: ['subjectChart1', 'subjectChart2', 'subjectChart3', 'subjectChart4', 'subjectChart5', 'subjectChart6', 'subjectChart7']
     }
   },
   mounted() {
@@ -192,7 +279,70 @@ export default {
     this.getData()
   },
   methods: {
+    getP7Graph: _.debounce(async function() {
+      // p7 颠覆度逐年图
+      // 一次获取所有data
+      let names = []
+      let datasets = []
+      const pargs = []
+      const xaxis = []
+      for (let i = this.years[0]; i <= this.years[1]; i += 1) {
+        xaxis.push(i)
+      }
+      for (const name of this.subjectTarget) {
+        names.push(name)
+        pargs.push(`Disruption_page_by_year_${name}`)
+      }
+      const itemdata = await this.getStorageData(pargs)
+      datasets = itemdata.map(item => item.Data)
+
+      // 提取对应百分比的数据
+      const percentIndex = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100].indexOf(this.ByYearTopPercent)
+      const subjectData = datasets.map(item => {
+        return item.filter(obj => { return this.years[0] <= obj.year && obj.year <= this.years[1] }).map(itemdata => {
+          return itemdata.data[percentIndex]
+        })
+      })
+      const fuseData = _.zip(names, subjectData)
+      fuseData.sort((x, y) =>
+        y[1][y[1].length - 1] - x[1][x[1].length - 1]
+      )
+      const tp = _.unzip(fuseData)
+      names = tp[0]
+      datasets = tp[1]
+
+      console.log(fuseData)
+      const opt = extendEchartsOpts({
+        title: {
+          text: `Top ${this.ByYearTopPercent}% Subject Disruption By year`
+        },
+        legend: {
+          data: names
+        },
+        xAxis: {
+          name: 'year',
+          type: 'category',
+          boundaryGap: false,
+          data: xaxis
+        },
+        yAxis: {
+          name: 'Average Disruption',
+          type: 'value',
+          max: 1
+        },
+        series: fuseData.map((item, index) => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: item[1]
+          })
+        })
+      })
+      this.myChartObjs[6].setOption(opt, true)
+    }),
     getData: _.debounce(async function() {
+      this.getP7Graph()
       this.loading = true
       const current_subject_data = all_subject_data.filter(item => this.subjectTarget.includes(item[0])).map(item => { return [item[0], item[1].toFixed(5)] })
       let opt = extendEchartsOpts({
@@ -270,7 +420,6 @@ export default {
       // p3 幂律图
       let names = []
       let datasets = []
-
       // x轴坐标
       xaxis = []
       for (let i = 1; i <= 100000; i++) {
@@ -284,17 +433,16 @@ export default {
         pargs.push(`Disruption_PowerLow_${name}`)
       }
       let itemdata = await this.getStorageData(pargs)
-      console.log(itemdata)
       datasets = itemdata.map(item => item.Data)
 
-      // lendge
+      // lengde
       let fuseData = _.zip(names, datasets)
       fuseData.sort((x, y) =>
         y[1][y[1].length - 1] - x[1][x[1].length - 1]
       )
       let tp = _.unzip(fuseData)
       names = tp[0]
-      datasets = tp[1]
+      datasets = tp[1].map(item => Float32Array.from(item))
       // 加入 x 轴
       datasets.unshift(xaxis.slice(0, 100000))
 
@@ -364,7 +512,6 @@ export default {
             large: true
           }
         })
-
       })
       console.log(opt)
       this.myChartObjs[2].setOption(opt, true)
@@ -467,7 +614,6 @@ export default {
         })
 
       })
-      console.log(opt)
       this.myChartObjs[3].setOption(opt, true)
 
       // 图5
@@ -552,7 +698,6 @@ export default {
       const opt = {
         paths: keys
       }
-      console.log(opt)
       const data = await getMultipleStorage(opt)
       return data.data
     }

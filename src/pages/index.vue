@@ -233,9 +233,9 @@ export default {
             },
             {
               title: 'Mag 学科颠覆度',
-              text: '',
+              text: '颠覆度学科计算法，文章计算平均法，学科 top 分布，按年学科 top 分布等。 ',
               to: '/MagDisruption',
-              update: '2020-11-02T09:43:03.429Z'
+              update: '2020-11-27T16:43:03.429Z'
             },
             {
               title: 'topN学科逐年分布',
@@ -598,9 +598,9 @@ export default {
       this.$notify({
         group: 'foo',
         duration: 10000,
-        title: `<a href="${item.to}" style="color: orange;">${item.title} </a>`,
-        type: 'success',
-        text: item.text + '<br> 更新：' + dayjs().from(dayjs(item.update))
+        title: `<a href="${item.to}" style="color: green;">${item.title} </a>`,
+        type: 'blue lighten-5',
+        text: '<span class="red--text">' + item.text + '<br> 更新：' + dayjs().from(dayjs(item.update)) + '</span>'
       })
     }
   },

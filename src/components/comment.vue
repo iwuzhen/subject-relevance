@@ -93,7 +93,6 @@ export default {
     },
     async init() {
       const data = await this.getStorageData(this.storagekey)
-      console.log(data)
       if (data) {
         this.content = data.content
       }
