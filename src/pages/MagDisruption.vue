@@ -268,8 +268,8 @@ export default {
       categorys: [],
       loading: false,
       TopPercent: 20,
-      years: [2000, 2019],
-      ByYearTopPercent: 20,
+      years: [1945, 2019],
+      ByYearTopPercent: 10,
       myChartIds: ['subjectChart1', 'subjectChart2', 'subjectChart3', 'subjectChart4', 'subjectChart5', 'subjectChart6', 'subjectChart7']
     }
   },
@@ -328,7 +328,7 @@ export default {
         yAxis: {
           name: 'Average Disruption',
           type: 'value',
-          max: 1
+          max: 'dataMax'
         },
         series: fuseData.map((item, index) => {
           return extendLineSeries({
