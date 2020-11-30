@@ -81,6 +81,7 @@
 import { ChartMap } from '@/api/chartData'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
+import _ from 'lodash'
 
 export default {
   name: 'Template',
@@ -112,7 +113,7 @@ export default {
     this.getData()
   },
   methods: {
-    async getData() {
+    getData: _.debounce(async function() {
       this.loading = true
       // 参数处理
       const opt = {}
@@ -132,7 +133,7 @@ export default {
       this.myChartObjs[0].setOption(options, true)
 
       this.loading = false
-    }
+    }, 500)
   }
 }
 </script>
