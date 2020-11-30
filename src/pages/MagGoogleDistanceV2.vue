@@ -26,20 +26,11 @@
       </v-col>
       <v-col cols="2">
         <v-select
-          v-model="methodValue"
-          :items="methodOptions"
+          v-model="version"
+          :items="versionOpt"
           dense
-          label="条件"
-          @change="linksChange"
-        />
-      </v-col>
-      <v-col cols="2">
-        <v-select
-          v-model="qsValue"
-          :items="qsOptions"
-          dense
-          label="筛选条件"
-          @change="qsChange"
+          label="过滤条件"
+          @change="getData"
         />
       </v-col>
     </v-row>
@@ -48,7 +39,7 @@
         <v-range-slider
           v-model="years"
           :max="2019"
-          :min="1900"
+          :min="1955"
           dense
           hide-details
           hint="年份范围"
@@ -79,15 +70,6 @@
             />
           </template>
         </v-range-slider>
-      </v-col>
-      <v-col cols="2">
-        <v-select
-          v-model="bfValue"
-          :items="bfOpt"
-          dense
-          label="只用该年以前的数据"
-          @change="bfChange"
-        />
       </v-col>
       <v-col cols="1">
         <v-btn
@@ -182,7 +164,7 @@ export default {
   extends: Base,
   data() {
     return {
-      pageName: 'MAG 学科相关度 v2',
+      pageName: 'MAG 学科相关度 v2（当时的距离）',
       qsValue: -1,
       qsOptions: [{ text: '去掉引用为0的。按边', value: -100 },
         { text: '不筛选,按边', value: -99 },
@@ -194,14 +176,22 @@ export default {
       subjectTarget: '',
       subjectRelevances: defaultCategorySelect,
       methodValue: 'linksin',
-      years: [1945, 2018],
+      years: [1955, 2017],
       categorys: coreCategorys,
       methodOptions: ['linksin', 'linksout'],
-      bfValue: '不适用',
-      bfOpt: ['不适用', 1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015],
+      bfValue: -1,
+      bfOpt: [-1, 1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015],
       loading: false,
       myChartIds: ['masChart1', 'masChart2'],
       averageLinedata: { title: '平均逐年距离图', legend: [], x: [], y: [] },
+      version: 'delete_noref_v2_node',
+      versionOpt: [{
+        value: 'delete_noref_v2_node',
+        text: '去0,按点'
+      }, {
+        value: 'delete_noref_v2_edge',
+        text: '去0,按边'
+      }],
       currentAverageLine: { name: null, line: [] },
       count: 0
     }
@@ -232,29 +222,6 @@ export default {
       const options = this.setOptions(this.averageLinedata)
       this.myChartObjs[1].setOption(options, true)
       console.log(this.averageLinedata)
-    },
-    qsChange() {
-      if (this.qsValue === 0) {
-        this.methodValue = 'linksin'
-        this.bfValue === '不适用'
-      }
-      this.getData()
-    },
-
-    bfChange() {
-      if (this.bfValue !== '不适用') {
-        this.methodValue = 'linksin'
-        this.qsValue = -1
-      }
-      this.getData()
-    },
-
-    linksChange() {
-      if (this.methodValue === 'linksout') {
-        this.qsValue = -1
-        this.bfValue = '不适用'
-      }
-      this.getData()
     },
 
     async getData() {

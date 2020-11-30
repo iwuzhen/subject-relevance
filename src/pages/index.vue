@@ -168,16 +168,23 @@ export default {
               text: ' mag 因果关系-贸易比例',
               to: '/MagTrade',
               update: '2020-09-24T09:43:03.429Z'
-            }, {
+            },
+            {
               title: 'topN因果关系-贸易比例',
               text: 'mag topN因果关系-贸易比例',
               to: '/MagTopTrade',
               update: '2020-11-03T09:43:03.429Z'
             },
             {
-              title: 'MAG google 距离',
+              title: 'google 距离',
               text: 'Mag 学科相关度',
               to: '/MasDistanceV2'
+            },
+            {
+              title: 'google 距离（当时的距离）',
+              text: 'Mag 学科相关度, 当时的距离',
+              to: '/MagGoogleDistanceV2',
+              update: '2020-11-30T09:43:03.429Z'
             },
             {
               title: 'google距离中间数据',
@@ -244,10 +251,16 @@ export default {
               update: '2020-11-04T09:43:03.429Z'
             },
             {
-              title: '逐年点边统计数据',
-              text: 'Mag 逐年点边统计数据',
+              title: '当年的点边数据统计',
+              text: 'Mag 当年的点边数据统计',
               to: '/NodeAndEdgeByYear',
               update: '2020-11-20T09:43:03.429Z'
+            },
+            {
+              title: '当时的点边数据统计',
+              text: 'Mag 当时的点边数据统计',
+              to: '/NodeAndEdgeThatTime',
+              update: '2020-11-30T19:43:03.429Z'
             }
 
           ],
@@ -597,7 +610,7 @@ export default {
       console.log(item)
       this.$notify({
         group: 'foo',
-        duration: 10000,
+        duration: 6000,
         title: `<a href="${item.to}" style="color: green;">${item.title} </a>`,
         type: 'blue lighten-5',
         text: '<span class="red--text">' + item.text + '<br> 更新：' + dayjs().from(dayjs(item.update)) + '</span>'
