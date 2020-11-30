@@ -224,7 +224,7 @@ export default {
               title: '引用关系逐年统计',
               text: '',
               to: '/LinkTjByYear',
-              update: '2020-10-28T09:43:03.429Z'
+              update: '2020-11-30T20:43:03.429Z'
             },
             {
               title: 'fos学科领域逐年分布',
