@@ -610,7 +610,7 @@ export default {
       console.log(item)
       this.$notify({
         group: 'foo',
-        duration: 6000,
+        duration: 5000,
         title: `<a href="${item.to}" style="color: green;">${item.title} </a>`,
         type: 'blue lighten-5',
         text: '<span class="red--text">' + item.text + '<br> 更新：' + dayjs().from(dayjs(item.update)) + '</span>'

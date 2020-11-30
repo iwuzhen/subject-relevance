@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-11-30 15:56:43
+ * @LastEditTime: 2020-11-30 19:32:38
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -383,7 +383,7 @@ export const ChartMap = {
     yAxisName: 'Count'
   },
   'NodeAndEdgeThatTime': {
-    ChName: 'mag 当年点边数据统计',
+    ChName: 'mag 当时点边数据统计',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_1,
     RequestFunc: async(params) => {
@@ -395,7 +395,7 @@ export const ChartMap = {
       label: '数据集',
       show: true,
       cols: 2,
-      items: [{ text: '去0', value: 'delete_noref_v2' }, { text: 'v2', value: '全集' }]
+      items: [{ text: '去0', value: 'delete_noref_v2' }, { text: '全集', value: 'v2' }]
     },
     {
       name: 'db',
