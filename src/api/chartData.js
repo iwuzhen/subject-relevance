@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-11-30 19:32:38
+ * @LastEditTime: 2020-11-30 19:34:58
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -192,7 +192,7 @@ export const ChartMap = {
           value: 'delete_noref_v2'
         }]
       }, {
-        name: 'yearType',
+        name: 'authorType',
         default: 0,
         label: '作者数筛选',
         multiple: false,
