@@ -113,7 +113,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <comment storagekey="Maslinev2_Chart_2" />
+        <comment storagekey="Mag_google_distance_Chart_1" />
       </v-col>
     </v-row>
     <v-row>
@@ -134,7 +134,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <comment storagekey="Maslinev2_Chart_2" />
+        <comment storagekey="Mag_google_distance_Chart_2" />
       </v-col>
     </v-row>
   </v-container>

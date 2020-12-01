@@ -131,7 +131,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <comment storagekey="Maslinev2_Chart_2" />
+        <comment storagekey="Maslinev2_Chart_1" />
       </v-col>
     </v-row>
     <v-row>
