@@ -33,6 +33,15 @@
           @change="getData"
         />
       </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="methodValue"
+          :items="methodOptions"
+          dense
+          label="条件"
+          @change="getData"
+        />
+      </v-col>
     </v-row>
     <v-row>
       <v-col cols="7">
