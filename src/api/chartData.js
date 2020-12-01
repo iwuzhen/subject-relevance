@@ -3,12 +3,13 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-11-30 19:34:58
+ * @LastEditTime: 2020-12-01 11:30:15
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
 import { requestWrap } from '@/api/index'
 import { coreCategorys, magCategory, defaultCategorySelect, extendEchartsOpts, extendLineSeries } from '@/api/data'
+import _ from 'lodash'
 
 const zip = (...rows) => [...rows[0]].map((_, c) => rows.map(row => row[c]))
 
@@ -67,6 +68,45 @@ const setChartOption_2 = (responseData, ChartObj) => {
         type: 'line',
         smooth: false,
         data: Object.values(item[1])
+      })
+    })
+  })
+  return _opt
+}
+
+// 合并2张图表，数据一起展示
+const setChartOption_3 = (doubleResponseData, ChartObj) => {
+  const [responseData_1, responseData_2] = doubleResponseData
+
+  const fuseData = _.zip([...responseData_1.legend, ...responseData_2.legend], [...responseData_1.y, ...responseData_2.y])
+  fuseData.sort((x, y) =>
+    y[1][y[1].length - 1] - x[1][x[1].length - 1]
+  )
+  const [legend, ys] = _.unzip(fuseData)
+
+  const _opt = extendEchartsOpts({
+    title: {
+      text: 'MAG 当年和当时（包含过去）的 edge,node 分布'
+    },
+    legend: {
+      data: legend
+    },
+    xAxis: {
+      name: ChartObj.xAxisName,
+      type: 'category',
+      boundaryGap: false,
+      data: responseData_1.x
+    },
+    yAxis: {
+      name: ChartObj.yAxisName,
+      type: 'value'
+    },
+    series: _.zip(legend, ys).map(item => {
+      return extendLineSeries({
+        name: item[0],
+        type: 'line',
+        smooth: false,
+        data: item[1]
       })
     })
   })
@@ -354,57 +394,28 @@ export const ChartMap = {
     yAxisName: 'Count'
   },
   'NodeAndEdgeByYear': {
-    ChName: 'mag 当年点边数据统计',
+    ChName: 'mag 历年点边数据统计',
     componentName: 'PageTemplate',
-    HandleResponseFunc: setChartOption_1,
+    HandleResponseFunc: setChartOption_3,
     RequestFunc: async(params) => {
-      return await requestWrap('mag/getNodeAndEdgeByYear', 'post', params)
+      params.db = 'mag'
+      // 当年
+      const data_a = await requestWrap('mag/getNodeAndEdgeByYear', 'post', params)
+      // 截至年
+      const data_b = await requestWrap('mag/getNodeAndEdgeThatTime', 'post', params)
+      data_a.data.legend = data_a.data.legend.map(item => `${item}-当年`)
+      data_b.data.legend = data_b.data.legend.map(item => `${item}-当时（包含过去）`)
+      return [data_a.data, data_b.data]
     },
     Select: [
       {
-        name: 'db',
-        default: 'mag',
-        label: '数据库',
-        show: false,
+        name: 'version',
+        default: 'delete_noref_v2',
+        label: '当时（包含过去）数据集',
+        show: true,
         cols: 2,
-        items: ['mag']
+        items: [{ text: '去0', value: 'delete_noref_v2' }, { text: '全集', value: 'v2' }]
       }],
-    RangeSlider: [{
-      name: 'yearRange',
-      startName: 'from',
-      rangeDefault: [1900, 2019],
-      endName: 'to',
-      label: '年份范围',
-      cols: 12,
-      max: 2019,
-      min: 1900
-    }],
-    xAxisName: 'Year',
-    yAxisName: 'Count'
-  },
-  'NodeAndEdgeThatTime': {
-    ChName: 'mag 当时点边数据统计',
-    componentName: 'PageTemplate',
-    HandleResponseFunc: setChartOption_1,
-    RequestFunc: async(params) => {
-      return await requestWrap('mag/getNodeAndEdgeThatTime', 'post', params)
-    },
-    Select: [{
-      name: 'version',
-      default: 'delete_noref_v2',
-      label: '数据集',
-      show: true,
-      cols: 2,
-      items: [{ text: '去0', value: 'delete_noref_v2' }, { text: '全集', value: 'v2' }]
-    },
-    {
-      name: 'db',
-      default: 'mag',
-      label: '数据库',
-      show: false,
-      cols: 0,
-      items: ['mag']
-    }],
     RangeSlider: [{
       name: 'yearRange',
       startName: 'from',

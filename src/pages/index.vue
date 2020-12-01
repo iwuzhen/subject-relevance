@@ -85,7 +85,7 @@
                     :class="(item.update!=null)&&(new Date().getTime()-new Date(item.update).getTime()<2497466968)?'orange':'white'"
                   >
                     <v-card-title>{{ item.title }}</v-card-title>
-                    <v-card-subtitle v-if="item.update!=null">{{ new Date(item.update).toDateString() }}</v-card-subtitle>
+                    <v-card-subtitle v-if="item.update!=null">{{ dayjs(item.update).locale('zh-cn').format('YYYY-MM-DD') }}</v-card-subtitle>
                     <v-card-text>{{ item.text }}</v-card-text>
                     <v-card-actions />
                   </v-card>
@@ -251,16 +251,10 @@ export default {
               update: '2020-11-04T09:43:03.429Z'
             },
             {
-              title: '当年的点边数据统计',
-              text: 'Mag 当年的点边数据统计',
+              title: '历年的点边数据统计',
+              text: 'Mag 历年的点边数据统计',
               to: '/NodeAndEdgeByYear',
-              update: '2020-11-20T09:43:03.429Z'
-            },
-            {
-              title: '当时的点边数据统计',
-              text: 'Mag 当时的点边数据统计',
-              to: '/NodeAndEdgeThatTime',
-              update: '2020-11-30T19:43:03.429Z'
+              update: '2020-12-01T09:43:03.429Z'
             }
 
           ],

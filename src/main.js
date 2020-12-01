@@ -8,6 +8,7 @@ import echarts from 'echarts'
 import store from './store.js'
 import vuetify from './plugins/vuetify'
 import Notifications from 'vue-notification'
+import dayjs from 'dayjs'
 // import VueRx from 'vue-rx';
 // Vue.use(VueRx);
 
@@ -15,6 +16,7 @@ Vue.use(echarts)
 Vue.use(Notifications)
 // Vue.use(ecStat);
 Vue.prototype.$echarts = echarts
+Vue.prototype.dayjs = dayjs
 Vue.config.productionTip = false
 
 new Vue({
