@@ -239,12 +239,6 @@ export default {
               update: '2020-10-29T09:43:03.429Z'
             },
             {
-              title: 'Mag 学科颠覆度',
-              text: '颠覆度学科计算法，文章计算平均法，学科 top 分布，按年学科 top 分布等。 ',
-              to: '/MagDisruption',
-              update: '2020-11-27T16:43:03.429Z'
-            },
-            {
               title: 'topN学科逐年分布',
               text: 'Mag topN学科逐年分布',
               to: '/TjYearByTopN',
@@ -281,6 +275,19 @@ export default {
               title: 'MAG 小世界 v4',
               text: '重新筛选后计算得到的 MAG 小世界',
               to: { path: 'MagDirectNetV4', query: { version: 'v4' }}
+            }
+          ],
+          'MAG v2 颠覆度': [
+            {
+              title: 'Mag 学科颠覆度',
+              text: '颠覆度学科计算法，文章计算平均法，学科 top 分布，按年学科 top 分布等。 ',
+              to: '/MagDisruption',
+              update: '2020-11-27T16:43:03.429Z'
+            }, {
+              title: '学科颠覆度年度分布',
+              text: '年度分布，可以调节多种条件进行过滤 ',
+              to: '/DisruptionByYear',
+              update: '2020-12-03T16:43:03.429Z'
             }
           ]
         },

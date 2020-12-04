@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 16:39:08
  * @LastEditors: ider
- * @LastEditTime: 2020-11-18 16:01:26
+ * @LastEditTime: 2020-12-03 15:59:32
  * @Description:
  */
 import axios from 'axios'
@@ -22,7 +22,6 @@ service.interceptors.response.use(
      * msg为非success是抛错 可结合自己业务进行修改
      */
     response.data = JSON.parse(JSON.stringify(response.data).replace(/Engineering disciplines/g, 'Engineering'))
-
     return response
   },
   error => {

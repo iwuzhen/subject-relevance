@@ -2,6 +2,13 @@ import request from '@/utils/request'
 import requestwiki from '@/utils/requestwiki'
 import requestgo from '@/utils/requestgo'
 import * as localforage from 'localforage'
+import axios from 'axios'
+
+// 创建axios实例
+const service = axios.create({
+  timeout: 150000000 // 请求超时时间
+})
+
 const qs = require('qs')
 
 localforage.setDriver([localforage.INDEXEDDB, localforage.WEBSQL])
@@ -83,6 +90,16 @@ export async function requestWrap(url, method, params) {
     data: params
   }
   const res = await request(requestParams)
+  return res.data
+}
+//  gov2 包裹
+export async function requestGoV2Wrap(url, method, params) {
+  const requestParams = {
+    url: url,
+    method: method,
+    data: params
+  }
+  const res = await service(requestParams)
   return res.data
 }
 

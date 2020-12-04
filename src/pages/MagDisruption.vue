@@ -263,7 +263,11 @@ export default {
   data() {
     return {
       pageName: 'MAG 学科颠覆度',
-      subjectTarget: ['Literature', 'Geometry', 'Philosophy', 'Linguistics', 'Anthropology', 'History', 'Geography', 'Sociology', 'Neuroscience', 'Geology', 'Economics', 'Mathematics', 'Physics', 'Psychology', 'Materials science', 'Computer science', 'Chemistry', 'Biology', 'Medicine'].sort(),
+      subjectTarget: ['Biology', 'Chemistry', 'Computer science',
+        'Economics', 'Geography',
+        'History', 'Literature', 'Materials science',
+        'Mathematics', 'Medicine', 'Philosophy',
+        'Physics'],
       // subjectTarget: ['Computer science', 'Medicine', 'Chemistry', 'Biology'].sort(),
       categorys: [],
       loading: false,
