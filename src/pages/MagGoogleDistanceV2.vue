@@ -253,7 +253,8 @@ export default {
         method: this.methodValue,
         from: this.years[0],
         to: this.years[1],
-        qs: this.qsValue
+        qs: this.qsValue,
+        version: this.version
       }
 
       if (this.bfValue !== '不适用') {
