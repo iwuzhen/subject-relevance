@@ -142,6 +142,16 @@ export default {
             }
           ]
         },
+        'MAG 2020': {
+          'MAG 2020 - 学科相关度': [
+            {
+              title: '2020 学科相关度',
+              text: '2020 学科相关度',
+              to: '/MagGoogleDistance_2020_V3',
+              update: '2020-12-14T09:43:03.429Z'
+            }
+          ]
+        },
         'MAG v2 (非简介分类)': {
           'MAG v2- Graph': [
             {

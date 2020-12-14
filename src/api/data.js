@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-11-16 13:58:05
+ * @LastEditTime: 2020-12-14 14:47:59
  * @Description:
  */
 
@@ -325,6 +325,20 @@ export const coreCategorys1 = [
   'Anthropology',
   'Neuroscience',
   'Literature'
+].sort().map(each => {
+  return {
+    text: each === 'Engineering disciplines' ? 'Engineering' : each,
+    value: each
+  }
+})
+
+export const MAGCoreCategorys2020 = ['Algebra', 'Anthropology', 'Applied mathematics', 'Applied physics', 'Artificial intelligence', 'Biological engineering', 'Biology',
+  'Blockchains', 'Chemical engineering', 'Chemistry', 'Civil engineering', 'Cognitive science', 'Computational biology', 'Computer engineering', 'Computer science',
+  'Deep learning', 'Discrete mathematics', 'Earth science', 'Economics', 'Electrical engineering', 'Engineering disciplines', 'Environmental engineering',
+  'Environmental science', 'Experimental physics', 'Genetic engineering', 'Genome editing', 'Geography', 'Geology', 'Geometry', 'History', 'Industrial engineering',
+  'Linguistics', 'Literature', 'Logic', 'Machine learning', 'Materials science', 'Mathematics', 'Mechanical engineering', 'Medicine', 'Neuroscience', 'Number theory',
+  'Operating system', 'Philosophy', 'Physics', 'Political science', 'Psychology', 'Quantum computing', 'Sociology', 'Theoretical chemistry', 'Theoretical computer science',
+  'Theoretical physics'
 ].sort().map(each => {
   return {
     text: each === 'Engineering disciplines' ? 'Engineering' : each,

@@ -60,6 +60,10 @@ const routes = [{
   name: 'MagGoogleDistanceV2',
   component: () => import('@/pages/MagGoogleDistanceV2')
 }, {
+  path: '/MagGoogleDistance_2020_V3',
+  name: 'MagGoogleDistance_2020_V3',
+  component: () => import('@/pages/MagGoogleDistance_2020_V3')
+}, {
   path: '/PageDistance',
   name: 'PageDistance',
   component: () => import('@/pages/PageDistance')
