@@ -13,7 +13,6 @@ export default {
     }
   },
   mounted() {
-    this.$store.commit('changeCurentPath', this.pageName)
     window.onresize = _.debounce(() => {
       this.myChartObjs.forEach(element => {
         element.resize()

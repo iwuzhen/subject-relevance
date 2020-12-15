@@ -5,10 +5,18 @@ import App from './App'
 import router from './router'
 import echarts from 'echarts'
 // import ecStat from "echarts-stat";
-import store from './store.js'
+// import store from './store.js'
 import vuetify from './plugins/vuetify'
 import Notifications from 'vue-notification'
 import dayjs from 'dayjs'
+import { sync } from 'vuex-router-sync'
+import { createStore } from '@/store'
+
+const store = createStore()
+sync(store, router)
+
+// 目录同步到 store
+
 // import VueRx from 'vue-rx';
 // Vue.use(VueRx);
 

@@ -22,6 +22,7 @@
 
 <script>
 import NoteBoard from './components/NoteBoard'
+import { get } from 'vuex-pathify'
 
 export default {
   name: 'App',
@@ -32,7 +33,7 @@ export default {
   data: () => ({ snackbar: false, timeout: 2000, text: '' }),
   computed: {
     currentPath: function() {
-      return this.$store.state.curentPath
+      return this.$store.state.route.path
     },
     items: function() {
       return [
@@ -42,13 +43,16 @@ export default {
           to: '/'
         },
         {
-          text: this.$store.state.curentPath,
+          text: this.$store.state.route.path.replace('/', ''),
           disabled: true
         }
       ]
     }
   },
-  mounted() { },
+  mounted() {
+    // set('pages/message_count', 123)
+    console.log('vx', get('pages', 'message_count'))
+  },
   methods: {
     message(text) {
       this.text = text

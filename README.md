@@ -25,3 +25,8 @@ yarn run lint
 ```
 yarn run test:unit
 ```
+
+
+# url 存储在 store
+
+https://www.npmjs.com/package/vuex-router-sync

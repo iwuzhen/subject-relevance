@@ -23,6 +23,7 @@
 </template>
 <script>
 import ToDo from './ToDo'
+import { get } from 'vuex-pathify'
 
 import { RequestBoard } from '@/api/index'
 export default {
@@ -46,9 +47,7 @@ export default {
     currentPath() {
       return this.$route.path
     },
-    messageCount() {
-      return this.$store.state.messageCount
-    }
+    messageCount: get('pages/message_count')
   },
   watch: {
     currentPath() {
@@ -66,7 +65,7 @@ export default {
       } else {
         ret = await RequestBoard({ path: this.currentPath }, 'get')
       }
-      this.$store.commit('changemessageCount', ret.length)
+      this.$store.set('pages/message_count', ret.length)
     }
   }
 }

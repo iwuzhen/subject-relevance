@@ -59,7 +59,7 @@
           class="mx-auto"
           outlined
           :loading="loading"
-          height="70vh"
+          :height="chartHeight"
         >
           <v-container
             id="subjectChart"
@@ -95,14 +95,15 @@ export default {
       options: {},
       ChartObj: {},
       myChartIds: ['subjectChart'],
-      loading: false
+      loading: false,
+      chartHeight: '70vh'
     }
   },
   mounted() {
     // 图表对象
     this.ChartObj = ChartMap[this.$route.path.replace('/', '')]
     this.pageName = this.ChartObj.ChName
-    this.$store.commit('changeCurentPath', this.pageName)
+    this.chartHeight = this.ChartObj.chartHeight ? this.ChartObj.chartHeight : '70vh'
     // 配置默认值
     for (const row of this.ChartObj.Select) {
       this.options[row.name] = row.default

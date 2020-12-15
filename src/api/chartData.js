@@ -3,12 +3,12 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-12-03 16:35:20
+ * @LastEditTime: 2020-12-15 16:26:21
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
 import { requestWrap } from '@/api/index'
-import { coreCategorys, magCategory, defaultCategorySelect, extendEchartsOpts, extendLineSeries } from '@/api/data'
+import { coreCategorys, magCategory, MAGCoreCategorys2020, defaultCategorySelect, extendEchartsOpts, extendLineSeries } from '@/api/data'
 import _ from 'lodash'
 
 const zip = (...rows) => [...rows[0]].map((_, c) => rows.map(row => row[c]))
@@ -109,6 +109,118 @@ const setChartOption_3 = (doubleResponseData, ChartObj) => {
         data: item[1]
       })
     })
+  })
+  return _opt
+}
+
+const setChartOption_bar_1 = ({ retData_1, retData_2, retData_3 }, ChartObj) => {
+  console.log(retData_2)
+  console.log(retData_3)
+
+  const _opt = extendEchartsOpts({
+    title: [{
+      left: 'center',
+      gridIndex: 0,
+      text: retData_1.title
+    }, {
+      top: '30%',
+      left: 'center',
+      gridIndex: 1,
+      text: retData_2.data.title
+    }, {
+      top: '65%',
+      left: 'center',
+      gridIndex: 2,
+      text: retData_3.title
+    }],
+    legend: [
+      {
+        orient: 'vertical',
+        top: '10%',
+        right: 0,
+        align: 'right',
+        gridIndex: 0,
+        data: retData_2.data.legend
+      }
+    ],
+    xAxis:
+    [
+      {
+        gridIndex: 1,
+        name: ChartObj.xAxisName,
+        type: 'category',
+        axisLabel: {
+          interval: 0,
+          rotate: -25
+        },
+        data: Object.keys(retData_1.data)
+      },
+      {
+        name: 'year',
+        type: 'category', gridIndex: 0,
+        axisLabel: {
+          interval: 0,
+          rotate: -75
+        },
+        data: retData_2.data.x
+      },
+      {
+        type: 'category', gridIndex: 2,
+        axisLabel: {
+          interval: 0,
+          rotate: -25
+        },
+        data: Object.keys(retData_3.data)
+      }],
+    yAxis:
+    [
+      {
+        gridIndex: 1,
+        name: ChartObj.yAxisName,
+        type: 'value',
+        nameTextStyle: { fontSize: 18 }
+      },
+      {
+        gridIndex: 0,
+        name: 'Count',
+        type: 'value',
+        nameTextStyle: { fontSize: 18 }
+      },
+      {
+        gridIndex: 2,
+        name: 'Count',
+        type: 'value',
+        nameTextStyle: { fontSize: 18 }
+      }
+    ],
+    grid: [
+      { top: '3%', bottom: '75%' },
+      { top: '35%', bottom: '40%' },
+      { top: '70%', bottom: '3%' }
+    ],
+    series: [{
+      xAxisIndex: 0,
+      yAxisIndex: 0,
+      name: '数量',
+      type: 'bar',
+      data: Object.values(retData_1.data)
+    }, ..._.zip(retData_2.data.legend, retData_2.data.y).map(item => {
+      return extendLineSeries({
+        xAxisIndex: 1,
+        yAxisIndex: 1,
+        name: item[0],
+        type: 'line',
+        smooth: false,
+        data: item[1]
+      })
+    }),
+    {
+      xAxisIndex: 2,
+      yAxisIndex: 2,
+      name: '数量',
+      type: 'bar',
+      data: Object.values(retData_3.data)
+    }]
   })
   return _opt
 }
@@ -529,6 +641,82 @@ export const ChartMap = {
       min: 1900
     }],
     xAxisName: 'Year',
+    yAxisName: 'Count'
+  },
+
+  'MasArticlesTotalV3': {
+    ChName: '统计学科',
+    componentName: 'PageTemplate',
+    HandleResponseFunc: setChartOption_bar_1,
+    RequestFunc: async(params) => {
+      // 此处处理三个请求
+      // 统计学科不按年分布
+      let newParams = {
+        doctype: 1,
+        cats: params.cats,
+        version: params.version,
+        yeartype: 1
+      }
+      const retData_1 = await requestWrap('wiki/getMasArticlesTotal_v3', 'post', newParams)
+
+      // 统计学科按年分布
+      newParams = {
+        doctype: 1,
+        cats: params.cats,
+        version: params.version,
+        yeartype: 0,
+        from: params.from,
+        to: params.to
+      }
+      const retData_2 = await requestWrap('wiki/getMasArticlesTotal_v3', 'post', newParams)
+
+      // 统计论文类型分布
+      newParams = {
+        doctype: 0,
+        version: params.version,
+        bltype: params.bltype
+      }
+      const retData_3 = await requestWrap('wiki/getMasArticlesTotal_v3', 'post', newParams)
+
+      return { retData_1, retData_2, retData_3 }
+    },
+    Select: [
+      {
+        name: 'cats',
+        default: SELECT_MAG_DATA,
+        multiple: true,
+        show: true,
+        label: '目标学科',
+        cols: 8,
+        items: MAGCoreCategorys2020
+      }, {
+        name: 'bltype',
+        default: '1',
+        show: true,
+        label: '数值类型',
+        cols: 2,
+        items: [{ text: '统计数值', value: '0' }, { text: '统计比例', value: '1' }]
+      }, {
+        name: 'version',
+        default: 'v3',
+        label: '过滤条件',
+        show: true,
+        cols: 2,
+        items: [{ text: '全集(去Patent和Book)', value: 'v3' }, { text: '去0 去Patent和Book', value: 'delete_noref_v3' }]
+      }
+    ],
+    RangeSlider: [{
+      name: 'yearRange',
+      startName: 'from',
+      rangeDefault: [1955, 2018],
+      endName: 'to',
+      label: '年份范围',
+      cols: 12,
+      max: 2020,
+      min: 1900
+    }],
+    xAxisName: 'Year',
+    chartHeight: '210vh',
     yAxisName: 'Count'
   }
 }

@@ -2,22 +2,28 @@
   <v-container>
     <v-navigation-drawer
       right
+      floating
       fixed
       app
     >
+      <template v-slot:prepend>
+        <div class="pt-10">目录</div>
+      </template>
+
       <v-list
         dense
         nav
+        max-height="2em"
       >
-        <v-list-item two-line />
         <v-divider />
         <v-list-item
           v-for="obj in hrefArray"
           :key="obj.name"
         >
-          <a @click="scrollMeTo(obj.href)">
+          <a :class="obj.class" @click="scrollMeTo(obj.href)">
             <v-list-item-title v-if="obj.badgeCount>0">
               <v-badge
+                class="mt-0"
                 color="orange"
                 :content="obj.badgeCount"
                 inline
@@ -43,7 +49,7 @@
           class="mb-5"
         >
           <v-row>
-            <a :ref="h1name">
+            <a :ref="h1name" :href="'#'+h1name">
               <h1>{{ h1name }}</h1>
             </a>
           </v-row>
@@ -56,7 +62,7 @@
             :key="name"
             class="mb-5"
           >
-            <v-row><a :ref="name">
+            <v-row><a :ref="name" :href="'#'+name">
               <h3>{{ name }}</h3>
             </a>
             </v-row>
@@ -101,7 +107,7 @@
 </template>
 
 <script>
-
+import { sync } from 'vuex-pathify'
 import dayjs from 'dayjs'
 
 export default {
@@ -136,7 +142,7 @@ export default {
             },
             {
               title: 'wiki 文章间距离计算',
-              text: '学科文章间距离计算',
+              text: '学科文章间距离计算, 手动输入文章名，进行计算',
               to: '/PageDistance',
               update: '2020-11-19T09:43:03.429Z'
             }
@@ -149,6 +155,11 @@ export default {
               text: '2020 学科相关度',
               to: '/MagGoogleDistance_2020_V3',
               update: '2020-12-14T09:43:03.429Z'
+            }, {
+              title: '统计学科数据',
+              text: '包含 3 个图表',
+              to: '/MasArticlesTotalV3',
+              update: '2020-12-15T09:43:03.429Z'
             }
           ]
         },
@@ -584,6 +595,12 @@ export default {
     hrefArray: function() {
       const retArray = []
       for (const key in this.indexObject) {
+        retArray.push({
+          name: key,
+          href: `${key}`,
+          badgeCount: 0,
+          class: ''
+        })
         for (const skey in this.indexObject[key]) {
           let badgeCount = 0
           for (const item of this.indexObject[key][skey]) {
@@ -594,17 +611,17 @@ export default {
           retArray.push({
             name: skey,
             href: `${skey}`,
-            badgeCount: badgeCount
+            badgeCount: badgeCount,
+            class: 'pl-4'
           })
         }
       }
       return retArray
-    }
+    },
     // 最近更新的图表，用作消息条提示
+    scrolling: sync('pages/scrolling')
   },
   mounted() {
-    this.$store.commit('changeCurentPath', null)
-
     // 最近更新的内容提醒
     const retArray = []
     for (const key in this.indexObject) {
@@ -618,7 +635,6 @@ export default {
     }
     retArray.sort((a, b) => { return new Date(b.update).getTime() - new Date(a.update).getTime() })
     for (const item of retArray.slice(0, 5)) {
-      console.log(item)
       this.$notify({
         group: 'foo',
         duration: 5000,
@@ -634,6 +650,8 @@ export default {
       var element = this.$refs[refName][0]
       var top = element.offsetTop
       window.scrollTo(0, top)
+      // console.log(refName)
+      // this.$vuetify.goTo('#' + refName)
     }
   }
 }
