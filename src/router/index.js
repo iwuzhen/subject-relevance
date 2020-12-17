@@ -274,5 +274,6 @@ export function createRouter(vuetify, store) {
     mode: 'history',
     routes: routes,
     scrollBehavior: (...args) => scrollBehavior(vuetify, store, ...args)
+
   })
 }

@@ -10,6 +10,7 @@
           deletable-chips
           clearable
           label="目标学科"
+          @click="getData"
         />
       </v-col>
       <v-col cols="2">

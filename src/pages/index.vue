@@ -645,14 +645,6 @@ export default {
     this.scrolling = false
   },
   methods: {
-    scrollMeTo(refName) {
-      console.log(this.$refs[refName])
-      var element = this.$refs[refName][0]
-      var top = element.offsetTop
-      window.scrollTo(0, top)
-      // console.log(refName)
-      // this.$vuetify.goTo('#' + refName)
-    },
     getMd5Id(name) {
       return 'f' + this.$md5(name).slice(0, 5)
     }
