@@ -33,7 +33,7 @@ build:
     - yarn run build
 
   artifacts:
-    expire_in: 1 week
+    expire_in: 1 h
     paths:
       - dist
 

@@ -5,5 +5,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositorie
     &&  mkdir -p ~/.ssh
 
 COPY package.json yarn.lock ./
-RUN yarn config set registry https://registry.npm.taobao.org \
+RUN yarn config set registry https://registry.npm.taobao.org --global \
+    && yarn config set disturl https://npm.taobao.org/dist --global \
     &&  yarn install 
