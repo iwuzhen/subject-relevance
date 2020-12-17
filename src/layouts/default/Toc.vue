@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-12-15 10:30:31
  * @LastEditors: ider
- * @LastEditTime: 2020-12-15 13:27:40
+ * @LastEditTime: 2020-12-16 15:56:06
  * @Description:
 -->
 <template>
@@ -11,6 +11,7 @@
     id="default-toc"
     v-scroll="onScroll"
     app
+    right
     class="py-4 pr-3"
     clipped
     floating
@@ -20,10 +21,7 @@
       v-if="toc.length"
       #prepend
     >
-      <headline
-        class="mb-2"
-        path="contents"
-      />
+      <div class="mb-2 text-h6 font-weight-medium text--primary" path="contents">Contents</div>
     </template>
 
     <ul class="mb-6">
@@ -51,32 +49,13 @@
         </li>
       </router-link>
     </ul>
-
-    <div class="ml-5">
-      <app-caption
-        class="ml-2 mb-3"
-        path="platinum-sponsors"
-      />
-
-      <sponsors
-        class="mb-3"
-        compact
-        no-gutters
-        tier="2"
-      />
-
-      <sponsor-link
-        class="ml-2"
-        small
-      />
-    </div>
   </v-navigation-drawer>
 </template>
 
 <script>
 // Utilities
 import { get, sync } from 'vuex-pathify'
-import { wait } from '@/util/helpers'
+import { wait } from '@/utils/helpers'
 export default {
   name: 'DefaultToc',
   data: () => ({
@@ -88,7 +67,7 @@ export default {
       'hash',
       'path'
     ]),
-    scrolling: sync('app/scrolling'),
+    scrolling: sync('pages/scrolling'),
     toc: get('pages/toc')
   },
   methods: {
@@ -97,6 +76,7 @@ export default {
       this.scrolling = true
       this.$router.replace({ path: this.path, hash })
       await this.$vuetify.goTo(hash)
+
       await wait(200)
       this.scrolling = false
     },

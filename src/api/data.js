@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-12-14 14:47:59
+ * @LastEditTime: 2020-12-17 10:58:37
  * @Description:
  */
 
@@ -389,7 +389,7 @@ export function extendEchartsOpts(opt) {
     },
     legend: {
       type: 'scroll',
-      left: 'right',
+      right: 'left',
       top: 'middle',
       textStyle: {
         fontSize: 15

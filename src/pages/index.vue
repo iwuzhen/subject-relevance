@@ -1,41 +1,9 @@
 <template>
   <v-container>
-    <v-navigation-drawer
-      right
-      floating
-      fixed
-      app
-    >
-      <template v-slot:prepend>
-        <div class="pt-10">目录</div>
-      </template>
 
-      <v-list
-        dense
-        nav
-        max-height="2em"
-      >
-        <v-divider />
-        <v-list-item
-          v-for="obj in hrefArray"
-          :key="obj.name"
-        >
-          <a :class="obj.class" @click="scrollMeTo(obj.href)">
-            <v-list-item-title v-if="obj.badgeCount>0">
-              <v-badge
-                class="mt-0"
-                color="orange"
-                :content="obj.badgeCount"
-                inline
-              >
-                {{ obj.name }}
-              </v-badge>
-            </v-list-item-title>
-            <v-list-item-title v-else v-html="obj.name" />
-          </a>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+    <default-toc />
+    <DefaultFabToTop />
+
     <!-- Sizes your content based upon application components -->
     <v-main style="padding:0">
       <!-- Provides the application the proper gutter -->
@@ -49,7 +17,7 @@
           class="mb-5"
         >
           <v-row>
-            <a :ref="h1name" :href="'#'+h1name">
+            <a :id="getMd5Id(h1name)" :href="'#'+getMd5Id(h1name)">
               <h1>{{ h1name }}</h1>
             </a>
           </v-row>
@@ -62,7 +30,7 @@
             :key="name"
             class="mb-5"
           >
-            <v-row><a :ref="name" :href="'#'+name">
+            <v-row><a :id="getMd5Id(h1name+name)" :href="'#'+getMd5Id(h1name+name)">
               <h3>{{ name }}</h3>
             </a>
             </v-row>
@@ -108,15 +76,23 @@
 
 <script>
 import { sync } from 'vuex-pathify'
+import DefaultToc from '@/layouts/default/Toc'
+import DefaultFabToTop from '@/layouts/default/FabToTop'
+import { get } from 'vuex-pathify'
 import dayjs from 'dayjs'
+import { wait } from '@/utils/helpers'
 
 export default {
   name: 'Index',
+  components: {
+    DefaultToc,
+    DefaultFabToTop
+  },
   data() {
     return {
       indexObject: {
         'Structure': {
-          'Tree  View': [
+          'Tree-View': [
             {
               title: 'Tree Viewer',
               text: 'WIKI 分类文章层次浏览',
@@ -148,8 +124,8 @@ export default {
             }
           ]
         },
-        'MAG 2020': {
-          'MAG 2020 - 学科相关度': [
+        'MAG-2020': {
+          'MAG-2020-学科相关度': [
             {
               title: '2020 学科相关度',
               text: '2020 学科相关度',
@@ -160,11 +136,16 @@ export default {
               text: '包含 3 个图表',
               to: '/MasArticlesTotalV3',
               update: '2020-12-15T09:43:03.429Z'
+            }, {
+              title: '幂律及其随时间变化趋势',
+              text: '包含 3 个图表',
+              to: '/mag2020/ZipfAndInnerzipfByYearv3',
+              update: '2020-12-16T09:43:03.429Z'
             }
           ]
         },
-        'MAG v2 (非简介分类)': {
-          'MAG v2- Graph': [
+        'MAG-v2-(非简介分类)': {
+          'MAG-v2-Graph': [
             {
               title: 'MagGraph',
               text:
@@ -183,7 +164,7 @@ export default {
               update: '2020-10-26T09:43:03.429Z'
             }
           ],
-          'MAG v2- 学科相关度': [
+          'MAG-v2-学科相关度': [
             {
               title: '因果关系-贸易比例',
               text: ' mag 因果关系-贸易比例',
@@ -214,7 +195,7 @@ export default {
             }
           ],
 
-          'MAG v2- 统计数据': [
+          'MAG-v2-统计数据': [
             {
               title: 'MAG level1层和父类的交集比例',
               text: 'MAG level1层和父类的交集比例 柱状图',
@@ -273,7 +254,7 @@ export default {
             }
 
           ],
-          'MAG v2- 幂率': [
+          'MAG-v2-幂率': [
             {
               title: '幂率相关统计数据',
               text: 'mag v2幂律相关统计数据',
@@ -291,14 +272,14 @@ export default {
               to: '/MagZipfV2'
             }
           ],
-          'MAG v2- 小世界': [
+          'MAG-v2-小世界': [
             {
               title: 'MAG 小世界 v4',
               text: '重新筛选后计算得到的 MAG 小世界',
               to: { path: 'MagDirectNetV4', query: { version: 'v4' }}
             }
           ],
-          'MAG v2 颠覆度': [
+          'MAG-v2-颠覆度': [
             {
               title: 'Mag 学科颠覆度',
               text: '颠覆度学科计算法，文章计算平均法，学科 top 分布，按年学科 top 分布等。 ',
@@ -313,7 +294,7 @@ export default {
           ]
         },
         MAG: {
-          'MAG- 统计数据': [
+          'MAG-统计数据': [
             {
               title: '作者文章数',
               text: 'MAG 作者文章数 统计',
@@ -347,7 +328,7 @@ export default {
               to: '/MAGRefDist'
             }
           ],
-          'MAG- 幂律': [
+          'MAG-幂律': [
             {
               title: 'MAG 幂律',
               text: 'MAG 幂律',
@@ -359,14 +340,14 @@ export default {
               to: '/MagInnerZipf'
             }
           ],
-          'MAG- 学科相关度': [
+          'MAG-学科相关度': [
             {
               title: 'MAG学科相关度',
               text: 'MAG 中各学科的逐年相关度',
               to: '/masline'
             }
           ],
-          'MAG- 小世界': [
+          'MAG-小世界': [
             // {
             //   title: "MAG 小世界 v1",
             //   text:
@@ -388,7 +369,7 @@ export default {
           ]
         },
         Wikipedia: {
-          'Wikipedia- 统计数据': [
+          'Wikipedia-统计数据': [
             {
               title: 'wiki子类半衰期',
               text: '2007年的N层子类，经过x年，其子类有一半改变了',
@@ -420,7 +401,7 @@ export default {
               href: 'http://wikidb.knogen.com:10080/wikidb_web/first.jsp'
             }
           ],
-          'Wikipedia- Core 学科相关度': [
+          'Wikipedia-Core-学科相关度': [
             {
               title: 'WIKI Core V1',
               text: '各 Core 学科的逐年相关度',
@@ -461,7 +442,7 @@ export default {
               update: '2020-11-18T09:43:03.429Z'
             }
           ],
-          'Wikipedia- Core 幂律': [
+          'Wikipedia-Core-幂律': [
             {
               title: 'Core V1 Zipf 幂律斜率',
               text: 'Core 逐年幂律图，及其斜率曲线',
@@ -478,7 +459,7 @@ export default {
               to: { path: 'CoreZipfByNodes', query: { version: 'v3' }}
             }
           ],
-          'Wikipedia- Core 文章数': [
+          'Wikipedia-Core-文章数': [
             {
               title: 'Core WIKI 文章数 v1',
               text:
@@ -504,7 +485,7 @@ export default {
               to: '/CoreArticlesTotalNew_v3'
             }
           ],
-          'Wikipedia- Core 小世界': [
+          'Wikipedia-Core-小世界': [
             {
               title: '规模趋势',
               text: '小世界 Core V2 规模趋势',
@@ -516,7 +497,7 @@ export default {
               to: '/CoreSMUndirected'
             }
           ],
-          'Wikipedia- 学科相关度': [
+          'Wikipedia-学科相关度': [
             {
               title: 'People in WIKI',
               text: '人和人，学科的相关度',
@@ -543,7 +524,7 @@ export default {
               to: '/SubDiscipline'
             }
           ],
-          'Wikipedia- 幂率': [
+          'Wikipedia-幂率': [
             {
               title: 'Zipf 幂律(世界)斜率 (人)',
               text: 'people 计算出的世界逐年幂律图',
@@ -575,7 +556,7 @@ export default {
               to: '/powerLawPageRank'
             }
           ],
-          'Wikipedia- 小世界': [
+          'Wikipedia-小世界': [
             {
               title: '规模趋势',
               text: '小世界',
@@ -592,38 +573,19 @@ export default {
     }
   },
   computed: {
-    hrefArray: function() {
-      const retArray = []
-      for (const key in this.indexObject) {
-        retArray.push({
-          name: key,
-          href: `${key}`,
-          badgeCount: 0,
-          class: ''
-        })
-        for (const skey in this.indexObject[key]) {
-          let badgeCount = 0
-          for (const item of this.indexObject[key][skey]) {
-            if ((item.update != null) && (new Date().getTime() - new Date(item.update).getTime() < 2497466968)) {
-              badgeCount += 1
-            }
-          }
-          retArray.push({
-            name: skey,
-            href: `${skey}`,
-            badgeCount: badgeCount,
-            class: 'pl-4'
-          })
-        }
-      }
-      return retArray
-    },
+    ...get('route', [
+      'hash',
+      'path'
+    ]),
+
     // 最近更新的图表，用作消息条提示
     scrolling: sync('pages/scrolling')
   },
-  mounted() {
+  async mounted() {
+    // toc
+    this.$store.set('pages/page_name', '')
     // 最近更新的内容提醒
-    const retArray = []
+    let retArray = []
     for (const key in this.indexObject) {
       for (const skey in this.indexObject[key]) {
         for (const item of this.indexObject[key][skey]) {
@@ -634,15 +596,53 @@ export default {
       }
     }
     retArray.sort((a, b) => { return new Date(b.update).getTime() - new Date(a.update).getTime() })
-    for (const item of retArray.slice(0, 5)) {
+    for (const item of retArray.slice(0, 3)) {
       this.$notify({
         group: 'foo',
-        duration: 5000,
+        duration: 3000,
         title: `<a href="${item.to}" style="color: green;">${item.title} </a>`,
         type: 'blue lighten-5',
         text: '<span class="red--text">' + item.text + '<br> 更新：' + dayjs().from(dayjs(item.update)) + '</span>'
       })
     }
+
+    // 配置 toc
+    retArray = []
+    for (const key in this.indexObject) {
+      retArray.push({
+        text: key,
+        to: `#${this.getMd5Id(key)}`,
+        badgeCount: 0,
+        level: 1
+      })
+      for (const skey in this.indexObject[key]) {
+        let badgeCount = 0
+        for (const item of this.indexObject[key][skey]) {
+          if ((item.update != null) && (new Date().getTime() - new Date(item.update).getTime() < 2497466968)) {
+            badgeCount += 1
+          }
+        }
+        retArray.push({
+          text: skey,
+          to: `#${this.getMd5Id(key + skey)}`,
+          badgeCount: badgeCount,
+          level: 3
+        })
+      }
+    }
+    this.$store.set('pages/toc', retArray)
+
+    // 初始滑动
+    if (!this.hash) return
+    await wait(1000)
+    this.scrolling = true
+    try {
+      await this.$vuetify.goTo(this.hash)
+    } catch (e) {
+      console.log(e)
+    }
+
+    this.scrolling = false
   },
   methods: {
     scrollMeTo(refName) {
@@ -652,6 +652,9 @@ export default {
       window.scrollTo(0, top)
       // console.log(refName)
       // this.$vuetify.goTo('#' + refName)
+    },
+    getMd5Id(name) {
+      return 'f' + this.$md5(name).slice(0, 5)
     }
   }
 }

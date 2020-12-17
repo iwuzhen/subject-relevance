@@ -23,6 +23,7 @@
 <script>
 import NoteBoard from './components/NoteBoard'
 import { get } from 'vuex-pathify'
+import _ from 'lodash'
 
 export default {
   name: 'App',
@@ -32,10 +33,18 @@ export default {
 
   data: () => ({ snackbar: false, timeout: 2000, text: '' }),
   computed: {
-    currentPath: function() {
-      return this.$store.state.route.path
-    },
+    ...get('route', [
+      'hash',
+      'path'
+    ]),
     items: function() {
+      let path = _.trim(this.path, '/').split('/')
+      if (path.length < 2) {
+        path = this.$store.get('pages/page_name')
+      } else {
+        path = path[0] + '-' + this.$store.get('pages/page_name')
+      }
+      console.log()
       return [
         {
           text: '首页',
@@ -43,7 +52,7 @@ export default {
           to: '/'
         },
         {
-          text: this.$store.state.route.path.replace('/', ''),
+          text: path,
           disabled: true
         }
       ]
@@ -51,7 +60,7 @@ export default {
   },
   mounted() {
     // set('pages/message_count', 123)
-    console.log('vx', get('pages', 'message_count'))
+    // console.log('vx', get('pages', 'message_count'))
   },
   methods: {
     message(text) {

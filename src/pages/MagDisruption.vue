@@ -434,7 +434,7 @@ export default {
       let pargs = []
       for (const name of this.subjectTarget) {
         names.push(name)
-        pargs.push(`Disruption_PowerLow_${name}`)
+        pargs.push(`Disruption_PowerLaw_${name}`)
       }
       let itemdata = await this.getStorageData(pargs)
       datasets = itemdata.map(item => item.Data)

@@ -18,6 +18,7 @@ export default {
         element.resize()
       })
     }, 500)
+    this.$store.set('pages/page_name', this.pageName)
   },
   methods: {
     translate: _.debounce(async function() {

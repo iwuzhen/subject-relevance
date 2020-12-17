@@ -2,7 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import router from './router'
+import { createRouter } from './router'
+// import router from './router'
 import echarts from 'echarts'
 // import ecStat from "echarts-stat";
 // import store from './store.js'
@@ -11,8 +12,10 @@ import Notifications from 'vue-notification'
 import dayjs from 'dayjs'
 import { sync } from 'vuex-router-sync'
 import { createStore } from '@/store'
+import md5 from 'md5'
 
 const store = createStore()
+const router = createRouter(vuetify, store)
 sync(store, router)
 
 // 目录同步到 store
@@ -25,6 +28,7 @@ Vue.use(Notifications)
 // Vue.use(ecStat);
 Vue.prototype.$echarts = echarts
 Vue.prototype.dayjs = dayjs
+Vue.prototype.$md5 = md5
 Vue.config.productionTip = false
 
 new Vue({
@@ -33,3 +37,4 @@ new Vue({
   vuetify,
   render: h => h(App)
 }).$mount('#app')
+
