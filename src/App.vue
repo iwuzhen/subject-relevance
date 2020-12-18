@@ -38,18 +38,22 @@ export default {
       'path'
     ]),
     items: function() {
+      // 双层目录 chart
       let path = _.trim(this.path, '/').split('/')
       if (path.length < 2) {
         path = this.$store.get('pages/page_name')
       } else {
         path = path[0] + '-' + this.$store.get('pages/page_name')
       }
-      console.log()
+      // 保留根目录 hash
+      if (this.path === '/') {
+        this.$store.set('pages/root_hash', this.hash)
+      }
       return [
         {
           text: '首页',
           disabled: false,
-          to: '/'
+          to: `/${this.$store.get('pages/root_hash')}`
         },
         {
           text: path,

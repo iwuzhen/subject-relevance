@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-12-15 10:30:31
  * @LastEditors: ider
- * @LastEditTime: 2020-12-16 15:56:06
+ * @LastEditTime: 2020-12-18 10:29:56
  * @Description:
 -->
 <template>
@@ -27,7 +27,7 @@
     <ul class="mb-6">
       <router-link
         v-for="({ to, level, text }, i) in toc"
-        :key="text"
+        :key="i"
         #default="{ href, isActive }"
         :to="to"
       >

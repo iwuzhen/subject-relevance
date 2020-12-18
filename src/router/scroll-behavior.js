@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-12-17 14:41:17
  * @LastEditors: ider
- * @LastEditTime: 2020-12-17 14:42:50
+ * @LastEditTime: 2020-12-17 17:31:48
  * @Description:可能是跳转页面之后滚动的逻辑，这里还没有验证
  */
 // Globals
@@ -25,7 +25,7 @@ export default async function(vuetify, store, to, from, savedPosition) {
   // load handled in views/Documentation.vue
   return new Promise((resolve, reject) => {
     // Options 1
-    const options = { Offset: 20 }
+    const options = { Offset: 0 }
 
     if (!scrollTo || to.hash) options.duration = 0
 

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-12-15 16:26:21
+ * @LastEditTime: 2020-12-17 17:43:00
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -249,7 +249,7 @@ const SELECT_MAG_DATA = ['Biology', 'Chemistry', 'Computer science',
   'Mathematics', 'Medicine', 'Philosophy', 'Physics']
 
 export const ChartMap = {
-  'AuthorsAndArticleInfoByYear': {
+  'mag2019v2/AuthorsAndArticleInfoByYear': {
     ChName: '作者数逐年统计',
     componentName: 'PageTemplate',
     RequestFunc: async(params) => {
@@ -331,7 +331,7 @@ export const ChartMap = {
     yAxisName: 'Count'
 
   },
-  'LinkTjByYear': {
+  'mag2019v2/LinkTjByYear': {
     ChName: '引用关系逐年统计',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_1,
@@ -394,7 +394,7 @@ export const ChartMap = {
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
-  'FosTjByYearV2': {
+  'mag2019v2/FosTjByYearV2': {
     ChName: 'fos学科领域逐年分布',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_1,
@@ -437,7 +437,7 @@ export const ChartMap = {
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
-  'MasArticlesTotalV2': {
+  'mag2019v2/MagArticlesTotalV2': {
     ChName: 'MAG 文章数 v2',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_2,
@@ -458,7 +458,7 @@ export const ChartMap = {
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
-  'MasArticlesTotal': {
+  'mag2019v1/MagArticlesTotal': {
     ChName: 'MAG 文章数',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_2,
@@ -479,7 +479,7 @@ export const ChartMap = {
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
-  'TjYearByTopN': {
+  'mag2019v2/TjYearByTopN': {
     ChName: 'mag topN学科逐年分布',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_1,
@@ -528,7 +528,7 @@ export const ChartMap = {
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
-  'NodeAndEdgeByYear': {
+  'mag2019v2/NodeAndEdgeByYear': {
     ChName: 'mag 历年点边数据统计',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_3,
@@ -644,8 +644,8 @@ export const ChartMap = {
     yAxisName: 'Count'
   },
 
-  'MasArticlesTotalV3': {
-    ChName: '统计学科',
+  'mag2020/MagArticlesTotalV3': {
+    ChName: '统计学科论文数量',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_bar_1,
     RequestFunc: async(params) => {

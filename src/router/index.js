@@ -10,137 +10,137 @@ const routes = [{
   name: 'index',
   component: () => import('@/pages/index')
 }, {
-  path: '/MagTrade',
+  path: '/mag2019v2/MagTrade',
   name: 'MagTrade',
-  component: () => import('@/pages/MagTrade')
+  component: () => import('@/pages/mag2019v2/MagTrade')
 }, {
-  path: '/DisruptionByYear',
+  path: '/mag2019v2/DisruptionByYear',
   name: 'DisruptionByYear',
-  component: () => import('@/pages/DisruptionByYear')
+  component: () => import('@/pages/mag2019v2/DisruptionByYear')
 }, {
-  path: '/MagGoogleDistanceV2',
-  name: 'MagGoogleDistanceV2',
-  component: () => import('@/pages/MagGoogleDistanceV2')
+  path: '/mag2019v2/MagGoogleDistanceCurrentV2',
+  name: 'MagGoogleDistanceCurrentV2',
+  component: () => import('@/pages/mag2019v2/MagGoogleDistanceCurrentV2')
 }, {
-  path: '/MagGoogleDistance_2020_V3',
+  path: '/mag2020/MagGoogleDistance_2020_V3',
   name: 'MagGoogleDistance_2020_V3',
-  component: () => import('@/pages/MagGoogleDistance_2020_V3')
+  component: () => import('@/pages/mag2020/MagGoogleDistance_2020_V3')
 }, {
-  path: '/PageDistance',
+  path: '/explorer/PageDistance',
   name: 'PageDistance',
-  component: () => import('@/pages/PageDistance')
+  component: () => import('@/pages/explorer/PageDistance')
 }, {
-  path: '/MagTopTrade',
+  path: '/mag2019v2/MagTopTrade',
   name: 'MagTopTrade',
-  component: () => import('@/pages/MagTopTrade')
+  component: () => import('@/pages/mag2019v2/MagTopTrade')
 }, {
-  path: '/MagTopNRefSelfRate',
+  path: '/mag2019v1/MagTopNRefSelfRate',
   name: 'MagTopNRefSelfRate',
-  component: () => import('@/pages/MagTopNRefSelfRate')
+  component: () => import('@/pages/mag2019v1/MagTopNRefSelfRate')
 }, {
-  path: '/MagDisruption',
+  path: '/mag2019v2/MagDisruption',
   name: 'MagDisruption',
-  component: () => import('@/pages/MagDisruption')
+  component: () => import('@/pages/mag2019v2/MagDisruption')
 }, {
-  path: '/MagJJByCat',
+  path: '/mag2019v2/MagJJByCat',
   name: 'MagJJByCat',
-  component: () => import('@/pages/MagJJByCat')
+  component: () => import('@/pages/mag2019v2/MagJJByCat')
 }, {
-  path: '/DataSheet',
+  path: '/explorer/DataSheet',
   name: 'DataSheet',
-  component: () => import('@/pages/DataSheet')
+  component: () => import('@/pages/explorer/DataSheet')
 }, {
-  path: '/MAGSankey',
+  path: '/mag2019v2/MagSankey',
   name: 'MAGSankey',
-  component: () => import('@/pages/MAGSankey')
+  component: () => import('@/pages/mag2019v2/MagSankey')
 }, {
-  path: '/MAGInnerZipTj',
-  name: 'MAGInnerZipTj',
-  component: () => import('@/pages/MAGInnerZipTj')
+  path: '/mag2019v2/MagInnerZipTj',
+  name: 'MagInnerZipTj',
+  component: () => import('@/pages/mag2019v2/MagInnerZipTj')
 }, {
-  path: '/WikiGoogleDistance',
+  path: '/wikipedia/WikiGoogleDistance',
   name: 'WikiGoogleDistance',
-  component: () => import('@/pages/WikiGoogleDistance')
+  component: () => import('@/pages/wikipedia/WikiGoogleDistance')
 }, {
-  path: '/GoogleDistance',
+  path: '/mag2019v2/GoogleDistance',
   name: 'GoogleDistance',
-  component: () => import('@/pages/GoogleDistance')
+  component: () => import('@/pages/mag2019v2/GoogleDistance')
 }, {
-  path: '/MagFunnel',
+  path: '/explorer/MagFunnel',
   name: 'MagFunnel',
-  component: () => import('@/pages/MagFunnel')
+  component: () => import('@/pages/explorer/MagFunnel')
 }, {
-  path: '/MAGBLLevel',
-  name: 'MAGBLLevel',
-  component: () => import('@/pages/MAGBLLevel')
+  path: '/mag2019v2/MagBlLevel',
+  name: 'MagBlLevel',
+  component: () => import('@/pages/mag2019v2/MagBlLevel')
 }, {
   path: '/SmallWorldDirectedCoreV2',
   name: 'SmallWorldDirectedCoreV2',
   component: () => import('@/pages/SmallWorldDirectedCoreV2')
 }, {
-  path: '/MasCompositionByYear',
-  name: 'MasCompositionByYear',
-  component: () => import('@/pages/MasCompositionByYear')
+  path: '/mag2019v1/MagCompositionByYear',
+  name: 'MagCompositionByYear',
+  component: () => import('@/pages/mag2019v1/MagCompositionByYear')
 }, {
-  path: '/MAGRefDist',
-  name: 'MAGRefDist',
-  component: () => import('@/pages/MAGRefDist')
+  path: '/mag2019v1/MagRefDist',
+  name: 'MagRefDist',
+  component: () => import('@/pages/mag2019v1/MagRefDist')
 }, {
-  path: '/MAGRefDistV2',
-  name: 'MAGRefDistV2',
-  component: () => import('@/pages/MAGRefDistV2')
+  path: '/mag2019v2/MagRefDistV2',
+  name: 'MagRefDistV2',
+  component: () => import('@/pages/mag2019v2/MagRefDistV2')
 }, {
-  path: '/MagRefSelfRate',
+  path: '/mag2019v1/MagRefSelfRate',
   name: 'MagRefSelfRate',
-  component: () => import('@/pages/MagRefSelfRate')
+  component: () => import('@/pages/mag2019v1/MagRefSelfRate')
 }, {
-  path: '/MagDirectNet',
+  path: '/mag2019v1/MagDirectNet',
   name: 'MagDirectNet',
-  component: () => import('@/pages/MagDirectNet')
+  component: () => import('@/pages/mag2019v1/MagDirectNet')
 }, {
-  path: '/MagDirectNetV3',
+  path: '/mag2019v1/MagDirectNetV3',
   name: 'MagDirectNetV3',
-  component: () => import('@/pages/MagDirectNetV3')
+  component: () => import('@/pages/mag2019v1/MagDirectNetV3')
 }, {
-  path: '/MagDirectNetV4',
+  path: '/mag2019v2/MagDirectNetV4',
   name: 'MagDirectNetV4',
-  component: () => import('@/pages/MagDirectNetV4')
+  component: () => import('@/pages/mag2019v2/MagDirectNetV4')
 }, {
-  path: '/MagAAAInfo',
+  path: '/mag2019v1/MagAAAInfo',
   name: 'MagAAAInfo',
-  component: () => import('@/pages/MagAAAInfo')
+  component: () => import('@/pages/mag2019v1/MagAAAInfo')
 }, {
-  path: '/MagAAAInfoV2',
+  path: '/mag2019v2/MagAAAInfoV2',
   name: 'MagAAAInfoV2',
-  component: () => import('@/pages/MagAAAInfoV2')
+  component: () => import('@/pages/mag2019v2/MagAAAInfoV2')
 }, {
-  path: '/CoreSWUndirectLimit',
+  path: '/wikipedia/CoreSWUndirectLimit',
   name: 'CoreSWUndirectLimit',
-  component: () => import('@/pages/CoreSWUndirectLimit')
+  component: () => import('@/pages/wikipedia/CoreSWUndirectLimit')
 }, {
-  path: '/CoreSMUndirected',
+  path: '/wikipedia/CoreSMUndirected',
   name: 'CoreSMUndirected',
-  component: () => import('@/pages/CoreSMUndirected')
+  component: () => import('@/pages/wikipedia/CoreSMUndirected')
 }, {
   path: '/discipline',
   name: 'discipline',
   component: () => import('@/pages/discipline')
 }, {
-  path: '/masline',
-  name: 'masline',
-  component: () => import('@/pages/masline')
+  path: '/mag2019v1/MagGoogleDistance',
+  name: 'MagGoogleDistance',
+  component: () => import('@/pages/mag2019v1/MagGoogleDistance')
 }, {
-  path: '/MasDistanceV2',
-  name: 'MasDistanceV2',
-  component: () => import('@/pages/maslinev2')
+  path: '/mag2019v2/MagGoogleDistanceV2',
+  name: 'MagGoogleDistanceV2',
+  component: () => import('@/pages/mag2019v2/MagGoogleDistanceV2')
 }, {
-  path: '/MagGraph',
+  path: '/mag2019v2/MagGraph',
   name: 'MagGraph',
-  component: () => import('@/pages/MagGraph')
+  component: () => import('@/pages/mag2019v2/MagGraph')
 }, {
-  path: '/ArticlesTotal',
+  path: '/wikipedia/ArticlesTotal',
   name: 'ArticlesTotal',
-  component: () => import('@/pages/ArticlesTotal')
+  component: () => import('@/pages/wikipedia/ArticlesTotal')
 }, {
   path: '/SubDiscipline',
   name: 'SubDiscipline',
@@ -150,9 +150,9 @@ const routes = [{
   name: 'powerlaw',
   component: () => import('@/pages/powerLaw')
 }, {
-  path: '/viewandedits',
-  name: 'viewandedits',
-  component: () => import('@/pages/ViewAndEdits')
+  path: '/wikipedia/ViewAndEdits',
+  name: 'ViewAndEdits',
+  component: () => import('@/pages/wikipedia/ViewAndEdits')
 }, {
   path: '/SmallWorldUndirected',
   name: 'SmallWorldUndirected',
@@ -178,21 +178,21 @@ const routes = [{
   name: 'ZipfByNodes',
   component: () => import('@/pages/ZipfByNodes')
 }, {
-  path: '/WikiTree',
+  path: '/browser/WikiTree',
   name: 'WikiTree',
-  component: () => import('@/pages/WikiTree')
+  component: () => import('@/pages/browser/WikiTree')
 }, {
-  path: '/BanShuaiQi',
+  path: '/wikipedia/BanShuaiQi',
   name: 'BanShuaiQi',
-  component: () => import('@/pages/BanShuaiQi')
+  component: () => import('@/pages/wikipedia/BanShuaiQi')
 }, {
-  path: '/TopArticles',
+  path: '/wikipedia/TopArticles',
   name: 'TopArticles',
-  component: () => import('@/pages/TopArticles')
+  component: () => import('@/pages/wikipedia/TopArticles')
 }, {
-  path: '/BritannicaTree',
+  path: '/browser/BritannicaTree',
   name: 'BritannicaTree',
-  component: () => import('@/pages/BritannicaTree')
+  component: () => import('@/pages/browser/BritannicaTree')
 }, {
   path: '/disciplinePeople',
   name: 'disciplinePeople',
@@ -206,59 +206,58 @@ const routes = [{
   name: 'PeopleInnerZipfByNodes',
   component: () => import('@/pages/PeopleInnerZipfByNodes')
 }, {
-  path: '/DisciplineCore',
+  path: '/wikipedia/DisciplineCore',
   name: 'DisciplineCore',
-  component: () => import('@/pages/disciplineCore')
+  component: () => import('@/pages/wikipedia/DisciplineCore')
 }, {
-  path: '/CoreZipfByNodes',
+  path: '/wikipedia/CoreZipfByNodes',
   name: 'CoreZipfByNodes',
-  component: () => import('@/pages/CoreZipfByNodes')
+  component: () => import('@/pages/wikipedia/CoreZipfByNodes')
 }, {
-  path: '/CoreLinks',
+  path: '/wikipedia/CoreLinks',
   name: 'CoreLinks',
-  component: () => import('@/pages/CoreLinks')
+  component: () => import('@/pages/wikipedia/CoreLinks')
 }, {
-  path: '/CoreArticlesTotal',
+  path: '/wikipedia/CoreArticlesTotal',
   name: 'CoreArticlesTotal',
-  component: () => import('@/pages/CoreArticlesTotal')
+  component: () => import('@/pages/wikipedia/CoreArticlesTotal')
 }, {
-  path: '/CoreArticlesTotalV2',
+  path: '/wikipedia/CoreArticlesTotalV2',
   name: 'CoreArticlesTotalV2',
-  component: () => import('@/pages/CoreArticlesTotalV2')
+  component: () => import('@/pages/wikipedia/CoreArticlesTotalV2')
 }, {
-  path: '/CoreArticlesTotalNew_v3',
+  path: '/wikipedia/CoreArticlesTotalNew_v3',
   name: 'CoreArticlesTotalNew_v3',
-  component: () => import('@/pages/CoreArticlesTotalNew_v3')
+  component: () => import('@/pages/wikipedia/CoreArticlesTotalNew_v3')
 }, {
-  path: '/MagZipf',
+  path: '/mag2019v1/MagZipf',
   name: 'MagZipf',
-  component: () => import('@/pages/MagZipf')
+  component: () => import('@/pages/mag2019v1/MagZipf')
 }, {
-  path: '/MagZipfV2',
+  path: '/mag2019v2/MagZipfV2',
   name: 'MagZipfV2',
-  component: () => import('@/pages/MagZipfV2')
+  component: () => import('@/pages/mag2019v2/MagZipfV2')
 }, {
-  path: '/MagInnerZipf',
+  path: '/mag2019v1/MagInnerZipf',
   name: 'MagInnerZipf',
-  component: () => import('@/pages/MagInnerZipf')
+  component: () => import('@/pages/mag2019v1/MagInnerZipf')
 }, {
-  path: '/MagInnerZipfV2',
+  path: '/mag2019v2/MagInnerZipfV2',
   name: 'MagInnerZipfV2',
-  component: () => import('@/pages/MagInnerZipfV2')
+  component: () => import('@/pages/mag2019v2/MagInnerZipfV2')
 }, {
-  path: '/CoreArticlesTotalV1_plus',
+  path: '/wikipedia/CoreArticlesTotalV1_plus',
   name: 'CoreArticlesTotalV1_plus',
-  component: () => import('@/pages/CoreArticlesTotalV1_plus')
+  component: () => import('@/pages/wikipedia/CoreArticlesTotalV1_plus')
 }, {
-  path: '/MagFosTree',
+  path: '/browser/MagFosTree',
   name: 'MagFosTree',
-  component: () => import('@/pages/MagFosTree')
+  component: () => import('@/pages/browser/MagFosTree')
 }, {
   path: '/mag2020/ZipfAndInnerzipfByYearV3',
   name: 'ZipfAndInnerzipfByYearV3',
   component: () => import('@/pages/mag2020/ZipfAndInnerzipfByYearV3')
 }
-
 ]
 // 自动化映入模板
 for (const [k, v] of Object.entries(ChartMap)) {
