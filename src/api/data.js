@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-12-17 10:58:37
+ * @LastEditTime: 2020-12-18 13:26:06
  * @Description:
  */
 
@@ -348,7 +348,8 @@ export const MAGCoreCategorys2020 = ['Algebra', 'Anthropology', 'Applied mathema
 
 export function extendLineSeries(series) {
   return Object.assign({
-    symbolSize: 12,
+    symbolSize: 8,
+    symbol: 'circle',
     smooth: false
   },
   series
@@ -358,6 +359,7 @@ export function extendLineSeries(series) {
 // 单页图，使用这个模版
 export function extendEchartsOpts(opt) {
   const basicEchartsOption = {
+    color: ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#003399', '#333366', '#663366', '#CC0099'],
     title: {
       left: 'center'
     },

@@ -47,7 +47,7 @@
       <v-col cols="7">
         <v-range-slider
           v-model="years"
-          :max="2019"
+          :max="2020"
           :min="1955"
           dense
           hide-details
@@ -150,6 +150,7 @@
 </template>
 
 <script>
+
 import { getMasDatav2 } from '@/api/index'
 import { extendEchartsOpts, MAGCoreCategorys2020, extendLineSeries, defaultCategorySelect } from '@/api/data'
 import Base from '@/utils/base'
@@ -254,7 +255,6 @@ export default {
         .then(res => {
           if (res.data.data) {
             if (this.subjectRelevances.length > 1 && this.showAve) {
-              console.log(res.data.data)
               this.averageLinedata.x = res.data.data.x
               const aveLine = []
               for (const i in res.data.data.x) {
@@ -304,7 +304,14 @@ export default {
         yAxis: {
           name: 'Semantic Distance',
           type: 'value',
-          max: 1
+          max: 1,
+          splitLine: {
+            show: true,
+            interval: (indexs, value) => {
+              console.log(indexs, value)
+              if (indexs === 0.3) { return true } return false
+            }
+          }
         },
         series: data.y.map((item, index) => {
           return extendLineSeries({
@@ -321,4 +328,6 @@ export default {
 }
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+
+</style>
