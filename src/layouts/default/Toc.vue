@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-12-15 10:30:31
  * @LastEditors: ider
- * @LastEditTime: 2020-12-18 10:29:56
+ * @LastEditTime: 2020-12-18 16:35:14
  * @Description:
 -->
 <template>
@@ -34,7 +34,7 @@
         <li
           :class="{
             'primary--text router-link-active': isActive,
-            'text--disabled': !isActive,
+            'orange--text text--light-1': !isActive,
             'pl-6': level === 3,
             'pl-9': level === 4
           }"

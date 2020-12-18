@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-12-18 13:26:06
+ * @LastEditTime: 2020-12-18 16:18:52
  * @Description:
  */
 
@@ -348,8 +348,8 @@ export const MAGCoreCategorys2020 = ['Algebra', 'Anthropology', 'Applied mathema
 
 export function extendLineSeries(series) {
   return Object.assign({
-    symbolSize: 8,
-    symbol: 'circle',
+    symbolSize: 10,
+    // symbol: 'circle',
     smooth: false
   },
   series
@@ -391,10 +391,11 @@ export function extendEchartsOpts(opt) {
     },
     legend: {
       type: 'scroll',
+      left: '82%',
       right: 'left',
       top: 'middle',
       textStyle: {
-        fontSize: 15
+        fontSize: 13
       },
       orient: 'vertical'
     },

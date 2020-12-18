@@ -172,7 +172,7 @@ export default {
         { text: '去掉被引用为0的文章，剩余7000万+,按点', value: -2 },
         { text: '引用top百分之十文章,按点', value: 10 },
         { text: '引用top百分之三十文章,按点', value: 30 }],
-      showAve: true,
+      showAve: false,
       subjectTarget: '',
       subjectRelevances: defaultCategorySelect,
       methodValue: 'linksin',
@@ -321,8 +321,18 @@ export default {
           text: data.title
         },
         legend: {
+          type: 'scroll',
+          left: '82%',
+          right: 'left',
+          // top: 'middle',
+          top: 70,
+          textStyle: {
+            fontSize: 13
+          },
+          orient: 'vertical',
           data: data.legend
         },
+
         xAxis: {
           name: 'Year',
           type: 'category',
