@@ -19,7 +19,7 @@
         >
           <h1 class="v-heading text-h4 text-sm-h4 mb-4">
             <a
-              href="#"
+              :href="'#'+getMd5Id(h1name)"
               class="text-decoration-none text-right text-md-left"
             > # </a>
             {{ h1name }}
@@ -34,7 +34,7 @@
           >
             <h2 class="v-heading text-h5 text-sm-h5 mb-4 mt-4">
               <a
-                href="#"
+                :href="'#'+getMd5Id(h1name+name)"
                 class="text-decoration-none text-right text-md-left"
               > # </a>
 
@@ -110,26 +110,26 @@ export default {
               to: '/browser/BritannicaTree'
             },
             {
-              title: 'Mag Fos',
+              title: 'MAG Fos',
               text: 'Mag Fos 层次浏览',
               to: '/browser/MagFosTree'
             }
           ],
           'Explorer': [
             {
-              title: '学科依赖层次',
+              title: 'MAG 学科依赖层次',
               text: '学科依赖层次等 3 个表格，比引力图层次鲜明',
               to: '/explorer/DataSheet',
               update: '2020-10-14T09:43:03.429Z'
             },
             {
-              title: 'wiki 文章间距离计算',
+              title: 'Wikipedia 文章间距离计算',
               text: '学科文章间距离计算, 手动输入文章名，进行计算',
               to: '/explorer/PageDistance',
               update: '2020-11-19T09:43:03.429Z'
             },
             {
-              title: 'Mag 哑铃图',
+              title: 'MAG 哑铃图',
               text: '学科间幂率层次关系，可自主调节关系',
               to: '/explorer/MagFunnel'
             }
@@ -143,19 +143,19 @@ export default {
               to: '/mag2020/MagGoogleDistance_2020_V3',
               update: '2020-12-14T09:43:03.429Z'
             }, {
-              title: '统计学科数据',
+              title: 'MAG 统计学科数据',
               text: '包含 3 个图表',
               to: '/mag2020/MagArticlesTotalV3',
               update: '2020-12-15T09:43:03.429Z'
             }, {
-              title: '幂律及其随时间变化趋势',
+              title: 'MAG 幂律及其随时间变化趋势',
               text: '包含 3 个图表',
               to: '/mag2020/ZipfAndInnerzipfByYearv3',
               update: '2020-12-16T09:43:03.429Z'
             }
           ]
         },
-        'MAG-v2-(非简介分类)': {
+        'MAG-2019-v2(非简介分类)': {
           'Graph': [
             {
               title: 'MagGraph',
@@ -172,38 +172,38 @@ export default {
           ],
           '学科相关度': [
             {
-              title: '因果关系-贸易比例',
-              text: ' mag 因果关系-贸易比例',
+              title: 'MAG 因果关系-贸易比例',
+              text: ' MAG 因果关系-贸易比例',
               to: '/mag2019v2/MagTrade',
               update: '2020-09-24T09:43:03.429Z'
             },
             {
-              title: 'topN因果关系-贸易比例',
-              text: 'mag topN因果关系-贸易比例',
+              title: 'MAG topN因果关系-贸易比例',
+              text: 'MAG topN因果关系-贸易比例',
               to: '/mag2019v2/MagTopTrade',
               update: '2020-11-03T09:43:03.429Z'
             },
             {
-              title: 'google 距离',
-              text: 'Mag 学科相关度',
+              title: 'MAG google 距离',
+              text: 'MAG 学科相关度',
               to: '/mag2019v2/MagGoogleDistanceV2'
             },
             {
-              title: 'google 距离(当时距离)',
-              text: 'Mag 学科相关度, 当时的距离',
+              title: 'MAG google 距离(当时距离)',
+              text: 'MAG 学科相关度, 当时的距离',
               to: '/mag2019v2/MagGoogleDistanceV2',
               update: '2020-11-30T09:43:03.429Z'
             },
             {
-              title: 'google距离中间数据',
-              text: 'google距离中间数据',
+              title: 'MAG google距离中间数据',
+              text: 'MAG google距离中间数据',
               to: '/mag2019v2/GoogleDistance'
             }
           ],
 
           '统计数据': [
             {
-              title: 'level1层和父类的交集比例',
+              title: 'MAG level1层和父类的交集比例',
               text: 'MAG level1层和父类的交集比例 柱状图',
               to: '/mag2019v2/MagBlLevel'
             }, {
@@ -212,48 +212,48 @@ export default {
               to: '/mag2019v2/MagArticlesTotalV2'
             },
             {
-              title: '作者文章数',
+              title: 'MAG 作者文章数',
               text: 'MAG 作者文章数 V2',
               to: '/mag2019v2/MagAAAInfoV2'
             },
             {
-              title: '学科引用年份热力图',
+              title: 'MAG 学科引用年份热力图',
               text: '单一学科 linksOut / linksIn 的年份分布',
               to: '/mag2019v2/MagRefDistV2'
             },
             {
-              title: '作者数逐年统计',
+              title: 'MAG 作者数逐年统计',
               text: '',
               to: '/mag2019v2/AuthorsAndArticleInfoByYear',
               update: '2020-10-28T09:43:03.429Z'
             },
             {
-              title: '引用关系逐年统计',
+              title: 'MAG 引用关系逐年统计',
               text: '',
               to: '/mag2019v2/LinkTjByYear',
               update: '2020-11-30T20:43:03.429Z'
             },
             {
-              title: 'fos学科领域逐年分布',
+              title: 'MAG fos学科领域逐年分布',
               text: '',
               to: '/mag2019v2/FosTjByYearV2',
               update: '2020-10-29T09:43:03.429Z'
             },
             {
-              title: '学科文章交集分布',
+              title: 'MAG 学科文章交集分布',
               text: '',
               to: '/mag2019v2/MagJJByCat',
               update: '2020-10-29T09:43:03.429Z'
             },
             {
-              title: 'topN学科逐年分布',
-              text: 'Mag topN学科逐年分布',
+              title: 'MAG topN学科逐年分布',
+              text: 'MAG topN学科逐年分布',
               to: '/mag2019v2/TjYearByTopN',
               update: '2020-11-04T09:43:03.429Z'
             },
             {
-              title: '历年的点边数据统计',
-              text: 'Mag 历年的点边数据统计',
+              title: 'MAG 历年的点边数据统计',
+              text: 'MAG 历年的点边数据统计',
               to: '/mag2019v2/NodeAndEdgeByYear',
               update: '2020-12-01T09:43:03.429Z'
             }
@@ -261,246 +261,240 @@ export default {
           ],
           '幂率': [
             {
-              title: '幂率相关统计数据',
-              text: 'mag v2幂律相关统计数据',
+              title: 'MAG 幂率相关统计数据',
+              text: 'MAG v2幂律相关统计数据',
               to: '/mag2019v2/MagInnerZipTj'
             },
             {
-              title: '小世界幂率',
+              title: 'MAG 小世界幂率',
               text: 'MAG 小世界幂率',
               to: '/mag2019v2/MagInnerZipfV2'
             },
 
             {
-              title: '世界幂率',
+              title: 'MAG 世界幂率',
               text: 'MAG 世界幂率',
               to: '/mag2019v2/MagZipfV2'
             }
           ],
           '小世界': [
             {
-              title: '小世界 v4',
+              title: 'MAG 小世界 v4',
               text: '重新筛选后计算得到的 MAG 小世界',
               to: { path: '/mag2019v2/MagDirectNetV4', query: { version: 'v4' }}
             }
           ],
           '颠覆度': [
             {
-              title: '学科颠覆度',
-              text: 'Mag  颠覆度学科计算法，文章计算平均法，学科 top 分布，按年学科 top 分布等。 ',
+              title: 'MAG 学科颠覆度',
+              text: 'MAG  颠覆度学科计算法，文章计算平均法，学科 top 分布，按年学科 top 分布等。 ',
               to: '/mag2019v2/MagDisruption',
               update: '2020-11-27T16:43:03.429Z'
             },
             {
-              title: '学科颠覆度年度分布',
+              title: 'MAG 学科颠覆度年度分布',
               text: 'MAG 颠覆度 年度分布，可以调节多种条件进行过滤 ',
               to: '/mag2019v2/DisruptionByYear',
               update: '2020-12-03T16:43:03.429Z'
             }
           ]
         },
-        MAG: {
+        'MAG-2019-v1': {
           '统计数据': [
             {
-              title: '作者文章数',
+              title: 'MAG 作者文章数',
               text: 'MAG 作者文章数 统计',
               to: '/mag2019v1/MagAAAInfo'
             },
             {
-              title: '文章数',
+              title: 'MAG 文章数',
               text: 'MAG 文章数查询',
               to: '/mag2019v1/MagArticlesTotal'
             },
             {
-              title: '学科自恋度',
+              title: 'MAG 学科自恋度',
               text: 'MAG 学科自恋度',
               to: '/mag2019v1/MagRefSelfRate'
             },
             {
-              title: 'topN 学科自恋度',
-              text: 'mag topN 学科自恋度',
-              to: '/MagTopNRefSelfRate',
+              title: 'MAG topN 学科自恋度',
+              text: 'MAG topN 学科自恋度',
+              to: '/mag2019v1/MagTopNRefSelfRate',
               update: '2020-11-03T09:43:03.429Z'
             },
             {
-              title: '学科逐年引用分布',
+              title: 'MAG 学科逐年引用分布',
               text: 'MAG 学科逐年引用分布',
-              to: '/MasCompositionByYear'
+              to: '/mag2019v1/MagCompositionByYear'
             },
             {
-              title: '学科引用年份热力图',
+              title: 'MAG 学科引用年份热力图',
               text:
-                '参数说明：不限制学科网络规模，就是统计学科内所有的文章，linksin 或 linsout 的文章年份数量。 限制学科规模数为 10 万，每一年按照 linksout 或 linksin 数量排序 10 万名内的文章，其linksin 或 linsout 的文章年份数量',
-              to: '/MAGRefDist'
+                '单一学科 linksOut / linksIn 的年份分布',
+              to: '/mag2019v1/MagRefDist'
             }
           ],
-          'MAG-幂律': [
+          '幂律': [
             {
-              title: 'MAG 幂律',
-              text: 'MAG 幂律',
-              to: '/MagZipf'
+              title: 'MAG 世界幂律',
+              text: 'MAG 世界幂律',
+              to: '/mag2019v1/MagZipf'
             },
             {
               title: 'MAG 小世界幂律',
               text: 'MAG 小世界幂律',
-              to: '/MagInnerZipf'
+              to: '/mag2019v1/MagInnerZipf'
             }
           ],
-          'MAG-学科相关度': [
+          '学科相关度': [
             {
-              title: 'MAG学科相关度',
+              title: 'MAG 学科相关度',
               text: 'MAG 中各学科的逐年相关度',
-              to: '/masline'
+              to: '/mag2019v1/MagGoogleDistance'
             }
           ],
-          'MAG-小世界': [
-            // {
-            //   title: "MAG 小世界 v1",
-            //   text:
-            //     "MAG 逐年趋势:后一年包含前一年的所有范围。  规模趋势:按照排名增大的网络折线图和按照实际规模增大的网络折线图.(此版本只是用2020排名计算)",
-            //   to: { path: "MagDirectNet", query: { version: "v1" } }
-            // },
+          '小世界': [
             {
               title: 'MAG 小世界 v2',
               text:
                 'MAG 逐年趋势:后一年包含前一年的所有范围。  规模趋势:按照排名增大的网络折线图和按照实际规模增大的网络折线图。(此版本各年份分别计算排名计算)',
-              to: { path: 'MagDirectNet', query: { version: 'v2' }}
+              to: { path: '/mag2019v1/MagDirectNet', query: { version: 'v2' }}
             },
             {
               title: 'MAG 小世界 v3',
               text:
                 'MAG 逐年趋势:可以选择5，10，15，20年的范围内的学科内论文，计算出的小世界。 ',
-              to: { path: 'MagDirectNetV3', query: { version: 'v3' }}
+              to: { path: '/mag2019v1/MagDirectNetV3', query: { version: 'v3' }}
             }
           ]
         },
         Wikipedia: {
-          'Wikipedia-统计数据': [
+          '统计数据': [
             {
-              title: 'wiki子类半衰期',
+              title: 'wiki 子类半衰期',
               text: '2007年的N层子类，经过x年，其子类有一半改变了',
-              to: '/BanShuaiQi'
+              to: '/wikipedia/BanShuaiQi'
             },
             {
               title: 'wiki top500文章',
               text: '各学科top500文章展示,数值表示该篇文章的ArticleLinksin',
-              to: '/TopArticles'
+              to: '/wikipedia/TopArticles'
             },
             {
               title: '访问量&编辑量',
-              text: 'WIKI 访问量&编辑量',
-              to: '/viewandedits'
+              text: 'wiki 访问量&编辑量',
+              to: '/wikipedia/ViewAndEdits'
             },
             {
-              title: 'WIKI 文章数',
-              text: 'WIKI 文章数查询',
-              to: '/ArticlesTotal'
+              title: 'wiki 文章数',
+              text: 'wiki 文章数查询',
+              to: '/wikipedia/ArticlesTotal'
             },
             {
-              title: 'Wiki 类引用详情',
-              text: 'Wiki Core 类之间类引用详情',
-              to: '/CoreLinks'
+              title: 'wiki 类引用详情',
+              text: 'wiki Core 类之间类引用详情',
+              to: '/wikipedia/CoreLinks'
             },
             {
-              title: 'WIKI 分类层次',
-              text: 'WIKI 分类层次查询',
+              title: 'wiki 分类层次',
+              text: 'wiki 分类层次查询',
               href: 'http://wikidb.knogen.com:10080/wikidb_web/first.jsp'
             }
           ],
-          'Wikipedia-Core-学科相关度': [
+          'Core-学科相关度': [
             {
-              title: 'WIKI Core V1',
+              title: 'wiki Core V1',
               text: '各 Core 学科的逐年相关度',
-              to: { path: 'DisciplineCore', query: { version: 'v1' }}
+              to: { path: '/wikipedia/DisciplineCore', query: { version: 'v1' }}
             },
             {
-              title: 'WIKI Core V2',
+              title: 'wiki Core V2',
               text: '各 Core V2 学科的逐年相关度',
-              to: { path: 'DisciplineCore', query: { version: 'v2' }}
+              to: { path: '/wikipedia/DisciplineCore', query: { version: 'v2' }}
             },
             {
-              title: 'WIKI Core V3',
+              title: 'wiki Core V3',
               text: '各 Core V3 学科的逐年相关度',
-              to: { path: 'DisciplineCore', query: { version: 'v3' }}
+              to: { path: '/wikipedia/DisciplineCore', query: { version: 'v3' }}
             },
             {
-              title: 'WIKI Core V4',
+              title: 'wiki Core V4',
               text: '各 Core V4 学科的逐年相关度',
-              to: { path: 'DisciplineCore', query: { version: 'v4' }},
+              to: { path: '/wikipedia/DisciplineCore', query: { version: 'v4' }},
               update: '2020-10-26T09:43:03.429Z'
             },
             {
-              title: 'WIKI Core V5',
+              title: 'wiki Core V5',
               text: '各 Core V5 学科的逐年相关度',
-              to: { path: 'DisciplineCore', query: { version: 'v5' }},
+              to: { path: '/wikipedia/DisciplineCore', query: { version: 'v5' }},
               update: '2020-11-11T09:43:03.429Z'
             },
             {
-              title: 'WIKI Core 基准线',
+              title: 'wiki Core 基准线',
               text: '各 Core 学科的基准学科相关度',
-              to: { path: 'DisciplineCore', query: { version: 'article' }},
+              to: { path: '/wikipedia/DisciplineCore', query: { version: 'article' }},
               update: '2020-11-17T09:43:03.429Z'
             },
             {
-              title: 'WIKI Google 中间距离',
-              text: 'WIKI Google 中间距离',
-              to: { path: 'WikiGoogleDistance' },
+              title: 'wiki Google 中间距离',
+              text: 'wiki Google 中间距离',
+              to: { path: '/wikipedia/WikiGoogleDistance' },
               update: '2020-11-18T09:43:03.429Z'
             }
           ],
-          'Wikipedia-Core-幂律': [
+          'Core-幂律': [
             {
-              title: 'Core V1 Zipf 幂律斜率',
-              text: 'Core 逐年幂律图，及其斜率曲线',
-              to: { path: 'CoreZipfByNodes', query: { version: 'v1' }}
+              title: 'wiki Core V1 Zipf 幂律斜率',
+              text: 'wiki Core 逐年幂律图，及其斜率曲线',
+              to: { path: '/wikipedia/CoreZipfByNodes', query: { version: 'v1' }}
             },
             {
-              title: 'Core V2 Zipf 幂律斜率',
-              text: 'Core V2 逐年幂律图，及其斜率曲线',
-              to: { path: 'CoreZipfByNodes', query: { version: 'v2' }}
+              title: 'wiki Core V2 Zipf 幂律斜率',
+              text: 'wiki Core V2 逐年幂律图，及其斜率曲线',
+              to: { path: '/wikipedia/CoreZipfByNodes', query: { version: 'v2' }}
             },
             {
-              title: 'Core V3 Zipf 幂律斜率',
-              text: 'Core V3 逐年幂律图，及其斜率曲线',
-              to: { path: 'CoreZipfByNodes', query: { version: 'v3' }}
+              title: 'wiki Core V3 Zipf 幂律斜率',
+              text: 'wiki Core V3 逐年幂律图，及其斜率曲线',
+              to: { path: '/wikipedia/CoreZipfByNodes', query: { version: 'v3' }}
             }
           ],
-          'Wikipedia-Core-文章数': [
+          'Core-文章数': [
             {
-              title: 'Core WIKI 文章数 v1',
+              title: 'Core wiki 文章数 v1',
               text:
                 '有core类只计算core类，无core类只计算非core类，都取N层，未添加黑名单',
-              to: '/CoreArticlesTotal'
+              to: '/wikipedia/CoreArticlesTotal'
             },
             {
-              title: 'Core WIKI 文章数 v1 Plus',
+              title: 'Core wiki 文章数 v1 Plus',
               text:
                 '有core类只计算core类，无core类只计算非core类，都取N层，添加黑名单(Sociology,Biology,Economics)',
-              to: '/CoreArticlesTotalV1_plus'
+              to: '/wikipedia/CoreArticlesTotalV1_plus'
             },
             {
-              title: 'Core WIKI 文章数 v2',
+              title: 'Core wiki 文章数 v2',
               text:
                 '5月22日方法论，core类和非core类，都取N层，添加黑名单(Sociology,Biology,Economics)',
-              to: '/CoreArticlesTotalV2'
+              to: '/wikipedia/CoreArticlesTotalV2'
             },
             {
-              title: 'Core WIKI 文章数 v3',
+              title: 'Core wiki 文章数 v3',
               text:
                 '儿童节方法论，core类计算N+1层，非core类计算N层，添加黑名单(Sociology,Biology,Economics)',
-              to: '/CoreArticlesTotalNew_v3'
+              to: '/wikipedia/CoreArticlesTotalNew_v3'
             }
           ],
-          'Wikipedia-Core-小世界': [
+          'Core-小世界': [
             {
-              title: '规模趋势',
+              title: 'wiki 小世界规模趋势',
               text: '小世界 Core V2 规模趋势',
-              to: '/CoreSWUndirectLimit'
+              to: '/wikipedia/CoreSWUndirectLimit'
             },
             {
-              title: '逐年趋势',
+              title: 'wiki 小世界逐年趋势',
               text: '小世界 Core V2 逐年趋势',
-              to: '/CoreSMUndirected'
+              to: '/wikipedia/CoreSMUndirected'
             }
           ],
           'Wikipedia-学科相关度': [

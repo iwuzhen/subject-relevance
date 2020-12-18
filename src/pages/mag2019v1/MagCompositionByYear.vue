@@ -72,7 +72,7 @@ import { extendEchartsOpts, coreCategorys, extendLineSeries, defaultCategorySele
 import Base from '@/utils/base'
 
 export default {
-  name: 'Mag',
+  name: 'MagTopNRefSelfRate',
   extends: Base,
   data() {
     return {

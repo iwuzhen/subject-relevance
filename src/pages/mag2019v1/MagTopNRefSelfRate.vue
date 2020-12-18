@@ -85,7 +85,7 @@ import Base from '@/utils/base'
 import comment from '@/components/comment'
 
 export default {
-  name: 'Mag',
+  name: 'MagTopNRefSelfRate',
   components: {
     comment
   },

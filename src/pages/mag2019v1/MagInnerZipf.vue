@@ -96,7 +96,7 @@ export default {
   extends: Base,
   data() {
     return {
-      pageName: 'MAG幂律度分布',
+      pageName: 'MAG 小世界幂律度分布',
       girdHeaders: [],
       nodeRange: [100, 35000],
       nodeMax: 100000,
