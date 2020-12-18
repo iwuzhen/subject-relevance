@@ -288,6 +288,34 @@ export default {
       this.loading = false
     },
     setOptions(data) {
+      const series = data.y.map((item, index) => {
+        return extendLineSeries({
+          name: data.legend[index],
+          type: 'line',
+          smooth: false,
+          data: item
+        })
+      })
+      //  添加 mark line
+      series.push({
+        type: 'line',
+        markLine: {
+          symbol: ['none', 'none'],
+          lineStyle: {
+            color: 'grey',
+            width: 2
+          },
+          data: [
+            {
+              yAxis: 0.9
+            }, {
+              yAxis: 0.7
+            }, {
+              yAxis: 0.5
+            }
+          ]
+        }
+      })
       const _opt = extendEchartsOpts({
         title: {
           text: data.title
@@ -306,21 +334,10 @@ export default {
           type: 'value',
           max: 1,
           splitLine: {
-            show: true,
-            interval: (indexs, value) => {
-              console.log(indexs, value)
-              if (indexs === 0.3) { return true } return false
-            }
+            show: false
           }
         },
-        series: data.y.map((item, index) => {
-          return extendLineSeries({
-            name: data.legend[index],
-            type: 'line',
-            smooth: false,
-            data: item
-          })
-        })
+        series: series
       })
       return _opt
     }
