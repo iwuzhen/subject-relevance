@@ -497,75 +497,75 @@ export default {
               to: '/wikipedia/CoreSMUndirected'
             }
           ],
-          'Wikipedia-学科相关度': [
+          '学科相关度': [
             {
-              title: 'People in WIKI',
+              title: 'People in wiki',
               text: '人和人，学科的相关度',
-              to: '/disciplinePeople'
+              to: '/wikipedia/disciplinePeople'
             },
             {
-              title: 'WIKI 学科逐年相关度',
+              title: 'wiki 学科逐年相关度',
               text: '各学科的逐年相关度',
-              to: '/discipline'
+              to: '/wikipedia/discipline'
             },
             {
-              title: '小世界有向图',
+              title: 'wiki 小世界有向图',
               text: '小世界有向网络学科间趋势',
-              to: '/SmallWorldDirected'
+              to: '/wikipedia/SmallWorldDirected'
             },
             {
-              title: 'Core_V2_小世界有向图',
+              title: 'Core wiki V2 小世界有向图',
               text: 'Core_V2_小世界有向网络学科间趋势',
-              to: '/SmallWorldDirectedCoreV2'
+              to: '/wikipedia/SmallWorldDirectedCoreV2'
             },
             {
               title: 'Cognitive science 相关度',
               text: 'Cognitive science 和其他学科的逐年相关度',
-              to: '/SubDiscipline'
+              to: '/wikipedia/SubDiscipline'
             }
           ],
-          'Wikipedia-幂率': [
+          '幂率': [
             {
-              title: 'Zipf 幂律(世界)斜率 (人)',
+              title: 'wiki Zipf 幂律(世界)斜率 (人)',
               text: 'people 计算出的世界逐年幂律图',
-              to: '/PeopleZipfByNodes'
+              to: '/wikipedia/PeopleZipfByNodes'
             },
             {
-              title: 'Zipf 幂律(小世界) (人)',
+              title: 'wiki Zipf 幂律(小世界) (人)',
               text: 'people 计算出的小世界逐年幂律图',
-              to: '/PeopleInnerZipfByNodes'
+              to: '/wikipedia/PeopleInnerZipfByNodes'
             },
             {
-              title: 'Zipf 幂律(世界)',
+              title: 'wiki Zipf 幂律(世界)',
               text: '逐年幂律图',
-              to: '/powerlaw'
+              to: '/wikipedia/powerlaw'
             },
             {
-              title: 'Zipf 幂律(小世界)斜率',
+              title: 'wiki Zipf 幂律(小世界)斜率',
               text: '逐年幂律图，及其斜率曲线',
-              to: '/ZipfByNodes'
+              to: '/wikipedia/ZipfByNodes'
             },
             {
-              title: '幂律度分布',
+              title: 'wiki 幂律度分布',
               text: '幂律度分布',
-              to: '/DegreeDistribution'
+              to: '/wikipedia/DegreeDistribution'
             },
             {
-              title: 'PageRank幂律',
+              title: 'wiki PageRank 幂律',
               text: 'PageRank幂律',
-              to: '/powerLawPageRank'
+              to: '/wikipedia/powerLawPageRank'
             }
           ],
-          'Wikipedia-小世界': [
+          '小世界': [
             {
-              title: '规模趋势',
+              title: 'wiki 小世界规模趋势',
               text: '小世界',
-              to: '/SmallWorldUndirectedLimit'
+              to: '/wikipedia/SmallWorldUndirectedLimit'
             },
             {
-              title: '逐年趋势',
+              title: 'wiki 小世界逐年趋势',
               text: '小世界',
-              to: '/SmallWorldUndirected'
+              to: '/wikipedia/SmallWorldUndirected'
             }
           ]
         }

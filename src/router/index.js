@@ -74,9 +74,9 @@ const routes = [{
   name: 'MagBlLevel',
   component: () => import('@/pages/mag2019v2/MagBlLevel')
 }, {
-  path: '/SmallWorldDirectedCoreV2',
+  path: '/wikipedia/SmallWorldDirectedCoreV2',
   name: 'SmallWorldDirectedCoreV2',
-  component: () => import('@/pages/SmallWorldDirectedCoreV2')
+  component: () => import('@/pages/wikipedia/SmallWorldDirectedCoreV2')
 }, {
   path: '/mag2019v1/MagCompositionByYear',
   name: 'MagCompositionByYear',
@@ -122,9 +122,9 @@ const routes = [{
   name: 'CoreSMUndirected',
   component: () => import('@/pages/wikipedia/CoreSMUndirected')
 }, {
-  path: '/discipline',
+  path: '/wikipedia/discipline',
   name: 'discipline',
-  component: () => import('@/pages/discipline')
+  component: () => import('@/pages/wikipedia/discipline')
 }, {
   path: '/mag2019v1/MagGoogleDistance',
   name: 'MagGoogleDistance',
@@ -142,41 +142,41 @@ const routes = [{
   name: 'ArticlesTotal',
   component: () => import('@/pages/wikipedia/ArticlesTotal')
 }, {
-  path: '/SubDiscipline',
+  path: '/wikipedia/SubDiscipline',
   name: 'SubDiscipline',
-  component: () => import('@/pages/SubDiscipline')
+  component: () => import('@/pages/wikipedia/SubDiscipline')
 }, {
-  path: '/powerlaw',
+  path: '/wikipedia/powerlaw',
   name: 'powerlaw',
-  component: () => import('@/pages/powerLaw')
+  component: () => import('@/pages/wikipedia/powerLaw')
 }, {
   path: '/wikipedia/ViewAndEdits',
   name: 'ViewAndEdits',
   component: () => import('@/pages/wikipedia/ViewAndEdits')
 }, {
-  path: '/SmallWorldUndirected',
+  path: '/wikipedia/SmallWorldUndirected',
   name: 'SmallWorldUndirected',
-  component: () => import('@/pages/SmallWorldUndirected')
+  component: () => import('@/pages/wikipedia/SmallWorldUndirected')
 }, {
-  path: '/SmallWorldDirected',
+  path: '/wikipedia/SmallWorldDirected',
   name: 'SmallWorldDirected',
-  component: () => import('@/pages/SmallWorldDirected')
+  component: () => import('@/pages/wikipedia/SmallWorldDirected')
 }, {
-  path: '/powerLawPageRank',
+  path: '/wikipedia/powerLawPageRank',
   name: 'powerLawPageRank',
-  component: () => import('@/pages/powerLawPageRank')
+  component: () => import('@/pages/wikipedia/powerLawPageRank')
 }, {
-  path: '/SmallWorldUndirectedLimit',
+  path: '/wikipedia/SmallWorldUndirectedLimit',
   name: 'SmallWorldUndirectedLimit',
-  component: () => import('@/pages/SmallWorldUndirectedLimit')
+  component: () => import('@/pages/wikipedia/SmallWorldUndirectedLimit')
 }, {
-  path: '/DegreeDistribution',
+  path: '/wikipedia/DegreeDistribution',
   name: 'DegreeDistribution',
-  component: () => import('@/pages/DegreeDistribution')
+  component: () => import('@/pages/wikipedia/DegreeDistribution')
 }, {
-  path: '/ZipfByNodes',
+  path: '/wikipedia/ZipfByNodes',
   name: 'ZipfByNodes',
-  component: () => import('@/pages/ZipfByNodes')
+  component: () => import('@/pages/wikipedia/ZipfByNodes')
 }, {
   path: '/browser/WikiTree',
   name: 'WikiTree',
@@ -194,17 +194,17 @@ const routes = [{
   name: 'BritannicaTree',
   component: () => import('@/pages/browser/BritannicaTree')
 }, {
-  path: '/disciplinePeople',
+  path: '/wikipedia/disciplinePeople',
   name: 'disciplinePeople',
-  component: () => import('@/pages/disciplinePeople')
+  component: () => import('@/pages/wikipedia/disciplinePeople')
 }, {
-  path: '/PeopleZipfByNodes',
+  path: '/wikipedia/PeopleZipfByNodes',
   name: 'PeopleZipfByNodes',
-  component: () => import('@/pages/PeopleZipfByNodes')
+  component: () => import('@/pages/wikipedia/PeopleZipfByNodes')
 }, {
-  path: '/PeopleInnerZipfByNodes',
+  path: '/wikipedia/PeopleInnerZipfByNodes',
   name: 'PeopleInnerZipfByNodes',
-  component: () => import('@/pages/PeopleInnerZipfByNodes')
+  component: () => import('@/pages/wikipedia/PeopleInnerZipfByNodes')
 }, {
   path: '/wikipedia/DisciplineCore',
   name: 'DisciplineCore',
