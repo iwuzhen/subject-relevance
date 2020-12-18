@@ -249,7 +249,7 @@
 import { extendEchartsOpts, extendLineSeries } from '@/api/data'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
-import Disruption from '../assets/data/disruption.json'
+import Disruption from '@/assets/data/disruption.json'
 import { getMultipleStorage } from '@/api/index'
 import _ from 'lodash'
 

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2019-07-21 13:24:25
  * @LastEditors: ider
- * @LastEditTime: 2020-10-28 19:43:21
+ * @LastEditTime: 2020-12-17 17:35:32
  * @Description:
 -->
 <template>
@@ -56,6 +56,10 @@
           height="70vh"
         />
       </v-col>
+    </v-row>    <v-row>
+      <v-col>
+        <comment storagekey="MagRefDistV2_Chart_2" />
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -63,9 +67,13 @@
 import { coreCategorys } from '@/api/data'
 import { getMasYearRefDist } from '@/api/index'
 import Base from '@/utils/base'
+import comment from '@/components/comment'
 
 export default {
   name: 'MAGV2',
+  components: {
+    comment
+  },
   extends: Base,
   data() {
     return {

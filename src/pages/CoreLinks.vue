@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-05-14 16:16:27
  * @LastEditors: ider
- * @LastEditTime: 2020-12-17 11:31:40
+ * @LastEditTime: 2020-12-17 17:53:28
  * @Description:
  -->
 
@@ -55,26 +55,20 @@
         />
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-for="chartid of myChartIds" :key="chartid">
       <v-col col="12">
         <v-card
-          id="subjectChart1"
           class="mx-auto"
           outlined
           :loading="loading"
           height="70vh"
-        />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col col="12">
-        <v-card
-          id="subjectChart2"
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="70vh"
-        />
+        >
+          <v-container
+            :id="chartid"
+            fluid
+            fill-height
+          />
+        </v-card>
       </v-col>
     </v-row>
   </v-container>

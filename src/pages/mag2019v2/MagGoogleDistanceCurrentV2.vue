@@ -166,7 +166,7 @@ coreCategorys.push({
 })
 
 export default {
-  name: 'MagV2',
+  name: 'MagGoogleDistanceCurrent',
   components: {
     comment
   },

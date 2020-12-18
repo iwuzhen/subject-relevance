@@ -3,19 +3,17 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-09-04 12:33:09
+ * @LastEditTime: 2020-12-17 15:09:46
  * @Description:
  -->
 <template>
   <v-container fluid>
     <v-row>
-      <!-- <v-col>
-        <v-btn color="primary" @click="checkNode">对比选中的节点</v-btn>
-      </v-col> -->
       <v-col>
         <v-autocomplete
           v-model="searchString"
           label="搜索 category"
+          disabled
           :loading="isLoadingButton"
           clearable
           cache-items
@@ -31,11 +29,10 @@
           hover
           flat
         >
-          <!-- <v-card-title>left</v-card-title> -->
           <v-treeview
             v-model="selection1"
             :items="treeItems1"
-            :load-children="fetchChildren1"
+            :load-children="fetchChildren"
             selectable
             activatable
             dense
@@ -55,8 +52,8 @@
               </v-tooltip>
             </template>
             <template v-slot:append="{ item }">
-              <v-icon v-if="item.length">
-                {{ item.length }}
+              <v-icon>
+                {{ item.cLength }}
               </v-icon>
             </template>
           </v-treeview>
@@ -67,26 +64,23 @@
 </template>
 
 <script>
-import { getBritannicaTree } from '@/api/index'
+import { getOriginCategories, getChildCategories } from '@/api/index'
 import { v4 as uuidv4 } from 'uuid'
 import Base from '@/utils/base'
 
 export default {
-  name: 'BritannicaTree',
+  name: 'MAGFos',
   extends: Base,
   data() {
     return {
-      pageName: 'Britannica Tree 大英百科全书分类层次浏览',
-      treeLength: {},
+      pageName: 'MAG Fos 层次浏览',
       selection1: [],
       treeItems1: [],
       overlay: false,
       isLoadingButton: false,
       searchItems: [],
       search: null,
-      searchString: '',
-      diffs: '',
-      basiccategorys: ['Britannica']
+      searchString: ''
     }
   },
   computed: {
@@ -95,7 +89,6 @@ export default {
     searchString() {
       if (!this.searchString) {
         this.loadDefauleCategory()
-        // this.categorys = this.basiccategorys;
       } else {
         this.treeItems1 = [
           {
@@ -110,11 +103,11 @@ export default {
       if (!val) return
       this.isLoadingButton = true
 
-      const response = await getBritannicaTree({
-        categoryTitle: Buffer.from(val).toString('base64')
+      const response = await getChildCategories({
+        id: val
       })
 
-      if (response.data.childList.length === 0) {
+      if (response.data.length === 0) {
         this.searchItems = []
       } else {
         this.searchItems = [val]
@@ -126,34 +119,36 @@ export default {
     this.loadDefauleCategory()
   },
   methods: {
-    loadDefauleCategory() {
-      this.treeItems1 = this.basiccategorys.map(item => {
-        this.addTranslateChan(item)
+    async loadDefauleCategory() {
+      const data = await getOriginCategories()
+      this.treeItems1 = data.data.map(item => {
+        this.addTranslateChan(item.name)
         return {
-          id: uuidv4(),
-          name: item,
+          id: item.id,
+          name: item.name,
+          cLength: item.size,
           children: []
         }
       })
     },
 
-    async getChildren(name) {
+    async getChildren(itemId) {
       //  本地缓存
-      let categoryLength, categoryChildrens
-      console.log(`扩展 tree,${name}`)
-      await getBritannicaTree({
-        categoryTitle: Buffer.from(name).toString('base64')
+      let categoryChildrens
+      console.log(`扩展 tree,${itemId}`)
+      await getChildCategories({
+        id: itemId
       })
         .then(res => {
           if (res.data) {
-            categoryLength = res.data.childList.length
-            categoryChildrens = res.data.childList.map(item => {
-              this.addTranslateChan(item)
+            categoryChildrens = res.data.map(item => {
+              this.addTranslateChan(item.name)
               return {
-                id: uuidv4(),
-                name: item,
+                id: item.id,
+                name: item.name,
                 leaf: true,
-                children: []
+                cLength: item.size,
+                children: item.size > 0 ? [] : null
               }
             })
           } else {
@@ -167,26 +162,14 @@ export default {
           this.$emit('emitMesage', `请求失败:${rej}`)
         })
 
-      return [categoryLength, categoryChildrens]
+      return categoryChildrens
     },
 
-    async _fetchChildren(treeitem) {
-      const [categoryLength, categoryChildrens] = await this.getChildren(
-        treeitem.name
+    async fetchChildren(treeitem) {
+      const categoryChildrens = await this.getChildren(
+        treeitem.id
       )
-      this.treeLength[treeitem.name] = categoryLength
-      const self = this
-      for (const i in categoryChildrens) {
-        const [cl] = await self.getChildren(categoryChildrens[i].name)
-        categoryChildrens[i]['length'] = cl
-        if (cl === 0) {
-          delete categoryChildrens[i].children
-        }
-      }
       treeitem.children.push(...categoryChildrens)
-    },
-    async fetchChildren1(treeitem) {
-      return await this._fetchChildren(treeitem)
     }
   }
 }

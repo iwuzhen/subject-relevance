@@ -8,32 +8,38 @@
     <v-main style="padding:0">
       <!-- Provides the application the proper gutter -->
       <v-container fluid>
-        <v-row class="light-blue lighten-5">
-          <aside>30 天内新增的图表标记为橘色</aside>
+        <v-row class="light-blue lighten-5 mb-4">
+          <aside>Tip: 30 天内新增的图表标记为橘色</aside>
         </v-row>
         <div
           v-for="(subitems, h1name) in indexObject"
+          :id="getMd5Id(h1name)"
           :key="h1name"
           class="mb-5"
         >
-          <v-row>
-            <a :id="getMd5Id(h1name)" :href="'#'+getMd5Id(h1name)">
-              <h1>{{ h1name }}</h1>
-            </a>
-          </v-row>
-          <v-row>
-            <v-divider />
-          </v-row>
+          <h1 class="v-heading text-h4 text-sm-h4 mb-4">
+            <a
+              href="#"
+              class="text-decoration-none text-right text-md-left"
+            > # </a>
+            {{ h1name }}
+            <!-- </a> -->
+          </h1>
 
           <div
             v-for="(items, name) in subitems"
-            :key="name"
+            :id="getMd5Id(h1name+name)"
+            :key="getMd5Id(h1name+name)"
             class="mb-5"
           >
-            <v-row><a :id="getMd5Id(h1name+name)" :href="'#'+getMd5Id(h1name+name)">
-              <h3>{{ name }}</h3>
-            </a>
-            </v-row>
+            <h2 class="v-heading text-h5 text-sm-h5 mb-4 mt-4">
+              <a
+                href="#"
+                class="text-decoration-none text-right text-md-left"
+              > # </a>
+
+              {{ name }}
+            </h2>
             <v-row>
               <v-divider />
             </v-row>
@@ -92,49 +98,54 @@ export default {
     return {
       indexObject: {
         'Structure': {
-          'Tree-View': [
+          'Browser': [
             {
-              title: 'Tree Viewer',
-              text: 'WIKI 分类文章层次浏览',
-              to: '/WikiTree'
+              title: 'wikipedia',
+              text: 'wikipedia 分类文章层次浏览,可以对比树之间的节点差异',
+              to: '/browser/WikiTree'
             },
             {
-              title: 'Britannica Tree',
+              title: 'Britannica',
               text: '大英百科全书分类层次浏览',
-              to: '/BritannicaTree'
+              to: '/browser/BritannicaTree'
             },
             {
-              title: 'Mag Fos Tree',
-              text: 'Mag Fos 层次 tree',
-              to: '/MagFosTree'
+              title: 'Mag Fos',
+              text: 'Mag Fos 层次浏览',
+              to: '/browser/MagFosTree'
             }
           ],
-          'Import': [
+          'Explorer': [
             {
               title: '学科依赖层次',
               text: '学科依赖层次等 3 个表格，比引力图层次鲜明',
-              to: '/DataSheet',
+              to: '/explorer/DataSheet',
               update: '2020-10-14T09:43:03.429Z'
             },
             {
               title: 'wiki 文章间距离计算',
               text: '学科文章间距离计算, 手动输入文章名，进行计算',
-              to: '/PageDistance',
+              to: '/explorer/PageDistance',
               update: '2020-11-19T09:43:03.429Z'
+            },
+            {
+              title: 'Mag 哑铃图',
+              text: '学科间幂率层次关系，可自主调节关系',
+              to: '/explorer/MagFunnel'
             }
           ]
         },
         'MAG-2020': {
-          'MAG-2020-学科相关度': [
+          '学科相关度等': [
             {
               title: '2020 学科相关度',
               text: '2020 学科相关度',
-              to: '/MagGoogleDistance_2020_V3',
+              to: '/mag2020/MagGoogleDistance_2020_V3',
               update: '2020-12-14T09:43:03.429Z'
             }, {
               title: '统计学科数据',
               text: '包含 3 个图表',
-              to: '/MasArticlesTotalV3',
+              to: '/mag2020/MagArticlesTotalV3',
               update: '2020-12-15T09:43:03.429Z'
             }, {
               title: '幂律及其随时间变化趋势',
@@ -145,170 +156,165 @@ export default {
           ]
         },
         'MAG-v2-(非简介分类)': {
-          'MAG-v2-Graph': [
+          'Graph': [
             {
               title: 'MagGraph',
               text:
-                '学科间引用关系引力，学科大小来自学科文章数。边的长度代表相关度。力引导布局相关的配置项，力引导布局是模拟弹簧电荷模型在每两个节点之间添加一个斥力，每条边的两个节点之间添加一个引力，每次迭代节点会在各个斥力和引力的作用下移动位置，多次迭代后节点会静止在一个受力平衡的位置，达到整个模型的能量最小化。',
-              to: '/MagGraph'
-            },
-            {
-              title: 'Mag 哑铃图',
-              text: '学科间幂律关系（v1）',
-              to: '/MagFunnel'
+                '展示MAG多个不同学科之间的大小和距离关系，用 2d 和 3d 引力图展示',
+              to: '/mag2019v2/MagGraph'
             },
             {
               title: 'MAG 学科桑基图',
               text: 'MAG 学科桑基图',
-              to: '/MAGSankey',
+              to: '/mag2019v2/MagSankey',
               update: '2020-10-26T09:43:03.429Z'
             }
           ],
-          'MAG-v2-学科相关度': [
+          '学科相关度': [
             {
               title: '因果关系-贸易比例',
               text: ' mag 因果关系-贸易比例',
-              to: '/MagTrade',
+              to: '/mag2019v2/MagTrade',
               update: '2020-09-24T09:43:03.429Z'
             },
             {
               title: 'topN因果关系-贸易比例',
               text: 'mag topN因果关系-贸易比例',
-              to: '/MagTopTrade',
+              to: '/mag2019v2/MagTopTrade',
               update: '2020-11-03T09:43:03.429Z'
             },
             {
               title: 'google 距离',
               text: 'Mag 学科相关度',
-              to: '/MasDistanceV2'
+              to: '/mag2019v2/MagGoogleDistanceV2'
             },
             {
-              title: 'google 距离（当时的距离）',
+              title: 'google 距离(当时距离)',
               text: 'Mag 学科相关度, 当时的距离',
-              to: '/MagGoogleDistanceV2',
+              to: '/mag2019v2/MagGoogleDistanceV2',
               update: '2020-11-30T09:43:03.429Z'
             },
             {
               title: 'google距离中间数据',
               text: 'google距离中间数据',
-              to: '/GoogleDistance'
+              to: '/mag2019v2/GoogleDistance'
             }
           ],
 
-          'MAG-v2-统计数据': [
+          '统计数据': [
             {
-              title: 'MAG level1层和父类的交集比例',
+              title: 'level1层和父类的交集比例',
               text: 'MAG level1层和父类的交集比例 柱状图',
-              to: '/MAGBLLevel'
+              to: '/mag2019v2/MagBlLevel'
             }, {
               title: 'MAG文章数',
               text: '',
-              to: '/MasArticlesTotalV2'
+              to: '/mag2019v2/MagArticlesTotalV2'
             },
             {
-              title: 'MAG 作者文章数',
+              title: '作者文章数',
               text: 'MAG 作者文章数 V2',
-              to: '/MagAAAInfoV2'
+              to: '/mag2019v2/MagAAAInfoV2'
             },
             {
-              title: 'MAG 学科引用年份热力图',
-              text:
-                '参数说明：不限制学科网络规模，就是统计学科内所有的文章，linksin 或 linsout 的文章年份数量。 限制学科规模数为 10 万，每一年按照 linksout 或 linksin 数量排序 10 万名内的文章，其linksin 或 linsout 的文章年份数量',
-              to: '/MAGRefDistV2'
+              title: '学科引用年份热力图',
+              text: '单一学科 linksOut / linksIn 的年份分布',
+              to: '/mag2019v2/MagRefDistV2'
             },
             {
               title: '作者数逐年统计',
               text: '',
-              to: '/AuthorsAndArticleInfoByYear',
+              to: '/mag2019v2/AuthorsAndArticleInfoByYear',
               update: '2020-10-28T09:43:03.429Z'
             },
             {
               title: '引用关系逐年统计',
               text: '',
-              to: '/LinkTjByYear',
+              to: '/mag2019v2/LinkTjByYear',
               update: '2020-11-30T20:43:03.429Z'
             },
             {
               title: 'fos学科领域逐年分布',
               text: '',
-              to: '/FosTjByYearV2',
+              to: '/mag2019v2/FosTjByYearV2',
               update: '2020-10-29T09:43:03.429Z'
             },
             {
               title: '学科文章交集分布',
               text: '',
-              to: '/MagJJByCat',
+              to: '/mag2019v2/MagJJByCat',
               update: '2020-10-29T09:43:03.429Z'
             },
             {
               title: 'topN学科逐年分布',
               text: 'Mag topN学科逐年分布',
-              to: '/TjYearByTopN',
+              to: '/mag2019v2/TjYearByTopN',
               update: '2020-11-04T09:43:03.429Z'
             },
             {
               title: '历年的点边数据统计',
               text: 'Mag 历年的点边数据统计',
-              to: '/NodeAndEdgeByYear',
+              to: '/mag2019v2/NodeAndEdgeByYear',
               update: '2020-12-01T09:43:03.429Z'
             }
 
           ],
-          'MAG-v2-幂率': [
+          '幂率': [
             {
               title: '幂率相关统计数据',
               text: 'mag v2幂律相关统计数据',
-              to: '/MAGInnerZipTj'
+              to: '/mag2019v2/MagInnerZipTj'
             },
             {
-              title: 'MAG 小世界幂率',
-              text: '',
-              to: '/MagInnerZipfV2'
+              title: '小世界幂率',
+              text: 'MAG 小世界幂率',
+              to: '/mag2019v2/MagInnerZipfV2'
             },
 
             {
-              title: 'MAG 世界幂率',
-              text: '',
-              to: '/MagZipfV2'
+              title: '世界幂率',
+              text: 'MAG 世界幂率',
+              to: '/mag2019v2/MagZipfV2'
             }
           ],
-          'MAG-v2-小世界': [
+          '小世界': [
             {
-              title: 'MAG 小世界 v4',
+              title: '小世界 v4',
               text: '重新筛选后计算得到的 MAG 小世界',
-              to: { path: 'MagDirectNetV4', query: { version: 'v4' }}
+              to: { path: '/mag2019v2/MagDirectNetV4', query: { version: 'v4' }}
             }
           ],
-          'MAG-v2-颠覆度': [
+          '颠覆度': [
             {
-              title: 'Mag 学科颠覆度',
-              text: '颠覆度学科计算法，文章计算平均法，学科 top 分布，按年学科 top 分布等。 ',
-              to: '/MagDisruption',
+              title: '学科颠覆度',
+              text: 'Mag  颠覆度学科计算法，文章计算平均法，学科 top 分布，按年学科 top 分布等。 ',
+              to: '/mag2019v2/MagDisruption',
               update: '2020-11-27T16:43:03.429Z'
-            }, {
+            },
+            {
               title: '学科颠覆度年度分布',
-              text: '年度分布，可以调节多种条件进行过滤 ',
-              to: '/DisruptionByYear',
+              text: 'MAG 颠覆度 年度分布，可以调节多种条件进行过滤 ',
+              to: '/mag2019v2/DisruptionByYear',
               update: '2020-12-03T16:43:03.429Z'
             }
           ]
         },
         MAG: {
-          'MAG-统计数据': [
+          '统计数据': [
             {
               title: '作者文章数',
               text: 'MAG 作者文章数 统计',
-              to: '/MagAAAInfo'
+              to: '/mag2019v1/MagAAAInfo'
             },
             {
               title: '文章数',
               text: 'MAG 文章数查询',
-              to: '/MasArticlesTotal'
+              to: '/mag2019v1/MagArticlesTotal'
             },
             {
               title: '学科自恋度',
               text: 'MAG 学科自恋度',
-              to: '/MagRefSelfRate'
+              to: '/mag2019v1/MagRefSelfRate'
             },
             {
               title: 'topN 学科自恋度',
@@ -652,4 +658,21 @@ export default {
 }
 </script>
 
-<style lang="less"></style>
+<style lang="less">
+.v-heading{
+  display: inline-block;
+  position: relative;
+  a {
+    bottom: 0;
+    display: inline-block;
+    left: 0;
+    margin: 0 -.7em;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  a:not(:hover):not(:focus) {
+    opacity: 0;
+}
+}
+</style>

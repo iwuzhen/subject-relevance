@@ -71,7 +71,7 @@
         </v-card>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-for="chartid of myChartIds" :key="chartid">
       <v-col col="12">
         <v-card
           class="mx-auto"
@@ -80,7 +80,7 @@
           height="70vh"
         >
           <v-container
-            id="subjectChart"
+            :id="chartid"
             fluid
             fill-height
           />

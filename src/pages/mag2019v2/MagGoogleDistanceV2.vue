@@ -24,31 +24,22 @@
           @change="getData"
         />
       </v-col>
-      <v-col cols="1">
+      <v-col cols="2">
         <v-select
           v-model="methodValue"
           :items="methodOptions"
           dense
           label="条件"
-          @change="getData"
-        />
-      </v-col>
-      <v-col cols="1">
-        <v-select
-          v-model="typeValue"
-          :items="typeOptions"
-          dense
-          label="数据类型"
-          @change="getData"
+          @change="linksChange"
         />
       </v-col>
       <v-col cols="2">
         <v-select
-          v-model="versionValue"
-          :items="versionOptions"
+          v-model="qsValue"
+          :items="qsOptions"
           dense
-          label="version"
-          @change="getData"
+          label="筛选条件"
+          @change="qsChange"
         />
       </v-col>
     </v-row>
@@ -89,6 +80,15 @@
           </template>
         </v-range-slider>
       </v-col>
+      <v-col cols="2">
+        <v-select
+          v-model="bfValue"
+          :items="bfOpt"
+          dense
+          label="只用该年以前的数据"
+          @change="bfChange"
+        />
+      </v-col>
       <v-col cols="1">
         <v-btn
           :color="showAve ? 'light-green' : 'lime'"
@@ -110,7 +110,7 @@
           :disabled="averageLinedata.legend.length===0"
           color="light-green"
           @click="initAverageLinedata"
-        >清空平均距离</v-btn>
+        >清空平均距离图</v-btn>
       </v-col>
     </v-row>
     <v-row>
@@ -131,7 +131,7 @@
     </v-row>
     <v-row>
       <v-col>
-        <comment storagekey="GoogleDistance_graph_1" />
+        <comment storagekey="Maslinev2_Chart_1" />
       </v-col>
     </v-row>
     <v-row>
@@ -152,29 +152,44 @@
     </v-row>
     <v-row>
       <v-col>
-        <comment storagekey="GoogleDistance_graph_2" />
+        <comment storagekey="Maslinev2_Chart_2" />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { getGoogleDistance_tempdata } from '@/api/index'
+import { getMasDatav2 } from '@/api/index'
 import { extendEchartsOpts, coreCategorys, extendLineSeries, defaultCategorySelect } from '@/api/data'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 
+coreCategorys.push({
+  text: 'Theoretical physics',
+  value: 'Theoretical physics'
+})
+
+coreCategorys.push({
+  text: 'Discrete mathematics',
+  value: 'Discrete mathematics'
+})
+
 export default {
-  name: 'MagV2',
+  name: 'MagGoogleDistance',
   components: {
     comment
   },
   extends: Base,
   data() {
     return {
-      pageName: 'MAG Google 距离中间数据',
-      typeValue: 1,
-      typeOptions: [{ text: '引用数', value: 0 }, { text: '引用交集数', value: 1 }],
+      pageName: 'MAG 学科相关度 v2',
+      qsValue: -1,
+      qsOptions: [{ text: '去掉引用为0的。按边', value: -100 },
+        { text: '不筛选,按边', value: -99 },
+        { text: '不筛选,按点', value: -1 },
+        { text: '去掉被引用为0的文章，剩余7000万+,按点', value: -2 },
+        { text: '引用top百分之十文章,按点', value: 10 },
+        { text: '引用top百分之三十文章,按点', value: 30 }],
       showAve: true,
       subjectTarget: '',
       subjectRelevances: defaultCategorySelect,
@@ -188,9 +203,7 @@ export default {
       myChartIds: ['masChart1', 'masChart2'],
       averageLinedata: { title: '平均逐年距离图', legend: [], x: [], y: [] },
       currentAverageLine: { name: null, line: [] },
-      count: 0,
-      versionOptions: [{ text: '未去掉引用为0的数据', value: 'v2' }, { text: '去掉引用为0的数据', value: 'delete_noref_v2' }],
-      versionValue: 'v2'
+      count: 0
     }
   },
   computed: {
@@ -220,6 +233,29 @@ export default {
       this.myChartObjs[1].setOption(options, true)
       console.log(this.averageLinedata)
     },
+    qsChange() {
+      if (this.qsValue === 0) {
+        this.methodValue = 'linksin'
+        this.bfValue === '不适用'
+      }
+      this.getData()
+    },
+
+    bfChange() {
+      if (this.bfValue !== '不适用') {
+        this.methodValue = 'linksin'
+        this.qsValue = -1
+      }
+      this.getData()
+    },
+
+    linksChange() {
+      if (this.methodValue === 'linksout') {
+        this.qsValue = -1
+        this.bfValue = '不适用'
+      }
+      this.getData()
+    },
 
     async getData() {
       if (!this.subjectTarget || this.subjectRelevances.length === 0) {
@@ -227,43 +263,46 @@ export default {
         return false
       }
       this.loading = true
+      const subjectTarget = this.subjectTarget
       const opt = {
         strA: this.subjectTarget,
         strB: this.subjectRelevances
           .filter(item => {
-            if (item === this.subjectTarget && this.typeValue === 1) {
+            if (item === subjectTarget) {
               return false
             }
             return true
           })
           .join(','),
-        version: this.versionValue,
         method: this.methodValue,
-        dbtype: 'mag',
         from: this.years[0],
         to: this.years[1],
-        type: this.typeValue
+        qs: this.qsValue
       }
-      getGoogleDistance_tempdata(opt)
+
+      if (this.bfValue !== '不适用') {
+        opt.bf = this.bfValue
+      }
+      getMasDatav2(opt)
         .then(res => {
-          if (res.data) {
+          if (res.data.data) {
             if (this.subjectRelevances.length > 1 && this.showAve) {
-              console.log(res.data)
-              this.averageLinedata.x = res.data.x
+              console.log(res.data.data)
+              this.averageLinedata.x = res.data.data.x
               const aveLine = []
-              for (const i in res.data.x) {
+              for (const i in res.data.data.x) {
                 let ss = 0
-                for (const row of res.data.y) {
+                for (const row of res.data.data.y) {
                   ss += row[i]
                 }
-                aveLine.push(ss / res.data.y.length)
+                aveLine.push(ss / res.data.data.y.length)
               }
               this.currentAverageLine.line = aveLine
               this.currentAverageLine.name = this.subjectTarget
-              res.data.y.push(aveLine)
-              res.data.legend.push('平均距离')
-              this.drawChart(res.data)
-            } else this.drawChart(res.data)
+              res.data.data.y.push(aveLine)
+              res.data.data.legend.push('平均距离')
+              this.drawChart(res.data.data)
+            } else this.drawChart(res.data.data)
           } else {
             this.loading = false
             this.$emit('emitMesage', '请求失败')
@@ -297,7 +336,8 @@ export default {
         },
         yAxis: {
           name: 'Semantic Distance',
-          type: 'value'
+          type: 'value',
+          max: 1
         },
         series: data.y.map((item, index) => {
           return extendLineSeries({
@@ -313,3 +353,5 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped></style>

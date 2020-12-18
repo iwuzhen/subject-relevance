@@ -98,23 +98,32 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <comment storagekey="Mag_graph_2019v2_Chart_1" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
-import edge_linksin_2016_echarts from '../assets/data/edge_linksin_2016_v2.json'
-import edge_linksout_2016_echarts from '../assets/data/edge_linksout_2016_v2.json'
-import edge_linksin_2017_echarts from '../assets/data/edge_linksin_2017_v2.json'
-import edge_linksout_2017_echarts from '../assets/data/edge_linksout_2017_v2.json'
-import node_2016 from '../assets/data/node_2016_v2.json'
-import node_2017 from '../assets/data/node_2017_v2.json'
+import edge_linksin_2016_echarts from '@/assets/data/edge_linksin_2016_v2.json'
+import edge_linksout_2016_echarts from '@/assets/data/edge_linksout_2016_v2.json'
+import edge_linksin_2017_echarts from '@/assets/data/edge_linksin_2017_v2.json'
+import edge_linksout_2017_echarts from '@/assets/data/edge_linksout_2017_v2.json'
+import node_2016 from '@/assets/data/node_2016_v2.json'
+import node_2017 from '@/assets/data/node_2017_v2.json'
 import Base from '@/utils/base'
 import ForceGraph3D from '3d-force-graph'
+import comment from '@/components/comment'
 
 import { defaultCategorySelect } from '@/api/data'
 
 export default {
   name: 'MagGraph',
+  components: {
+    comment
+  },
   extends: Base,
   data() {
     return {

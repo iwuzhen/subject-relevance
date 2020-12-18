@@ -103,6 +103,7 @@ export default {
     // 图表对象
     this.ChartObj = ChartMap[this.$route.path.replace('/', '')]
     this.pageName = this.ChartObj.ChName
+    this.$store.set('pages/page_name', this.pageName)
     this.chartHeight = this.ChartObj.chartHeight ? this.ChartObj.chartHeight : '70vh'
     // 配置默认值
     for (const row of this.ChartObj.Select) {

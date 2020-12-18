@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-11-19 13:17:37
  * @LastEditors: ider
- * @LastEditTime: 2020-11-19 17:53:19
+ * @LastEditTime: 2020-12-17 15:56:40
  * @Description:计算 page distacne
 -->
 
@@ -90,7 +90,7 @@ import comment from '@/components/comment'
 import _ from 'lodash'
 
 export default {
-  name: 'CoreWiki',
+  name: 'PageDistance',
   components: {
     comment
   },

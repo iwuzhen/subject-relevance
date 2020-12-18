@@ -23,15 +23,6 @@
           @change="getData"
         />
       </v-col>
-      <!-- <v-col cols="2">
-        <v-select
-          v-model="ctypeValue"
-          :items="ctypeOptions"
-          dense
-          label="参数"
-          @change="getData"
-        />
-      </v-col> -->
     </v-row>
     <v-row>
       <v-col cols="10">
@@ -109,7 +100,7 @@
         </v-range-slider>
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-for="chartid of myChartIds" :key="chartid">
       <v-col col="12">
         <v-card
           class="mx-auto"
@@ -118,58 +109,7 @@
           height="70vh"
         >
           <v-container
-            id="masChart1"
-            fluid
-            fill-height
-          />
-        </v-card>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="70vh"
-        >
-          <v-container
-            id="masChart2"
-            fluid
-            fill-height
-          />
-        </v-card>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="70vh"
-        >
-          <v-container
-            id="masChart3"
-            fluid
-            fill-height
-          />
-        </v-card>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="70vh"
-        >
-          <v-container
-            id="masChart4"
+            :id="chartid"
             fluid
             fill-height
           />
@@ -185,7 +125,7 @@ import { extendEchartsOpts, magCategory, extendLineSeries, defaultCategorySelect
 import Base from '@/utils/base'
 
 export default {
-  name: 'MagV2',
+  name: 'MagInnerZipTj',
   extends: Base,
   data() {
     return {
