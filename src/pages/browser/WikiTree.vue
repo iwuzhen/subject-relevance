@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-12-17 14:46:50
+ * @LastEditTime: 2020-12-22 23:59:24
  * @Description:
  -->
 <template>
@@ -99,7 +99,7 @@
                 <template v-slot:activator="{ on }">
                   <a
                     v-if="item.father"
-                    :href="'https://en.wikipedia.org/wiki/' + item.name"
+                    :href="'https://wikimili.com/en/' + item.name.replace(/ /g,'_')"
                     target="blank"
                     v-on="on"
                   ><strong
@@ -175,7 +175,7 @@
                 <template v-slot:activator="{ on }">
                   <a
                     v-if="item.father"
-                    :href="'https://en.wikipedia.org/wiki/' + item.name"
+                    :href="'https://wikimili.com/en/' + item.name.replace(/ /g,'_')"
                     target="blank"
                     v-on="on"
                   ><strong
@@ -454,7 +454,8 @@ export default {
       }
       const ret = await getWikiBirthday(queryArray)
       for (const key in ret) {
-        this.arithclBirth[key] = ret[key]
+        // this.arithclBirth[key] = ret[key]
+        this.$set(this.arithclBirth, key, ret[key])
       }
       console.log(ret)
     },
@@ -475,7 +476,7 @@ export default {
             db: `WIKI${_wikiDB}`
           })
           articleLength = data.childList.length
-          await this._fectch_article_birth(data.childList)
+          this._fectch_article_birth(data.childList)
           articleChildrens = data.childList.map(item => {
             this.getParagraph(item)
             this.addTranslateChan(item)
