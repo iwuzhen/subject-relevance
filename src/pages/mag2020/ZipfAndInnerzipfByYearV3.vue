@@ -160,7 +160,13 @@ import ecStat from 'echarts-stat'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 import _ from 'lodash'
-
+MAGCoreCategorys2020.push({
+  text: '论文-去Book 去Patent',
+  value: 'all_v3'
+}, {
+  value: 'all_delete_noref_v3',
+  text: '论文-去0 去Book 去Patent'
+})
 // tooyip 位置的x位置
 var tipLegend = 0
 export default {

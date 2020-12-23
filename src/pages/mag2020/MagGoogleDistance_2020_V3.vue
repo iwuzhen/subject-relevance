@@ -187,10 +187,16 @@ export default {
       version: 'delete_noref_v3_node',
       versionOpt: [{
         value: 'delete_noref_v3_node',
-        text: '去0,按点'
+        text: '去0，去Book和去Patent，按点'
       }, {
         value: 'delete_noref_v3_edge',
-        text: '去0,按边'
+        text: '去0，去Book和去Patent，按边'
+      }, {
+        value: 'tjbook_only_noPatent_delete_noref_v3_node',
+        text: '书的距离，去0，去Patent，按点'
+      }, {
+        value: 'tjbook_only_noPatent_delete_noref_v3_edge',
+        text: '书的距离，去0，去Patent，按边'
       }],
       currentAverageLine: { name: null, line: [] },
       count: 0
