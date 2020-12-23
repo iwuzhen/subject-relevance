@@ -152,6 +152,11 @@ export default {
               text: '包含 3 个图表',
               to: '/mag2020/ZipfAndInnerzipfByYearv3',
               update: '2020-12-16T09:43:03.429Z'
+            }, {
+              title: 'MAG topN学科逐年分布',
+              text: '包含 1 个图表',
+              to: '/mag2020/TjYearByTopN_v3',
+              update: '2020-12-13T09:43:03.429Z'
             }
           ]
         },

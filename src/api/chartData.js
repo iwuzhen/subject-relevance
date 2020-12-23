@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-12-17 17:43:00
+ * @LastEditTime: 2020-12-24 00:21:06
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -221,6 +221,36 @@ const setChartOption_bar_1 = ({ retData_1, retData_2, retData_3 }, ChartObj) => 
       type: 'bar',
       data: Object.values(retData_3.data)
     }]
+  })
+  return _opt
+}
+
+const setChartOption_bar_2 = (retData, ChartObj) => {
+  const _opt = extendEchartsOpts({
+    title: {
+      text: 'MAG 当年和当时（包含过去）的 edge,node 分布'
+    },
+    legend: {
+      data: retData.legend
+    },
+    xAxis: {
+      name: ChartObj.xAxisName,
+      type: 'category',
+      boundaryGap: false,
+      data: retData.x
+    },
+    yAxis: {
+      name: ChartObj.yAxisName,
+      type: 'value'
+    },
+    series: _.zip(retData.legend, retData.legend).map(item => {
+      return extendLineSeries({
+        name: item[0],
+        type: 'line',
+        smooth: false,
+        data: item[1]
+      })
+    })
   })
   return _opt
 }
@@ -717,6 +747,78 @@ export const ChartMap = {
     }],
     xAxisName: 'Year',
     chartHeight: '210vh',
+    yAxisName: 'Count'
+  },
+  'mag2020/TjYearByTopN_v3': {
+    ChName: 'topN学科逐年分布',
+    componentName: 'PageTemplate',
+    HandleResponseFunc: setChartOption_bar_2,
+    RequestFunc: async(params) => {
+      // 当年
+      const data = await requestWrap('mag/getTjYearByTopN_v3', 'post', params)
+      console.log(data)
+      return data
+    },
+    Select: [
+      {
+        name: 'str',
+        default: null,
+        label: '目标学科',
+        multiple: false,
+        show: true,
+        cols: 2,
+        items: MAG_ALL_SUBJECT
+      }, {
+        name: 'version',
+        default: 'nopb_delete_noref_v3',
+        label: '过滤条件',
+        show: true,
+        cols: 4,
+        items: [{
+          text: '论文(去0 去Book 去Patent)',
+          value: 'nopb_delete_noref_v3'
+        }]
+      }, {
+        name: 'N',
+        default: 40000,
+        label: '固定点数上限（优先）',
+        show: true,
+        cols: 2,
+        items: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 20000, 30000, 40000, 50000]
+      }, {
+        name: 'type',
+        default: 'zipf',
+        label: '排名规则',
+        multiple: false,
+        cols: 2,
+        items: [{
+          text: '按世界排名',
+          value: 'zipf'
+        }, {
+          text: '按小世界排名',
+          value: 'innerzipf'
+        }]
+      }],
+    Slider: [{
+      name: 'year',
+      Default: 2020,
+      label: '数据截止',
+      step: 1,
+      cols: 10,
+      max: 2020,
+      min: 1900
+    }],
+    RangeSlider: [{
+      name: 'yearRange',
+      startName: 'to',
+      rangeDefault: [1980, 2020],
+      endName: 'from',
+      label: '年份范围',
+      cols: 12,
+      max: 2020,
+      min: 1900
+    }],
+    xAxisName: 'Year',
     yAxisName: 'Count'
   }
 }

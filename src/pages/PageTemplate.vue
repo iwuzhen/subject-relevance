@@ -16,6 +16,23 @@
           @change="getData"
         />
       </v-col>
+      <v-col v-for="(item,index) in ChartObj.Slider" :key="index+'slide'" :cols="item.cols">
+        <v-slider
+          v-model="options[item.name]"
+          :max="item.max"
+          :min="item.min"
+          dense
+          hide-details
+          :step="item.step"
+          :hint="item.label"
+          thumb-label="always"
+          thumb-size="32"
+          :label="item.label"
+          ticks
+          class="align-center"
+          @change="getData"
+        />
+      </v-col>
       <v-col v-for="(item,index) in ChartObj.RangeSlider" :key="index+'slide'" :cols="item.cols">
         <v-range-slider
           v-model="options[item.name]"
@@ -112,6 +129,11 @@ export default {
     for (const row of this.ChartObj.RangeSlider) {
       this.options[row.name] = row.rangeDefault
     }
+    if (this.ChartObj.Slider !== undefined) {
+      for (const row of this.ChartObj.Slider) {
+        this.options[row.name] = row.Default
+      }
+    }
     this.getData()
   },
   methods: {
@@ -130,6 +152,12 @@ export default {
         opt[row.startName] = this.options[row.name][0]
         opt[row.endName] = this.options[row.name][1]
       }
+      if (this.ChartObj.Slider !== undefined) {
+        for (const row of this.ChartObj.Slider) {
+          opt[row.name] = this.options[row.name]
+        }
+      }
+
       const data = await this.ChartObj.RequestFunc(opt)
       const options = this.ChartObj.HandleResponseFunc(data, this.ChartObj)
       this.myChartObjs[0].setOption(options, true)
