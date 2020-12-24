@@ -33,7 +33,7 @@
           @change="getData"
         />
       </v-col>
-      <v-col v-for="(item,index) in ChartObj.RangeSlider" :key="index+'slide'" :cols="item.cols">
+      <v-col v-for="(item,index) in ChartObj.RangeSlider" :key="index+'rangeslide'" :cols="item.cols">
         <v-range-slider
           v-model="options[item.name]"
           :max="item.max"
@@ -159,8 +159,12 @@ export default {
       }
 
       const data = await this.ChartObj.RequestFunc(opt)
-      const options = this.ChartObj.HandleResponseFunc(data, this.ChartObj)
-      this.myChartObjs[0].setOption(options, true)
+      if (data !== undefined) {
+        const options = this.ChartObj.HandleResponseFunc(data, this.ChartObj)
+        this.myChartObjs[0].setOption(options, true)
+      } else {
+        this.$emit('emitMesage', '请求失败')
+      }
 
       this.loading = false
     }, 500)

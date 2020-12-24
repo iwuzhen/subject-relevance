@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-12-24 00:21:06
+ * @LastEditTime: 2020-12-24 14:27:35
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -228,7 +228,7 @@ const setChartOption_bar_1 = ({ retData_1, retData_2, retData_3 }, ChartObj) => 
 const setChartOption_bar_2 = (retData, ChartObj) => {
   const _opt = extendEchartsOpts({
     title: {
-      text: 'MAG 当年和当时（包含过去）的 edge,node 分布'
+      text: retData.title
     },
     legend: {
       data: retData.legend
@@ -243,7 +243,7 @@ const setChartOption_bar_2 = (retData, ChartObj) => {
       name: ChartObj.yAxisName,
       type: 'value'
     },
-    series: _.zip(retData.legend, retData.legend).map(item => {
+    series: _.zip(retData.legend, retData.y).map(item => {
       return extendLineSeries({
         name: item[0],
         type: 'line',
@@ -732,7 +732,8 @@ export const ChartMap = {
         label: '过滤条件',
         show: true,
         cols: 2,
-        items: [{ text: '全集(去Patent和Book)', value: 'v3' }, { text: '去0 去Patent和Book', value: 'delete_noref_v3' }]
+        items: [{ text: '论文(去Book 去Patent)', value: 'v3' }, { text: '论文(去0 去Book 去Patent)', value: 'delete_noref_v3' },
+          { text: '论文(只含Book)', value: 'book_all_v3' }, { text: '论文=(只含Patent)', value: 'patent_all_v3' }]
       }
     ],
     RangeSlider: [{
@@ -756,13 +757,12 @@ export const ChartMap = {
     RequestFunc: async(params) => {
       // 当年
       const data = await requestWrap('mag/getTjYearByTopN_v3', 'post', params)
-      console.log(data)
-      return data
+      return data.data
     },
     Select: [
       {
         name: 'str',
-        default: null,
+        default: 'Biology',
         label: '目标学科',
         multiple: false,
         show: true,
@@ -810,9 +810,9 @@ export const ChartMap = {
     }],
     RangeSlider: [{
       name: 'yearRange',
-      startName: 'to',
+      startName: 'from',
       rangeDefault: [1980, 2020],
-      endName: 'from',
+      endName: 'to',
       label: '年份范围',
       cols: 12,
       max: 2020,
