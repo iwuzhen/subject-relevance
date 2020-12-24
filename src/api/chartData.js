@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-12-24 15:46:29
+ * @LastEditTime: 2020-12-24 16:04:59
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -114,9 +114,6 @@ const setChartOption_3 = (doubleResponseData, ChartObj) => {
 }
 
 const setChartOption_bar_1 = ({ retData_1, retData_2, retData_3 }, ChartObj) => {
-  console.log(retData_2)
-  console.log(retData_3)
-
   const _opt = extendEchartsOpts({
     title: [{
       left: 'center',
@@ -137,10 +134,17 @@ const setChartOption_bar_1 = ({ retData_1, retData_2, retData_3 }, ChartObj) => 
       {
         orient: 'vertical',
         top: '10%',
-        right: 0,
-        align: 'right',
+        // right: 0,
+        // align: 'right',
         gridIndex: 0,
-        data: retData_2.data.legend
+        data: retData_2.data.legend,
+        type: 'scroll',
+        left: '82%',
+        right: 'left',
+        // top: 'middle',
+        textStyle: {
+          fontSize: 13
+        }
       }
     ],
     xAxis:
@@ -194,9 +198,12 @@ const setChartOption_bar_1 = ({ retData_1, retData_2, retData_3 }, ChartObj) => 
       }
     ],
     grid: [
-      { top: '3%', bottom: '75%' },
-      { top: '35%', bottom: '40%' },
-      { top: '70%', bottom: '3%' }
+      { top: '3%', bottom: '75%',
+        right: '20%' },
+      { top: '35%', bottom: '40%',
+        right: '20%' },
+      { top: '70%', bottom: '3%',
+        right: '20%' }
     ],
     series: [{
       xAxisIndex: 0,
@@ -762,7 +769,7 @@ export const ChartMap = {
     Select: [
       {
         name: 'str',
-        default: ['Biology'],
+        default: SELECT_MAG_DATA,
         label: '目标学科',
         multiple: true,
         show: true,
