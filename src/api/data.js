@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2020-12-18 16:18:52
+ * @LastEditTime: 2020-12-25 00:48:40
  * @Description:
  */
 
@@ -377,10 +377,14 @@ export function extendEchartsOpts(opt) {
       },
       formatter: function(params) {
         params.sort((x, y) => {
+          if (y.data === undefined) { return -1 }
           return y.data - x.data
         })
         let showHtm = ` ${params[0].name}<br>`
         for (let i = 0; i < params.length; i++) {
+          if (params[i].data === undefined) {
+            continue
+          }
           const _text = params[i].seriesName
           const _data = params[i].data
           const _marker = params[i].marker
@@ -406,9 +410,15 @@ export function extendEchartsOpts(opt) {
       containLabel: true
     },
     toolbox: {
-      right: '20%',
+      right: '5%',
       feature: {
-        saveAsImage: {}
+        saveAsImage: {},
+        dataZoom: {
+          yAxisIndex: 'none'
+        },
+        dataView: { readOnly: false },
+        // magicType: { type: ['line', 'bar'] },
+        restore: {}
       }
     }
   }

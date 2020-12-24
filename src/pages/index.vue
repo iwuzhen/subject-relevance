@@ -157,6 +157,11 @@ export default {
               text: '包含 1 个图表',
               to: '/mag2020/TjYearByTopN_v3',
               update: '2020-12-13T09:43:03.429Z'
+            }, {
+              title: 'MAG 学科内小世界',
+              text: '包含 1 个图表',
+              to: '/mag2020/MagDirectNet',
+              update: '2020-12-24T09:43:03.429Z'
             }
           ]
         },

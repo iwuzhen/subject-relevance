@@ -26,6 +26,10 @@ const routes = [{
   name: 'MagGoogleDistance_2020_V3',
   component: () => import('@/pages/mag2020/MagGoogleDistance_2020_V3')
 }, {
+  path: '/mag2020/MagDirectNet',
+  name: 'MagDirectNet',
+  component: () => import('@/pages/mag2020/MagDirectNet')
+}, {
   path: '/explorer/PageDistance',
   name: 'PageDistance',
   component: () => import('@/pages/explorer/PageDistance')
