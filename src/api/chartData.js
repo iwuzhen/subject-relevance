@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-12-24 14:27:35
+ * @LastEditTime: 2020-12-24 15:46:29
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -762,11 +762,11 @@ export const ChartMap = {
     Select: [
       {
         name: 'str',
-        default: 'Biology',
+        default: ['Biology'],
         label: '目标学科',
-        multiple: false,
+        multiple: true,
         show: true,
-        cols: 2,
+        cols: 8,
         items: MAG_ALL_SUBJECT
       }, {
         name: 'version',
