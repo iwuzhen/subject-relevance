@@ -287,8 +287,14 @@ export default {
           return this.getCurrentValue(y[1].slice(-1)[0]) - this.getCurrentValue(x[1].slice(-1)[0])
         }).map(([key, value], index) => {
           const dataArray = []
+          const dataSet = new Set()
           value.forEach(element => {
-            dataArray.push([element.nc, this.getCurrentValue(element)])
+            if (dataSet.has(element.nc)) {
+              return
+            } else {
+              dataSet.add(element.nc)
+              dataArray.push([element.nc, this.getCurrentValue(element)])
+            }
           })
           return extendLineSeries({
             name: key,

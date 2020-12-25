@@ -14,6 +14,10 @@ const routes = [{
   name: 'MagTrade',
   component: () => import('@/pages/mag2019v2/MagTrade')
 }, {
+  path: '/mag2020/DisruptionByYear2020',
+  name: 'DisruptionByYear2020',
+  component: () => import('@/pages/mag2020/DisruptionByYear')
+}, {
   path: '/mag2019v2/DisruptionByYear',
   name: 'DisruptionByYear',
   component: () => import('@/pages/mag2019v2/DisruptionByYear')
