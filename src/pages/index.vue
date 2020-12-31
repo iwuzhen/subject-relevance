@@ -120,7 +120,7 @@ export default {
               title: 'MAG 学科依赖层次',
               text: '学科依赖层次等 3 个表格，比引力图层次鲜明',
               to: '/explorer/DataSheet',
-              update: '2020-10-14T09:43:03.429Z'
+              update: '2020-12-31T09:43:03.429Z'
             },
             {
               title: 'Wikipedia 文章间距离计算',
