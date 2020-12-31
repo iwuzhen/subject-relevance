@@ -99,7 +99,7 @@
           @change="getData"
         />
       </v-col>
-      <v-col cols="6">
+      <v-col v-if="false" cols="6">
         <v-slider
           v-model="decimalLen"
           :max="10"
@@ -119,7 +119,7 @@
       <v-col cols="6">
         <v-range-slider
           v-model="years"
-          :max="2019"
+          :max="2020"
           :min="1900"
           dense
           hide-details

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-12-24 16:04:59
+ * @LastEditTime: 2020-12-31 14:53:55
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -151,7 +151,7 @@ const setChartOption_bar_1 = ({ retData_1, retData_2, retData_3 }, ChartObj) => 
     [
       {
         gridIndex: 1,
-        name: ChartObj.xAxisName,
+        name: 'subject',
         type: 'category',
         axisLabel: {
           interval: 0,
@@ -160,7 +160,7 @@ const setChartOption_bar_1 = ({ retData_1, retData_2, retData_3 }, ChartObj) => 
         data: Object.keys(retData_1.data)
       },
       {
-        name: 'year',
+        name: ChartObj.xAxisName,
         type: 'category', gridIndex: 0,
         axisLabel: {
           interval: 0,
@@ -169,6 +169,7 @@ const setChartOption_bar_1 = ({ retData_1, retData_2, retData_3 }, ChartObj) => 
         data: retData_2.data.x
       },
       {
+        name: 'item',
         type: 'category', gridIndex: 2,
         axisLabel: {
           interval: 0,

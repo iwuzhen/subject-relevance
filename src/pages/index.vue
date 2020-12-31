@@ -164,9 +164,9 @@ export default {
               update: '2020-12-24T09:43:03.429Z'
             }, {
               title: 'MAG 学科颠覆度',
-              text: '数据需要更新',
+              text: '数据已更新',
               to: '/mag2020/DisruptionByYear2020',
-              update: '2020-12-26T09:43:03.429Z'
+              update: '2020-12-30T09:43:03.429Z'
             }
           ]
         },
