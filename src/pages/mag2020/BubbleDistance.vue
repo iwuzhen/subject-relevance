@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2021-01-06 17:39:20
  * @LastEditors: ider
- * @LastEditTime: 2021-01-07 00:06:19
+ * @LastEditTime: 2021-01-07 01:42:09
  * @Description:
 -->
 <template lang="pug">
@@ -13,12 +13,12 @@ v-container(fluid)
             v-select(v-model="subjectX",:items="categorys",dense,deletable-chips,label="学科 X",@change="getData")
         v-col(cols="2")
             v-select(v-model="subjectY",:items="categorys",dense,deletable-chips,label="学科 Y",@change="getData")
-        v-col(cols="6")
+        v-col(cols="8")
             v-select(v-model="subjectRelevances",:items="categorys",dense,
                 small-chips,deletable-chips,multiple,label="相关学科",@change="getData")
 
-        v-col(cols="6")
-            v-slider(v-model="year",:max="2020",:min="1950",dense,hide-details,step="1",hint="top percent",thumb-label="always",thumb-size="32",label="year",ticks,class="align-center",@change="getData")
+        v-col(cols="2")
+            v-btn(@click="showTitle=!showTitle;getData()") {{showTitle===true?"关闭泡泡 title":"开启泡泡 title"}}
 
     v-row(v-for="chartid of myChartIds",:key="chartid")
         v-col(col="12")
@@ -49,15 +49,15 @@ export default {
   extends: Base,
   data() {
     return {
-      pageName: 'MAG 学科相关度 2020 泡泡图',
+      pageName: 'MAG 学科相关度 2020 相关二向图',
       myChartIds: ['masChart1'],
       loading: false,
       categorys: MAGCoreCategorys2020,
       subjectX: 'Chemistry',
       subjectY: 'Physics',
       subjectRelevances: defaultCategorySelect,
-      year: 2020,
-      knowledge: 0
+      knowledge: 0,
+      showTitle: true
     }
   },
   mounted() {
@@ -82,8 +82,8 @@ export default {
         strA: this.subjectX,
         strB: calSubject.join(','),
         method: 'linksin',
-        from: this.year,
-        to: this.year,
+        from: 1955,
+        to: 2020,
         qs: -1,
         version: 'delete_noref_v3_node'
       }
@@ -93,16 +93,21 @@ export default {
         // x 轴
         let ret = await getMasDatav2(opt)
         this.knowledge = 30
-        for (const i in ret.data.data.y) {
-          retObj[ret.data.data.legend[i]] = [ret.data.data.y[i][0]]
+        for (const i in ret.data.data.x) {
+          retObj[ret.data.data.x[i]] = {}
+          for (const j in ret.data.data.y) {
+            retObj[ret.data.data.x[i]][ret.data.data.legend[j]] = [ret.data.data.y[j][i]]
+          }
         }
 
         // y 轴
         opt.strA = this.subjectY
         ret = await getMasDatav2(opt)
         this.knowledge = 60
-        for (const i in ret.data.data.y) {
-          retObj[ret.data.data.legend[i]].push(ret.data.data.y[i][0])
+        for (const i in ret.data.data.x) {
+          for (const j in ret.data.data.y) {
+            retObj[ret.data.data.x[i]][ret.data.data.legend[j]].push(ret.data.data.y[j][i])
+          }
         }
 
         // 学科大小
@@ -111,8 +116,8 @@ export default {
           cats: calSubject.join(','),
           version: 'v3',
           yeartype: 0,
-          from: this.year,
-          to: this.year
+          from: 1955,
+          to: 2020
         }
         ret = await requestWrap('wiki/getMasArticlesTotal_v3', 'post', opt)
 
@@ -120,76 +125,27 @@ export default {
         const allSize = _.flattenDeep(ret.data.y)
         const maxSize = Math.pow(_.max(allSize), 1 / 3)
         const minSize = Math.pow(_.min(allSize), 1 / 3)
-        console.log(ret)
-        for (const i in ret.data.y) {
-          retObj[ret.data.legend[i]].push(ret.data.y[i][0], ret.data.legend[i])
+        for (const i in ret.data.x) {
+          for (const j in ret.data.y) {
+            retObj[ret.data.x[i]][ret.data.legend[j]].push(ret.data.y[j][i], ret.data.legend[j], ret.data.x[i])
+          }
         }
 
-        // 处理 echart opt
-        const subjectY = this.subjectY
-        const subjectX = this.subjectX
-        const _opt = extendEchartsOpts({
-          title: {
-            text: '气泡图'
-          },
-          tooltip: {
-            trigger: 'item',
-            textStyle: {
-              align: 'left'
-            },
-            axisPointer: {
-              type: 'cross',
-              animation: true,
-              label: {
-                backgroundColor: '#505765'
-              }
-            },
-            formatter: function(params) {
-              let showHtm = ` ${params.seriesName}<br>`
-
-              showHtm += `${subjectX}：${params.value[0]}<br>`
-              showHtm += `${subjectY}：${params.value[1]}<br>`
-              showHtm += `subject size：${params.value[2]}<br>`
-              return showHtm
-            }
-          },
-          legend: {
-            type: 'scroll',
-            left: '82%',
-            right: 'left',
-            // top: 'middle',
-            top: 70,
-            textStyle: {
-              fontSize: 13
-            },
-            orient: 'vertical'
-            // data: data.legend
-          },
-
-          xAxis: {
-            name: this.subjectX,
-            type: 'value',
-            max: 1,
-            boundaryGap: false
-          },
-          yAxis: {
-            name: this.subjectY,
-            type: 'value',
-            max: 1
-            // splitLine: {
-            //   show: false
-            // }
-          },
-          series: Object.entries(retObj).map((item) => {
-            return {
-              name: item[0],
-              data: [item[1]],
+        // 计算 timeline series
+        const timelineSeries = []
+        Object.entries(retObj).forEach(item => {
+          const row = []
+          Object.entries(item[1]).forEach(subitem => {
+            row.push({
+              name: subitem[0],
+              data: [subitem[1]],
               type: 'scatter',
               symbolSize: function(data) {
-                return Math.floor((80 * (Math.pow(Number(data[2]), 1 / 3) - minSize)) / (maxSize - minSize) + 5)
+                return Math.floor((70 * (Math.pow(Number(data[2]), 1 / 3) - minSize)) / (maxSize - minSize) + 5)
               },
               label: {
-                show: true,
+                show: this.showTitle,
+                position: 'top',
                 formatter: function(param) {
                   return param.data[3]
                 }
@@ -200,7 +156,7 @@ export default {
                   formatter: function(param) {
                     return param.data[3]
                   },
-                  position: 'inside'
+                  position: 'top'
                 }
               },
               itemStyle: {
@@ -210,16 +166,144 @@ export default {
                 shadowOffsetY: 0,
                 shadowColor: 'rgba(0, 0, 0, 0.5)'
               }
+            })
+          })
+          timelineSeries.push(row)
+        })
+
+        // 处理 echart opt
+        const subjectY = this.subjectY
+        const subjectX = this.subjectX
+        const option = {
+          baseOption: extendEchartsOpts({
+            timeline: {
+              axisType: 'category',
+              orient: 'vertical',
+              autoPlay: true,
+              inverse: true,
+              playInterval: 800,
+              left: null,
+              right: 0,
+              top: 20,
+              bottom: 20,
+              width: 55,
+              height: null,
+              label: {
+                color: '#999'
+              },
+              symbol: 'none',
+              lineStyle: {
+                color: '#555'
+              },
+              checkpointStyle: {
+                color: '#bbb',
+                borderColor: '#777',
+                borderWidth: 2
+              },
+              controlStyle: {
+                showNextBtn: false,
+                showPrevBtn: false,
+                color: '#666',
+                borderColor: '#666'
+              },
+              emphasis: {
+                label: {
+                  color: '#fff'
+                },
+                controlStyle: {
+                  color: '#aaa',
+                  borderColor: '#aaa'
+                }
+              },
+              data: ret.data.x
+            },
+            title: [{
+              text: ret.data.x[0],
+              textAlign: 'center',
+              left: '70%',
+              top: '70%',
+              textStyle: {
+                fontSize: 100
+                // color: 'rgba(255, 255, 255, 0.7)'
+              }
+            }, {
+              text: '学科相关二向图',
+              left: 'center',
+              top: 0,
+              textStyle: {
+                color: '#aaa',
+                fontWeight: 'normal',
+                fontSize: 20
+              }
+            }],
+            tooltip: {
+              padding: 5,
+              backgroundColor: '#222',
+              borderColor: '#777',
+              borderWidth: 1,
+              formatter: function(params) {
+                let showHtm = ` ${params[0].seriesName}<br>`
+                showHtm += `${subjectX}：${params[0].value[0]}<br>`
+                showHtm += `${subjectY}：${params[0].value[1]}<br>`
+                showHtm += `subject size：${params[0].value[2]}<br>`
+                return showHtm
+              }
+            },
+
+            xAxis: {
+              name: this.subjectX,
+              type: 'value',
+              max: 1,
+              boundaryGap: false,
+              splitLine: {
+                show: false
+              }
+            },
+            yAxis: {
+              name: this.subjectY,
+              type: 'value',
+              max: 1,
+              splitLine: {
+                show: false
+              }
+            },
+            visualMap: [
+              {
+                show: false,
+                dimension: 3,
+                // categories: data.counties,
+                calculable: true,
+                precision: 0.1,
+                textGap: 30,
+                textStyle: {
+                  color: '#ccc'
+                },
+                inRange: {
+                  color: (function() {
+                    var colors = ['#bcd3bb', '#e88f70', '#edc1a5', '#9dc5c8', '#e1e8c8', '#7b7c68', '#e5b5b5', '#f0b489', '#928ea8', '#bda29a']
+                    return colors.concat(colors)
+                  })()
+                }
+              }
+            ],
+
+            series: timelineSeries[0],
+            animationDurationUpdate: 1000,
+            animationEasingUpdate: 'quinticInOut'
+          }),
+          options: timelineSeries.map(item => {
+            return {
+              series: item,
+              title: { show: true, text: item[0].data[0][4] }
             }
           })
-        })
-        console.log(_opt)
-        this.myChartObjs[0].setOption(_opt, true)
+        }
+        this.myChartObjs[0].setOption(option, true)
         this.loading = false
       } catch (error) {
         console.log(error)
       }
-    }, 2000)
+    }, 1000)
   }
 }
 </script>
