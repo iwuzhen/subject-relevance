@@ -10,6 +10,10 @@ const routes = [{
   name: 'index',
   component: () => import('@/pages/index')
 }, {
+  path: '/mag2020/BubbleDistance',
+  name: 'BubbleDistance',
+  component: () => import('@/pages/mag2020/BubbleDistance')
+}, {
   path: '/mag2019v2/MagTrade',
   name: 'MagTrade',
   component: () => import('@/pages/mag2019v2/MagTrade')

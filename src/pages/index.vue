@@ -143,6 +143,11 @@ export default {
               to: '/mag2020/MagGoogleDistance_2020_V3',
               update: '2020-12-14T09:43:03.429Z'
             }, {
+              title: '2020 学科引力泡泡图',
+              text: '2020 学科引力泡泡图',
+              to: '/mag2020/BubbleDistance',
+              update: '2021-01-06T09:43:03.429Z'
+            }, {
               title: 'MAG 统计学科数据',
               text: '包含 3 个图表',
               to: '/mag2020/MagArticlesTotalV3',
