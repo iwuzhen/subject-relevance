@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2021-01-06 17:39:20
  * @LastEditors: ider
- * @LastEditTime: 2021-01-07 01:42:09
+ * @LastEditTime: 2021-01-07 01:43:21
  * @Description:
 -->
 <template lang="pug">
@@ -53,7 +53,7 @@ export default {
       myChartIds: ['masChart1'],
       loading: false,
       categorys: MAGCoreCategorys2020,
-      subjectX: 'Chemistry',
+      subjectX: 'Biology',
       subjectY: 'Physics',
       subjectRelevances: defaultCategorySelect,
       knowledge: 0,
