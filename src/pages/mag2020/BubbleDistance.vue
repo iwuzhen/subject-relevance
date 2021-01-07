@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2021-01-06 17:39:20
  * @LastEditors: ider
- * @LastEditTime: 2021-01-07 01:43:21
+ * @LastEditTime: 2021-01-07 19:57:37
  * @Description:
 -->
 <template lang="pug">
@@ -130,7 +130,24 @@ export default {
             retObj[ret.data.x[i]][ret.data.legend[j]].push(ret.data.y[j][i], ret.data.legend[j], ret.data.x[i])
           }
         }
-
+        // 象限区域线
+        const markLine = {
+          type: 'line',
+          markLine: {
+            symbol: ['none', 'none'],
+            lineStyle: {
+              color: 'grey',
+              width: 2
+            },
+            data: [
+              {
+                yAxis: 0.5
+              }, {
+                xAxis: 0.5
+              }
+            ]
+          }
+        }
         // 计算 timeline series
         const timelineSeries = []
         Object.entries(retObj).forEach(item => {
@@ -168,6 +185,7 @@ export default {
               }
             })
           })
+          row.push(markLine)
           timelineSeries.push(row)
         })
 
@@ -183,6 +201,7 @@ export default {
               inverse: true,
               playInterval: 800,
               left: null,
+              loop: false,
               right: 0,
               top: 20,
               bottom: 20,
@@ -217,17 +236,34 @@ export default {
               },
               data: ret.data.x
             },
+            legend: {
+              type: 'scroll',
+              left: '80%',
+              right: 'left',
+              top: 'middle',
+              textStyle: {
+                fontSize: 13
+              },
+              orient: 'vertical'
+            },
+            grid: {
+              left: '5%',
+              right: '25%',
+              top: '20%',
+              bottom: '5%',
+              containLabel: true
+            },
             title: [{
               text: ret.data.x[0],
               textAlign: 'center',
-              left: '70%',
-              top: '70%',
+              left: '85%',
+              bottom: '5%',
               textStyle: {
-                fontSize: 100
+                fontSize: 30
                 // color: 'rgba(255, 255, 255, 0.7)'
               }
             }, {
-              text: '学科相关二向图',
+              text: 'Two-dimensional distance',
               left: 'center',
               top: 0,
               textStyle: {
