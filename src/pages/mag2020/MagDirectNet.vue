@@ -257,6 +257,16 @@ export default {
             data: dataArray
           })
         })
+        if (this.quotaSelect.value === 'avc') {
+        //  添加 mark line
+          series.push({
+            type: 'line',
+            name: '万维网平均路径长度',
+            data: this.nodeCountOpt.map(xv => {
+              return [xv, 0.35 + 0.89 * Math.log(xv)]
+            })
+          })
+        }
         _opt = extendEchartsOpts({
           title: {
             text: `按照头部排名的小世界网络 ${this.quotaSelect.text} 规模趋势`,
@@ -279,6 +289,7 @@ export default {
           },
           series: series
         })
+        console.log(_opt)
         this.myChartObjs[1].setOption(_opt, true)
 
         // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++==
@@ -303,6 +314,16 @@ export default {
             data: dataArray
           })
         })
+        if (this.quotaSelect.value === 'avc') {
+        //  添加 mark line
+          series.push({
+            type: 'line',
+            name: '万维网平均路径长度',
+            data: this.nodeCountOpt.map(xv => {
+              return [xv, 0.35 + 0.89 * Math.log(xv)]
+            })
+          })
+        }
         _opt = extendEchartsOpts({
           title: {
             text: `头部实际联通的小世界网络 ${this.quotaSelect.text} 规模趋势`,
