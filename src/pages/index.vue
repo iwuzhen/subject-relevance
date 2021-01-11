@@ -136,6 +136,22 @@ export default {
           ]
         },
         'MAG-2020': {
+          '统计数据': [{
+            title: 'MAG 统计学科数据',
+            text: '包含 3 个图表',
+            to: '/mag2020/MagArticlesTotalV3',
+            update: '2020-12-15T09:43:03.429Z'
+          }, {
+            title: 'MAG 学科引用其他学科的逐年分布趋势',
+            text: '学科引用其他学科的逐年分布趋势',
+            to: '/mag2020/linkscf',
+            update: '2021-01-11T09:43:03.429Z'
+          }, {
+            title: 'MAG 统计学科被引用为0的情况',
+            text: '',
+            to: '/mag2020/tjhaslinksinByCats',
+            update: '2021-01-11T09:43:03.429Z'
+          }],
           '学科相关度等': [
             {
               title: '2020 学科相关度',
@@ -147,11 +163,6 @@ export default {
               text: '2020 学科引力泡泡图',
               to: '/mag2020/BubbleDistance',
               update: '2021-01-06T09:43:03.429Z'
-            }, {
-              title: 'MAG 统计学科数据',
-              text: '包含 3 个图表',
-              to: '/mag2020/MagArticlesTotalV3',
-              update: '2020-12-15T09:43:03.429Z'
             }, {
               title: 'MAG 幂律及其随时间变化趋势',
               text: '包含 3 个图表',

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2020-12-31 14:53:55
+ * @LastEditTime: 2021-01-11 20:07:38
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -827,6 +827,190 @@ export const ChartMap = {
       min: 1900
     }],
     xAxisName: 'Year',
+    yAxisName: 'Count'
+  },
+  'mag2020/linkscf': {
+    ChName: '学科引用其他学科的逐年分布趋势',
+    componentName: 'PageTemplate',
+    HandleResponseFunc: ([responseData, yaisa], ChartObj) => {
+      const _opt = extendEchartsOpts({
+        title: {
+          text: responseData.data.title
+        },
+        legend: {
+          data: responseData.data.legend
+        },
+        xAxis: {
+          name: ChartObj.xAxisName,
+          type: 'category',
+          boundaryGap: false,
+          data: responseData.data.x
+        },
+        yAxis: {
+          name: yaisa,
+          type: 'value'
+        },
+        series: zip(responseData.data.legend, responseData.data.y).map(item => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: item[1]
+          })
+        })
+      })
+      return _opt
+    },
+    RequestFunc: async(params) => {
+      // 当年
+      const data = await requestWrap('mag/maglinkscf', 'post', params)
+      let yaisa = 'percent'
+      if (params.returnType === '0') {
+        yaisa = 'count'
+      }
+      return [data, yaisa]
+    },
+    Select: [
+      {
+        name: 'catA',
+        default: 'Biology',
+        label: '当前学科',
+        show: true,
+        cols: 2,
+        items: MAG_ALL_SUBJECT
+      }, {
+        name: 'catB',
+        default: SELECT_MAG_DATA,
+        label: '目标学科',
+        multiple: true,
+        show: true,
+        cols: 8,
+        items: MAG_ALL_SUBJECT
+      }, {
+        name: 'version',
+        default: 'tjart_nopb_delete_noref_v3',
+        label: '过滤条件',
+        show: true,
+        cols: 4,
+        items: [{
+          text: '文章 去0 去Book和Patent',
+          value: 'tjart_nopb_delete_noref_v3'
+        }]
+      }, {
+        name: 'type',
+        default: 'linksout',
+        label: '引用条件',
+        show: true,
+        cols: 2,
+        items: [{
+          text: 'linksout',
+          value: 'linksout'
+        }]
+      }, {
+        name: 'returnType',
+        default: '1',
+        label: '返回类型',
+        multiple: false,
+        cols: 2,
+        items: [{
+          text: '数值',
+          value: '0'
+        }, {
+          text: '比例',
+          value: '1'
+        }]
+      }],
+    Slider: [{
+      name: 'yearA',
+      Default: 2017,
+      label: '当前学科年份',
+      step: 1,
+      cols: 10,
+      max: 2020,
+      min: 1900
+    }],
+    RangeSlider: [{
+      name: 'yearRange',
+      startName: 'from_yearB',
+      rangeDefault: [1980, 2020],
+      endName: 'to_yearB',
+      label: '目标学科年份范围',
+      cols: 12,
+      max: 2020,
+      min: 1900
+    }],
+    xAxisName: 'Year',
+    yAxisName: 'Count'
+  },
+  'mag2020/tjhaslinksinByCats': {
+    ChName: '统计学科被引用为0的情况',
+    componentName: 'PageTemplate',
+    HandleResponseFunc: ([responseData, yaisa], ChartObj) => {
+      const _opt = extendEchartsOpts({
+        title: {
+          text: responseData.data.title
+        },
+        xAxis: {
+          name: ChartObj.xAxisName,
+          type: 'category',
+          axisLabel: {
+            interval: 0,
+            rotate: -25
+          },
+          data: responseData.data.x
+        },
+        yAxis: {
+          name: yaisa,
+          type: 'value'
+        },
+        series:
+           extendLineSeries({
+             //  label: {
+             //    show: true,
+             //    position: 'top'
+             //  },
+             type: 'bar',
+             data: responseData.data.y
+           })
+
+      })
+      return _opt
+    },
+    RequestFunc: async(params) => {
+      // 当年
+      const data = await requestWrap('mag/tjhaslinksinByCats', 'post', params)
+      let yaisa = 'percent'
+      if (params.returnType === '0') {
+        yaisa = 'count'
+      }
+      return [data, yaisa]
+    },
+    Select: [
+      {
+        name: 'cat',
+        default: SELECT_MAG_DATA,
+        label: '目标学科',
+        multiple: true,
+        show: true,
+        cols: 8,
+        items: MAG_ALL_SUBJECT
+      }, {
+        name: 'returnType',
+        default: '1',
+        label: '返回类型',
+        multiple: false,
+        cols: 2,
+        items: [{
+          text: '数值',
+          value: '0'
+        }, {
+          text: '比例',
+          value: '1'
+        }]
+      }],
+    Slider: [],
+    RangeSlider: [],
+    xAxisName: 'Subject',
     yAxisName: 'Count'
   }
 }

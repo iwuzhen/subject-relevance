@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2021-01-06 17:39:20
  * @LastEditors: ider
- * @LastEditTime: 2021-01-07 19:57:37
+ * @LastEditTime: 2021-01-11 20:11:44
  * @Description:
 -->
 <template lang="pug">
@@ -267,7 +267,7 @@ export default {
               left: 'center',
               top: 0,
               textStyle: {
-                color: '#aaa',
+                // color: '#aaa',
                 fontWeight: 'normal',
                 fontSize: 20
               }
@@ -293,7 +293,8 @@ export default {
               boundaryGap: false,
               splitLine: {
                 show: false
-              }
+              },
+              nameTextStyle: { fontSize: 16 }
             },
             yAxis: {
               name: this.subjectY,
