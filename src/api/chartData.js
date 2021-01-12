@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-01-11 20:07:38
+ * @LastEditTime: 2021-01-12 12:58:23
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -862,6 +862,9 @@ export const ChartMap = {
       return _opt
     },
     RequestFunc: async(params) => {
+      if (params.yearA < params.to_yearB) {
+        params.to_yearB = params.yearA
+      }
       // 当年
       const data = await requestWrap('mag/maglinkscf', 'post', params)
       let yaisa = 'percent'
