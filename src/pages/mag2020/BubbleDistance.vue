@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2021-01-06 17:39:20
  * @LastEditors: ider
- * @LastEditTime: 2021-01-11 20:11:44
+ * @LastEditTime: 2021-01-12 10:32:20
  * @Description:
 -->
 <template lang="pug">
@@ -134,10 +134,13 @@ export default {
         const markLine = {
           type: 'line',
           markLine: {
+            label: {
+              show: false
+            },
             symbol: ['none', 'none'],
             lineStyle: {
               color: 'grey',
-              width: 2
+              width: 1
             },
             data: [
               {
@@ -294,15 +297,24 @@ export default {
               splitLine: {
                 show: false
               },
+              axisLabel: {
+                fontSize: 16
+              },
+              splitNumber: 2,
               nameTextStyle: { fontSize: 16 }
             },
             yAxis: {
               name: this.subjectY,
               type: 'value',
               max: 1,
+              axisLabel: {
+                fontSize: 16
+              },
+              splitNumber: 2,
               splitLine: {
                 show: false
-              }
+              },
+              nameTextStyle: { fontSize: 16 }
             },
             visualMap: [
               {
