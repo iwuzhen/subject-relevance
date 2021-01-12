@@ -151,6 +151,12 @@ export default {
             text: '',
             to: '/mag2020/tjhaslinksinByCats',
             update: '2021-01-11T09:43:03.429Z'
+          },
+          {
+            title: 'MAG 因果关系-贸易比例',
+            text: ' MAG 因果关系-贸易比例',
+            to: '/mag2020/MagTrade',
+            update: '2021-01-12T09:43:03.429Z'
           }],
           '学科相关度等': [
             {

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-01-12 12:58:23
+ * @LastEditTime: 2021-01-12 15:06:57
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -908,6 +908,19 @@ export const ChartMap = {
         items: [{
           text: 'linksout',
           value: 'linksout'
+        }]
+      }, {
+        name: 'fz',
+        default: '0',
+        label: '引用条件',
+        show: true,
+        cols: 2,
+        items: [{
+          text: '当前学科对目标学科的引用情况',
+          value: '0'
+        }, {
+          text: '目标学科对当前学科的引用情况',
+          value: '1'
         }]
       }, {
         name: 'returnType',

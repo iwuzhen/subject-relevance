@@ -46,6 +46,10 @@ const routes = [{
   name: 'MagTopTrade',
   component: () => import('@/pages/mag2019v2/MagTopTrade')
 }, {
+  path: '/mag2020/MagTrade',
+  name: 'MagTopTrade',
+  component: () => import('@/pages/mag2020/MagTrade')
+}, {
   path: '/mag2019v1/MagTopNRefSelfRate',
   name: 'MagTopNRefSelfRate',
   component: () => import('@/pages/mag2019v1/MagTopNRefSelfRate')
