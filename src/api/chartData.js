@@ -930,7 +930,7 @@ export const ChartMap = {
       step: 1,
       cols: 10,
       max: 2020,
-      min: 1900
+      min: 1955
     }],
     RangeSlider: [{
       name: 'yearRange',
