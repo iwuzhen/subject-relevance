@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-01-12 15:06:57
+ * @LastEditTime: 2021-01-12 20:30:06
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -281,7 +281,13 @@ const MAG_ALL_SUBJECT = [
   'Medicine', 'Neuroscience', 'Number theory', 'Operating system',
   'Philosophy', 'Physics', 'Political science', 'Psychology',
   'Quantum computing', 'Sociology', 'Theoretical computer science', 'Theoretical physics'
-]
+].sort().map(each => {
+  return {
+    text: each === 'Engineering disciplines' ? 'Engineering' : each,
+    value: each
+  }
+})
+
 const SELECT_MAG_DATA = ['Biology', 'Chemistry', 'Computer science',
   'Economics', 'Geography', 'History', 'Literature', 'Materials science',
   'Mathematics', 'Medicine', 'Philosophy', 'Physics']
@@ -829,135 +835,135 @@ export const ChartMap = {
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
-  'mag2020/linkscf': {
-    ChName: '学科引用其他学科的逐年分布趋势',
-    componentName: 'PageTemplate',
-    HandleResponseFunc: ([responseData, yaisa], ChartObj) => {
-      const _opt = extendEchartsOpts({
-        title: {
-          text: responseData.data.title
-        },
-        legend: {
-          data: responseData.data.legend
-        },
-        xAxis: {
-          name: ChartObj.xAxisName,
-          type: 'category',
-          boundaryGap: false,
-          data: responseData.data.x
-        },
-        yAxis: {
-          name: yaisa,
-          type: 'value'
-        },
-        series: zip(responseData.data.legend, responseData.data.y).map(item => {
-          return extendLineSeries({
-            name: item[0],
-            type: 'line',
-            smooth: false,
-            data: item[1]
-          })
-        })
-      })
-      return _opt
-    },
-    RequestFunc: async(params) => {
-      if (params.yearA < params.to_yearB) {
-        params.to_yearB = params.yearA
-      }
-      // 当年
-      const data = await requestWrap('mag/maglinkscf', 'post', params)
-      let yaisa = 'percent'
-      if (params.returnType === '0') {
-        yaisa = 'count'
-      }
-      return [data, yaisa]
-    },
-    Select: [
-      {
-        name: 'catA',
-        default: 'Biology',
-        label: '当前学科',
-        show: true,
-        cols: 2,
-        items: MAG_ALL_SUBJECT
-      }, {
-        name: 'catB',
-        default: SELECT_MAG_DATA,
-        label: '目标学科',
-        multiple: true,
-        show: true,
-        cols: 8,
-        items: MAG_ALL_SUBJECT
-      }, {
-        name: 'version',
-        default: 'tjart_nopb_delete_noref_v3',
-        label: '过滤条件',
-        show: true,
-        cols: 4,
-        items: [{
-          text: '文章 去0 去Book和Patent',
-          value: 'tjart_nopb_delete_noref_v3'
-        }]
-      }, {
-        name: 'type',
-        default: 'linksout',
-        label: '引用条件',
-        show: true,
-        cols: 2,
-        items: [{
-          text: 'linksout',
-          value: 'linksout'
-        }]
-      }, {
-        name: 'fz',
-        default: '0',
-        label: '引用条件',
-        show: true,
-        cols: 2,
-        items: [{
-          text: '当前学科对目标学科的引用情况',
-          value: '0'
-        }, {
-          text: '目标学科对当前学科的引用情况',
-          value: '1'
-        }]
-      }, {
-        name: 'returnType',
-        default: '1',
-        label: '返回类型',
-        multiple: false,
-        cols: 2,
-        items: [{
-          text: '数值',
-          value: '0'
-        }, {
-          text: '比例',
-          value: '1'
-        }]
-      }],
-    Slider: [{
-      name: 'yearA',
-      Default: 2017,
-      label: '当前学科年份',
-      step: 1,
-      cols: 10,
-      max: 2020,
-      min: 1955
-    }],
-    RangeSlider: [{
-      name: 'yearRange',
-      startName: 'from_yearB',
-      rangeDefault: [1980, 2020],
-      endName: 'to_yearB',
-      label: '目标学科年份范围',
-      cols: 12,
-      max: 2020,
-      min: 1900
-    }],
-    xAxisName: 'Year',
-    yAxisName: 'Count'
-  },
+  // 'mag2020/linkscf': {
+  //   ChName: '学科引用其他学科的逐年分布趋势',
+  //   componentName: 'PageTemplate',
+  //   HandleResponseFunc: ([responseData, yaisa], ChartObj) => {
+  //     const _opt = extendEchartsOpts({
+  //       title: {
+  //         text: responseData.data.title
+  //       },
+  //       legend: {
+  //         data: responseData.data.legend
+  //       },
+  //       xAxis: {
+  //         name: ChartObj.xAxisName,
+  //         type: 'category',
+  //         boundaryGap: false,
+  //         data: responseData.data.x
+  //       },
+  //       yAxis: {
+  //         name: yaisa,
+  //         type: 'value'
+  //       },
+  //       series: zip(responseData.data.legend, responseData.data.y).map(item => {
+  //         return extendLineSeries({
+  //           name: item[0],
+  //           type: 'line',
+  //           smooth: false,
+  //           data: item[1]
+  //         })
+  //       })
+  //     })
+  //     return _opt
+  //   },
+  //   RequestFunc: async(params) => {
+  //     if (params.yearA < params.to_yearB) {
+  //       params.to_yearB = params.yearA
+  //     }
+  //     // 当年
+  //     const data = await requestWrap('mag/maglinkscf', 'post', params)
+  //     let yaisa = 'percent'
+  //     if (params.returnType === '0') {
+  //       yaisa = 'count'
+  //     }
+  //     return [data, yaisa]
+  //   },
+  //   Select: [{
+  //     name: 'fz',
+  //     default: '0',
+  //     label: '模式',
+  //     show: true,
+  //     cols: 2,
+  //     items: [{
+  //       text: '当前学科对目标学科的引用情况',
+  //       value: '0'
+  //     }, {
+  //       text: '目标学科对当前学科的引用情况',
+  //       value: '1'
+  //     }]
+  //   },
+  //   {
+  //     name: 'catA',
+  //     default: 'Biology',
+  //     label: '当前学科',
+  //     show: true,
+  //     cols: 2,
+  //     items: MAG_ALL_SUBJECT
+  //   }, {
+  //     name: 'catB',
+  //     default: SELECT_MAG_DATA,
+  //     label: '目标学科',
+  //     multiple: true,
+  //     show: true,
+  //     cols: 8,
+  //     items: MAG_ALL_SUBJECT
+  //   }, {
+  //     name: 'version',
+  //     default: 'tjart_nopb_delete_noref_v3',
+  //     label: '过滤条件',
+  //     show: true,
+  //     cols: 2,
+  //     items: [{
+  //       text: '文章 去0 去Book和Patent',
+  //       value: 'tjart_nopb_delete_noref_v3'
+  //     }]
+  //   }, {
+  //     name: 'type',
+  //     default: 'linksout',
+  //     label: '引用条件',
+  //     show: true,
+  //     cols: 2,
+  //     items: [{
+  //       text: 'linksout',
+  //       value: 'linksout'
+  //     }]
+  //   }, {
+  //     name: 'returnType',
+  //     default: '1',
+  //     label: '返回类型',
+  //     multiple: false,
+  //     cols: 2,
+  //     items: [{
+  //       text: '数值',
+  //       value: '0'
+  //     }, {
+  //       text: '比例',
+  //       value: '1'
+  //     }]
+  //   }],
+  //   Slider: [{
+  //     name: 'yearA',
+  //     Default: 2017,
+  //     label: '当前学科年份',
+  //     step: 1,
+  //     cols: 10,
+  //     max: 2020,
+  //     min: 1955
+  //   }],
+  //   RangeSlider: [{
+  //     name: 'yearRange',
+  //     startName: 'from_yearB',
+  //     rangeDefault: [1980, 2020],
+  //     endName: 'to_yearB',
+  //     label: '目标学科年份范围',
+  //     cols: 12,
+  //     max: 2020,
+  //     min: 1900
+  //   }],
+  //   xAxisName: 'Year',
+  //   yAxisName: 'Count'
+  // },
   'mag2020/tjhaslinksinByCats': {
     ChName: '统计学科被引用为0的情况',
     componentName: 'PageTemplate',

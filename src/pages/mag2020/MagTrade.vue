@@ -17,7 +17,7 @@ v-container(fluid)
     v-col(cols='7')
       v-range-slider.align-center(v-model='years', :max='2020', :min='1900', dense, hide-details, hint='年份范围', @change='getData')
         template(v-slot:prepend)
-          p(style='width: 100px') &#x5E74;&#x4EFD;&#x8303;&#x56F4;
+          p(style='width: 100px') 年份范围
           v-text-field.mt-0.pt-0(:value='years[0]', hide-details, single-line, type='number', style='width: 60px', @change='$set(years, 0, $event)')
         template(v-slot:append)
           v-text-field.mt-0.pt-0(:value='years[1]', hide-details, single-line, type='number', style='width: 60px', @change='$set(years, 1, $event)')
@@ -40,20 +40,10 @@ v-container(fluid)
 
 <script>
 import { getYinguoData } from '@/api/index'
-import { extendEchartsOpts, coreCategorys, extendLineSeries, defaultCategorySelect } from '@/api/data'
+import { extendEchartsOpts, MAGCoreCategorys2020, extendLineSeries, defaultCategorySelect } from '@/api/data'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 import _ from 'lodash'
-
-coreCategorys.push({
-  text: 'Theoretical physics',
-  value: 'Theoretical physics'
-})
-
-coreCategorys.push({
-  text: 'Discrete mathematics',
-  value: 'Discrete mathematics'
-})
 
 export default {
   name: 'MagTrade',
@@ -71,8 +61,8 @@ export default {
       showAve: true,
       subjectTarget: '',
       subjectRelevances: defaultCategorySelect,
-      years: [2015, 2017],
-      categorys: coreCategorys,
+      years: [1980, 2017],
+      categorys: MAGCoreCategorys2020,
       loading: false,
       myChartIds: ['masChart1', 'masChart2'],
       averageLinedata: { title: '平均逐年距离图', legend: [], x: [], y: [] },
@@ -85,7 +75,7 @@ export default {
       },
       pureType: {
         Select: 1,
-        Opt: [{ text: '纯学科', value: 0 }, { text: '含交叉', value: 1 }],
+        Opt: [{ text: '作者发布该学科论文较多的', value: 0 }, { text: '作者发布该学科论文较多或一样多的', value: 1 }],
         Disabled: false
       }
     }
