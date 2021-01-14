@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-01-12 20:30:06
+ * @LastEditTime: 2021-01-14 11:38:19
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -968,35 +968,61 @@ export const ChartMap = {
     ChName: '统计学科被引用为0的情况',
     componentName: 'PageTemplate',
     HandleResponseFunc: ([responseData, yaisa], ChartObj) => {
-      const _opt = extendEchartsOpts({
-        title: {
-          text: responseData.data.title
-        },
-        xAxis: {
-          name: ChartObj.xAxisName,
-          type: 'category',
-          axisLabel: {
-            interval: 0,
-            rotate: -25
+      if (responseData.data.legend !== undefined) {
+        const _opt = extendEchartsOpts({
+          title: {
+            text: responseData.data.title
           },
-          data: responseData.data.x
-        },
-        yAxis: {
-          name: yaisa,
-          type: 'value'
-        },
-        series:
+          legend: {
+            data: responseData.data.legend
+          },
+          xAxis: {
+            name: ChartObj.xAxisName,
+            type: 'category',
+            boundaryGap: false,
+            data: responseData.data.x
+          },
+          yAxis: {
+            name: yaisa,
+            type: 'value'
+          },
+          series: zip(responseData.data.legend, responseData.data.y).map(item => {
+            return extendLineSeries({
+              name: item[0],
+              type: 'line',
+              smooth: false,
+              data: item[1]
+            })
+          })
+        })
+        return _opt
+      } else {
+        const _opt = extendEchartsOpts({
+          title: {
+            text: responseData.data.title
+          },
+          xAxis: {
+            name: ChartObj.xAxisName,
+            type: 'category',
+            axisLabel: {
+              interval: 0,
+              rotate: -25
+            },
+            data: responseData.data.x
+          },
+          yAxis: {
+            name: yaisa,
+            type: 'value'
+          },
+          series:
            extendLineSeries({
-             //  label: {
-             //    show: true,
-             //    position: 'top'
-             //  },
              type: 'bar',
              data: responseData.data.y
            })
 
-      })
-      return _opt
+        })
+        return _opt
+      }
     },
     RequestFunc: async(params) => {
       // 当年
@@ -1019,7 +1045,7 @@ export const ChartMap = {
       }, {
         name: 'returnType',
         default: '1',
-        label: '返回类型',
+        label: '展示类型',
         multiple: false,
         cols: 2,
         items: [{
@@ -1029,9 +1055,31 @@ export const ChartMap = {
           text: '比例',
           value: '1'
         }]
+      }, {
+        name: 'yearType',
+        default: '1',
+        label: '是否按年',
+        multiple: false,
+        cols: 2,
+        items: [{
+          text: '不按年',
+          value: '0'
+        }, {
+          text: '按年',
+          value: '1'
+        }]
       }],
     Slider: [],
-    RangeSlider: [],
+    RangeSlider: [{
+      name: 'yearRange',
+      startName: 'from_year',
+      rangeDefault: [1955, 2020],
+      endName: 'to_year',
+      label: '目标学科年份范围',
+      cols: 12,
+      max: 2020,
+      min: 1900
+    }],
     xAxisName: 'Subject',
     yAxisName: 'Count'
   }
