@@ -152,7 +152,7 @@
 <script>
 
 import { getMasDatav2 } from '@/api/index'
-import { extendEchartsOpts, MAGCoreCategorys2020, extendLineSeries, defaultCategorySelect } from '@/api/data'
+import { extendEchartsOpts, MAGCoreCategorys2020, extendLineSeries, SELECT_MAG_DATA } from '@/api/data'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 
@@ -174,7 +174,7 @@ export default {
         { text: '引用top百分之三十文章,按点', value: 30 }],
       showAve: false,
       subjectTarget: '',
-      subjectRelevances: defaultCategorySelect,
+      subjectRelevances: SELECT_MAG_DATA,
       methodValue: 'linksin',
       years: [1955, 2017],
       categorys: MAGCoreCategorys2020,

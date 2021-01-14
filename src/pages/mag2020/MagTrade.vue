@@ -40,7 +40,7 @@ v-container(fluid)
 
 <script>
 import { getYinguoData } from '@/api/index'
-import { extendEchartsOpts, MAGCoreCategorys2020, extendLineSeries, defaultCategorySelect } from '@/api/data'
+import { extendEchartsOpts, MAGCoreCategorys2020, extendLineSeries, SELECT_MAG_DATA } from '@/api/data'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 import _ from 'lodash'
@@ -60,7 +60,7 @@ export default {
       versionOpt: [{ text: '论文(去0 去Book和Patent)', value: 'tjart_nopb_delete_noref_v3' }],
       showAve: true,
       subjectTarget: '',
-      subjectRelevances: defaultCategorySelect,
+      subjectRelevances: SELECT_MAG_DATA,
       years: [1980, 2017],
       categorys: MAGCoreCategorys2020,
       loading: false,

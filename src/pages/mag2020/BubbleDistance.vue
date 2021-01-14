@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2021-01-06 17:39:20
  * @LastEditors: ider
- * @LastEditTime: 2021-01-12 10:32:20
+ * @LastEditTime: 2021-01-14 13:42:53
  * @Description:
 -->
 <template lang="pug">
@@ -36,8 +36,8 @@ v-container(fluid)
 import comment from '@/components/comment'
 import Base from '@/utils/base'
 import _ from 'lodash'
-// import { extendEchartsOpts, MAGCoreCategorys2020, extendLineSeries, defaultCategorySelect } from '@/api/data'
-import { MAGCoreCategorys2020, defaultCategorySelect, extendEchartsOpts } from '@/api/data'
+// import { extendEchartsOpts, MAGCoreCategorys2020, extendLineSeries, SELECT_MAG_DATA } from '@/api/data'
+import { MAGCoreCategorys2020, SELECT_MAG_DATA, extendEchartsOpts } from '@/api/data'
 import { getMasDatav2, requestWrap } from '@/api/index'
 // import echarts from 'echarts'
 
@@ -55,7 +55,7 @@ export default {
       categorys: MAGCoreCategorys2020,
       subjectX: 'Biology',
       subjectY: 'Physics',
-      subjectRelevances: defaultCategorySelect,
+      subjectRelevances: SELECT_MAG_DATA,
       knowledge: 0,
       showTitle: true
     }

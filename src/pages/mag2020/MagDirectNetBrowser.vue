@@ -1,98 +1,27 @@
-<template>
-  <v-container fluid>
-    <v-row>
-      <v-col cols="7">
-        <v-select
-          v-model="subjectTarget"
-          :items="categoryOpt"
-          small-chips
-          dense
-          deletable-chips
-          clearable
-          multiple
-          label="当前学科"
-          @change="getData"
-        />
-      </v-col>
-      <v-col cols="3">
-        <v-select
-          v-model="yearSelect"
-          :items="yearOpt"
-          small-chips
-          dense
-          deletable-chips
-          label="年份截至"
-          @change="getData"
-        />
-      </v-col>
-      <v-col cols="2">
-        <v-select
-          v-model="yearRangeSelect"
-          :items="yearRangeOpt"
-          dense
-          deletable-chips
-          label="年份范围"
-          @change="getData"
-        />
-      </v-col>
-    </v-row>
+<template lang="pug">
+v-container(fluid)
+  v-row
+    v-col(cols="7")
+      v-select(v-model="subjectTarget" :items="categoryOpt" small-chips dense deletable-chips clearable multiple label="当前学科" @change="getData")
+    v-col(cols="3")
+      v-select(v-model="yearSelect" :items="yearOpt" small-chips dense deletable-chips label="年份截至" @change="getData")
+    v-col(cols="2")
+      v-select(v-model="yearRangeSelect" :items="yearRangeOpt" dense deletable-chips label="年份范围" @change="getData")
+  v-row
+    v-col(cols="2")
+      v-select(v-model="quotaSelect" :items="quotaOpt" dense return-object label="小世界指标" @change="getData")
+    v-col(cols="2")
+      v-select(v-model="citationSelect" :items="citationOpt" dense disabled return-object label="引用关系" @change="getData")
+    v-col(cols="2")
+      v-select(v-model="nodeCountSelect" :items="nodeCountOpt" dense label="网络节点上限" @change="getData")
+  v-row(v-for="chartid of myChartIds" :key="chartid")
+    v-col(col="12")
+      v-card.mx-auto(outlined :loading="loading" height="70vh")
+        v-container(:id="chartid" fluid fill-height)
+  v-row
+    v-col
+      comment(storagekey="Mag_small_world_2020_Chart")
 
-    <v-row>
-      <v-col cols="2">
-        <v-select
-          v-model="quotaSelect"
-          :items="quotaOpt"
-          dense
-          return-object
-          label="小世界指标"
-          @change="getData"
-        />
-      </v-col>
-
-      <v-col cols="2">
-        <v-select
-          v-model="citationSelect"
-          :items="citationOpt"
-          dense
-          disabled
-          return-object
-          label="引用关系"
-          @change="getData"
-        />
-      </v-col>
-
-      <v-col cols="2">
-        <v-select
-          v-model="nodeCountSelect"
-          :items="nodeCountOpt"
-          dense
-          label="网络节点上限"
-          @change="getData"
-        />
-      </v-col>
-    </v-row>
-    <v-row v-for="chartid of myChartIds" :key="chartid">
-      <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="70vh"
-        >
-          <v-container
-            :id="chartid"
-            fluid
-            fill-height
-          />
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <comment storagekey="Mag_small_world_2020_Chart" />
-      </v-col>
-    </v-row>
-  </v-container>
 </template>
 
 <script>
@@ -274,7 +203,7 @@ export default {
             left: 'center'
           },
           tooltip: {
-            trigger: 'axis',
+            trigger: 'item',
             textStyle: {
               align: 'left'
             },
@@ -285,23 +214,7 @@ export default {
                 backgroundColor: '#505765'
               }
             },
-            formatter: function(params) {
-              params.sort((x, y) => {
-                if (y.data === undefined) { return -1 }
-                return y.data[1] - x.data[1]
-              })
-              let showHtm = ` ${params[0].name}<br>`
-              for (let i = 0; i < params.length; i++) {
-                if (params[i].data === undefined) {
-                  continue
-                }
-                const _text = params[i].seriesName
-                const _data = params[i].data[1]
-                const _marker = params[i].marker
-                showHtm += `${_marker}${_text}：${_data}<br>`
-              }
-              return showHtm
-            }
+            formatter: '{a}: {c0}'
           },
           legend: {
             data: series.map(item => item.name)

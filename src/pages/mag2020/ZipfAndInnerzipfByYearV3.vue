@@ -155,7 +155,7 @@
 
 <script>
 import { requestWrap } from '@/api/index'
-import { MAGCoreCategorys2020, extendEchartsOpts, extendLineSeries, defaultCategorySelect } from '@/api/data'
+import { MAGCoreCategorys2020, extendEchartsOpts, extendLineSeries, SELECT_MAG_DATA } from '@/api/data'
 import ecStat from 'echarts-stat'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
@@ -184,7 +184,7 @@ export default {
       yearRange: [2000, 2010],
       typeSelect: 'zipf',
       typeOpt: [{ text: '世界', value: 'zipf' }, { text: '小世界', value: 'innerzipf' }],
-      subjectSelect: defaultCategorySelect,
+      subjectSelect: SELECT_MAG_DATA,
       subjectOpt: MAGCoreCategorys2020,
       loading: false,
       chartOpt: {},

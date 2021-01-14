@@ -10,6 +10,10 @@ const routes = [{
   name: 'index',
   component: () => import('@/pages/index')
 }, {
+  path: '/mag2020/MagDirectNetBrowser',
+  name: 'MagDirectNetBrowser',
+  component: () => import('@/pages/mag2020/MagDirectNetBrowser')
+}, {
   path: '/mag2020/BubbleDistance',
   name: 'BubbleDistance',
   component: () => import('@/pages/mag2020/BubbleDistance')

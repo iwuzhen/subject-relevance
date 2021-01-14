@@ -28,7 +28,7 @@ import { requestWrap } from '@/api/index'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 import _ from 'lodash'
-import { MAGCoreCategorys2020, defaultCategorySelect, extendLineSeries, extendEchartsOpts } from '@/api/data'
+import { MAGCoreCategorys2020, SELECT_MAG_DATA, extendLineSeries, extendEchartsOpts } from '@/api/data'
 
 export default {
   name: 'Template',
@@ -126,7 +126,7 @@ export default {
         items: MAGCoreCategorys2020
       }, {
         name: 'catB',
-        default: defaultCategorySelect,
+        default: SELECT_MAG_DATA,
         label: '目标学科',
         multiple: true,
         show: true,
