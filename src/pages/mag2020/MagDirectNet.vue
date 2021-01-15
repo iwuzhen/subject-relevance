@@ -101,6 +101,10 @@ import { requestGoV2Wrap } from '@/api/index'
 import Base from '@/utils/base'
 import _ from 'lodash'
 import comment from '@/components/comment'
+const coreCategory = MAGCoreCategorys2020.concat()
+const defaultSelectCategory = defaultCategorySelect.concat()
+coreCategory.push('MAG')
+defaultSelectCategory.push('MAG')
 
 export default {
   name: 'MAGSmallWorld2020',
@@ -114,13 +118,13 @@ export default {
       pageName: `MAG 小世界网络`,
       citationSelect: 'linksin',
       citationOpt: ['linksin'],
-      subjectTarget: defaultCategorySelect,
+      subjectTarget: defaultSelectCategory,
       yearSelect: 2015,
       quotaSelect: { text: '平均路径长度', value: 'avc' },
       yearRangeSelect: 0,
       yearRangeOpt: [0, 5, 10, 15, 20, 25, 30, 35, 40],
       nodeCountSelect: 10000,
-      nodeCountOpt: [50, 60, 72, 86, 100, 120, 140, 160, 190, 220, 260, 310, 370, 440, 520, 620, 740, 880, 1000, 1200, 1400, 1600, 1900, 2200, 2600, 3100, 3700, 4400, 5200, 6200, 7400, 8800, 10000, 12000, 14000, 16000, 19000, 22000, 26000, 31000, 37000, 44000, 52000, 62000, 74000, 88000, 100000],
+      nodeCountOpt: [50, 60, 72, 86, 100, 120, 140, 160, 190, 220, 260, 310, 370, 440, 520, 620, 740, 880, 1000, 1200, 1400, 1600, 1900, 2200, 2600, 3100, 3700, 4400, 5200, 6200, 7400, 8800, 10000, 12000, 14000, 16000, 19000, 22000, 26000, 31000, 37000, 44000, 52000, 62000, 74000, 88000, 100000, 120000, 140000, 160000, 190000],
       quotaOpt: [
         {
           value: 'avc',
@@ -156,7 +160,7 @@ export default {
         2015,
         2020
       ],
-      categoryOpt: MAGCoreCategorys2020,
+      categoryOpt: coreCategory,
       datacache: {},
       myChartIds: ['subjectChart1', 'subjectChart2', 'subjectChart3']
     }

@@ -180,6 +180,11 @@ export default {
               to: '/mag2020/TjYearByTopN_v3',
               update: '2020-12-13T09:43:03.429Z'
             }, {
+              title: 'MAG 小世界网络独立统计',
+              text: '点击图表中的单个节点，即可分析该网络的多个维度信息',
+              to: '/mag2020/MagDirectNetBrowser',
+              update: '2021-01-15T09:43:03.429Z'
+            }, {
               title: 'MAG 学科内小世界',
               text: '包含 1 个图表,数据需要更新',
               to: '/mag2020/MagDirectNet',
