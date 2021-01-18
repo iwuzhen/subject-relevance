@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2021-01-06 17:39:20
  * @LastEditors: ider
- * @LastEditTime: 2021-01-14 13:42:53
+ * @LastEditTime: 2021-01-18 23:02:59
  * @Description:
 -->
 <template lang="pug">
@@ -202,7 +202,7 @@ export default {
               orient: 'vertical',
               autoPlay: true,
               inverse: true,
-              playInterval: 800,
+              playInterval: 400,
               left: null,
               loop: false,
               right: 0,
