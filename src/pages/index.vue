@@ -157,7 +157,14 @@ export default {
             text: ' MAG 因果关系-贸易比例',
             to: '/mag2020/MagTrade',
             update: '2021-01-12T09:43:03.429Z'
-          }],
+          }, {
+            title: 'MAG 作者数逐年统计',
+            text: '',
+            to: '/mag2020/AuthorsAndArticleInfoByYear',
+            update: '2021-01-20T09:43:03.429Z'
+          }
+
+          ],
           '学科相关度等': [
             {
               title: '2020 学科相关度',
