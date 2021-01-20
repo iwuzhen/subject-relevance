@@ -3,12 +3,12 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-01-14 11:38:19
+ * @LastEditTime: 2021-01-20 13:33:25
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
 import { requestWrap } from '@/api/index'
-import { coreCategorys, magCategory, MAGCoreCategorys2020, defaultCategorySelect, extendEchartsOpts, extendLineSeries } from '@/api/data'
+import { coreCategorys, magCategory, SELECT_MAG_DATA, MAGCoreCategorys2020, defaultCategorySelect, extendEchartsOpts, extendLineSeries } from '@/api/data'
 import _ from 'lodash'
 
 const zip = (...rows) => [...rows[0]].map((_, c) => rows.map(row => row[c]))
@@ -263,34 +263,30 @@ const setChartOption_bar_2 = (retData, ChartObj) => {
   return _opt
 }
 
-const MAG_ALL_SUBJECT = [
-  'Algebra', 'Anthropology', 'Applied mathematics',
-  'Applied physics', 'Artificial intelligence', 'Biological engineering',
-  'Biology', 'Chemical engineering',
-  'Chemistry', 'Civil engineering',
-  'Cognitive science', 'Computer engineering',
-  'Computer science', 'Deep learning',
-  'Discrete mathematics', 'Earth science', 'Economics',
-  'Electrical engineering', 'Engineering disciplines',
-  'Environmental engineering', 'Environmental science', 'Experimental physics',
-  'Genetic engineering', 'Genome editing',
-  'Geography', 'Geology', 'Geometry', 'History',
-  'Industrial engineering', 'Linguistics', 'Literature',
-  'Logic', 'Machine learning', 'Materials science',
-  'Mathematics', 'Mechanical engineering',
-  'Medicine', 'Neuroscience', 'Number theory', 'Operating system',
-  'Philosophy', 'Physics', 'Political science', 'Psychology',
-  'Quantum computing', 'Sociology', 'Theoretical computer science', 'Theoretical physics'
-].sort().map(each => {
-  return {
-    text: each === 'Engineering disciplines' ? 'Engineering' : each,
-    value: each
-  }
-})
-
-const SELECT_MAG_DATA = ['Biology', 'Chemistry', 'Computer science',
-  'Economics', 'Geography', 'History', 'Literature', 'Materials science',
-  'Mathematics', 'Medicine', 'Philosophy', 'Physics']
+// const MAGCoreCategorys2020 = [
+//   'Algebra', 'Anthropology', 'Applied mathematics',
+//   'Applied physics', 'Artificial intelligence', 'Biological engineering',
+//   'Biology', 'Chemical engineering',
+//   'Chemistry', 'Civil engineering',
+//   'Cognitive science', 'Computer engineering',
+//   'Computer science', 'Deep learning',
+//   'Discrete mathematics', 'Earth science', 'Economics',
+//   'Electrical engineering', 'Engineering disciplines',
+//   'Environmental engineering', 'Environmental science', 'Experimental physics',
+//   'Genetic engineering', 'Genome editing',
+//   'Geography', 'Geology', 'Geometry', 'History',
+//   'Industrial engineering', 'Linguistics', 'Literature',
+//   'Logic', 'Machine learning', 'Materials science',
+//   'Mathematics', 'Mechanical engineering',
+//   'Medicine', 'Neuroscience', 'Number theory', 'Operating system',
+//   'Philosophy', 'Physics', 'Political science', 'Psychology',
+//   'Quantum computing', 'Sociology', 'Theoretical computer science', 'Theoretical physics'
+// ].sort().map(each => {
+//   return {
+//     text: each === 'Engineering disciplines' ? 'Engineering' : each,
+//     value: each
+//   }
+// })
 
 export const ChartMap = {
   'mag2019v2/AuthorsAndArticleInfoByYear': {
@@ -630,7 +626,7 @@ export const ChartMap = {
         multiple: true,
         show: true,
         cols: 12,
-        items: MAG_ALL_SUBJECT
+        items: MAGCoreCategorys2020
       }, {
         name: 'linksOutCount',
         default: 0,
@@ -781,7 +777,7 @@ export const ChartMap = {
         multiple: true,
         show: true,
         cols: 8,
-        items: MAG_ALL_SUBJECT
+        items: MAGCoreCategorys2020
       }, {
         name: 'version',
         default: 'nopb_delete_noref_v3',
@@ -899,7 +895,7 @@ export const ChartMap = {
   //     label: '当前学科',
   //     show: true,
   //     cols: 2,
-  //     items: MAG_ALL_SUBJECT
+  //     items: MAGCoreCategorys2020
   //   }, {
   //     name: 'catB',
   //     default: SELECT_MAG_DATA,
@@ -907,7 +903,7 @@ export const ChartMap = {
   //     multiple: true,
   //     show: true,
   //     cols: 8,
-  //     items: MAG_ALL_SUBJECT
+  //     items: MAGCoreCategorys2020
   //   }, {
   //     name: 'version',
   //     default: 'tjart_nopb_delete_noref_v3',
@@ -1041,7 +1037,7 @@ export const ChartMap = {
         multiple: true,
         show: true,
         cols: 8,
-        items: MAG_ALL_SUBJECT
+        items: MAGCoreCategorys2020
       }, {
         name: 'returnType',
         default: '1',

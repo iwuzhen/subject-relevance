@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2021-01-14 13:41:55
+ * @LastEditTime: 2021-01-20 13:35:07
  * @Description:
  */
 
@@ -347,8 +347,8 @@ export const MAGCoreCategorys2020 = ['Algebra', 'Anthropology', 'Applied mathema
 })
 
 export const SELECT_MAG_DATA = ['Biology', 'Chemistry', 'Computer science',
-  'Economics', 'Geography', 'History', 'Literature', 'Materials science',
-  'Mathematics', 'Medicine', 'Philosophy', 'Physics']
+  'Economics', 'Engineering disciplines', 'History', 'Environmental Science', 'Political Science',
+  'Mathematics', 'Medicine', 'Philosophy', 'Physics', 'Sociology']
 
 export function extendLineSeries(series) {
   return Object.assign({
