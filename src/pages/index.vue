@@ -1,83 +1,33 @@
-<template>
-  <v-container>
+<template lang="pug">
+v-container
+  DefaultToc
+  DefaultFabToTop
+  // Sizes your content based upon application components
+  v-main(style="padding:0")
+    // Provides the application the proper gutter
+    v-container(fluid="")
+      v-row.light-blue.lighten-5.mb-4
+        aside Tip: 30 天内新增的图表标记为橘色
+      .mb-5(v-for="(subitems, h1name) in indexObject" :id="getMd5Id(h1name)" :key="h1name")
+        h1.v-heading.text-h4.text-sm-h4.mb-4
+          a.text-decoration-none.text-right.text-md-left(:href="'#'+getMd5Id(h1name)")  #
+          |             {{ h1name }}
+          // </a>
+        .mb-5(v-for="(items, name) in subitems" :id="getMd5Id(h1name+name)" :key="getMd5Id(h1name+name)")
+          h2.v-heading.text-h5.text-sm-h5.mb-4.mt-4
+            a.text-decoration-none.text-right.text-md-left(:href="'#'+getMd5Id(h1name+name)")  #
+            |               {{ name }}
+          v-row
+            v-divider
+          v-row
+            v-col(v-for="(item, index) in items" :key="index" cols="6" md="4" lg="3")
+              v-hover(v-slot:default="{ hover }" close-delay="200")
+                v-card.mx-auto(max-width="344" :elevation="hover ? 16 : 2" min-height="150" :to="item.to" :href="item.href" :class="(item.update!=null)&&(new Date().getTime()-new Date(item.update).getTime()<2497466968)?'orange':'white'")
+                  v-card-title {{ item.title }}
+                  v-card-subtitle(v-if="item.update!=null") {{ dayjs(item.update).locale('zh-cn').format('YYYY-MM-DD') }}
+                  v-card-text {{ item.text }}
+                  v-card-actions
 
-    <default-toc />
-    <DefaultFabToTop />
-
-    <!-- Sizes your content based upon application components -->
-    <v-main style="padding:0">
-      <!-- Provides the application the proper gutter -->
-      <v-container fluid>
-        <v-row class="light-blue lighten-5 mb-4">
-          <aside>Tip: 30 天内新增的图表标记为橘色</aside>
-        </v-row>
-        <div
-          v-for="(subitems, h1name) in indexObject"
-          :id="getMd5Id(h1name)"
-          :key="h1name"
-          class="mb-5"
-        >
-          <h1 class="v-heading text-h4 text-sm-h4 mb-4">
-            <a
-              :href="'#'+getMd5Id(h1name)"
-              class="text-decoration-none text-right text-md-left"
-            > # </a>
-            {{ h1name }}
-            <!-- </a> -->
-          </h1>
-
-          <div
-            v-for="(items, name) in subitems"
-            :id="getMd5Id(h1name+name)"
-            :key="getMd5Id(h1name+name)"
-            class="mb-5"
-          >
-            <h2 class="v-heading text-h5 text-sm-h5 mb-4 mt-4">
-              <a
-                :href="'#'+getMd5Id(h1name+name)"
-                class="text-decoration-none text-right text-md-left"
-              > # </a>
-
-              {{ name }}
-            </h2>
-            <v-row>
-              <v-divider />
-            </v-row>
-            <v-row>
-              <v-col
-                v-for="(item, index) in items"
-                :key="index"
-                cols="6"
-                md="4"
-                lg="3"
-              >
-                <v-hover
-                  v-slot:default="{ hover }"
-                  close-delay="200"
-                >
-                  <v-card
-                    class="mx-auto"
-                    max-width="344"
-                    :elevation="hover ? 16 : 2"
-                    min-height="150"
-                    :to="item.to"
-                    :href="item.href"
-                    :class="(item.update!=null)&&(new Date().getTime()-new Date(item.update).getTime()<2497466968)?'orange':'white'"
-                  >
-                    <v-card-title>{{ item.title }}</v-card-title>
-                    <v-card-subtitle v-if="item.update!=null">{{ dayjs(item.update).locale('zh-cn').format('YYYY-MM-DD') }}</v-card-subtitle>
-                    <v-card-text>{{ item.text }}</v-card-text>
-                    <v-card-actions />
-                  </v-card>
-                </v-hover>
-              </v-col>
-            </v-row>
-          </div>
-        </div>
-
-      </v-container>
-    </v-main>
-  </v-container>
 </template>
 
 <script>
@@ -98,6 +48,13 @@ export default {
     return {
       indexObject: {
         'Structure': {
+          '归档数据': [
+            {
+              title: '归档数据',
+              text: '历史数据的集合',
+              to: '/index2020'
+            }
+          ],
           'Browser': [
             {
               title: 'wikipedia',
@@ -345,75 +302,6 @@ export default {
               text: 'MAG 颠覆度 年度分布，可以调节多种条件进行过滤 ',
               to: '/mag2019v2/DisruptionByYear',
               update: '2020-12-03T16:43:03.429Z'
-            }
-          ]
-        },
-        'MAG-2019-v1': {
-          '统计数据': [
-            {
-              title: 'MAG 作者文章数',
-              text: 'MAG 作者文章数 统计',
-              to: '/mag2019v1/MagAAAInfo'
-            },
-            {
-              title: 'MAG 文章数',
-              text: 'MAG 文章数查询',
-              to: '/mag2019v1/MagArticlesTotal'
-            },
-            {
-              title: 'MAG 学科自恋度',
-              text: 'MAG 学科自恋度',
-              to: '/mag2019v1/MagRefSelfRate'
-            },
-            {
-              title: 'MAG topN 学科自恋度',
-              text: 'MAG topN 学科自恋度',
-              to: '/mag2019v1/MagTopNRefSelfRate',
-              update: '2020-11-03T09:43:03.429Z'
-            },
-            {
-              title: 'MAG 学科逐年引用分布',
-              text: 'MAG 学科逐年引用分布',
-              to: '/mag2019v1/MagCompositionByYear'
-            },
-            {
-              title: 'MAG 学科引用年份热力图',
-              text:
-                '单一学科 linksOut / linksIn 的年份分布',
-              to: '/mag2019v1/MagRefDist'
-            }
-          ],
-          '幂律': [
-            {
-              title: 'MAG 世界幂律',
-              text: 'MAG 世界幂律',
-              to: '/mag2019v1/MagZipf'
-            },
-            {
-              title: 'MAG 小世界幂律',
-              text: 'MAG 小世界幂律',
-              to: '/mag2019v1/MagInnerZipf'
-            }
-          ],
-          '学科相关度': [
-            {
-              title: 'MAG 学科相关度',
-              text: 'MAG 中各学科的逐年相关度',
-              to: '/mag2019v1/MagGoogleDistance'
-            }
-          ],
-          '小世界': [
-            {
-              title: 'MAG 小世界 v2',
-              text:
-                'MAG 逐年趋势:后一年包含前一年的所有范围。  规模趋势:按照排名增大的网络折线图和按照实际规模增大的网络折线图。(此版本各年份分别计算排名计算)',
-              to: { path: '/mag2019v1/MagDirectNet', query: { version: 'v2' }}
-            },
-            {
-              title: 'MAG 小世界 v3',
-              text:
-                'MAG 逐年趋势:可以选择5，10，15，20年的范围内的学科内论文，计算出的小世界。 ',
-              to: { path: '/mag2019v1/MagDirectNetV3', query: { version: 'v3' }}
             }
           ]
         },

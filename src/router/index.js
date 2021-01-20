@@ -10,6 +10,10 @@ const routes = [{
   name: 'index',
   component: () => import('@/pages/index')
 }, {
+  path: '/index2020',
+  name: 'index2020',
+  component: () => import('@/pages/index2020')
+}, {
   path: '/mag2020/MagDirectNetBrowser',
   name: 'MagDirectNetBrowser',
   component: () => import('@/pages/mag2020/MagDirectNetBrowser')
