@@ -57,37 +57,12 @@ export default {
           ]
         },
         'MAG-2019-v2(非简介分类)': {
-          'Graph': [
-            {
-              title: 'MagGraph',
-              text:
-                '展示MAG多个不同学科之间的大小和距离关系，用 2d 和 3d 引力图展示',
-              to: '/mag2019v2/MagGraph'
-            },
-            {
-              title: 'MAG 学科桑基图',
-              text: 'MAG 学科桑基图',
-              to: '/mag2019v2/MagSankey',
-              update: '2020-10-26T09:43:03.429Z'
-            }
-          ],
           '学科相关度': [
             {
               title: 'MAG 因果关系-贸易比例',
               text: ' MAG 因果关系-贸易比例',
               to: '/mag2019v2/MagTrade',
               update: '2020-09-24T09:43:03.429Z'
-            },
-            {
-              title: 'MAG topN因果关系-贸易比例',
-              text: 'MAG topN因果关系-贸易比例',
-              to: '/mag2019v2/MagTopTrade',
-              update: '2020-11-03T09:43:03.429Z'
-            },
-            {
-              title: 'MAG google 距离',
-              text: 'MAG 学科相关度',
-              to: '/mag2019v2/MagGoogleDistanceV2'
             },
             {
               title: 'MAG google 距离(当时距离)',
@@ -104,23 +79,9 @@ export default {
 
           '统计数据': [
             {
-              title: 'MAG level1层和父类的交集比例',
-              text: 'MAG level1层和父类的交集比例 柱状图',
-              to: '/mag2019v2/MagBlLevel'
-            }, {
               title: 'MAG文章数',
               text: '',
               to: '/mag2019v2/MagArticlesTotalV2'
-            },
-            {
-              title: 'MAG 作者文章数',
-              text: 'MAG 作者文章数 V2',
-              to: '/mag2019v2/MagAAAInfoV2'
-            },
-            {
-              title: 'MAG 学科引用年份热力图',
-              text: '单一学科 linksOut / linksIn 的年份分布',
-              to: '/mag2019v2/MagRefDistV2'
             },
             {
               title: 'MAG 作者数逐年统计',
@@ -129,74 +90,79 @@ export default {
               update: '2020-10-28T09:43:03.429Z'
             },
             {
-              title: 'MAG 引用关系逐年统计',
-              text: '',
-              to: '/mag2019v2/LinkTjByYear',
-              update: '2020-11-30T20:43:03.429Z'
-            },
-            {
-              title: 'MAG fos学科领域逐年分布',
-              text: '',
-              to: '/mag2019v2/FosTjByYearV2',
-              update: '2020-10-29T09:43:03.429Z'
-            },
-            {
-              title: 'MAG 学科文章交集分布',
-              text: '',
-              to: '/mag2019v2/MagJJByCat',
-              update: '2020-10-29T09:43:03.429Z'
-            },
-            {
               title: 'MAG topN学科逐年分布',
               text: 'MAG topN学科逐年分布',
               to: '/mag2019v2/TjYearByTopN',
               update: '2020-11-04T09:43:03.429Z'
-            },
-            {
-              title: 'MAG 历年的点边数据统计',
-              text: 'MAG 历年的点边数据统计',
-              to: '/mag2019v2/NodeAndEdgeByYear',
-              update: '2020-12-01T09:43:03.429Z'
             }
-
+          ]
+        },
+        'MAG-2019-v1': {
+          '统计数据': [
+            {
+              title: 'MAG 作者文章数',
+              text: 'MAG 作者文章数 统计',
+              to: '/mag2019v1/MagAAAInfo'
+            },
+            {
+              title: 'MAG 文章数',
+              text: 'MAG 文章数查询',
+              to: '/mag2019v1/MagArticlesTotal'
+            },
+            {
+              title: 'MAG 学科自恋度',
+              text: 'MAG 学科自恋度',
+              to: '/mag2019v1/MagRefSelfRate'
+            },
+            {
+              title: 'MAG topN 学科自恋度',
+              text: 'MAG topN 学科自恋度',
+              to: '/mag2019v1/MagTopNRefSelfRate',
+              update: '2020-11-03T09:43:03.429Z'
+            },
+            {
+              title: 'MAG 学科逐年引用分布',
+              text: 'MAG 学科逐年引用分布',
+              to: '/mag2019v1/MagCompositionByYear'
+            },
+            {
+              title: 'MAG 学科引用年份热力图',
+              text:
+                '单一学科 linksOut / linksIn 的年份分布',
+              to: '/mag2019v1/MagRefDist'
+            }
           ],
-          '幂率': [
+          '幂律': [
             {
-              title: 'MAG 幂率相关统计数据',
-              text: 'MAG v2幂律相关统计数据',
-              to: '/mag2019v2/MagInnerZipTj'
+              title: 'MAG 世界幂律',
+              text: 'MAG 世界幂律',
+              to: '/mag2019v1/MagZipf'
             },
             {
-              title: 'MAG 小世界幂率',
-              text: 'MAG 小世界幂率',
-              to: '/mag2019v2/MagInnerZipfV2'
-            },
-
+              title: 'MAG 小世界幂律',
+              text: 'MAG 小世界幂律',
+              to: '/mag2019v1/MagInnerZipf'
+            }
+          ],
+          '学科相关度': [
             {
-              title: 'MAG 世界幂率',
-              text: 'MAG 世界幂率',
-              to: '/mag2019v2/MagZipfV2'
+              title: 'MAG 学科相关度',
+              text: 'MAG 中各学科的逐年相关度',
+              to: '/mag2019v1/MagGoogleDistance'
             }
           ],
           '小世界': [
             {
-              title: 'MAG 小世界 v4',
-              text: '重新筛选后计算得到的 MAG 小世界',
-              to: { path: '/mag2019v2/MagDirectNetV4', query: { version: 'v4' }}
-            }
-          ],
-          '颠覆度': [
-            {
-              title: 'MAG 学科颠覆度',
-              text: 'MAG  颠覆度学科计算法，文章计算平均法，学科 top 分布，按年学科 top 分布等。 ',
-              to: '/mag2019v2/MagDisruption',
-              update: '2020-11-27T16:43:03.429Z'
+              title: 'MAG 小世界 v2',
+              text:
+                'MAG 逐年趋势:后一年包含前一年的所有范围。  规模趋势:按照排名增大的网络折线图和按照实际规模增大的网络折线图。(此版本各年份分别计算排名计算)',
+              to: { path: '/mag2019v1/MagDirectNet', query: { version: 'v2' }}
             },
             {
-              title: 'MAG 学科颠覆度年度分布',
-              text: 'MAG 颠覆度 年度分布，可以调节多种条件进行过滤 ',
-              to: '/mag2019v2/DisruptionByYear',
-              update: '2020-12-03T16:43:03.429Z'
+              title: 'MAG 小世界 v3',
+              text:
+                'MAG 逐年趋势:可以选择5，10，15，20年的范围内的学科内论文，计算出的小世界。 ',
+              to: { path: '/mag2019v1/MagDirectNetV3', query: { version: 'v3' }}
             }
           ]
         }

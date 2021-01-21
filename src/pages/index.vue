@@ -178,32 +178,10 @@ export default {
           ],
           '学科相关度': [
             {
-              title: 'MAG 因果关系-贸易比例',
-              text: ' MAG 因果关系-贸易比例',
-              to: '/mag2019v2/MagTrade',
-              update: '2020-09-24T09:43:03.429Z'
-            },
-            {
               title: 'MAG topN因果关系-贸易比例',
               text: 'MAG topN因果关系-贸易比例',
               to: '/mag2019v2/MagTopTrade',
               update: '2020-11-03T09:43:03.429Z'
-            },
-            {
-              title: 'MAG google 距离',
-              text: 'MAG 学科相关度',
-              to: '/mag2019v2/MagGoogleDistanceV2'
-            },
-            {
-              title: 'MAG google 距离(当时距离)',
-              text: 'MAG 学科相关度, 当时的距离',
-              to: '/mag2019v2/MagGoogleDistanceV2',
-              update: '2020-11-30T09:43:03.429Z'
-            },
-            {
-              title: 'MAG google距离中间数据',
-              text: 'MAG google距离中间数据',
-              to: '/mag2019v2/GoogleDistance'
             }
           ],
 
@@ -212,10 +190,6 @@ export default {
               title: 'MAG level1层和父类的交集比例',
               text: 'MAG level1层和父类的交集比例 柱状图',
               to: '/mag2019v2/MagBlLevel'
-            }, {
-              title: 'MAG文章数',
-              text: '',
-              to: '/mag2019v2/MagArticlesTotalV2'
             },
             {
               title: 'MAG 作者文章数',
@@ -226,12 +200,6 @@ export default {
               title: 'MAG 学科引用年份热力图',
               text: '单一学科 linksOut / linksIn 的年份分布',
               to: '/mag2019v2/MagRefDistV2'
-            },
-            {
-              title: 'MAG 作者数逐年统计',
-              text: '',
-              to: '/mag2019v2/AuthorsAndArticleInfoByYear',
-              update: '2020-10-28T09:43:03.429Z'
             },
             {
               title: 'MAG 引用关系逐年统计',
@@ -250,12 +218,6 @@ export default {
               text: '',
               to: '/mag2019v2/MagJJByCat',
               update: '2020-10-29T09:43:03.429Z'
-            },
-            {
-              title: 'MAG topN学科逐年分布',
-              text: 'MAG topN学科逐年分布',
-              to: '/mag2019v2/TjYearByTopN',
-              update: '2020-11-04T09:43:03.429Z'
             },
             {
               title: 'MAG 历年的点边数据统计',
