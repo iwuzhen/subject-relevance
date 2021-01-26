@@ -18,6 +18,10 @@ const routes = [{
   name: 'MagDirectNetBrowser',
   component: () => import('@/pages/mag2020/MagDirectNetBrowser')
 }, {
+  path: '/mag2020/MagGraph',
+  name: 'Mag2020Graph',
+  component: () => import('@/pages/mag2020/MagGraph')
+}, {
   path: '/mag2020/BubbleDistance',
   name: 'BubbleDistance',
   component: () => import('@/pages/mag2020/BubbleDistance')
@@ -47,7 +51,7 @@ const routes = [{
   component: () => import('@/pages/mag2020/MagGoogleDistance_2020_V3')
 }, {
   path: '/mag2020/MagDirectNet',
-  name: 'MagDirectNet',
+  name: 'Mag2020DirectNet',
   component: () => import('@/pages/mag2020/MagDirectNet')
 }, {
   path: '/explorer/PageDistance',
@@ -59,7 +63,7 @@ const routes = [{
   component: () => import('@/pages/mag2019v2/MagTopTrade')
 }, {
   path: '/mag2020/MagTrade',
-  name: 'MagTopTrade',
+  name: 'Mag2020TopTrade',
   component: () => import('@/pages/mag2020/MagTrade')
 }, {
   path: '/mag2019v1/MagTopNRefSelfRate',

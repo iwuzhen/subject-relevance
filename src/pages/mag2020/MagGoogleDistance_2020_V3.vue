@@ -265,23 +265,23 @@ export default {
       }
       getMasDatav2(opt)
         .then(res => {
-          if (res.data.data) {
+          if (res.data) {
             if (this.subjectRelevances.length > 1 && this.showAve) {
-              this.averageLinedata.x = res.data.data.x
+              this.averageLinedata.x = res.data.x
               const aveLine = []
-              for (const i in res.data.data.x) {
+              for (const i in res.data.x) {
                 let ss = 0
-                for (const row of res.data.data.y) {
+                for (const row of res.data.y) {
                   ss += row[i]
                 }
-                aveLine.push(ss / res.data.data.y.length)
+                aveLine.push(ss / res.data.y.length)
               }
               this.currentAverageLine.line = aveLine
               this.currentAverageLine.name = this.subjectTarget
-              res.data.data.y.push(aveLine)
-              res.data.data.legend.push('平均距离')
-              this.drawChart(res.data.data)
-            } else this.drawChart(res.data.data)
+              res.data.y.push(aveLine)
+              res.data.legend.push('平均距离')
+              this.drawChart(res.data)
+            } else this.drawChart(res.data)
           } else {
             this.loading = false
             this.$emit('emitMesage', '请求失败')

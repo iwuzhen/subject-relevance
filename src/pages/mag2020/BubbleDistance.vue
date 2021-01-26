@@ -3,7 +3,11 @@
  * @Author: ider
  * @Date: 2021-01-06 17:39:20
  * @LastEditors: ider
- * @LastEditTime: 2021-01-18 23:02:59
+<<<<<<< Updated upstream
+ * @LastEditTime: 2021-01-26 19:25:17
+=======
+ * @LastEditTime: 2021-01-26 17:54:43
+>>>>>>> Stashed changes
  * @Description:
 -->
 <template lang="pug">
@@ -93,10 +97,10 @@ export default {
         // x 轴
         let ret = await getMasDatav2(opt)
         this.knowledge = 30
-        for (const i in ret.data.data.x) {
-          retObj[ret.data.data.x[i]] = {}
-          for (const j in ret.data.data.y) {
-            retObj[ret.data.data.x[i]][ret.data.data.legend[j]] = [ret.data.data.y[j][i]]
+        for (const i in ret.data.x) {
+          retObj[ret.data.x[i]] = {}
+          for (const j in ret.data.y) {
+            retObj[ret.data.x[i]][ret.data.legend[j]] = [ret.data.y[j][i]]
           }
         }
 
@@ -104,9 +108,9 @@ export default {
         opt.strA = this.subjectY
         ret = await getMasDatav2(opt)
         this.knowledge = 60
-        for (const i in ret.data.data.x) {
-          for (const j in ret.data.data.y) {
-            retObj[ret.data.data.x[i]][ret.data.data.legend[j]].push(ret.data.data.y[j][i])
+        for (const i in ret.data.x) {
+          for (const j in ret.data.y) {
+            retObj[ret.data.x[i]][ret.data.legend[j]].push(ret.data.y[j][i])
           }
         }
 
@@ -191,7 +195,7 @@ export default {
           row.push(markLine)
           timelineSeries.push(row)
         })
-
+        console.log(timelineSeries)
         // 处理 echart opt
         const subjectY = this.subjectY
         const subjectX = this.subjectX
@@ -277,6 +281,9 @@ export default {
             }],
             tooltip: {
               padding: 5,
+              textStyle: {
+                color: '#fff'
+              },
               backgroundColor: '#222',
               borderColor: '#777',
               borderWidth: 1,
@@ -292,7 +299,7 @@ export default {
             xAxis: {
               name: this.subjectX,
               type: 'value',
-              max: 1,
+              max: 1.001,
               boundaryGap: false,
               splitLine: {
                 show: false
@@ -306,7 +313,7 @@ export default {
             yAxis: {
               name: this.subjectY,
               type: 'value',
-              max: 1,
+              max: 1.001,
               axisLabel: {
                 fontSize: 16
               },
@@ -316,25 +323,6 @@ export default {
               },
               nameTextStyle: { fontSize: 16 }
             },
-            visualMap: [
-              {
-                show: false,
-                dimension: 3,
-                // categories: data.counties,
-                calculable: true,
-                precision: 0.1,
-                textGap: 30,
-                textStyle: {
-                  color: '#ccc'
-                },
-                inRange: {
-                  color: (function() {
-                    var colors = ['#bcd3bb', '#e88f70', '#edc1a5', '#9dc5c8', '#e1e8c8', '#7b7c68', '#e5b5b5', '#f0b489', '#928ea8', '#bda29a']
-                    return colors.concat(colors)
-                  })()
-                }
-              }
-            ],
 
             series: timelineSeries[0],
             animationDurationUpdate: 1000,

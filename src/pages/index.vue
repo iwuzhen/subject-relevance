@@ -119,8 +119,19 @@ export default {
             text: '',
             to: '/mag2020/AuthorsAndArticleInfoByYear',
             update: '2021-01-20T09:43:03.429Z'
+          },
+          {
+            title: '各学科当时的点边统计',
+            text: '',
+            to: '/mag2020/NodeAndEdgeThatTimeByCats',
+            update: '2021-01-26T09:43:03.429Z'
+          },
+          {
+            title: 'MAG 3D 引力图',
+            text: '',
+            to: '/mag2020/MagGraph',
+            update: '2021-01-22T09:43:03.429Z'
           }
-
           ],
           '学科相关度等': [
             {

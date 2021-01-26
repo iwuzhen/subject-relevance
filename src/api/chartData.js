@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-01-20 14:33:48
+ * @LastEditTime: 2021-01-26 19:02:50
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -184,6 +184,7 @@ const setChartOption_bar_1 = ({ retData_1, retData_2, retData_3 }, ChartObj) => 
         name: ChartObj.yAxisName,
         type: 'value',
         nameTextStyle: { fontSize: 18 }
+
       },
       {
         gridIndex: 0,
@@ -243,20 +244,21 @@ const setChartOption_bar_2 = (retData, ChartObj) => {
     },
     xAxis: {
       name: ChartObj.xAxisName,
-      type: 'category',
+      type: 'value',
       boundaryGap: false,
-      data: retData.x
+      min: 'dataMin'
     },
     yAxis: {
       name: ChartObj.yAxisName,
       type: 'value'
     },
     series: _.zip(retData.legend, retData.y).map(item => {
+      console.log(_.zip(retData.x, item[1]))
       return extendLineSeries({
         name: item[0],
         type: 'line',
         smooth: false,
-        data: item[1]
+        data: _.zip(retData.x, item[1])
       })
     })
   })
@@ -377,7 +379,7 @@ export const ChartMap = {
       endName: 'to',
       label: '年份范围',
       cols: 8,
-      max: 2019,
+      max: 2020,
       min: 1900
     }],
     xAxisName: 'Year',
@@ -459,7 +461,7 @@ export const ChartMap = {
       endName: 'to',
       label: '年份范围',
       cols: 8,
-      max: 2019,
+      max: 2020,
       min: 1900
     }],
     xAxisName: 'Year',
@@ -523,7 +525,7 @@ export const ChartMap = {
       endName: 'to',
       label: '年份范围',
       cols: 8,
-      max: 2019,
+      max: 2020,
       min: 1900
     }],
     xAxisName: 'Year',
@@ -566,7 +568,7 @@ export const ChartMap = {
       endName: 'to',
       label: '年份范围',
       cols: 8,
-      max: 2019,
+      max: 2020,
       min: 1900
     }],
     xAxisName: 'Year',
@@ -657,7 +659,7 @@ export const ChartMap = {
       endName: 'to',
       label: '年份范围',
       cols: 8,
-      max: 2019,
+      max: 2020,
       min: 1900
     }],
     xAxisName: 'Year',
@@ -693,7 +695,7 @@ export const ChartMap = {
       endName: 'to',
       label: '年份范围',
       cols: 12,
-      max: 2019,
+      max: 2020,
       min: 1900
     }],
     xAxisName: 'Year',
@@ -772,7 +774,7 @@ export const ChartMap = {
       endName: 'yearEnd',
       label: '年份范围',
       cols: 12,
-      max: 2019,
+      max: 2020,
       min: 1900
     }],
     xAxisName: 'Year',
@@ -910,11 +912,14 @@ export const ChartMap = {
         multiple: false,
         cols: 2,
         items: [{
-          text: '否',
+          text: '不取对数',
           value: 0
         }, {
-          text: '是',
+          text: '双对数',
           value: 1
+        }, {
+          text: 'y轴单对数',
+          value: 2
         }]
       }],
     Slider: [{
@@ -939,135 +944,156 @@ export const ChartMap = {
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
-  // 'mag2020/linkscf': {
-  //   ChName: '学科引用其他学科的逐年分布趋势',
-  //   componentName: 'PageTemplate',
-  //   HandleResponseFunc: ([responseData, yaisa], ChartObj) => {
-  //     const _opt = extendEchartsOpts({
-  //       title: {
-  //         text: responseData.data.title
-  //       },
-  //       legend: {
-  //         data: responseData.data.legend
-  //       },
-  //       xAxis: {
-  //         name: ChartObj.xAxisName,
-  //         type: 'category',
-  //         boundaryGap: false,
-  //         data: responseData.data.x
-  //       },
-  //       yAxis: {
-  //         name: yaisa,
-  //         type: 'value'
-  //       },
-  //       series: zip(responseData.data.legend, responseData.data.y).map(item => {
-  //         return extendLineSeries({
-  //           name: item[0],
-  //           type: 'line',
-  //           smooth: false,
-  //           data: item[1]
-  //         })
-  //       })
-  //     })
-  //     return _opt
-  //   },
-  //   RequestFunc: async(params) => {
-  //     if (params.yearA < params.to_yearB) {
-  //       params.to_yearB = params.yearA
-  //     }
-  //     // 当年
-  //     const data = await requestWrap('mag/maglinkscf', 'post', params)
-  //     let yaisa = 'percent'
-  //     if (params.returnType === '0') {
-  //       yaisa = 'count'
-  //     }
-  //     return [data, yaisa]
-  //   },
-  //   Select: [{
-  //     name: 'fz',
-  //     default: '0',
-  //     label: '模式',
-  //     show: true,
-  //     cols: 2,
-  //     items: [{
-  //       text: '当前学科对目标学科的引用情况',
-  //       value: '0'
-  //     }, {
-  //       text: '目标学科对当前学科的引用情况',
-  //       value: '1'
-  //     }]
-  //   },
-  //   {
-  //     name: 'catA',
-  //     default: 'Biology',
-  //     label: '当前学科',
-  //     show: true,
-  //     cols: 2,
-  //     items: MAGCoreCategorys2020
-  //   }, {
-  //     name: 'catB',
-  //     default: SELECT_MAG_DATA,
-  //     label: '目标学科',
-  //     multiple: true,
-  //     show: true,
-  //     cols: 8,
-  //     items: MAGCoreCategorys2020
-  //   }, {
-  //     name: 'version',
-  //     default: 'tjart_nopb_delete_noref_v3',
-  //     label: '过滤条件',
-  //     show: true,
-  //     cols: 2,
-  //     items: [{
-  //       text: '文章 去0 去Book和Patent',
-  //       value: 'tjart_nopb_delete_noref_v3'
-  //     }]
-  //   }, {
-  //     name: 'type',
-  //     default: 'linksout',
-  //     label: '引用条件',
-  //     show: true,
-  //     cols: 2,
-  //     items: [{
-  //       text: 'linksout',
-  //       value: 'linksout'
-  //     }]
-  //   }, {
-  //     name: 'returnType',
-  //     default: '1',
-  //     label: '返回类型',
-  //     multiple: false,
-  //     cols: 2,
-  //     items: [{
-  //       text: '数值',
-  //       value: '0'
-  //     }, {
-  //       text: '比例',
-  //       value: '1'
-  //     }]
-  //   }],
-  //   Slider: [{
-  //     name: 'yearA',
-  //     Default: 2017,
-  //     label: '当前学科年份',
-  //     step: 1,
-  //     cols: 10,
-  //     max: 2020,
-  //     min: 1955
-  //   }],
-  //   RangeSlider: [{
-  //     name: 'yearRange',
-  //     startName: 'from_yearB',
-  //     rangeDefault: [1980, 2020],
-  //     endName: 'to_yearB',
-  //     label: '目标学科年份范围',
-  //     cols: 12,
-  //     max: 2020,
-  //     min: 1900
-  //   }],
-  //   xAxisName: 'Year',
-  //   yAxisName: 'Count'
-  // },
+  'mag2020/NodeAndEdgeThatTimeByCats': {
+    ChName: '各学科当时的点边统计',
+    componentName: 'PageTemplate',
+    chartHeight: '100vh',
+    HandleResponseFunc: (responseData, ChartObj) => {
+      console.log(responseData)
+      const _opt = extendEchartsOpts({
+        title: [{
+          left: 'center',
+          gridIndex: 0,
+          text: responseData.edge.title
+        }, {
+          top: '50%',
+          left: 'center',
+          gridIndex: 1,
+          text: responseData.node.title
+        }],
+        legend: {
+          top: '6%',
+          data: responseData.edge.legend
+        },
+        xAxis: [
+          {
+            gridIndex: 0,
+            name: 'year',
+            type: 'category',
+            axisLabel: {
+              interval: 0,
+              rotate: -75
+            },
+            data: responseData.edge.x
+          },
+          {
+            name: 'year',
+            type: 'category',
+            gridIndex: 1,
+            axisLabel: {
+              interval: 0,
+              rotate: -75
+            },
+            data: responseData.node.x
+          }],
+        yAxis: [
+          {
+            gridIndex: 0,
+            name: 'Count',
+            type: 'value',
+            nameTextStyle: { fontSize: 18 },
+            axisLine: {
+              show: true
+            }
+          },
+          {
+            gridIndex: 1,
+            name: 'Count',
+            type: 'value',
+            nameTextStyle: { fontSize: 18 },
+            axisLine: {
+              show: true
+            }
+          }],
+        grid: [
+          { top: '10%', bottom: '58%',
+            right: '20%' },
+          { top: '58%', bottom: '5%',
+            right: '20%' }
+        ],
+        series: [...zip(responseData.edge.legend, responseData.edge.y).map(item => {
+          return extendLineSeries({
+            xAxisIndex: 0,
+            yAxisIndex: 0,
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: item[1]
+          })
+        }),
+        ...zip(responseData.node.legend, responseData.node.y).map(item => {
+          return extendLineSeries({
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: item[1]
+          })
+        })
+        ]
+      })
+      return _opt
+    },
+    RequestFunc: async(params) => {
+      const data = await requestWrap('mag/getNodeAndEdgeThatTimeByCats', 'post', params)
+
+      return data.data
+    },
+    Select: [
+      {
+        name: 'cats',
+        default: SELECT_MAG_DATA,
+        label: '目标学科',
+        multiple: true,
+        show: true,
+        cols: 8,
+        items: MAGCoreCategorys2020
+      }, {
+        name: 'version',
+        default: 'v3',
+        label: '版本',
+        show: true,
+        cols: 2,
+        items: [{
+          text: '不去0',
+          value: 'v3'
+        }]
+      }, {
+        name: 'type',
+        default: 'tjart_nopb',
+        label: '引用条件',
+        show: true,
+        cols: 2,
+        items: [{
+          text: '论文(去Book 去Patent)',
+          value: 'tjart_nopb'
+        }]
+      }, {
+        name: 'db',
+        default: 'mag',
+        label: '数据库',
+        show: false,
+        cols: 2,
+        items: [{
+          text: 'mag',
+          value: 'mag'
+        }]
+      }],
+    Slider: [],
+    RangeSlider: [{
+      name: 'yearRange',
+      startName: 'from',
+      rangeDefault: [1955, 2019],
+      endName: 'to',
+      label: '目标学科年份范围',
+      cols: 12,
+      max: 2020,
+      min: 1945
+    }],
+    xAxisName: 'Year',
+    yAxisName: 'Count'
+  },
   'mag2020/tjhaslinksinByCats': {
     ChName: '统计学科被引用为0的情况',
     componentName: 'PageTemplate',

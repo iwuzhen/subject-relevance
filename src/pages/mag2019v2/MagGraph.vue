@@ -1,109 +1,34 @@
-<template>
-  <v-container fluid>
-    <v-row>
-      <v-col cols="12">
-        <v-select
-          v-model="subjectRelevances"
-          :items="categorys"
-          chips
-          multiple
-          deletable-chips
-          clearable
-          dense
-          label="目标学科"
-          @change="getData"
-        />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="70vh"
-        >
-          <v-card-title>
-            MAG 2016 linksin 测试 3D 引力图
-          </v-card-title>
-          <v-container
-            id="3d-graph"
-            fluid
-            fill-height
-          />
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="70vh"
-        >
-          <v-container
-            id="subjectChart1"
-            fluid
-            fill-height
-          />
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="70vh"
-        >
-          <v-container
-            id="subjectChart2"
-            fluid
-            fill-height
-          />
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="70vh"
-        >
-          <v-container
-            id="subjectChart3"
-            fluid
-            fill-height
-          />
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="70vh"
-        >
-          <v-container
-            id="subjectChart4"
-            fluid
-            fill-height
-          />
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <comment storagekey="Mag_graph_2019v2_Chart_1" />
-      </v-col>
-    </v-row>
-  </v-container>
+<template lang="pug">
+v-container(fluid='')
+  v-row
+    v-col(cols='12')
+      v-select(v-model='subjectRelevances' :items='categorys' chips='' multiple='' deletable-chips='' clearable='' dense='' label='目标学科' @change='getData')
+  v-row
+    v-col(col='12')
+      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
+        v-card-title
+          | MAG 2016 linksin 测试 3D 引力图
+        v-container#3d-graph(fluid='' fill-height='')
+  v-row
+    v-col(col='12')
+      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
+        v-container#subjectChart1(fluid='' fill-height='')
+  v-row
+    v-col(col='12')
+      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
+        v-container#subjectChart2(fluid='' fill-height='')
+  v-row
+    v-col(col='12')
+      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
+        v-container#subjectChart3(fluid='' fill-height='')
+  v-row
+    v-col(col='12')
+      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
+        v-container#subjectChart4(fluid='' fill-height='')
+  v-row
+    v-col
+      comment(storagekey='Mag_graph_2019v2_Chart_1')
+
 </template>
 
 <script>

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2021-01-20 14:42:08
+ * @LastEditTime: 2021-01-26 18:19:15
  * @Description:
  */
 
@@ -363,9 +363,14 @@ export function extendLineSeries(series) {
 // 单页图，使用这个模版
 export function extendEchartsOpts(opt) {
   const basicEchartsOption = {
-    color: ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#003399', '#333366', '#663366', '#CC0099'],
+    // color: ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#003399', '#333366', '#663366', '#CC0099'],
     title: {
       left: 'center'
+    },
+    yAxis: {
+      axisLine: {
+        show: true
+      }
     },
     tooltip: {
       trigger: 'axis',

@@ -153,15 +153,15 @@ async function calMagData(year) {
     try {
       const ret = await getMasDatav2(opt)
       const aa = []; const ba = []; const ca = []; const da = []
-      for (const i in ret.data.data.y) {
-        if (ret.data.data.y[i][0] > 0.9) {
-          aa.push(ret.data.data.legend[i])
-        } else if (ret.data.data.y[i][0] >= 0.7) {
-          ba.push(ret.data.data.legend[i])
-        } else if (ret.data.data.y[i][0] >= 0.5) {
-          ca.push(ret.data.data.legend[i])
+      for (const i in ret.data.y) {
+        if (ret.data.y[i][0] > 0.9) {
+          aa.push(ret.data.legend[i])
+        } else if (ret.data.y[i][0] >= 0.7) {
+          ba.push(ret.data.legend[i])
+        } else if (ret.data.y[i][0] >= 0.5) {
+          ca.push(ret.data.legend[i])
         } else {
-          da.push(ret.data.data.legend[i])
+          da.push(ret.data.legend[i])
         }
       }
       if (subject === 'Engineering disciplines') {
@@ -206,7 +206,7 @@ export default {
   computed: {
     yearsOpt: function() {
       const ret = []
-      for (let i = 1945; i <= 2019; i++) {
+      for (let i = 1945; i <= 2020; i++) {
         ret.push(i)
       }
       return ret

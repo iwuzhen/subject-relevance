@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import { createRouter } from './router'
 // import router from './router'
-import echarts from 'echarts'
+import * as echarts from 'echarts'
 // import ecStat from "echarts-stat";
 // import store from './store.js'
 import vuetify from './plugins/vuetify'

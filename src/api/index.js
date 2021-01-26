@@ -452,12 +452,16 @@ export function getMasData(params) {
   })
 }
 
-export function getMasDatav2(params) {
-  return request({
+export async function getMasDatav2(params) {
+  const requestParams = {
     url: '/wiki/getMasDistance_v2',
     method: 'post',
     data: params
-  })
+  }
+
+  // const res = await request(requestParams)
+  // return res
+  return await cacheRequest(requestParams)
 }
 
 export function getCoreLinksInDataByCats(params) {
