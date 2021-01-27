@@ -4,21 +4,23 @@ v-container(fluid='')
     v-col(cols='4')
       v-select(v-model='vertexSubjects' :items='subjectOpt' chips='' multiple='' deletable-chips='' clearable='' dense='' label='定点学科' @change='Draw')
 
-    v-col(cols='12')
+    v-col(cols='8')
       v-select(v-model='subjectRelevances' :items='categorys' chips='' multiple='' deletable-chips='' clearable='' dense='' label='目标学科' @change='Draw')
+    v-col(cols="3")
+      v-slider(hint="距离过滤器" label="距离过滤器" max=1 min=0.5 step=0.01 thumb-label="always" v-model="linkFilter" @change='Draw')
+    v-col(cols="9")
+      v-slider(hint="展示年份" label="展示年份" max=2020 min=1955 step=1 thumb-label="always" v-model="selectYear" @change='Draw')
     v-col(cols="2")
-      v-slider(hint="距离过滤器" max=1 min=0.5 step=0.1 thumb-label="always" v-model="linkFilter")
-    v-col
-      v-btn(@click='testclick')  动画测试
-    v-col(cols="12")
-      v-slider(hint="展示年份" max=2020 min=1955 step=1 thumb-label="always" v-model="selectYear")
+      v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='Draw')
+    v-col(cols="2")
+      v-switch(v-model="camera.status" :label="`Camera 自动环绕: ${showText.toString()}`"  @change='AutoCamera')
   v-row
     .loop
   v-row
     v-col(col='12')
       v-card.mx-auto(outlined='' :loading='loading' height='90vh')
         v-card-title
-          | MAG 2016 linksin 测试 3D 引力图
+          | MAG {{selectYear}} linksin 测试 3D 引力图
         v-container#3d-graph(fluid='' fill-height='')
   v-row
     v-col
@@ -36,6 +38,8 @@ import _ from 'lodash'
 import { getMasDatav2, requestWrap } from '@/api/index'
 import anime from 'animejs/lib/anime.es.js'
 
+import SpriteText from 'three-spritetext'
+
 export default {
   name: 'MagGraph',
   components: {
@@ -50,13 +54,18 @@ export default {
       subjectRelevances: SELECT_MAG_DATA,
       BasicData: {},
       GraphData: {},
+      showText: false,
+      camera: {
+        status: false,
+        intPid: 0
+      },
       categorys: MAGCoreCategorys2020,
       myChartIds: ['subjectChart1'],
       loading: false,
-      linkFilter: 1,
+      linkFilter: 0.75,
       ct: 0,
       selectYear: 2020,
-      Graph: Object
+      Graph: null
     }
   },
   mounted() {
@@ -121,17 +130,18 @@ export default {
 
     parseGraphData(nodes, links, yindex) {
       const sizeMax = Math.pow(
-        Math.max(..._.flattenDeep(nodes.map(each => _.flattenDeep(each.weight)))), 1 / 3
+        Math.max(..._.flattenDeep(nodes.map(each => each.weight[yindex]))), 1 / 3
       )
       const sizeMin = Math.pow(
-        Math.min(..._.flattenDeep(nodes.map(each => _.flattenDeep(each.weight)))), 1 / 3
+        Math.min(..._.flattenDeep(nodes.map(each => each.weight[yindex]))), 1 / 3
       )
+      console.log(sizeMax, sizeMin)
 
       const vertuxArray = []
       if (this.vertexSubjects.length <= 3) {
         vertuxArray.push({ fx: 100, fy: 0, fz: 0 }, { fx: 0, fy: 100, fz: 0 }, { fx: 0, fy: 0, fz: 100 })
       } else if (this.vertexSubjects.length === 4) {
-        vertuxArray.push({ fx: 100, fy: 100, fz: 0 }, { fx: 0, fy: 100, fz: 100 }, { fx: 100, fy: 0, fz: 100 }, { fx: 0, fy: 0, fz: 0 })
+        vertuxArray.push({ fx: 100, fy: 100, fz: -50 }, { fx: 0, fy: 100, fz: 50 }, { fx: 100, fy: 0, fz: 100 }, { fx: 0, fy: 0, fz: -50 })
       }
 
       return {
@@ -141,7 +151,7 @@ export default {
             return {
               id: each.id,
               name: each.label,
-              value: (10 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.01,
+              value: (5 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.01,
               fx,
               fy,
               fz
@@ -150,7 +160,7 @@ export default {
             return {
               id: each.id,
               name: each.label,
-              value: (10 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.01
+              value: (5 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.01
             }
           }
         }),
@@ -166,8 +176,8 @@ export default {
     draw3DForceGraph(gData) {
       const elem = document.getElementById('3d-graph')
       const height = Math.floor(window.innerHeight * 0.9)
-      const weight = Math.floor(window.innerWeightWeight * 0.9)
-      const Graph = ForceGraph3D()(elem).width(weight).height(height)
+      const width = Math.floor(window.innerWidth) - 10
+      const Graph = ForceGraph3D()(elem).width(width).height(height)
         .graphData(gData)
         .nodeResolution(30)
         .nodeVal('value')
@@ -192,40 +202,46 @@ export default {
         .strength(link => { return link.value })
       this.Graph = Graph
     },
-    async testclick() {
-      console.log('1', this.GraphData)
-      let { nodes, links } = await this.getData()
 
+    AutoCamera() {
+      let angle = 0
+      const distance = 400
+      if (this.camera.status === true) {
+        this.camera.intPid = setInterval(() => {
+          this.Graph.cameraPosition({
+            x: distance * Math.sin(angle),
+            z: distance * Math.cos(angle)
+          })
+          angle += Math.PI / 300
+        }, 10)
+      } else {
+        this.camera.intPid.close()
+      }
+    },
+
+    Draw: _.debounce(async function() {
+      this.loading = true
+      let { nodes, links } = await this.getData()
       this.GraphData = this.parseGraphData(nodes, links, this.selectYear - 1955)
       links = this.GraphData.links.filter(x => x.value <= this.linkFilter)
       nodes = this.GraphData.nodes
-      this.Graph.graphData({ nodes, links }).d3ReheatSimulation()
-    },
-    Draw: _.debounce(async function() {
-      const { nodes, links } = await this.getData()
-
-      this.GraphData = this.parseGraphData(nodes, links, this.selectYear - 1955)
-      console.log('2', this.GraphData)
-      this.draw3DForceGraph(this.GraphData)
-      // var dd = {
-      //   'lambda': 0
-      // }
-      // var animation = anime({
-      //   targets: dd,
-      //   // lambda: 1,
-      //   easing: 'easeInOutCubic',
-      //   duration: 3000,
-      //   loop: true,
-      //   autoplay: true,
-      //   update: function() {
-      //     // console.log('play')
-      //     // const data = that.parseGraphData(nodes, links, dd.lambda)
-      //     // GraphData.nodes = data.nodes
-      //     // GraphData.links = data.links
-      //     dd.lambda += 1
-      //   }
-      // })
-      // console.log(animation.play())
+      if (this.Graph === null) {
+        this.draw3DForceGraph({ nodes, links })
+      } else {
+        this.Graph.graphData({ nodes, links }).d3ReheatSimulation()
+      }
+      if (this.showText === true) {
+        this.Graph.nodeThreeObject(node => {
+          const sprite = new SpriteText(node.name)
+          sprite.material.depthWrite = false // make sprite background transparent
+          sprite.color = node.color
+          sprite.textHeight = 8
+          return sprite
+        })
+        // this.Graph.d3Force('charge').strength(-120)
+      } else {
+        this.Graph.nodeThreeObject('null')
+      }
       anime({
         targets: '.loop',
         direction: 'alternate',
@@ -234,6 +250,7 @@ export default {
         duration: 3000,
         loop: true
       })
+      this.loading = false
     }, 2500)
 
   }
