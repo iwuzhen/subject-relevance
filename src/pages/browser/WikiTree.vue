@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-12-23 02:13:53
+ * @LastEditTime: 2021-01-27 17:45:27
  * @Description:
  -->
 <template>
@@ -254,7 +254,7 @@ export default {
       searchString: '',
       diffs: '',
       yearSelect1: 2019,
-      yearSelect2: 2020,
+      yearSelect2: 2021,
       wikiYearOptions: [
         2007,
         2008,
@@ -267,7 +267,8 @@ export default {
         2017,
         2018,
         2019,
-        2020
+        2020,
+        2021
       ],
       basiCategorys: basiCategorys,
       arithclBirth: {}
