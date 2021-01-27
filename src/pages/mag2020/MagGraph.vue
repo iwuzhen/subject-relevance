@@ -6,6 +6,11 @@ v-container(fluid='')
 
     v-col(cols='12')
       v-select(v-model='subjectRelevances' :items='categorys' chips='' multiple='' deletable-chips='' clearable='' dense='' label='目标学科' @change='Draw')
+
+    v-col
+      v-btn(@click='testclick')  动画测试
+  v-row
+    .loop
   v-row
     v-col(col='12')
       v-card.mx-auto(outlined='' :loading='loading' height='70vh')
@@ -13,24 +18,8 @@ v-container(fluid='')
           | MAG 2016 linksin 测试 3D 引力图
         v-container#3d-graph(fluid='' fill-height='')
   v-row
-    v-col(col='12')
-      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
-        v-container#subjectChart1(fluid='' fill-height='')
-  v-row
-    v-col(col='12')
-      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
-        v-container#subjectChart2(fluid='' fill-height='')
-  v-row
-    v-col(col='12')
-      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
-        v-container#subjectChart3(fluid='' fill-height='')
-  v-row
-    v-col(col='12')
-      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
-        v-container#subjectChart4(fluid='' fill-height='')
-  v-row
     v-col
-      comment(storagekey='Mag_graph_2019v2_Chart_1')
+      comment(storagekey='Mag_graph_2020_Chart_1')
 
 </template>
 
@@ -42,9 +31,7 @@ import comment from '@/components/comment'
 import _ from 'lodash'
 
 import { getMasDatav2, requestWrap } from '@/api/index'
-// import anime from 'animejs/lib/anime.es.js'
-
-// import { defaultCategorySelect } from '@/api/data'
+import anime from 'animejs/lib/anime.es.js'
 
 export default {
   name: 'MagGraph',
@@ -54,18 +41,21 @@ export default {
   extends: Base,
   data() {
     return {
-      pageName: 'Mag 相关度引力图',
+      pageName: 'Mag 相关度引力图测试',
       vertexSubjects: ['Biology', 'Physics', 'Mathematics', 'Political science'],
       subjectOpt: MAGCoreCategorys2020,
       subjectRelevances: SELECT_MAG_DATA,
-
+      BasicData: {},
+      GraphData: {},
       categorys: MAGCoreCategorys2020,
-      myChartIds: ['subjectChart1', 'subjectChart2', 'subjectChart3', 'subjectChart4'],
-      loading: false
+      myChartIds: ['subjectChart1'],
+      loading: false,
+      ct: 0,
+      Graph: Object
     }
   },
   mounted() {
-    this.getData()
+    // this.getData()
     this.Draw()
   },
   methods: {
@@ -96,7 +86,7 @@ export default {
       }
       let linkId = 0
       while (allData.length > 1) {
-        const strA = allData.pop()
+        let strA = allData.pop()
         const opt = {
           strA,
           strB: allData.join(','),
@@ -107,6 +97,9 @@ export default {
           version: 'delete_noref_v3_node'
         }
         const ret = await getMasDatav2(opt)
+        if (strA === 'Engineering disciplines') {
+          strA = 'Engineering'
+        }
         const souceId = allNodesMap[strA].id
         for (const index in ret.data.legend) {
           allNodeLinks.push({
@@ -120,12 +113,13 @@ export default {
       }
       return { nodes: Object.values(allNodesMap), links: allNodeLinks }
     },
-    async draw3DForceGraph(nodes, links, yindex) {
+
+    parseGraphData(nodes, links, yindex) {
       const sizeMax = Math.pow(
-        Math.max(...nodes.map(each => _.flattenDeep(each.weight))), 1 / 3
+        Math.max(..._.flattenDeep(nodes.map(each => _.flattenDeep(each.weight)))), 1 / 3
       )
       const sizeMin = Math.pow(
-        Math.min(...nodes.map(each => _.flattenDeep(each.weight))), 1 / 3
+        Math.min(..._.flattenDeep(nodes.map(each => _.flattenDeep(each.weight)))), 1 / 3
       )
 
       const vertuxArray = []
@@ -135,11 +129,12 @@ export default {
         vertuxArray.push({ fx: 100, fy: 100, fz: 0 }, { fx: 0, fy: 100, fz: 100 }, { fx: 100, fy: 0, fz: 100 }, { fx: 0, fy: 0, fz: 0 })
       }
 
-      const gData = {
+      return {
         nodes: nodes.map(each => {
           if (this.vertexSubjects.includes(each.label)) {
             const { fx, fy, fz } = vertuxArray.pop()
 
+            console.log('each.weight', (2 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.05)
             return {
               id: each.id,
               name: each.label,
@@ -149,6 +144,7 @@ export default {
               fz
             }
           } else {
+            console.log('each.weight', (2 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.05)
             return {
               id: each.id,
               name: each.label,
@@ -163,8 +159,23 @@ export default {
             value: Number(each.weight[yindex])
           }))
       }
+    },
 
-      console.log(gData)
+    updateGraphData(GraphData, nodes, links, yindex) {
+      const sizeMax = Math.pow(
+        Math.max(..._.flattenDeep(nodes.map(each => _.flattenDeep(each.weight)))), 1 / 3
+      )
+      const sizeMin = Math.pow(
+        Math.min(..._.flattenDeep(nodes.map(each => _.flattenDeep(each.weight)))), 1 / 3
+      )
+      for (const index in nodes) {
+        GraphData.nodes[index].value = (2 * (Math.pow(Number(nodes[index].weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.05
+      }
+      for (const index in links) {
+        GraphData.links[index].value = Number(links[index].weight[yindex])
+      }
+    },
+    draw3DForceGraph(gData) {
       const elem = document.getElementById('3d-graph')
       const Graph = ForceGraph3D()(elem).width(1500).height(700)
         .graphData(gData)
@@ -189,30 +200,59 @@ export default {
       Graph
         .d3Force('link')
         .strength(link => { return link.value })
+      this.Graph = Graph
+    },
+    async testclick() {
+      console.log('1', this.GraphData)
+      const { nodes, links } = await this.getData()
+      this.updateGraphData(this.GraphData, nodes, links, this.ct)
+      this.ct += 1
+      this.Graph.d3ReheatSimulation()
     },
     async Draw() {
       const { nodes, links } = await this.getData()
-      this.draw3DForceGraph(nodes, links, 1)
+
+      this.GraphData = this.parseGraphData(nodes, links, 1)
+      console.log('2', this.GraphData)
+      this.draw3DForceGraph(this.GraphData)
       // var dd = {
       //   'lambda': 0
       // }
       // var animation = anime({
       //   targets: dd,
-      //   lambda: 1,
+      //   // lambda: 1,
       //   easing: 'easeInOutCubic',
-      //   duration: 750,
-      //   autoplay: false,
+      //   duration: 3000,
+      //   loop: true,
+      //   autoplay: true,
       //   update: function() {
-      //     // update node positions: note we use fx, fy and fz, not dx, dy and dz!
-      //     nodes.forEach((d, i) => {
-      //       d.fx = (1 - dd.lambda) * start[i].x + dd.lambda * end[i].x
-      //       d.fy = (1 - dd.lambda) * start[i].y + dd.lambda * end[i].y
-      //       d.fz = (1 - dd.lambda) * start[i].z + dd.lambda * end[i].z
-      //     })
+      //     // console.log('play')
+      //     // const data = that.parseGraphData(nodes, links, dd.lambda)
+      //     // GraphData.nodes = data.nodes
+      //     // GraphData.links = data.links
+      //     dd.lambda += 1
       //   }
       // })
+      // console.log(animation.play())
+      anime({
+        targets: '.loop',
+        direction: 'alternate',
+        translateX: 250, // -> '250px'
+        rotate: 540, // -> '540deg'
+        duration: 3000,
+        loop: true
+      })
     }
 
   }
 }
 </script>
+
+<style lang="scss">
+
+.loop {
+  width:20px;
+  height:20px;
+  background-color: red;
+}
+</style>
