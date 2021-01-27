@@ -10,11 +10,13 @@ v-container(fluid='')
       v-slider(hint="距离过滤器" max=1 min=0.5 step=0.1 thumb-label="always" v-model="linkFilter")
     v-col
       v-btn(@click='testclick')  动画测试
+    v-col(cols="12")
+      v-slider(hint="展示年份" max=2020 min=1955 step=1 thumb-label="always" v-model="selectYear")
   v-row
     .loop
   v-row
     v-col(col='12')
-      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
+      v-card.mx-auto(outlined='' :loading='loading' height='90vh')
         v-card-title
           | MAG 2016 linksin 测试 3D 引力图
         v-container#3d-graph(fluid='' fill-height='')
@@ -53,6 +55,7 @@ export default {
       loading: false,
       linkFilter: 1,
       ct: 0,
+      selectYear: 2020,
       Graph: Object
     }
   },
@@ -104,8 +107,6 @@ export default {
         }
         const souceId = allNodesMap[strA].id
         for (const index in ret.data.legend) {
-          console.log(ret.data.y[index], this.linkFilter)
-
           allNodeLinks.push({
             source: souceId,
             target: allNodesMap[ret.data.legend[index]].id,
@@ -140,17 +141,16 @@ export default {
             return {
               id: each.id,
               name: each.label,
-              value: (2 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.05,
+              value: (10 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.01,
               fx,
               fy,
               fz
             }
           } else {
-            console.log('each.weight', (2 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.05)
             return {
               id: each.id,
               name: each.label,
-              value: (2 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.05
+              value: (10 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.01
             }
           }
         }),
@@ -165,7 +165,9 @@ export default {
 
     draw3DForceGraph(gData) {
       const elem = document.getElementById('3d-graph')
-      const Graph = ForceGraph3D()(elem).width(1500).height(700)
+      const height = Math.floor(window.innerHeight * 0.9)
+      const weight = Math.floor(window.innerWeightWeight * 0.9)
+      const Graph = ForceGraph3D()(elem).width(weight).height(height)
         .graphData(gData)
         .nodeResolution(30)
         .nodeVal('value')
@@ -194,8 +196,7 @@ export default {
       console.log('1', this.GraphData)
       let { nodes, links } = await this.getData()
 
-      this.GraphData = this.parseGraphData(nodes, links, this.ct)
-      this.ct += 1
+      this.GraphData = this.parseGraphData(nodes, links, this.selectYear - 1955)
       links = this.GraphData.links.filter(x => x.value <= this.linkFilter)
       nodes = this.GraphData.nodes
       this.Graph.graphData({ nodes, links }).d3ReheatSimulation()
@@ -203,7 +204,7 @@ export default {
     Draw: _.debounce(async function() {
       const { nodes, links } = await this.getData()
 
-      this.GraphData = this.parseGraphData(nodes, links, 1)
+      this.GraphData = this.parseGraphData(nodes, links, this.selectYear - 1955)
       console.log('2', this.GraphData)
       this.draw3DForceGraph(this.GraphData)
       // var dd = {
