@@ -6,7 +6,8 @@ v-container(fluid='')
 
     v-col(cols='12')
       v-select(v-model='subjectRelevances' :items='categorys' chips='' multiple='' deletable-chips='' clearable='' dense='' label='目标学科' @change='Draw')
-
+    v-col(cols="2")
+      v-slider(hint="距离过滤器" max=1 min=0.5 step=0.1 thumb-label="always" v-model="linkFilter")
     v-col
       v-btn(@click='testclick')  动画测试
   v-row
@@ -50,6 +51,7 @@ export default {
       categorys: MAGCoreCategorys2020,
       myChartIds: ['subjectChart1'],
       loading: false,
+      linkFilter: 1,
       ct: 0,
       Graph: Object
     }
@@ -102,6 +104,8 @@ export default {
         }
         const souceId = allNodesMap[strA].id
         for (const index in ret.data.legend) {
+          console.log(ret.data.y[index], this.linkFilter)
+
           allNodeLinks.push({
             source: souceId,
             target: allNodesMap[ret.data.legend[index]].id,
@@ -133,8 +137,6 @@ export default {
         nodes: nodes.map(each => {
           if (this.vertexSubjects.includes(each.label)) {
             const { fx, fy, fz } = vertuxArray.pop()
-
-            console.log('each.weight', (2 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.05)
             return {
               id: each.id,
               name: each.label,
@@ -161,20 +163,6 @@ export default {
       }
     },
 
-    updateGraphData(GraphData, nodes, links, yindex) {
-      const sizeMax = Math.pow(
-        Math.max(..._.flattenDeep(nodes.map(each => _.flattenDeep(each.weight)))), 1 / 3
-      )
-      const sizeMin = Math.pow(
-        Math.min(..._.flattenDeep(nodes.map(each => _.flattenDeep(each.weight)))), 1 / 3
-      )
-      for (const index in nodes) {
-        GraphData.nodes[index].value = (2 * (Math.pow(Number(nodes[index].weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.05
-      }
-      for (const index in links) {
-        GraphData.links[index].value = Number(links[index].weight[yindex])
-      }
-    },
     draw3DForceGraph(gData) {
       const elem = document.getElementById('3d-graph')
       const Graph = ForceGraph3D()(elem).width(1500).height(700)
@@ -204,12 +192,15 @@ export default {
     },
     async testclick() {
       console.log('1', this.GraphData)
-      const { nodes, links } = await this.getData()
-      this.updateGraphData(this.GraphData, nodes, links, this.ct)
+      let { nodes, links } = await this.getData()
+
+      this.GraphData = this.parseGraphData(nodes, links, this.ct)
       this.ct += 1
-      this.Graph.d3ReheatSimulation()
+      links = this.GraphData.links.filter(x => x.value <= this.linkFilter)
+      nodes = this.GraphData.nodes
+      this.Graph.graphData({ nodes, links }).d3ReheatSimulation()
     },
-    async Draw() {
+    Draw: _.debounce(async function() {
       const { nodes, links } = await this.getData()
 
       this.GraphData = this.parseGraphData(nodes, links, 1)
@@ -242,7 +233,7 @@ export default {
         duration: 3000,
         loop: true
       })
-    }
+    }, 2500)
 
   }
 }
