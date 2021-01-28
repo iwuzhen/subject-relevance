@@ -215,7 +215,7 @@ export default {
           angle += Math.PI / 300
         }, 10)
       } else {
-        this.camera.intPid.close()
+        clearInterval(this.camera.intPid)
       }
     },
 
