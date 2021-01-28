@@ -176,7 +176,7 @@ export default {
     draw3DForceGraph(gData) {
       const elem = document.getElementById('3d-graph')
       const height = Math.floor(window.innerHeight * 0.9)
-      const width = Math.floor(window.innerWidth) - 10
+      const width = Math.floor(window.innerWidth) - 60
       const Graph = ForceGraph3D()(elem).width(width).height(height)
         .graphData(gData)
         .nodeResolution(30)
