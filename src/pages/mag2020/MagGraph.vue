@@ -7,7 +7,7 @@ v-container(fluid='')
     v-col(cols='8')
       v-select(v-model='subjectRelevances' :items='categorys' chips='' multiple='' deletable-chips='' clearable='' dense='' label='目标学科' @change='Draw')
     v-col(cols="3")
-      v-slider(hint="距离过滤器" label="距离过滤器" max=1 min=0.5 step=0.01 thumb-label="always" v-model="linkFilter" @change='Draw')
+      v-slider(hint="距离过滤器" label="距离过滤器" max=1 min=0.3 step=0.01 thumb-label="always" v-model="linkFilter" @change='Draw')
     v-col(cols="9")
       v-slider(hint="展示年份" label="展示年份" max=2020 min=1955 step=1 thumb-label="always" v-model="selectYear" @change='Draw')
     v-col(cols="2")
@@ -151,7 +151,7 @@ export default {
             return {
               id: each.id,
               name: each.label,
-              value: (5 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.01,
+              value: (5 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.5,
               fx,
               fy,
               fz
@@ -160,7 +160,7 @@ export default {
             return {
               id: each.id,
               name: each.label,
-              value: (5 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.01
+              value: (5 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.5
             }
           }
         }),
