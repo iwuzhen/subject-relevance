@@ -37,7 +37,7 @@ import _ from 'lodash'
 
 import { getMasDatav2, requestWrap } from '@/api/index'
 import anime from 'animejs/lib/anime.es.js'
-
+// import * as THREE from 'three'
 import SpriteText from 'three-spritetext'
 
 export default {
@@ -196,7 +196,7 @@ export default {
             node, // lookAt ({ x, y, z })
             3000 // ms transition duration
           )
-        })
+        }).nodeThreeObjectExtend(true)
       Graph
         .d3Force('link')
         .strength(link => { return link.value })
@@ -235,8 +235,21 @@ export default {
           const sprite = new SpriteText(node.name)
           sprite.material.depthWrite = false // make sprite background transparent
           sprite.color = node.color
-          sprite.textHeight = 8
+          sprite.textHeight = node.value + 3
+          // sprite.position.x = 0
+          sprite.position.y = 10
           return sprite
+          // const canvas = document.createElement('canvas')
+          // const context = canvas.getContext('2d')
+          // // add image, text etc
+          // context.fillText('dada', 10, 10)
+
+          // const texture = new THREE.Texture(context.canvas)
+          // texture.needsUpdate = true
+          // const material = new THREE.SpriteMaterial({ map: texture })
+          // const sprite = new THREE.Sprite(material)
+          // sprite.scale.set(32, 32, 1)
+          // return sprite
         })
         // this.Graph.d3Force('charge').strength(-120)
       } else {
