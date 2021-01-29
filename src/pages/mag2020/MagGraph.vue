@@ -22,6 +22,11 @@ v-container(fluid='')
         v-card-title
           | MAG {{selectYear}} linksin 测试 3D 引力图
         v-container#3d-graph(fluid='' fill-height='')
+
+  v-row
+    v-col(col='12')
+      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
+        v-container#subjectChart1(fluid='' fill-height='')
   v-row
     v-col
       comment(storagekey='Mag_graph_2020_Chart_1')
@@ -225,6 +230,7 @@ export default {
       this.GraphData = this.parseGraphData(nodes, links, this.selectYear - 1955)
       links = this.GraphData.links.filter(x => x.value <= this.linkFilter)
       nodes = this.GraphData.nodes
+      this.echartDraw(nodes, links.concat())
       if (this.Graph === null) {
         this.draw3DForceGraph({ nodes, links })
       } else {
@@ -264,8 +270,83 @@ export default {
         loop: true
       })
       this.loading = false
-    }, 2500)
+    }, 2500),
 
+    echartDraw(nodes, links) {
+      const nodemap = {}
+      const graphData = nodes.map(node => {
+        nodemap[node.id] = node.name
+
+        return {
+          name: node.name,
+          category: node.name,
+          fixed: false,
+          value: node.value,
+          symbolSize: node.value * 10
+
+        }
+      })
+      const graphLink = links.map(link => {
+        return {
+          source: nodemap[link.source],
+          target: nodemap[link.target],
+          value: link.value
+        }
+      })
+      const _opt = {
+        title: {
+          text: '2D 力引导图'
+        },
+        legend: [
+          {
+            left: '15%',
+            data: this.subjectRelevances
+          }
+        ],
+        animationDuration: 1500,
+        animationEasingUpdate: 'quinticInOut',
+        tooltip: {
+          trigger: 'item'
+        },
+        series: [
+          {
+            name: 'Les Miserables',
+            tooltip: { formatter: '{c0}' },
+            type: 'graph',
+            layout: 'force',
+            zoom: 2.5,
+            force: {
+              edgeLength: [20, 200]
+              // layoutAnimation: false,
+            },
+            draggable: true,
+            data: graphData,
+            links: graphLink,
+            roam: true,
+            label: {
+              show: true,
+              color: '#000',
+              position: 'top',
+              fontSize: 16
+            },
+            lineStyle: {
+              opacity: 0.7,
+              curveness: 0
+            },
+            categories: Array.from(new Set(this.subjectRelevances.concat(this.vertexSubjects))).map(each => {
+              return { name: each }
+            }),
+            emphasis: {
+              lineStyle: {
+                width: 2
+              }
+            }
+          }
+        ]
+      }
+
+      this.myChartObjs[0].setOption(_opt, true)
+    }
   }
 }
 </script>
