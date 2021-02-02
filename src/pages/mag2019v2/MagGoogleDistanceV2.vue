@@ -164,16 +164,6 @@ import { extendEchartsOpts, coreCategorys, extendLineSeries, defaultCategorySele
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 
-coreCategorys.push({
-  text: 'Theoretical physics',
-  value: 'Theoretical physics'
-})
-
-coreCategorys.push({
-  text: 'Discrete mathematics',
-  value: 'Discrete mathematics'
-})
-
 export default {
   name: 'MagGoogleDistance',
   components: {
@@ -195,7 +185,13 @@ export default {
       subjectRelevances: defaultCategorySelect,
       methodValue: 'linksin',
       years: [1945, 2018],
-      categorys: coreCategorys,
+      categorys: coreCategorys.concat([{
+        text: 'Discrete mathematics',
+        value: 'Discrete mathematics'
+      }, {
+        text: 'Theoretical physics',
+        value: 'Theoretical physics'
+      }]),
       methodOptions: ['linksin', 'linksout'],
       bfValue: '不适用',
       bfOpt: ['不适用', 1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015],

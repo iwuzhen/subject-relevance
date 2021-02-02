@@ -177,7 +177,13 @@ export default {
       subjectRelevances: SELECT_MAG_DATA,
       methodValue: 'linksin',
       years: [1955, 2017],
-      categorys: MAGCoreCategorys2020,
+      categorys: MAGCoreCategorys2020.concat([{
+        text: 'Business',
+        value: 'Business'
+      }, {
+        text: 'Art',
+        value: 'Art'
+      }]).sort((a, b) => a.text.localeCompare(b.text)),
       methodOptions: ['linksin', 'linksout'],
       bfValue: -1,
       bfOpt: [-1, 1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015],
