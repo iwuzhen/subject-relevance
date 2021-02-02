@@ -56,7 +56,7 @@ export default {
       pageName: 'Mag 相关度引力图测试',
       vertexSubjects: ['Biology', 'Physics', 'Mathematics', 'Political science'],
       subjectOpt: MAGCoreCategorys2020,
-      subjectRelevances: SELECT_MAG_DATA,
+      subjectRelevances: SELECT_MAG_DATA.concat(['Business', 'Art']).sort(),
       BasicData: {},
       GraphData: {},
       showText: false,
@@ -64,7 +64,13 @@ export default {
         status: false,
         intPid: 0
       },
-      categorys: MAGCoreCategorys2020,
+      categorys: MAGCoreCategorys2020.concat([{
+        text: 'Business',
+        value: 'Business'
+      }, {
+        text: 'Art',
+        value: 'Art'
+      }]).sort((a, b) => a.text.localeCompare(b.text)),
       myChartIds: ['subjectChart1'],
       loading: false,
       linkFilter: 0.75,
