@@ -45,6 +45,14 @@ import anime from 'animejs/lib/anime.es.js'
 // import * as THREE from 'three'
 import SpriteText from 'three-spritetext'
 
+const currentSubbjectOpt = MAGCoreCategorys2020.concat([{
+  text: 'Business',
+  value: 'Business'
+}, {
+  text: 'Art',
+  value: 'Art'
+}]).sort((a, b) => a.text.localeCompare(b.text))
+
 export default {
   name: 'MagGraph',
   components: {
@@ -55,8 +63,8 @@ export default {
     return {
       pageName: 'Mag 相关度引力图测试',
       vertexSubjects: ['Biology', 'Physics', 'Mathematics', 'Political science'],
-      subjectOpt: MAGCoreCategorys2020,
-      subjectRelevances: SELECT_MAG_DATA.concat(['Business', 'Art']).sort(),
+      subjectOpt: currentSubbjectOpt,
+      subjectRelevances: SELECT_MAG_DATA.concat(['Business', 'Art', 'Materials science', 'Geology', 'Geography']).sort(),
       BasicData: {},
       GraphData: {},
       showText: false,
@@ -64,13 +72,7 @@ export default {
         status: false,
         intPid: 0
       },
-      categorys: MAGCoreCategorys2020.concat([{
-        text: 'Business',
-        value: 'Business'
-      }, {
-        text: 'Art',
-        value: 'Art'
-      }]).sort((a, b) => a.text.localeCompare(b.text)),
+      categorys: currentSubbjectOpt,
       myChartIds: ['subjectChart1'],
       loading: false,
       linkFilter: 0.75,

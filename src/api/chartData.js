@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-01-26 19:02:50
+ * @LastEditTime: 2021-02-02 15:32:30
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -1212,5 +1212,93 @@ export const ChartMap = {
     }],
     xAxisName: 'Subject',
     yAxisName: 'Count'
+  },
+  'mag2020/BanshuaiqiByYear': {
+    ChName: '半衰期-新鲜度',
+    componentName: 'PageTemplate',
+    HandleResponseFunc: (responseData, ChartObj) => {
+      const _opt = extendEchartsOpts({
+        title: {
+          text: responseData.data.title
+        },
+        legend: {
+          data: responseData.data.legend
+        },
+        xAxis: {
+          name: ChartObj.xAxisName,
+          type: 'category',
+          boundaryGap: false,
+          data: responseData.data.x
+        },
+        yAxis: {
+          name: ChartObj.yAxisName,
+          type: 'value'
+        },
+        series: zip(responseData.data.legend, responseData.data.y).map(item => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: item[1]
+          })
+        })
+      })
+      return _opt
+    },
+    RequestFunc: async(params) => {
+      // 当年
+      const data = await requestWrap('mag/getBanshuaiqiByYear', 'post', params)
+      return data
+    },
+    Select: [
+      {
+        name: 'cats',
+        default: SELECT_MAG_DATA,
+        label: '目标学科',
+        multiple: true,
+        show: true,
+        cols: 8,
+        items: MAGCoreCategorys2020
+      }, {
+        name: 'percent',
+        default: 10,
+        label: '百分比',
+        multiple: false,
+        cols: 2,
+        items: _.range(10, 91, 10)
+      }, {
+        name: 'version',
+        default: 'delete_noref_v3',
+        label: '数据',
+        multiple: false,
+        cols: 2,
+        items: [{
+          text: '去0',
+          value: 'delete_noref_v3'
+        }]
+      }, {
+        name: 'type',
+        default: 'tjart_nopb',
+        label: '数据',
+        multiple: false,
+        cols: 2,
+        items: [{
+          text: '论文(去Book，去Patent)',
+          value: 'tjart_nopb'
+        }]
+      }],
+    Slider: [],
+    RangeSlider: [{
+      name: 'yearRange',
+      startName: 'from',
+      rangeDefault: [1970, 2020],
+      endName: 'to',
+      label: '目标学科年份范围',
+      cols: 12,
+      max: 2020,
+      min: 1970
+    }],
+    xAxisName: 'Year',
+    yAxisName: 'Percent'
   }
 }
