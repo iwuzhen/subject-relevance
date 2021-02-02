@@ -6,12 +6,12 @@ v-container(fluid='')
 
     v-col(cols='8')
       v-select(v-model='subjectRelevances' :items='categorys' chips='' multiple='' deletable-chips='' clearable='' dense='' label='目标学科' @change='Draw')
-    v-col(cols="3")
-      v-slider(hint="距离过滤器" label="距离过滤器" max=1 min=0 step=0.01 thumb-label="always" v-model="linkFilter" @change='Draw')
-    v-col(cols="9")
-      v-slider(hint="展示年份" label="展示年份" max=2020 min=1955 step=1 thumb-label="always" v-model="selectYear" @change='Draw')
+    v-col(cols="5")
+      v-slider(hint="距离过滤器" label="距离过滤器" max=1 min=0 step=0.01 thumb-label="always" v-model="linkFilter" @change='liteDraw')
+    v-col(cols="7")
+      v-slider(hint="展示年份" label="展示年份" max=2020 min=1955 step=1 thumb-label="always" v-model="selectYear" @change='liteDraw')
     v-col(cols="2")
-      v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='Draw')
+      v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='liteDraw')
     v-col(cols="2")
       v-switch(v-model="camera.status" :label="`Camera 自动环绕: ${showText.toString()}`"  @change='AutoCamera')
   v-row
@@ -34,6 +34,7 @@ v-container(fluid='')
 </template>
 
 <script>
+// 计算阈值
 import { MAGCoreCategorys2020, SELECT_MAG_DATA } from '@/api/data'
 import Base from '@/utils/base'
 import ForceGraph3D from '3d-force-graph'
@@ -78,7 +79,8 @@ export default {
       linkFilter: 0.75,
       ct: 0,
       selectYear: 2020,
-      Graph: null
+      Graph: null,
+      camerAngle: 0
     }
   },
   mounted() {
@@ -161,20 +163,20 @@ export default {
         nodes: nodes.map(each => {
           if (this.vertexSubjects.includes(each.label)) {
             const { fx, fy, fz } = vertuxArray.pop()
-            return {
+            return Object.assign(each, {
               id: each.id,
               name: each.label,
               value: (5 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.5,
               fx,
               fy,
               fz
-            }
+            })
           } else {
-            return {
+            return Object.assign(each, {
               id: each.id,
               name: each.label,
               value: (5 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.5
-            }
+            })
           }
         }),
         links: links
@@ -217,15 +219,15 @@ export default {
     },
 
     AutoCamera() {
-      let angle = 0
       const distance = 400
+      const that = this
       if (this.camera.status === true) {
         this.camera.intPid = setInterval(() => {
           this.Graph.cameraPosition({
-            x: distance * Math.sin(angle),
-            z: distance * Math.cos(angle)
+            x: distance * Math.sin(that.camerAngle),
+            z: distance * Math.cos(that.camerAngle)
           })
-          angle += Math.PI / 300
+          that.camerAngle += Math.PI / 300
         }, 10)
       } else {
         clearInterval(this.camera.intPid)
@@ -235,6 +237,7 @@ export default {
     Draw: _.debounce(async function() {
       this.loading = true
       let { nodes, links } = await this.getData()
+      console.log(links)
       this.GraphData = this.parseGraphData(nodes, links, this.selectYear - 1955)
       links = this.GraphData.links.filter(x => x.value <= this.linkFilter)
       nodes = this.GraphData.nodes
@@ -277,6 +280,58 @@ export default {
         duration: 3000,
         loop: true
       })
+      window.graph = this.Graph
+      window.nodes = nodes
+      this.loading = false
+    }, 2500),
+
+    liteDraw: _.debounce(async function() {
+      this.loading = true
+      let { links } = await this.getData()
+      this.GraphData = this.parseGraphData(this.GraphData.nodes, links, this.selectYear - 1955)
+      links = this.GraphData.links.filter(x => x.value <= this.linkFilter)
+      const nodes = this.GraphData.nodes
+      this.echartDraw(nodes, links.concat())
+      if (this.Graph === null) {
+        this.draw3DForceGraph({ nodes, links })
+      } else {
+        this.Graph.graphData({ nodes, links }).d3ReheatSimulation()
+      }
+      if (this.showText === true) {
+        this.Graph.nodeThreeObject(node => {
+          const sprite = new SpriteText(node.name)
+          sprite.material.depthWrite = false // make sprite background transparent
+          sprite.color = node.color
+          sprite.textHeight = node.value + 3
+          // sprite.position.x = 0
+          sprite.position.y = 10
+          return sprite
+          // const canvas = document.createElement('canvas')
+          // const context = canvas.getContext('2d')
+          // // add image, text etc
+          // context.fillText('dada', 10, 10)
+
+          // const texture = new THREE.Texture(context.canvas)
+          // texture.needsUpdate = true
+          // const material = new THREE.SpriteMaterial({ map: texture })
+          // const sprite = new THREE.Sprite(material)
+          // sprite.scale.set(32, 32, 1)
+          // return sprite
+        })
+        // this.Graph.d3Force('charge').strength(-120)
+      } else {
+        this.Graph.nodeThreeObject('null')
+      }
+      anime({
+        targets: '.loop',
+        direction: 'alternate',
+        translateX: 250, // -> '250px'
+        rotate: 540, // -> '540deg'
+        duration: 3000,
+        loop: true
+      })
+      window.graph = this.Graph
+      window.nodes = nodes
       this.loading = false
     }, 2500),
 
