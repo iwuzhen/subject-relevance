@@ -137,6 +137,12 @@ export default {
             text: '',
             to: '/mag2020/BanshuaiqiByYear',
             update: '2021-02-02T09:43:03.429Z'
+          },
+          {
+            title: 'MAG google距离中间数据',
+            text: 'MAG google距离中间数据',
+            to: '/mag2020/GoogleDistance',
+            update: '2021-02-02T09:43:03.429Z'
           }
           ],
           '学科相关度等': [
