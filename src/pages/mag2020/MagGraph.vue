@@ -14,8 +14,7 @@ v-container(fluid='')
       v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='liteDraw')
     v-col(cols="2")
       v-switch(v-model="camera.status" :label="`Camera 自动环绕: ${showText.toString()}`"  @change='AutoCamera')
-  v-row
-    .loop
+
   v-row
     v-col(col='12')
       v-card.mx-auto(outlined='' :loading='loading' height='90vh')
@@ -27,6 +26,11 @@ v-container(fluid='')
     v-col(col='12')
       v-card.mx-auto(outlined='' :loading='loading' height='70vh')
         v-container#subjectChart1(fluid='' fill-height='')
+
+  v-row
+    v-col(col='12')
+      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
+        v-container#subjectChart2(fluid='' fill-height='')
   v-row
     v-col
       comment(storagekey='Mag_graph_2020_Chart_1')
@@ -40,9 +44,13 @@ import Base from '@/utils/base'
 import ForceGraph3D from '3d-force-graph'
 import comment from '@/components/comment'
 import _ from 'lodash'
+import { extendEchartsOpts, extendLineSeries } from '@/api/data'
+
+const Graph = require('graphology')
+import { connectedComponents } from 'graphology-components'
 
 import { getMasDatav2, requestWrap } from '@/api/index'
-import anime from 'animejs/lib/anime.es.js'
+// import anime from 'animejs/lib/anime.es.js'
 // import * as THREE from 'three'
 import SpriteText from 'three-spritetext'
 
@@ -74,7 +82,7 @@ export default {
         intPid: 0
       },
       categorys: currentSubbjectOpt,
-      myChartIds: ['subjectChart1'],
+      myChartIds: ['subjectChart1', 'subjectChart2'],
       loading: false,
       linkFilter: 0.75,
       ct: 0,
@@ -155,8 +163,8 @@ export default {
       const vertuxArray = []
       if (this.vertexSubjects.length <= 3) {
         vertuxArray.push({ fx: 100, fy: 0, fz: 0 }, { fx: 0, fy: 100, fz: 0 }, { fx: 0, fy: 0, fz: 100 })
-      } else if (this.vertexSubjects.length === 4) {
-        vertuxArray.push({ fx: 100, fy: 100, fz: -50 }, { fx: 0, fy: 100, fz: 50 }, { fx: 100, fy: 0, fz: 100 }, { fx: 0, fy: 0, fz: -50 })
+      } else if (this.vertexSubjects.length >= 4) {
+        vertuxArray.push({ fx: 100, fy: 100, fz: -150 }, { fx: 120, fy: 100, fz: -50 }, { fx: 100, fy: 50, fz: -50 }, { fx: 100, fy: 100, fz: -50 }, { fx: 0, fy: 100, fz: 50 }, { fx: 100, fy: 0, fz: 100 }, { fx: 0, fy: 0, fz: -50 })
       }
 
       return {
@@ -237,8 +245,10 @@ export default {
     Draw: _.debounce(async function() {
       this.loading = true
       let { nodes, links } = await this.getData()
-      console.log(links)
+      // console.log(links)
+      this.drawTable(nodes, links)
       this.GraphData = this.parseGraphData(nodes, links, this.selectYear - 1955)
+
       links = this.GraphData.links.filter(x => x.value <= this.linkFilter)
       nodes = this.GraphData.nodes
       this.echartDraw(nodes, links.concat())
@@ -272,16 +282,7 @@ export default {
       } else {
         this.Graph.nodeThreeObject('null')
       }
-      anime({
-        targets: '.loop',
-        direction: 'alternate',
-        translateX: 250, // -> '250px'
-        rotate: 540, // -> '540deg'
-        duration: 3000,
-        loop: true
-      })
-      window.graph = this.Graph
-      window.nodes = nodes
+
       this.loading = false
     }, 2500),
 
@@ -322,19 +323,107 @@ export default {
       } else {
         this.Graph.nodeThreeObject('null')
       }
-      anime({
-        targets: '.loop',
-        direction: 'alternate',
-        translateX: 250, // -> '250px'
-        rotate: 540, // -> '540deg'
-        duration: 3000,
-        loop: true
-      })
+
       window.graph = this.Graph
       window.nodes = nodes
       this.loading = false
     }, 2500),
 
+    drawTable(nodes, links, maxcompents = 8) {
+      const retData = []
+      for (let year = 2020; year >= 1955; year--) {
+        const tmpData = []
+        const weightId = year - 1955
+        links = links.sort((x, y) => x.weight[weightId] - y.weight[weightId])
+        const graph = new Graph()
+        for (const { id } of nodes) {
+          graph.addNode(id)
+        }
+        let tmpLength = nodes.length
+        for (const obj of links) {
+          graph.addEdge(obj.source, obj.target)
+          const components = connectedComponents(graph)
+          if (components.length < tmpLength && maxcompents >= components.length) {
+            tmpData.push([components.length, obj.weight[ weightId]])
+            tmpLength = components.length
+          }
+        }
+        retData.push(tmpData)
+      }
+      // 转置矩阵
+      const retDataT = retData[0].map(function(col, i) {
+        return retData.map(function(row, j) {
+          const tmpRow = row[i]
+          tmpRow[0] = 2020 - j
+          return tmpRow
+        })
+      })
+      // console.log(retDataT)
+
+      const _opt = extendEchartsOpts({
+        title: {
+          text: '年度阈值图'
+        },
+        tooltip: {
+          trigger: 'axis',
+          textStyle: {
+            align: 'left'
+          },
+          axisPointer: {
+            type: 'cross',
+            animation: true,
+            label: {
+              backgroundColor: '#505765'
+            }
+          },
+          formatter: function(params) {
+            params.sort((x, y) => {
+              if (!x.data[1]) {
+                return 1
+              }
+              if (!y.data[1]) {
+                return -1
+              }
+              return y.data[1] - x.data[1]
+            })
+            // console.log(params)
+            let showHtm = ` ${params[0].axisValue}<br>`
+            for (let i = 0; i < params.length; i++) {
+              const _text = params[i].seriesName
+              const _data = params[i].data
+              const _marker = params[i].marker
+              if (_data[1] !== undefined) {
+                showHtm += `${_marker}${_text}, ${_data[1]}  <br>`
+              }
+            }
+            return showHtm
+          }
+        },
+        legend: {
+          data: _.range(1, maxcompents + 1, 1).map(item => String(item))
+        },
+        xAxis: {
+          name: 'Year',
+          type: 'value',
+          min: 'dataMin',
+          boundaryGap: false
+        },
+        yAxis: {
+          name: 'Distance',
+          type: 'value'
+        },
+        series: _.zip(_.range(maxcompents, 0, -1), retDataT).map(item => {
+          return extendLineSeries({
+            name: String(item[0]),
+            type: 'line',
+            smooth: false,
+            data: item[1]
+          })
+        })
+      })
+      // console.log(_opt)
+      this.myChartObjs[0].setOption(_opt, true)
+    },
     echartDraw(nodes, links) {
       const nodemap = {}
       const graphData = nodes.map(node => {
@@ -408,7 +497,7 @@ export default {
         ]
       }
 
-      this.myChartObjs[0].setOption(_opt, true)
+      this.myChartObjs[1].setOption(_opt, true)
     }
   }
 }

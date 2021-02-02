@@ -1573,6 +1573,11 @@
   resolved "https://registry.npm.taobao.org/@xtuc/long/download/@xtuc/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha1-0pHGpOl5ibXGHZrPOWrk/hM6cY0=
 
+"@yomguithereal/helpers@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.npm.taobao.org/@yomguithereal/helpers/download/@yomguithereal/helpers-1.1.1.tgz#185dfb0f88ca2beec53d0adf6eed15c33b1c549d"
+  integrity sha1-GF37D4jKK+7FPQrfbu0VwzscVJ0=
+
 accepts@~1.3.4, accepts@~1.3.5, accepts@~1.3.7:
   version "1.3.7"
   resolved "https://registry.npm.taobao.org/accepts/download/accepts-1.3.7.tgz#531bc726517a3b2b41f850021c6cc15eaab507cd"
@@ -4149,7 +4154,7 @@ eventemitter3@^4.0.0:
   resolved "https://registry.npm.taobao.org/eventemitter3/download/eventemitter3-4.0.7.tgz?cache=0&sync_timestamp=1598517714257&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Feventemitter3%2Fdownload%2Feventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
   integrity sha1-Lem2j2Uo1WRO9cWVJqG0oHMGFp8=
 
-events@^3.0.0:
+events@^3.0.0, events@^3.2.0:
   version "3.2.0"
   resolved "https://registry.npm.taobao.org/events/download/events-3.2.0.tgz#93b87c18f8efcd4202a461aec4dfc0556b639379"
   integrity sha1-k7h8GPjvzUICpGGuxN/AVWtjk3k=
@@ -4770,6 +4775,32 @@ graphlib@^2.1.7, graphlib@^2.1.8:
   integrity sha1-V2HUFHN4cAhMkux7XbywWSydNdo=
   dependencies:
     lodash "^4.17.15"
+
+graphology-components@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npm.taobao.org/graphology-components/download/graphology-components-1.1.0.tgz#0a4a1b9e84556e783cb19f38b32ea44432009d34"
+  integrity sha1-CkobnoRVbng8sZ84sy6kRDIAnTQ=
+  dependencies:
+    "@yomguithereal/helpers" "^1.1.1"
+    graphology-utils "^1.8.0"
+
+graphology-types@^0.19.2:
+  version "0.19.2"
+  resolved "https://registry.npm.taobao.org/graphology-types/download/graphology-types-0.19.2.tgz#bb5577e1883b8b23af97f1ba04cb29191b18e502"
+  integrity sha1-u1V34Yg7iyOvl/G6BMspGRsY5QI=
+
+graphology-utils@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.npm.taobao.org/graphology-utils/download/graphology-utils-1.8.0.tgz#41315c468656e2a3e028a76468bbc2fbe42b0145"
+  integrity sha1-QTFcRoZW4qPgKKdkaLvC++QrAUU=
+
+graphology@^0.19.3:
+  version "0.19.3"
+  resolved "https://registry.npm.taobao.org/graphology/download/graphology-0.19.3.tgz#5cdec93cedb767e81892915c168c28a7c2376317"
+  integrity sha1-XN7JPO23Z+gYkpFcFowop8I3Yxc=
+  dependencies:
+    events "^3.2.0"
+    obliterator "^1.6.1"
 
 gzip-size@^5.0.0:
   version "5.1.1"
@@ -6799,6 +6830,11 @@ object.values@^1.1.0:
     define-properties "^1.1.3"
     es-abstract "^1.18.0-next.1"
     has "^1.0.3"
+
+obliterator@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.npm.taobao.org/obliterator/download/obliterator-1.6.1.tgz#dea03e8ab821f6c4d96a299e17aef6a3af994ef3"
+  integrity sha1-3qA+irgh9sTZaimeF672o6+ZTvM=
 
 obuf@^1.0.0, obuf@^1.1.2:
   version "1.1.2"
