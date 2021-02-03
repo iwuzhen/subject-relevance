@@ -321,7 +321,14 @@ export default {
               title: 'wiki 分类层次',
               text: 'wiki 分类层次查询',
               href: 'http://wikidb.knogen.com:10080/wikidb_web/first.jsp'
+            },
+            {
+              title: 'wiki 贸易度',
+              text: 'wiki Core 类之间类引用详情',
+              to: '/wikipedia/WikiTrade',
+              update: '2021-02-03T16:43:03.429Z'
             }
+
           ],
           'Core-学科相关度': [
             {
