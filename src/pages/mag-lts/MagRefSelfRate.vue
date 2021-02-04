@@ -32,7 +32,7 @@ v-container(fluid='')
 
 <script>
 import { getMagRefSelfRate } from '@/api/index'
-import { extendEchartsOpts, coreCategorys, extendLineSeries, MAGCoreCategorys2020, defaultCategorySelect } from '@/api/data'
+import { extendEchartsOpts, coreCategorys, extendLineSeries, MAGCoreCategorys2020, defaultCategorySelect, SELECT_MAG_DATA } from '@/api/data'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 
@@ -75,6 +75,7 @@ export default {
         this.categorys = MAGCoreCategorys2020
         this.versionValue = 'tjart_nopb_delete_noref_v3'
         this.versionOptions = [{ text: '论文(去0 去Book，去Patent)', value: 'tjart_nopb_delete_noref_v3' }]
+        this.subjectTarget = SELECT_MAG_DATA
       } else if (this.magVersionSelect === 2019) {
         this.methodValue = 'linksin'
         this.methodOptions = ['article', 'linksout', 'linksin']

@@ -73,7 +73,7 @@ export default {
       pageName: 'Mag 相关度引力图测试',
       vertexSubjects: ['Biology', 'Physics', 'Mathematics', 'Political science'],
       subjectOpt: currentSubbjectOpt,
-      subjectRelevances: SELECT_MAG_DATA.concat(['Business', 'Art', 'Materials science', 'Geology', 'Geography']).sort(),
+      subjectRelevances: SELECT_MAG_DATA.concat(['Business', 'Art']).sort(),
       BasicData: {},
       GraphData: {},
       showText: false,
