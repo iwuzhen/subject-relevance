@@ -130,9 +130,9 @@ const routes = [{
   name: 'MagRefDistV2',
   component: () => import('@/pages/mag2019v2/MagRefDistV2')
 }, {
-  path: '/mag2019v1/MagRefSelfRate',
+  path: '/mag-lts/MagRefSelfRate',
   name: 'MagRefSelfRate',
-  component: () => import('@/pages/mag2019v1/MagRefSelfRate')
+  component: () => import('@/pages/mag-lts/MagRefSelfRate')
 }, {
   path: '/mag2019v1/MagDirectNet',
   name: 'MagDirectNet',

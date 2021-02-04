@@ -110,11 +110,6 @@ export default {
               to: '/mag2019v1/MagArticlesTotal'
             },
             {
-              title: 'MAG 学科自恋度',
-              text: 'MAG 学科自恋度',
-              to: '/mag2019v1/MagRefSelfRate'
-            },
-            {
               title: 'MAG topN 学科自恋度',
               text: 'MAG topN 学科自恋度',
               to: '/mag2019v1/MagTopNRefSelfRate',

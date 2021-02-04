@@ -143,6 +143,11 @@ export default {
             text: 'MAG google距离中间数据',
             to: '/mag2020/GoogleDistance',
             update: '2021-02-02T09:43:03.429Z'
+          },
+          {
+            title: 'MAG 学科自恋度',
+            text: 'MAG 学科自恋度',
+            to: '/mag-lts/MagRefSelfRate'
           }
           ],
           '学科相关度等': [
