@@ -147,7 +147,8 @@ export default {
           {
             title: 'MAG 学科自恋度',
             text: 'MAG 学科自恋度',
-            to: '/mag-lts/MagRefSelfRate'
+            to: '/mag-lts/MagRefSelfRate',
+            update: '2021-02-04T09:43:03.429Z'
           }
           ],
           '学科相关度等': [
