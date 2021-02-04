@@ -16,14 +16,14 @@ v-container(fluid)
         v-container#masChart1(fluid, fill-height)
   v-row
     v-col
-      comment(storagekey='Mag2020Trade_Chart_1')
+      comment(storagekey='wiki_Trade_Chart_1')
   v-row
     v-col(col='12')
       v-card.mx-auto(outlined, :loading='loading', height='70vh')
         v-container#masChart2(fluid, fill-height)
   v-row
     v-col
-      comment(storagekey='Mag2020Trade_Chart_2')
+      comment(storagekey='wiki_Trade_Chart_2')
 
 </template>
 
