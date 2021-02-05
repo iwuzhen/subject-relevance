@@ -333,6 +333,12 @@ export default {
               text: 'wiki Core 类之间类引用详情',
               to: '/wikipedia/WikiTrade',
               update: '2021-02-03T16:43:03.429Z'
+            },
+            {
+              title: 'wiki 自恋度',
+              text: '',
+              to: '/wikipedia/RefSelfRate',
+              update: '2021-02-05T16:43:03.429Z'
             }
 
           ],

@@ -3,12 +3,12 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-02-04 13:56:17
+ * @LastEditTime: 2021-02-05 10:49:53
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
 import { requestWrap } from '@/api/index'
-import { coreCategorys, magCategory, SELECT_MAG_DATA, MAGCoreCategorys2020, defaultCategorySelect, extendEchartsOpts, extendLineSeries } from '@/api/data'
+import { coreCategorys, magCategory, SELECT_MAG_DATA, MAGCoreCategorys2020, SELECT_MAG_DATA_V1, MAGCoreCategorys2020_V1, defaultCategorySelect, extendEchartsOpts, extendLineSeries } from '@/api/data'
 import _ from 'lodash'
 
 const zip = (...rows) => [...rows[0]].map((_, c) => rows.map(row => row[c]))
@@ -780,7 +780,6 @@ export const ChartMap = {
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
-
   'mag2020/MagArticlesTotalV3': {
     ChName: '统计学科论文数量',
     componentName: 'PageTemplate',
@@ -1253,12 +1252,12 @@ export const ChartMap = {
     Select: [
       {
         name: 'cats',
-        default: SELECT_MAG_DATA,
+        default: SELECT_MAG_DATA_V1,
         label: '目标学科',
         multiple: true,
         show: true,
         cols: 8,
-        items: MAGCoreCategorys2020
+        items: MAGCoreCategorys2020_V1
       }, {
         name: 'percent',
         default: 10,
@@ -1291,14 +1290,88 @@ export const ChartMap = {
     RangeSlider: [{
       name: 'yearRange',
       startName: 'from',
-      rangeDefault: [1970, 2020],
+      rangeDefault: [1955, 2020],
       endName: 'to',
       label: '目标学科年份范围',
       cols: 12,
       max: 2020,
-      min: 1970
+      min: 1955
     }],
     xAxisName: 'Year',
     yAxisName: '衰减器'
+  },
+  'wikipedia/RefSelfRate': {
+    ChName: 'wiki 自恋度',
+    componentName: 'PageTemplate',
+    HandleResponseFunc: (responseData, ChartObj) => {
+      const _opt = extendEchartsOpts({
+        title: {
+          text: responseData.data.title
+        },
+        legend: {
+          data: responseData.data.legend
+        },
+        xAxis: {
+          name: ChartObj.xAxisName,
+          type: 'category',
+          boundaryGap: false,
+          data: responseData.data.x
+        },
+        yAxis: {
+          name: ChartObj.yAxisName,
+          type: 'value'
+        },
+        series: zip(responseData.data.legend, responseData.data.y).map(item => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: item[1]
+          })
+        })
+      })
+      return _opt
+    },
+    RequestFunc: async(params) => {
+      // 当年
+      const data = await requestWrap('wiki/getWikiRefSelfRate', 'post', params)
+      return data
+    },
+    Select: [
+      {
+        name: 'str',
+        default: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+          'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+          'Literature', 'History'],
+        label: '目标学科',
+        multiple: true,
+        show: true,
+        cols: 8,
+        items: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+          'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+          'Literature', 'History'].sort()
+      }, {
+        name: 'method',
+        default: 'linksout',
+        label: '链接方向',
+        multiple: false,
+        cols: 2,
+        items: ['linksout', 'linksin']
+      }, {
+        name: 'version',
+        default: 'v5',
+        label: '版本',
+        multiple: false,
+        cols: 2,
+        items: [{
+          text: 'v5',
+          value: 'v5'
+        }]
+      }
+    ],
+    Slider: [],
+    RangeSlider: [],
+    xAxisName: 'Year',
+    yAxisName: '自恋度'
   }
 }

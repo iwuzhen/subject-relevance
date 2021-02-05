@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2021-02-04 15:25:49
+ * @LastEditTime: 2021-02-05 10:33:06
  * @Description:
  */
 
@@ -346,9 +346,27 @@ export const MAGCoreCategorys2020 = ['Algebra', 'Anthropology', 'Applied mathema
   }
 })
 
+export const MAGCoreCategorys2020_V1 = ['Algebra', 'Anthropology', 'Applied mathematics', 'Applied physics', 'Artificial intelligence', 'Biological engineering', 'Biology',
+  'Blockchains', 'Chemical engineering', 'Chemistry', 'Civil engineering', 'Cognitive science', 'Computational biology', 'Computer engineering', 'Computer science',
+  'Deep learning', 'Discrete mathematics', 'Earth science', 'Economics', 'Electrical engineering', 'Engineering disciplines', 'Environmental engineering',
+  'Environmental science', 'Experimental physics', 'Genetic engineering', 'Genome editing', 'Geography', 'Geology', 'Geometry', 'History', 'Industrial engineering',
+  'Linguistics', 'Literature', 'Logic', 'Machine learning', 'Materials science', 'Mathematics', 'Mechanical engineering', 'Medicine', 'Neuroscience', 'Number theory',
+  'Operating system', 'Philosophy', 'Physics', 'Political science', 'Psychology', 'Quantum computing', 'Sociology', 'Theoretical chemistry', 'Theoretical computer science',
+  'Theoretical physics', 'Art', 'Business'
+].sort().map(each => {
+  return {
+    text: each === 'Engineering disciplines' ? 'Engineering' : each,
+    value: each
+  }
+})
+
 export const SELECT_MAG_DATA = ['Biology', 'Chemistry', 'Computer science',
   'Economics', 'Engineering disciplines', 'History', 'Environmental science', 'Political science',
   'Mathematics', 'Medicine', 'Philosophy', 'Physics', 'Sociology', 'Psychology', 'Materials science', 'Geology', 'Geography']
+
+export const SELECT_MAG_DATA_V1 = ['Biology', 'Chemistry', 'Computer science',
+  'Economics', 'Engineering disciplines', 'History', 'Environmental science', 'Political science',
+  'Mathematics', 'Medicine', 'Philosophy', 'Physics', 'Sociology', 'Psychology', 'Materials science', 'Geology', 'Geography', 'Art', 'Business']
 
 export function extendLineSeries(series) {
   return Object.assign({
