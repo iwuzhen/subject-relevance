@@ -439,9 +439,9 @@ export async function getDistanceCore(params) {
     data: params
   }
 
-  const res = await request(requestParams)
-  return res.data
-  // return await cacheRequest(requestParams);
+  // const res = await request(requestParams)
+  // return res.data
+  return await cacheRequest(requestParams)
 }
 
 export function getMasData(params) {

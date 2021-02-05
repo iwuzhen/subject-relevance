@@ -98,6 +98,10 @@ const routes = [{
   name: 'WikiTrade',
   component: () => import('@/pages/wikipedia/WikiTrade')
 }, {
+  path: '/wikipedia/wikiGraph',
+  name: 'wikiGraph',
+  component: () => import('@/pages/wikipedia/wikiGraph')
+}, {
   path: '/mag2019v2/GoogleDistance',
   name: 'GoogleDistance',
   component: () => import('@/pages/mag2019v2/GoogleDistance')

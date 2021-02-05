@@ -339,6 +339,12 @@ export default {
               text: '',
               to: '/wikipedia/RefSelfRate',
               update: '2021-02-05T16:43:03.429Z'
+            },
+            {
+              title: 'wiki 3D 引力图',
+              text: '',
+              to: '/wikipedia/wikiGraph',
+              update: '2021-02-05T16:43:03.429Z'
             }
 
           ],
