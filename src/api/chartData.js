@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-02-05 10:49:53
+ * @LastEditTime: 2021-02-05 12:36:38
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -1373,5 +1373,67 @@ export const ChartMap = {
     RangeSlider: [],
     xAxisName: 'Year',
     yAxisName: '自恋度'
+  },
+  'wikipedia/ArticleCount': {
+    ChName: 'wiki Core 文章数',
+    componentName: 'PageTemplate',
+    HandleResponseFunc: (responseData, ChartObj) => {
+      const _opt = extendEchartsOpts({
+        title: {
+          text: 'wiki 学科文章数'
+        },
+        legend: {
+          data: Object.keys(responseData)
+        },
+        xAxis: {
+          name: ChartObj.xAxisName,
+          type: 'value',
+          boundaryGap: false,
+          min: 'dataMin',
+          max: 'dataMax'
+        },
+        yAxis: {
+          name: ChartObj.yAxisName,
+          type: 'value'
+        },
+        series: zip(Object.keys(responseData), Object.values(responseData)).map(item => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: Object.entries(item[1])
+          })
+        })
+      })
+      console.log(_opt)
+      return _opt
+    },
+    RequestFunc: async(params) => {
+      // 当年
+      params.type = 0
+      params.version = 'v5'
+      params.level = 3
+      const data = await requestWrap('wiki/getArticlesTotalByCoreNew_v', 'post', params)
+      return data
+    },
+    Select: [
+      {
+        name: 'subjects',
+        default: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+          'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+          'Literature', 'History'],
+        label: '目标学科',
+        multiple: true,
+        show: true,
+        cols: 8,
+        items: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+          'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+          'Literature', 'History'].sort()
+      }
+    ],
+    Slider: [],
+    RangeSlider: [],
+    xAxisName: 'Year',
+    yAxisName: 'Count'
   }
 }

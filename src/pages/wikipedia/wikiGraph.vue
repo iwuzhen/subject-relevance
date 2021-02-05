@@ -48,7 +48,7 @@ import { extendEchartsOpts, extendLineSeries } from '@/api/data'
 const Graph = require('graphology')
 import { connectedComponents } from 'graphology-components'
 
-import { getDistanceCore } from '@/api/index'
+import { getDistanceCore, requestWrap } from '@/api/index'
 // import anime from 'animejs/lib/anime.es.js'
 // import * as THREE from 'three'
 import SpriteText from 'three-spritetext'
@@ -96,12 +96,26 @@ export default {
       const allNodesMap = {}
       const allNodeLinks = []
       const allData = Array.from(new Set(this.subjectRelevances.concat(this.vertexSubjects)))
-      allData.forEach((item, index) => {
-        allNodesMap[item] = {
-          id: index,
-          label: item
+      requestWrap
+      try {
+        // 学科大小
+        const opt = {
+          subjects: allData.join(','),
+          version: 'v5',
+          type: 0,
+          level: 3
         }
-      })
+        const ret = await requestWrap('wiki/getArticlesTotalByCoreNew_v', 'post', opt)
+        allData.forEach((item, index) => {
+          allNodesMap[item] = {
+            id: index,
+            label: item,
+            weight: ret[item]
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      }
 
       let linkId = 0
       while (allData.length > 1) {
@@ -138,7 +152,14 @@ export default {
     },
 
     parseGraphData(nodes, links, yindex) {
-      // console.log(nodes)
+      const year = this.repYearRange[yindex]
+      const sizeMax = Math.pow(
+        Math.max(..._.flattenDeep(nodes.map(each => each.weight[year]))), 1 / 3
+      )
+      const sizeMin = Math.pow(
+        Math.min(..._.flattenDeep(nodes.map(each => each.weight[year]))), 1 / 3
+      )
+      console.log(sizeMax, sizeMin)
 
       const vertuxArray = []
       if (this.vertexSubjects.length <= 3) {
@@ -154,7 +175,7 @@ export default {
             return Object.assign(each, {
               id: each.id,
               name: each.label,
-              value: 5,
+              value: (5 * (Math.pow(Number(each.weight[year]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.5,
               fx,
               fy,
               fz
@@ -163,7 +184,8 @@ export default {
             return Object.assign(each, {
               id: each.id,
               name: each.label,
-              value: 5
+              value: (5 * (Math.pow(Number(each.weight[year]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.5
+
             })
           }
         }),

@@ -345,8 +345,13 @@ export default {
               text: '',
               to: '/wikipedia/wikiGraph',
               update: '2021-02-05T16:43:03.429Z'
+            },
+            {
+              title: 'wiki 文章数',
+              text: '',
+              to: '/wikipedia/ArticleCount',
+              update: '2021-02-05T16:43:03.429Z'
             }
-
           ],
           'Core-学科相关度': [
             {
