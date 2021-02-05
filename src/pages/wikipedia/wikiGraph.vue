@@ -10,6 +10,8 @@ v-container(fluid='')
       v-slider(hint="距离过滤器" label="距离过滤器" max=1 min=0 step=0.01 thumb-label="always" v-model="linkFilter" @change='liteDraw')
     v-col(cols="7")
       v-slider(hint="展示年份" label="展示年份" max=2021 min=2007 step=1 thumb-label="always" v-model="selectYear" @change='liteDraw')
+    v-col(cols='2')
+      v-select(v-model='methodValue' :items='methodOpt' dense='' label='方向' @change='Draw')
     v-col(cols="2")
       v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='liteDraw')
     v-col(cols="2")
@@ -69,6 +71,8 @@ export default {
       vertexSubjects: ['Biology', 'Physics', 'Mathematics', 'Political science'],
       subjectOpt: v5Subject,
       subjectRelevances: v5Subject,
+      methodValue: 'linksin',
+      methodOpt: ['linksin', 'linksout'],
       BasicData: {},
       GraphData: {},
       showText: false,
@@ -123,7 +127,7 @@ export default {
         const opt = {
           strA,
           strB: allData.join(','),
-          method: 'linksin',
+          method: this.methodValue,
           level: -1,
           levelType: 3,
           btype: 'v5_node'
