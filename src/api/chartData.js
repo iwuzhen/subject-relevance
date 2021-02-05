@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-02-05 12:36:38
+ * @LastEditTime: 2021-02-05 16:46:18
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -1213,7 +1213,7 @@ export const ChartMap = {
     yAxisName: 'Count'
   },
   'mag2020/BanshuaiqiByYear': {
-    ChName: '半衰期-新鲜度',
+    ChName: '引用半衰期',
     componentName: 'PageTemplate',
     HandleResponseFunc: (responseData, ChartObj) => {
       const _opt = extendEchartsOpts({
@@ -1298,7 +1298,7 @@ export const ChartMap = {
       min: 1955
     }],
     xAxisName: 'Year',
-    yAxisName: '衰减器'
+    yAxisName: '衰减期'
   },
   'wikipedia/RefSelfRate': {
     ChName: 'wiki 自恋度',

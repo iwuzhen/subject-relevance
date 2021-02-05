@@ -133,8 +133,8 @@ export default {
             update: '2021-01-22T09:43:03.429Z'
           },
           {
-            title: 'MAG 半衰期，新鲜度',
-            text: '',
+            title: 'MAG 引用半衰期',
+            text: '引用半衰期',
             to: '/mag2020/BanshuaiqiByYear',
             update: '2021-02-02T09:43:03.429Z'
           },
