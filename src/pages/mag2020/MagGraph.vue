@@ -1,5 +1,5 @@
 <template lang="pug">
-v-container(fluid='')
+v-container(fluid='' :style="cssVars")
   v-row
     v-col(cols='4')
       v-select(v-model='vertexSubjects' :items='subjectOpt' chips='' multiple='' deletable-chips='' clearable='' dense='' label='定点学科' @change='Draw')
@@ -14,13 +14,28 @@ v-container(fluid='')
       v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='liteDraw')
     v-col(cols="2")
       v-switch(v-model="camera.status" :label="`Camera 自动环绕: ${showText.toString()}`"  @change='AutoCamera')
+    v-col(cols="2")
+      span  字体大小
+      v-btn-toggle(dense)
+        v-btn(@click="style.fontSize++") + 1
+        v-btn(@click="style.fontSize--") - 1
+    v-col(cols="2")
+      span  字体top
+      v-btn-toggle(dense)
+        v-btn(@click="style.fontTop--") + 1
+        v-btn(@click="style.fontTop++") - 1
+    v-col(cols="2")
+      span  字体left
+      v-btn-toggle(dense)
+        v-btn(@click="style.fontLeft--") + 1
+        v-btn(@click="style.fontLeft++") - 1
 
   v-row
     v-col(col='12')
       v-card.mx-auto(outlined='' :loading='loading' height='90vh')
         v-card-title
           | MAG {{selectYear}} linksin 测试 3D 引力图
-        v-container#3d-graph(fluid='' fill-height='')
+        v-container#3dgraph(fluid='' fill-height='')
 
   v-row
     v-col(col='12')
@@ -52,7 +67,11 @@ import { connectedComponents } from 'graphology-components'
 import { getMasDatav2, requestWrap } from '@/api/index'
 // import anime from 'animejs/lib/anime.es.js'
 // import * as THREE from 'three'
-import SpriteText from 'three-spritetext'
+
+// import * as THREE from '@/utils/three/three.module.js'
+// import SpriteText from 'three-spritetext'
+
+import { CSS2DObject, CSS2DRenderer } from '@/utils/three/CSS2DRenderer'
 
 const currentSubbjectOpt = MAGCoreCategorys2020.concat([{
   text: 'Business',
@@ -76,10 +95,15 @@ export default {
       subjectRelevances: SELECT_MAG_DATA.concat(['Business', 'Art']).sort(),
       BasicData: {},
       GraphData: {},
-      showText: false,
+      showText: true,
       camera: {
         status: false,
         intPid: 0
+      },
+      style: {
+        fontSize: 18,
+        fontTop: -10,
+        fontLeft: -10
       },
       categorys: currentSubbjectOpt,
       myChartIds: ['subjectChart1', 'subjectChart2'],
@@ -88,7 +112,21 @@ export default {
       ct: 0,
       selectYear: 2020,
       Graph: null,
-      camerAngle: 0
+      camerAngle: 0,
+      twoDRenderer: null,
+      WIDTH: 0,
+      HEIGHT: 0
+
+    }
+  },
+  computed: {
+    cssVars() {
+      return {
+        /* variables you want to pass to css */
+        '--fontSize': `${this.style.fontSize}px`,
+        '--fontTop': `${this.style.fontTop}px`,
+        '--fontLeft': `${this.style.fontLeft}px`
+      }
     }
   },
   mounted() {
@@ -174,7 +212,7 @@ export default {
             return Object.assign(each, {
               id: each.id,
               name: each.label,
-              value: (5 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.5,
+              value: ((5 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.5),
               fx,
               fy,
               fz
@@ -183,7 +221,7 @@ export default {
             return Object.assign(each, {
               id: each.id,
               name: each.label,
-              value: (5 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.5
+              value: ((5 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.5)
             })
           }
         }),
@@ -196,20 +234,45 @@ export default {
       }
     },
 
+    render2D() {
+      console.log('render2D')
+      const elem = document.getElementById('3dgraph')
+      this.WIDTH = elem.clientWidth
+      this.HEIGHT = elem.clientHeight
+      this.twoDRenderer = new CSS2DRenderer()
+      this.twoDRenderer.setSize(elem.clientWidth, elem.clientHeight)
+      this.twoDRenderer.domElement.style.position = 'absolute'
+      // this.twoDRenderer.domElement.style.top = '-35px'
+      // this.twoDRenderer.domElement.style.left = '-25px'
+      this.twoDRenderer.domElement.style.pointerEvents = 'none'
+      // this.twoDRenderer.domElement.style.zIndex = 1000
+      elem.appendChild(this.twoDRenderer.domElement)
+      // this.twoDRenderer.render(this.createScene(), this.createCamera())
+    },
+
+    randerCssLabel() {
+      requestAnimationFrame(this.randerCssLabel)
+      this.twoDRenderer.render(this.Graph.scene(), this.Graph.camera())
+    },
+
     draw3DForceGraph(gData) {
-      const elem = document.getElementById('3d-graph')
+      const elem = document.getElementById('3dgraph')
+
       const height = Math.floor(window.innerHeight * 0.9)
       const width = Math.floor(window.innerWidth) - 60
       const Graph = ForceGraph3D()(elem).width(width).height(height)
         .graphData(gData)
-        .nodeResolution(30)
+        .nodeResolution(20)
         .nodeVal('value')
         .nodeLabel('name')
+        .nodeRelSize(3)
         .nodeAutoColorBy('name')
         .d3Force('center', null)
-        .zoomToFit(100, 100, node => true)
+        .zoomToFit(0, 50, node => true)
+        // .cameraPosition({ x: 0, y: 0, z: 100 })
         // eslint-disable-next-line no-return-assign
         .onNodeHover(node => elem.style.cursor = node ? 'pointer' : null)
+
         .onNodeClick(node => {
           // Aim at node from outside it
           const distance = 40
@@ -219,11 +282,19 @@ export default {
             node, // lookAt ({ x, y, z })
             3000 // ms transition duration
           )
-        }).nodeThreeObjectExtend(true)
+        })
+        .nodeThreeObjectExtend(true)
       Graph
         .d3Force('link')
         .strength(link => { return link.value })
       this.Graph = Graph
+
+      // const grid = new THREE.GridHelper(1000, 50, 0x64FE00, 0x0C291F) // 网格辅助，大小，行距，中心线颜色，网格线条颜色
+      // this.Graph.scene().add(grid)
+
+      // 初始化 2d css label
+      this.render2D()
+      this.randerCssLabel()
     },
 
     AutoCamera() {
@@ -257,34 +328,45 @@ export default {
       } else {
         this.Graph.graphData({ nodes, links }).d3ReheatSimulation()
       }
+
       if (this.showText === true) {
         this.Graph.nodeThreeObject(node => {
-          const sprite = new SpriteText(node.name)
-          sprite.material.depthWrite = false // make sprite background transparent
-          sprite.color = node.color
-          sprite.textHeight = node.value + 3
-          // sprite.position.x = 0
-          sprite.position.y = 10
-          return sprite
-          // const canvas = document.createElement('canvas')
-          // const context = canvas.getContext('2d')
-          // // add image, text etc
-          // context.fillText('dada', 10, 10)
-
-          // const texture = new THREE.Texture(context.canvas)
-          // texture.needsUpdate = true
-          // const material = new THREE.SpriteMaterial({ map: texture })
-          // const sprite = new THREE.Sprite(material)
-          // sprite.scale.set(32, 32, 1)
+          // const sprite = new SpriteText(node.name)
+          // sprite.material.depthWrite = false // make sprite background transparent
+          // sprite.color = node.color
+          // sprite.textHeight = node.value + 3
+          // // sprite.position.x = 0
+          // sprite.position.y = 10
           // return sprite
+
+          return this.createLabel(node)
         })
         // this.Graph.d3Force('charge').strength(-120)
       } else {
         this.Graph.nodeThreeObject('null')
       }
-
+      this.twoDRenderer.render(this.Graph.scene(), this.Graph.camera())
       this.loading = false
     }, 2500),
+
+    createLabel(node) {
+      const labelDiv = document.createElement('div')
+      // labelDiv.id = node.name
+      labelDiv.style.color = node.color
+      labelDiv.textContent = node.name
+      labelDiv.className = 'label'
+      // labelDiv.textContent = '大大的'
+      const label = new CSS2DObject(labelDiv)
+      // label.position.set(0, Math.floor(node.value), 0)
+      // label.position.multiplyScalar(75)
+      // label.scale.multiplyScalar(25)
+      // label.position.copy(node.position)
+      // this.Graph.scene().add(label)
+      // this.root.add(label)
+      // this.Graph.scene().add(new THREE.Mesh(
+
+      return label
+    },
 
     liteDraw: _.debounce(async function() {
       this.loading = true
@@ -300,17 +382,20 @@ export default {
       }
       if (this.showText === true) {
         this.Graph.nodeThreeObject(node => {
-          const sprite = new SpriteText(node.name)
-          sprite.material.depthWrite = false // make sprite background transparent
-          sprite.color = node.color
-          sprite.textHeight = node.value + 3
-          // sprite.position.x = 0
-          sprite.position.y = 10
-          return sprite
+          // const sprite = new SpriteText(node.name)
+          // sprite.material.depthWrite = false // make sprite background transparent
+          // sprite.color = node.color
+          // sprite.textHeight = node.value + 3
+          // // sprite.position.x = 0
+          // sprite.position.y = 10
+          // return sprite
+          // return
+          return this.createLabel(node)
+          // return this.createAttackLabel(node)
           // const canvas = document.createElement('canvas')
           // const context = canvas.getContext('2d')
           // // add image, text etc
-          // context.fillText('dada', 10, 10)
+          // context.fillText(node.name, 10, 10)
 
           // const texture = new THREE.Texture(context.canvas)
           // texture.needsUpdate = true
@@ -326,6 +411,7 @@ export default {
 
       window.graph = this.Graph
       window.nodes = nodes
+      this.twoDRenderer.render(this.Graph.scene(), this.Graph.camera())
       this.loading = false
     }, 2500),
 
@@ -509,5 +595,11 @@ export default {
   width:20px;
   height:20px;
   background-color: red;
+}
+
+.label {
+  text-shadow: -1px 1px 1px rgb(0,0,0);
+  margin: var(--fontTop) 0 0 var(--fontLeft);
+  font-size: var(--fontSize);
 }
 </style>

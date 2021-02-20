@@ -39,6 +39,7 @@ module.exports = {
       "d3": "d3",
       "lodash": "_",
       "dayjs": "dayjs",
+      "THREE": "three",
     }
   },
   "transpileDependencies": [
