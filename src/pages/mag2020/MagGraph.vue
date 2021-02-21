@@ -242,12 +242,8 @@ export default {
       this.twoDRenderer = new CSS2DRenderer()
       this.twoDRenderer.setSize(elem.clientWidth, elem.clientHeight)
       this.twoDRenderer.domElement.style.position = 'absolute'
-      // this.twoDRenderer.domElement.style.top = '-35px'
-      // this.twoDRenderer.domElement.style.left = '-25px'
       this.twoDRenderer.domElement.style.pointerEvents = 'none'
-      // this.twoDRenderer.domElement.style.zIndex = 1000
       elem.appendChild(this.twoDRenderer.domElement)
-      // this.twoDRenderer.render(this.createScene(), this.createCamera())
     },
 
     randerCssLabel() {
@@ -272,7 +268,10 @@ export default {
         // .cameraPosition({ x: 0, y: 0, z: 100 })
         // eslint-disable-next-line no-return-assign
         .onNodeHover(node => elem.style.cursor = node ? 'pointer' : null)
-
+        .linkWidth(link => {
+          return link.value
+        })
+        .linkOpacity(0.6)
         .onNodeClick(node => {
           // Aim at node from outside it
           const distance = 40
