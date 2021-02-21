@@ -237,8 +237,6 @@ export default {
     render2D() {
       console.log('render2D')
       const elem = document.getElementById('3dgraph')
-      this.WIDTH = elem.clientWidth
-      this.HEIGHT = elem.clientHeight
       this.twoDRenderer = new CSS2DRenderer()
       this.twoDRenderer.setSize(elem.clientWidth, elem.clientHeight)
       this.twoDRenderer.domElement.style.position = 'absolute'
