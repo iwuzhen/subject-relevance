@@ -45,7 +45,7 @@
           @change="getData"
         />
       </v-col>
-      <v-col v-if="levelSelect.length>1" cols="1">
+      <v-col v-if="levelOpt.length>1" cols="1">
         <v-select
           v-model="levelSelect"
           :items="levelOpt"
@@ -175,7 +175,8 @@ export default {
   mounted() {
     const v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
       'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-      'Literature', 'History'].sort()
+      'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
+      'Medicine'].sort()
 
     this.storagekey = `disciplineCore_Chart_${this.$route.query.version}`
     if (this.$route.query.version === 'v1') {
@@ -197,8 +198,8 @@ export default {
       this.versionSelect = 'v4'
       this.versionOpt = ['v4']
     } else if (this.$route.query.version === 'v5') {
-      this.levelOpt = [3]
-      this.levelSelect = 3
+      this.levelOpt = [3, 4]
+      this.levelSelect = 4
       this.methodValue = 'linksout'
       this.pageCountSelect = -1
       this.pageCountOpt = [-1]
@@ -206,8 +207,12 @@ export default {
       this.versionOpt = ['v5_node', 'v5_edge']
 
       this.categorys = v5Subject.map(item => {
+        let text = item
+        if (item === 'Engineering disciplines') {
+          text = 'Engineering'
+        }
         return {
-          text: item,
+          text: text,
           value: item
         }
       })
@@ -227,6 +232,37 @@ export default {
   },
   methods: {
     async getData() {
+      if (this.levelSelect === 4 && this.$route.query.version === 'v5') {
+        const v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+          'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+          'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
+          'Medicine'].sort()
+        this.categorys = v5Subject.map(item => {
+          let text = item
+          if (item === 'Engineering disciplines') {
+            text = 'Engineering'
+          }
+          return {
+            text: text,
+            value: item
+          }
+        })
+      } else if (this.levelSelect === 3 && this.$route.query.version === 'v5') {
+        const v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+          'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+          'Literature', 'History'].sort()
+        this.categorys = v5Subject.map(item => {
+          let text = item
+          if (item === 'Engineering disciplines') {
+            text = 'Engineering'
+          }
+          return {
+            text: text,
+            value: item
+          }
+        })
+      }
+
       if (!this.subjectTarget || this.subjectRelevances.length === 0) {
         return false
       }
