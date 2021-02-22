@@ -259,7 +259,7 @@ export default {
         .nodeResolution(20)
         .nodeVal('value')
         .nodeLabel('name')
-        .nodeRelSize(3)
+        .nodeRelSize(4)
         .nodeAutoColorBy('name')
         .d3Force('center', null)
         .zoomToFit(0, 50, node => true)

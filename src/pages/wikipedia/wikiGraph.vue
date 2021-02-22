@@ -72,7 +72,8 @@ import { CSS2DObject, CSS2DRenderer } from '@/utils/three/CSS2DRenderer'
 
 const v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
   'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-  'Literature', 'History'].sort()
+  'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
+  'Medicine'].sort()
 
 export default {
   name: 'MagGraph',
@@ -138,10 +139,13 @@ export default {
           subjects: allData.join(','),
           version: 'v5',
           type: 0,
-          level: 3
+          level: 4
         }
         const ret = await requestWrap('wiki/getArticlesTotalByCoreNew_v', 'post', opt)
         allData.forEach((item, index) => {
+          if (item === 'Engineering disciplines') {
+            item = 'Engineering'
+          }
           allNodesMap[item] = {
             id: index,
             label: item,
@@ -160,7 +164,7 @@ export default {
           strB: allData.join(','),
           method: this.methodValue,
           level: -1,
-          levelType: 3,
+          levelType: 4,
           btype: 'v5_node'
         }
         const ret = await getDistanceCore(opt)
