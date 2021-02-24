@@ -237,6 +237,9 @@ export default {
           'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
           'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
           'Medicine'].sort()
+        this.subjectRelevances = this.subjectRelevances.filter(item =>
+          v5Subject.includes(item)
+        )
         this.categorys = v5Subject.map(item => {
           let text = item
           if (item === 'Engineering disciplines') {
@@ -251,13 +254,12 @@ export default {
         const v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
           'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
           'Literature', 'History'].sort()
+        this.subjectRelevances = this.subjectRelevances.filter(item =>
+          v5Subject.includes(item)
+        )
         this.categorys = v5Subject.map(item => {
-          let text = item
-          if (item === 'Engineering disciplines') {
-            text = 'Engineering'
-          }
           return {
-            text: text,
+            text: item,
             value: item
           }
         })
