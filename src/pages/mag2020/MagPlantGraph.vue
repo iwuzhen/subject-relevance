@@ -164,11 +164,13 @@ export default {
         let strA = allData.pop()
         const opt = {
           strA,
-          strB: allData.join(','),
+          strB: allData[0],
           method: 'linksin',
           from: 1955,
           to: 2020,
           qs: -1,
+          bf: -1,
+          level: 1,
           version: 'delete_noref_v3_node'
         }
         const ret = await getMasDatav2(opt)

@@ -22,6 +22,10 @@ const routes = [{
   name: 'Mag2020Graph',
   component: () => import('@/pages/mag2020/MagGraph')
 }, {
+  path: '/mag2020/MagPlantDistance',
+  name: 'Mag2020MagPlantDistance',
+  component: () => import('@/pages/mag2020/MagPlantDistance')
+}, {
   path: '/mag2020/BubbleDistance',
   name: 'BubbleDistance',
   component: () => import('@/pages/mag2020/BubbleDistance')
@@ -45,6 +49,10 @@ const routes = [{
   path: '/mag2019v2/MagGoogleDistanceCurrentV2',
   name: 'MagGoogleDistanceCurrentV2',
   component: () => import('@/pages/mag2019v2/MagGoogleDistanceCurrentV2')
+}, {
+  path: '/mag2020/MagPlantGraph',
+  name: 'Mag2020PlantGraph',
+  component: () => import('@/pages/mag2020/MagPlantGraph')
 }, {
   path: '/mag2020/MagGoogleDistance_2020_V3',
   name: 'MagGoogleDistance_2020_V3',

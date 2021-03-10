@@ -133,6 +133,12 @@ export default {
             update: '2021-01-22T09:43:03.429Z'
           },
           {
+            title: 'MAG 3D 二级学科 引力图',
+            text: '',
+            to: '/mag2020/MagPlantGraph',
+            update: '2021-03-09T09:43:03.429Z'
+          },
+          {
             title: 'MAG 引用半衰期',
             text: '引用半衰期',
             to: '/mag2020/BanshuaiqiByYear',
@@ -157,6 +163,11 @@ export default {
               text: '2020 学科相关度',
               to: '/mag2020/MagGoogleDistance_2020_V3',
               update: '2020-12-14T09:43:03.429Z'
+            }, {
+              title: '2020 二级学科相关度',
+              text: '二级学科相关度',
+              to: '/mag2020/MagPlantDistance',
+              update: '2021-03-09T09:43:03.429Z'
             }, {
               title: '2020 学科引力泡泡图',
               text: '2020 学科引力泡泡图',
