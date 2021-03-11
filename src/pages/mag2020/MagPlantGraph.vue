@@ -124,7 +124,7 @@ export default {
       vertexSubjects: ['Biology', 'Physics', 'Mathematics', 'Political science'],
       BasicData: {},
       GraphData: {},
-      showText: true,
+      showText: false,
       camera: {
         status: false,
         intPid: 0
@@ -189,7 +189,6 @@ export default {
       })
       this.activeSubLevel(142362112, 'Art')
     })
-    // this.Draw()
   },
   methods: {
     // 将学科更新到表格
@@ -220,19 +219,19 @@ export default {
       } else {
         // 目标学科
         this.targetSubject.topSubject = topSelect
-        this.targetSubject.allSubject = allSelect
+        this.targetSubject.allSubject = Array.from(new Set(allSelect))
       }
-      this.getData()
+      // this.getData()
+
+      this.Draw()
+      // this.cleanSelect()
     },
     // 初始化原始值
     cleanSelect() {
       this.topSelect = []
-      this.subLevel = {
-        currentName: null,
-        subject: {},
-        select: {},
-        selectAllStats: {}
-      }
+      this.subLevel.select = {}
+      this.subLevel.selectAllStats = {}
+
       this.activeSubLevel(142362112, 'Art')
     },
     // 全选控制器
@@ -254,18 +253,13 @@ export default {
         this.selectAllStats = 1
         this.subLevel.currentName = subjectName
         this.subLevel.subject[subjectName] = data.data.map(item => {
-        // 首字母外小写
+          // 首字母外小写
           item.name = item.name.charAt(0) + item.name.slice(1).toLowerCase()
           return item
         })
       })
     },
     async getData() {
-      if (this.currentSubject.allSubject.length === 0 || this.targetSubject.allSubject.length === 0) {
-        // this.$message.error("请选择完整");
-        return false
-      }
-
       const opt = {
         version: 'delete_noref_v3_node',
         method: 'linksin',
@@ -321,16 +315,49 @@ export default {
       }
 
       // console.log(allLine)
-
-      return { nodes: Array.from(allSunjectSet), links: allLine }
+      const nodeArray = Array.from(allSunjectSet)
+      const fObj = this.getSubjectFather()
+      console.log(fObj)
+      const nodes = nodeArray.map((name, index) => {
+        return {
+          id: index,
+          name: name,
+          fname: Array.from(fObj[name]).join(',')
+        }
+      })
+      const links = allLine.map(item => {
+        return {
+          source: nodeArray.indexOf(item.catA),
+          target: nodeArray.indexOf(item.catB),
+          value: Number(item.distance)
+        }
+      })
+      return { nodes: nodes, links: links }
+    },
+    // 生成学科父类对象
+    getSubjectFather() {
+      const retObj = {}
+      console.log('this.subLevel.subject', this.subLevel.subject)
+      for (const key in this.subLevel.subject) {
+        console.log(key)
+        retObj[key] = new Set([key])
+        for (const item of this.subLevel.subject[key]) {
+          if (retObj[item.name] === undefined) {
+            retObj[item.name] = new Set()
+          }
+          retObj[item.name].add(key)
+        }
+      }
+      console.log(retObj)
+      return retObj
     },
 
-    parseGraphData(nodes, links, yindex) {
+    parseGraphData(nodes, links) {
       const sizeMax = Math.pow(
-        Math.max(..._.flattenDeep(nodes.map(each => each.weight[yindex]))), 1 / 3
+        Math.max(..._.flattenDeep(nodes.map(item => this.subjectSizeDict[item]))), 1 / 3
       )
       const sizeMin = Math.pow(
-        Math.min(..._.flattenDeep(nodes.map(each => each.weight[yindex]))), 1 / 3
+        Math.min(..._.flattenDeep(nodes.map(item => this.subjectSizeDict[item]))), 1 / 3
       )
       console.log(sizeMax, sizeMin)
 
@@ -343,12 +370,13 @@ export default {
 
       return {
         nodes: nodes.map(each => {
-          if (this.vertexSubjects.includes(each.label)) {
+          if (this.vertexSubjects.includes(each.name)) {
             const { fx, fy, fz } = vertuxArray.pop()
             return Object.assign(each, {
               id: each.id,
-              name: each.label,
-              value: ((5 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.5),
+              name: each.name,
+              fname: each.fname,
+              value: ((5 * (Math.pow(Number(this.subjectSizeDict[each]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.5),
               fx,
               fy,
               fz
@@ -356,8 +384,8 @@ export default {
           } else {
             return Object.assign(each, {
               id: each.id,
-              name: each.label,
-              value: ((5 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.5)
+              name: each.name,
+              value: ((5 * (Math.pow(Number(this.subjectSizeDict[each]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.5)
             })
           }
         }),
@@ -365,7 +393,7 @@ export default {
           .map(each => ({
             source: each.source,
             target: each.target,
-            value: Number(each.weight[yindex])
+            value: each.value
           }))
       }
     },
@@ -392,11 +420,11 @@ export default {
       const width = Math.floor(window.innerWidth) - 60
       const Graph = ForceGraph3D()(elem).width(width).height(height)
         .graphData(gData)
-        .nodeResolution(20)
+        .nodeResolution(5)
         .nodeVal('value')
         .nodeLabel('name')
         .nodeRelSize(4)
-        .nodeAutoColorBy('name')
+        .nodeAutoColorBy('fname')
         .d3Force('center', null)
         .zoomToFit(0, 50, node => true)
         // .cameraPosition({ x: 0, y: 0, z: 100 })
@@ -447,15 +475,18 @@ export default {
     },
 
     Draw: _.debounce(async function() {
+      if (this.currentSubject.allSubject.length === 0 || this.targetSubject.allSubject.length === 0) {
+        // this.$message.error("请选择完整");
+        return false
+      }
       this.loading = true
       let { nodes, links } = await this.getData()
-      // console.log(links)
-      this.drawTable(nodes, links)
-      this.GraphData = this.parseGraphData(nodes, links, this.selectYear - 1955)
+      // this.drawTable(nodes, links)
+      this.GraphData = this.parseGraphData(nodes, links)
 
       links = this.GraphData.links.filter(x => x.value <= this.linkFilter)
       nodes = this.GraphData.nodes
-      this.echartDraw(nodes, links.concat())
+      // this.echartDraw(nodes, links.concat())
       if (this.Graph === null) {
         this.draw3DForceGraph({ nodes, links })
       } else {
@@ -504,10 +535,12 @@ export default {
     liteDraw: _.debounce(async function() {
       this.loading = true
       let { links } = await this.getData()
-      this.GraphData = this.parseGraphData(this.GraphData.nodes, links, this.selectYear - 1955)
+      this.GraphData = this.parseGraphData(this.GraphData.nodes, links)
       links = this.GraphData.links.filter(x => x.value <= this.linkFilter)
       const nodes = this.GraphData.nodes
-      this.echartDraw(nodes, links.concat())
+
+      console.log(nodes, links)
+      // this.echartDraw(nodes, links.concat())
       if (this.Graph === null) {
         this.draw3DForceGraph({ nodes, links })
       } else {
@@ -547,7 +580,7 @@ export default {
       this.twoDRenderer.render(this.Graph.scene(), this.Graph.camera())
       this.loading = false
     }, 2500),
-
+    // 变化阈值图
     drawTable(nodes, links, maxcompents = 8) {
       const retData = []
       for (let year = 2020; year >= 1955; year--) {
