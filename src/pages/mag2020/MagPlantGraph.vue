@@ -1,11 +1,11 @@
 <template lang="pug">
-v-container(fluid='' :style="cssVars")
+v-container(fluid :style="cssVars")
   v-row
     v-col(cols='4')
-      v-select(v-model='vertexSubjects' :items='subjectOpt' chips='' multiple='' deletable-chips='' clearable='' dense='' label='定点学科' @change='Draw')
+      v-select(@click="dialog.pid=0;dialog.stats=!dialog.stats" v-model='currentSubject.allSubject' :items='currentSubject.allSubject' chips multiple dense label='定点学科')
 
     v-col(cols='8')
-      v-select(v-model='subjectRelevances' :items='categorys' chips='' multiple='' deletable-chips='' clearable='' dense='' label='目标学科' @change='Draw')
+      v-select(@click="dialog.pid=1;dialog.stats=!dialog.stats" v-model='targetSubject.allSubject' :items='targetSubject.allSubject' chips multiple dense label='目标学科')
     v-col(cols="5")
       v-slider(hint="距离过滤器" label="距离过滤器" max=1 min=0 step=0.01 thumb-label="always" v-model="linkFilter" @change='liteDraw')
     v-col(cols="7")
@@ -32,29 +32,68 @@ v-container(fluid='' :style="cssVars")
 
   v-row
     v-col(col='12')
-      v-card.mx-auto(outlined='' :loading='loading' height='90vh')
+      v-card.mx-auto(outlined :loading='loading' height='90vh')
         v-card-title
           | MAG {{selectYear}} linksin 测试 3D 引力图
-        v-container#3dgraph(fluid='' fill-height='')
+        v-container#3dgraph(fluid fill-height)
 
   v-row
     v-col(col='12')
-      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
-        v-container#subjectChart1(fluid='' fill-height='')
+      v-card.mx-auto(outlined :loading='loading' height='70vh')
+        v-container#subjectChart1(fluid fill-height)
 
   v-row
     v-col(col='12')
-      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
-        v-container#subjectChart2(fluid='' fill-height='')
+      v-card.mx-auto(outlined :loading='loading' height='70vh')
+        v-container#subjectChart2(fluid fill-height)
   v-row
     v-col
-      comment(storagekey='Mag_graph_2020_Chart_1')
+      comment(storagekey='Mag_plant_graph_Chart_1')
 
+  v-dialog(v-model="dialog.stats" )
+    v-card
+      v-card-title 学科以及二级学科选择器
+        v-spacer
+        div.v-btn--float
+          v-btn(rounded color="secondary" @click="cleanSelect" large) 清空
+          v-btn(rounded color="primary" @click="changeSubject" large) 提交
+
+      v-container(fluid)
+        v-row
+          v-col(cols='4')
+            v-list(dense)
+              v-subheader 一级学科
+              v-list-item-group(v-model="topSelect" multiple)
+                v-list-item(v-for="(item) in topSubject" @click="activeSubLevel(item.id,item.name)")
+                  template( v-slot:default="{ active }")
+                    v-list-item-action
+                      v-checkbox(:input-value="active")
+                    v-list-item-content
+                      v-list-item-title {{item.name}}
+
+          v-col(cols='4')
+            v-list(dense)
+              v-subheader 二级学科 {{subLevel.currentName}}
+
+              v-list-item-group(v-if="subLevel.currentName != null" v-model="subLevel.selectAllStats[subLevel.currentName]")
+                v-list-item(@click="selectAllChange")
+                  template(v-slot:default="{ active }")
+                    v-list-item-action
+                      v-checkbox(:input-value="active")
+                    v-list-item-content
+                      v-list-item-title 全选
+
+              v-list-item-group(v-model="subLevel.select[subLevel.currentName]" multiple)
+                v-list-item(v-for="(item) in subLevel.subject[subLevel.currentName]")
+                  template( v-slot:default="{ active }")
+                    v-list-item-action
+                      v-checkbox(:input-value="active")
+                    v-list-item-content
+                      v-list-item-title {{item.name}}
 </template>
 
 <script>
 // 计算阈值
-import { MAGCoreCategorys2020, SELECT_MAG_DATA } from '@/api/data'
 import Base from '@/utils/base'
 import ForceGraph3D from '3d-force-graph'
 import comment from '@/components/comment'
@@ -64,7 +103,7 @@ import { extendEchartsOpts, extendLineSeries } from '@/api/data'
 const Graph = require('graphology')
 import { connectedComponents } from 'graphology-components'
 
-import { getMasDatav2, requestWrap } from '@/api/index'
+import { getOriginCategories, getChildCategories, getMasDatav2, requestWrap } from '@/api/index'
 // import anime from 'animejs/lib/anime.es.js'
 // import * as THREE from 'three'
 
@@ -72,14 +111,6 @@ import { getMasDatav2, requestWrap } from '@/api/index'
 // import SpriteText from 'three-spritetext'
 
 import { CSS2DObject, CSS2DRenderer } from '@/utils/three/CSS2DRenderer'
-
-const currentSubbjectOpt = MAGCoreCategorys2020.concat([{
-  text: 'Business',
-  value: 'Business'
-}, {
-  text: 'Art',
-  value: 'Art'
-}]).sort((a, b) => a.text.localeCompare(b.text))
 
 export default {
   name: 'MagGraph',
@@ -91,8 +122,6 @@ export default {
     return {
       pageName: 'Mag 相关度引力图测试',
       vertexSubjects: ['Biology', 'Physics', 'Mathematics', 'Political science'],
-      subjectOpt: currentSubbjectOpt,
-      subjectRelevances: SELECT_MAG_DATA.concat(['Business', 'Art']).sort(),
       BasicData: {},
       GraphData: {},
       showText: true,
@@ -105,7 +134,6 @@ export default {
         fontTop: -10,
         fontLeft: -10
       },
-      categorys: currentSubbjectOpt,
       myChartIds: ['subjectChart1', 'subjectChart2'],
       loading: false,
       linkFilter: 0.5,
@@ -115,7 +143,29 @@ export default {
       camerAngle: 0,
       twoDRenderer: null,
       WIDTH: 0,
-      HEIGHT: 0
+      HEIGHT: 0,
+
+      dialog: {
+        stats: false,
+        pid: 0
+      },
+      topSelect: [],
+      topSubject: [],
+      subLevel: {
+        currentName: null,
+        subject: {},
+        select: {},
+        selectAllStats: {}
+      },
+      currentSubject: {
+        topSubject: [],
+        allSubject: []
+      },
+      targetSubject: {
+        topSubject: [],
+        allSubject: []
+      },
+      subjectSizeDict: {} // 学科大小
 
     }
   },
@@ -130,65 +180,149 @@ export default {
     }
   },
   mounted() {
-    // this.getData()
-    this.Draw()
+    // todo 异常未处理
+    getOriginCategories().then(data => {
+      this.topSubject = data.data.map(item => {
+        // 首字母外小写
+        item.name = item.name.charAt(0) + item.name.slice(1).toLowerCase()
+        return item
+      })
+      this.activeSubLevel(142362112, 'Art')
+    })
+    // this.Draw()
   },
   methods: {
+    // 将学科更新到表格
+    changeSubject() {
+      this.dialog.stats = false
+      const topSelect = []
+      const allSelect = []
+      // 遍历一级学科
+      for (const id of this.topSelect) {
+        topSelect.push(this.topSubject[id].name)
+        allSelect.push(this.topSubject[id].name)
+      }
+      // 遍历 二级学科
+      for (const key of Object.keys(this.subLevel.select)) {
+        for (const id of this.subLevel.select[key]) {
+          // 只选择的二级学科
+          if (topSelect.indexOf(key) === -1) {
+            topSelect.push(key)
+          }
+          allSelect.push(this.subLevel.subject[key][id].name)
+        }
+      }
+
+      if (this.dialog.pid === 0) {
+        // 当前学科
+        this.currentSubject.topSubject = topSelect
+        this.currentSubject.allSubject = allSelect.slice(0, 5)
+      } else {
+        // 目标学科
+        this.targetSubject.topSubject = topSelect
+        this.targetSubject.allSubject = allSelect
+      }
+      this.getData()
+    },
+    // 初始化原始值
+    cleanSelect() {
+      this.topSelect = []
+      this.subLevel = {
+        currentName: null,
+        subject: {},
+        select: {},
+        selectAllStats: {}
+      }
+      this.activeSubLevel(142362112, 'Art')
+    },
+    // 全选控制器
+    selectAllChange() {
+      const currentName = this.subLevel.currentName
+      if (this.subLevel.selectAllStats[currentName] === 0) {
+        // 全不选
+        this.subLevel.select[currentName] = []
+      } else {
+        // 全选
+        this.subLevel.select[currentName] = _.range(0, this.subLevel.subject[currentName].length, 1)
+      }
+    },
+    // 激活二级学科菜单
+    activeSubLevel(subjectID, subjectName) {
+      getChildCategories({
+        id: subjectID
+      }).then(data => {
+        this.selectAllStats = 1
+        this.subLevel.currentName = subjectName
+        this.subLevel.subject[subjectName] = data.data.map(item => {
+        // 首字母外小写
+          item.name = item.name.charAt(0) + item.name.slice(1).toLowerCase()
+          return item
+        })
+      })
+    },
     async getData() {
-      const allNodesMap = {}
-      const allNodeLinks = []
-      const allData = Array.from(new Set(this.subjectRelevances.concat(this.vertexSubjects)))
+      if (this.currentSubject.allSubject.length === 0 || this.targetSubject.allSubject.length === 0) {
+        // this.$message.error("请选择完整");
+        return false
+      }
+
+      const opt = {
+        version: 'delete_noref_v3_node',
+        method: 'linksin',
+        dbtype: 'mag',
+        from: 1955,
+        to: 2020,
+        level: 1,
+        qs: -1,
+        bf: -1
+      }
+
+      // 整合所有数据，这里有交叉学科，所以会有重复
+
+      const allSunjectSet = new Set(this.currentSubject.allSubject.concat(this.targetSubject.allSubject))
+      const deqLine = new Set()
+      const allLine = []
+      const currentYear = `${this.selectYear}`
+
+      for (const currentTopSubject of this.currentSubject.topSubject) {
+        for (const targetTopSubject of this.targetSubject.topSubject) {
+          opt.strA = currentTopSubject
+          opt.strB = targetTopSubject
+          const response = await getMasDatav2(opt)
+          for (const item of response.data) {
+            if (allSunjectSet.has(item.catA) && allSunjectSet.has(item.catB) && currentYear === item.year) {
+              const deqkey = item.catA + '_' + item.catB
+              if (!deqLine.has(deqkey)) {
+                allLine.push(item)
+                deqLine.add(deqkey)
+              }
+            }
+          }
+        }
+      }
+
+      // 获得学科大小
+      const alltopSet = new Set(this.currentSubject.topSubject.concat(this.targetSubject.topSubject))
       try {
         // 学科大小
         const opt = {
           doctype: 1,
-          cats: allData.join(','),
-          version: 'v3',
-          yeartype: 0,
+          cats: Array.from(alltopSet).join(','),
+          version: 'delete_noref_v3_level1',
+          yeartype: 1,
+          bltype: 0,
           from: 1955,
           to: 2020
         }
-        const ret = await requestWrap('wiki/getMasArticlesTotal_v3', 'post', opt)
-        for (const index in ret.data.y) {
-          allNodesMap[ret.data.legend[index]] = {
-            id: Number(index),
-            label: ret.data.legend[index],
-            weight: ret.data.y[index]
-          }
-        }
+        const response = await requestWrap('wiki/getMasArticlesTotal_v3', 'post', opt)
+        this.subjectSizeDict = response.data
       } catch (error) {
         console.log(error)
       }
-      let linkId = 0
-      while (allData.length > 1) {
-        let strA = allData.pop()
-        const opt = {
-          strA,
-          strB: allData[0],
-          method: 'linksin',
-          from: 1955,
-          to: 2020,
-          qs: -1,
-          bf: -1,
-          level: 1,
-          version: 'delete_noref_v3_node'
-        }
-        const ret = await getMasDatav2(opt)
-        if (strA === 'Engineering disciplines') {
-          strA = 'Engineering'
-        }
-        const souceId = allNodesMap[strA].id
-        for (const index in ret.data.legend) {
-          allNodeLinks.push({
-            source: souceId,
-            target: allNodesMap[ret.data.legend[index]].id,
-            id: linkId,
-            weight: ret.data.y[index]
-          })
-          linkId += 1
-        }
-      }
-      return { nodes: Object.values(allNodesMap), links: allNodeLinks }
+
+      // console.log(allLine)
+
+      return { nodes: Array.from(allSunjectSet), links: allLine }
     },
 
     parseGraphData(nodes, links, yindex) {
@@ -601,4 +735,14 @@ export default {
   margin: var(--fontTop) 0 0 var(--fontLeft);
   font-size: var(--fontSize);
 }
+
+.v-btn--float {
+    right: 20px;
+    position: fixed;
+    margin: 20px 40px 16px 16px;
+    button {
+      margin: 0 10px;
+    }
+}
 </style>
+

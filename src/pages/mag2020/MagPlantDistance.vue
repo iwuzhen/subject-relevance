@@ -2,9 +2,9 @@
 v-container(fluid)
   v-row
     v-col(cols='6')
-      v-select(@click="dialog.pid=0;dialog.stats=!dialog.stats" v-model='currentSubject.allSubject' :items='currentSubject.allSubject' dense multiple small-chips deletable-chips label='目标学科,最多5个')
+      v-select(@click="dialog.pid=0;dialog.stats=!dialog.stats" v-model='currentSubject.allSubject' :items='currentSubject.allSubject' dense multiple small-chips label='目标学科,最多 10 个')
     v-col(cols='6')
-      v-select(@click="dialog.pid=1;dialog.stats=!dialog.stats"  v-model='targetSubject.allSubject' :items='targetSubject.allSubject' dense small-chips deletable-chips clearable multiple label='相关学科')
+      v-select(@click="dialog.pid=1;dialog.stats=!dialog.stats"  v-model='targetSubject.allSubject' :items='targetSubject.allSubject' dense small-chips multiple label='相关学科')
 
     v-col(cols='7')
       v-range-slider.align-center(v-model='years' :max='2020' :min='1955' dense hide-details hint='年份范围' @change='getData')
@@ -27,8 +27,9 @@ v-container(fluid)
     v-card
       v-card-title 学科以及二级学科选择器
         v-spacer
-        v-btn(rounded color="primary" @click="cleanSelect") 清空
-        v-btn(rounded color="primary" @click="changeSubject") 提交
+        div.v-btn--float
+          v-btn(rounded color="secondary" @click="cleanSelect" large) 清空
+          v-btn(rounded color="primary" @click="changeSubject" large) 提交
 
       v-container(fluid)
         v-row
@@ -62,7 +63,6 @@ v-container(fluid)
                       v-checkbox(:input-value="active")
                     v-list-item-content
                       v-list-item-title {{item.name}}
-
 </template>
 
 <script>
@@ -83,7 +83,7 @@ export default {
       pageName: 'MAG 二级学科距离',
       typeValue: 1,
       methodValue: 'linksin',
-      years: [2007, 2020],
+      years: [1970, 2020],
       methodOptions: ['linksin'],
       loading: {
         masChart0: false,
@@ -93,7 +93,6 @@ export default {
         masChart4: false
       },
       myChartIds: ['masChart1'],
-      count: 0,
       dialog: {
         stats: false,
         pid: 0
@@ -154,12 +153,13 @@ export default {
       if (this.dialog.pid === 0) {
         // 当前学科
         this.currentSubject.topSubject = topSelect
-        this.currentSubject.allSubject = allSelect.slice(0, 5)
+        this.currentSubject.allSubject = allSelect.slice(0, 10)
       } else {
         // 目标学科
         this.targetSubject.topSubject = topSelect
         this.targetSubject.allSubject = allSelect
       }
+      this.cleanSelect()
       this.getData()
     },
     // 初始化原始值
@@ -320,3 +320,14 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.v-btn--float {
+    right: 20px;
+    position: fixed;
+    margin: 20px 40px 16px 16px;
+    button {
+      margin: 0 10px;
+    }
+}
+</style>
