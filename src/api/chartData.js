@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-03-12 16:33:01
+ * @LastEditTime: 2021-03-12 17:46:46
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -723,9 +723,9 @@ export const ChartMap = {
             type: 'category',
             axisLabel: {
               interval: 0,
-              rotate: -25
+              rotate: -75
             },
-            data: Object.keys(retData_1.data)
+            data: retData_2.data.x
           },
           {
             name: ChartObj.xAxisName,
@@ -741,9 +741,9 @@ export const ChartMap = {
             type: 'category', gridIndex: 2,
             axisLabel: {
               interval: 0,
-              rotate: -75
+              rotate: -25
             },
-            data: retData_2.data.x
+            data: Object.keys(retData_1.data)
           },
           {
             name: 'item',
