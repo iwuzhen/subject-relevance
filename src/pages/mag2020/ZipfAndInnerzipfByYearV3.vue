@@ -155,12 +155,12 @@
 
 <script>
 import { requestWrap } from '@/api/index'
-import { MAGCoreCategorys2020, extendEchartsOpts, extendLineSeries, SELECT_MAG_DATA } from '@/api/data'
+import { MAGCoreCategorys2020_V1, extendEchartsOpts, extendLineSeries, SELECT_MAG_DATA_V1 } from '@/api/data'
 import ecStat from 'echarts-stat'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 import _ from 'lodash'
-MAGCoreCategorys2020.push({
+MAGCoreCategorys2020_V1.push({
   text: '论文-去Book 去Patent',
   value: 'all_v3'
 }, {
@@ -184,8 +184,8 @@ export default {
       yearRange: [2000, 2010],
       typeSelect: 'zipf',
       typeOpt: [{ text: '世界', value: 'zipf' }, { text: '小世界', value: 'innerzipf' }],
-      subjectSelect: SELECT_MAG_DATA,
-      subjectOpt: MAGCoreCategorys2020,
+      subjectSelect: SELECT_MAG_DATA_V1,
+      subjectOpt: MAGCoreCategorys2020_V1,
       loading: false,
       chartOpt: {},
       chartData: {},

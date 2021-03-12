@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-03-09 19:08:19
+ * @LastEditTime: 2021-03-12 16:33:01
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -109,127 +109,6 @@ const setChartOption_3 = (doubleResponseData, ChartObj) => {
         data: item[1]
       })
     })
-  })
-  return _opt
-}
-
-const setChartOption_bar_1 = ({ retData_1, retData_2, retData_3 }, ChartObj) => {
-  const _opt = extendEchartsOpts({
-    title: [{
-      left: 'center',
-      gridIndex: 0,
-      text: retData_1.title
-    }, {
-      top: '30%',
-      left: 'center',
-      gridIndex: 1,
-      text: retData_2.data.title
-    }, {
-      top: '65%',
-      left: 'center',
-      gridIndex: 2,
-      text: retData_3.title
-    }],
-    legend: [
-      {
-        orient: 'vertical',
-        top: '10%',
-        // right: 0,
-        // align: 'right',
-        gridIndex: 0,
-        data: retData_2.data.legend,
-        type: 'scroll',
-        left: '82%',
-        right: 'left',
-        // top: 'middle',
-        textStyle: {
-          fontSize: 13
-        }
-      }
-    ],
-    xAxis:
-    [
-      {
-        gridIndex: 1,
-        name: 'subject',
-        type: 'category',
-        axisLabel: {
-          interval: 0,
-          rotate: -25
-        },
-        data: Object.keys(retData_1.data)
-      },
-      {
-        name: ChartObj.xAxisName,
-        type: 'category', gridIndex: 0,
-        axisLabel: {
-          interval: 0,
-          rotate: -75
-        },
-        data: retData_2.data.x
-      },
-      {
-        name: 'item',
-        type: 'category', gridIndex: 2,
-        axisLabel: {
-          interval: 0,
-          rotate: -25
-        },
-        data: Object.keys(retData_3.data)
-      }],
-    yAxis:
-    [
-      {
-        gridIndex: 1,
-        name: ChartObj.yAxisName,
-        type: 'value',
-        nameTextStyle: { fontSize: 18 }
-
-      },
-      {
-        gridIndex: 0,
-        name: 'Count',
-        type: 'value',
-        nameTextStyle: { fontSize: 18 }
-      },
-      {
-        gridIndex: 2,
-        name: 'Count',
-        type: 'value',
-        nameTextStyle: { fontSize: 18 }
-      }
-    ],
-    grid: [
-      { top: '3%', bottom: '75%',
-        right: '20%' },
-      { top: '35%', bottom: '40%',
-        right: '20%' },
-      { top: '70%', bottom: '3%',
-        right: '20%' }
-    ],
-    series: [{
-      xAxisIndex: 0,
-      yAxisIndex: 0,
-      name: '数量',
-      type: 'bar',
-      data: Object.values(retData_1.data)
-    }, ..._.zip(retData_2.data.legend, retData_2.data.y).map(item => {
-      return extendLineSeries({
-        xAxisIndex: 1,
-        yAxisIndex: 1,
-        name: item[0],
-        type: 'line',
-        smooth: false,
-        data: item[1]
-      })
-    }),
-    {
-      xAxisIndex: 2,
-      yAxisIndex: 2,
-      name: '数量',
-      type: 'bar',
-      data: Object.values(retData_3.data)
-    }]
   })
   return _opt
 }
@@ -783,7 +662,174 @@ export const ChartMap = {
   'mag2020/MagArticlesTotalV3': {
     ChName: '统计学科论文数量',
     componentName: 'PageTemplate',
-    HandleResponseFunc: setChartOption_bar_1,
+    HandleResponseFunc: ({ retData_1, retData_2, retData_3, retData_4 }, ChartObj) => {
+      console.log(retData_4)
+      const _opt = extendEchartsOpts({
+        title: [{
+          left: 'center',
+          gridIndex: 0,
+          text: retData_2.data.title
+        }, {
+          top: '25%',
+          left: 'center',
+          gridIndex: 1,
+          text: 'mag2020 论文年差量'
+        }, {
+          top: '50%',
+          left: 'center',
+          gridIndex: 1,
+          text: retData_1.title
+        }, {
+          top: '75%',
+          left: 'center',
+          gridIndex: 2,
+          text: retData_3.title
+        }],
+        legend: [
+          {
+            orient: 'vertical',
+            top: '3%',
+            // right: 0,
+            // align: 'right',
+            gridIndex: 0,
+            data: retData_2.data.legend,
+            type: 'scroll',
+            left: '82%',
+            right: 'left',
+            // top: 'middle',
+            textStyle: {
+              fontSize: 13
+            }
+          },
+          {
+            orient: 'vertical',
+            top: '28%',
+            gridIndex: 0,
+            data: retData_4.data.legend,
+            type: 'scroll',
+            left: '82%',
+            right: 'left',
+            // top: 'middle',
+            textStyle: {
+              fontSize: 13
+            }
+          }
+        ],
+        xAxis:
+        [
+          {
+            gridIndex: 0,
+            name: 'subject',
+            type: 'category',
+            axisLabel: {
+              interval: 0,
+              rotate: -25
+            },
+            data: Object.keys(retData_1.data)
+          },
+          {
+            name: ChartObj.xAxisName,
+            type: 'category', gridIndex: 1,
+            axisLabel: {
+              interval: 0,
+              rotate: -75
+            },
+            data: retData_4.data.x
+          },
+          {
+            name: ChartObj.xAxisName,
+            type: 'category', gridIndex: 2,
+            axisLabel: {
+              interval: 0,
+              rotate: -75
+            },
+            data: retData_2.data.x
+          },
+          {
+            name: 'item',
+            type: 'category', gridIndex: 3,
+            axisLabel: {
+              interval: 0,
+              rotate: -25
+            },
+            data: Object.keys(retData_3.data)
+          }],
+        yAxis:
+        [
+          {
+            gridIndex: 0,
+            name: ChartObj.yAxisName,
+            type: 'value',
+            nameTextStyle: { fontSize: 18 }
+
+          },
+          {
+            gridIndex: 1,
+            name: 'Count',
+            type: 'value',
+            nameTextStyle: { fontSize: 18 }
+          },
+          {
+            gridIndex: 2,
+            name: 'Count',
+            type: 'value',
+            nameTextStyle: { fontSize: 18 }
+          },
+          {
+            gridIndex: 3,
+            name: 'Count',
+            type: 'value',
+            nameTextStyle: { fontSize: 18 }
+          }
+        ],
+        grid: [
+          { top: '3%', bottom: '79%',
+            right: '20%' },
+          { top: '28%', bottom: '53%',
+            right: '20%' },
+          { top: '55%', bottom: '28%',
+            right: '20%' },
+          { top: '78%', bottom: '3%',
+            right: '20%' }
+        ],
+        series: [
+          {
+            xAxisIndex: 2,
+            yAxisIndex: 2,
+            name: '数量',
+            type: 'bar',
+            data: Object.values(retData_1.data)
+          },
+          ..._.zip(retData_2.data.legend, retData_2.data.y).map(item => {
+            return extendLineSeries({
+              xAxisIndex: 0,
+              yAxisIndex: 0,
+              name: item[0],
+              type: 'line',
+              smooth: false,
+              data: item[1]
+            })
+          }),
+          ..._.zip(retData_4.data.legend, retData_4.data.y).map(item => {
+            return extendLineSeries({
+              xAxisIndex: 1,
+              yAxisIndex: 1,
+              name: item[0],
+              type: 'line',
+              smooth: false,
+              data: item[1]
+            })
+          }),
+          {
+            xAxisIndex: 3,
+            yAxisIndex: 3,
+            name: '数量',
+            type: 'bar',
+            data: Object.values(retData_3.data)
+          }]
+      })
+      return _opt
+    },
     RequestFunc: async(params) => {
       // 此处处理三个请求
       // 统计学科不按年分布
@@ -814,17 +860,29 @@ export const ChartMap = {
       }
       const retData_3 = await requestWrap('wiki/getMasArticlesTotal_v3', 'post', newParams)
 
-      return { retData_1, retData_2, retData_3 }
+      // 一阶差分
+      newParams = {
+        doctype: 1,
+        addRate: 1, // API:getMasArticlesTotal_v3 增加参数:addRate=[0:原来的，1：获取增长率]
+        cats: params.cats,
+        version: params.version,
+        yeartype: 0,
+        from: params.from,
+        to: params.to
+      }
+      const retData_4 = await requestWrap('wiki/getMasArticlesTotal_v3', 'post', newParams)
+
+      return { retData_1, retData_2, retData_3, retData_4 }
     },
     Select: [
       {
         name: 'cats',
-        default: SELECT_MAG_DATA,
+        default: SELECT_MAG_DATA_V1,
         multiple: true,
         show: true,
         label: '目标学科',
         cols: 8,
-        items: MAGCoreCategorys2020
+        items: MAGCoreCategorys2020_V1
       }, {
         name: 'bltype',
         default: '1',
@@ -845,7 +903,7 @@ export const ChartMap = {
     RangeSlider: [{
       name: 'yearRange',
       startName: 'from',
-      rangeDefault: [1955, 2018],
+      rangeDefault: [1955, 2020],
       endName: 'to',
       label: '年份范围',
       cols: 12,
@@ -853,7 +911,7 @@ export const ChartMap = {
       min: 1900
     }],
     xAxisName: 'Year',
-    chartHeight: '210vh',
+    chartHeight: '280vh',
     yAxisName: 'Count'
   },
   'mag2020/TjYearByTopN_v3': {

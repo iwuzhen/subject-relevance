@@ -97,7 +97,7 @@ export default {
             title: 'MAG 统计学科数据',
             text: '包含 3 个图表',
             to: '/mag2020/MagArticlesTotalV3',
-            update: '2020-12-15T09:43:03.429Z'
+            update: '2021-03-12T09:43:03.429Z'
           }, {
             title: 'MAG 学科引用其他学科的逐年分布趋势',
             text: '学科引用其他学科的逐年分布趋势',
