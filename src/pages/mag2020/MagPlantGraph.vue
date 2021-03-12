@@ -29,23 +29,16 @@ v-container(fluid :style="cssVars")
       v-btn-toggle(dense)
         v-btn(@click="style.fontLeft--") + 1
         v-btn(@click="style.fontLeft++") - 1
-
+  v-row
+    v-col(col=12)
+      span 一级学科标识
+      v-chip(v-for="(value,key) in colorMap" :color="value") {{key}}
   v-row
     v-col(col='12')
-      v-card.mx-auto(outlined :loading='loading' height='90vh')
+      v-card.mx-auto(outlined :loading='loading' height='120vh')
         v-card-title
           | MAG {{selectYear}} linksin 测试 3D 引力图
         v-container#3dgraph(fluid fill-height)
-
-  v-row
-    v-col(col='12')
-      v-card.mx-auto(outlined :loading='loading' height='70vh')
-        v-container#subjectChart1(fluid fill-height)
-
-  v-row
-    v-col(col='12')
-      v-card.mx-auto(outlined :loading='loading' height='70vh')
-        v-container#subjectChart2(fluid fill-height)
   v-row
     v-col
       comment(storagekey='Mag_plant_graph_Chart_1')
@@ -109,6 +102,8 @@ import { getOriginCategories, getChildCategories, getMasDatav2, requestWrap } fr
 
 // import * as THREE from '@/utils/three/three.module.js'
 // import SpriteText from 'three-spritetext'
+const colorPool = ['#CCCCFF', '#99CC33', '#FF99CC', '#FFFFFF', '#339999', '#3399CC', '#CC6666', '#CCCC99', '#009966', '#CC0033',
+  '#FFFFCC', '#9999CC', '#FFCCCC', '#FF6666', '#99CC66', '#FFFF00', '#99CC00', '#FF9900', '#0099CC', '#CC9933', '#CCFFFF', '#CCCC00', '#00FF00']
 
 import { CSS2DObject, CSS2DRenderer } from '@/utils/three/CSS2DRenderer'
 
@@ -134,7 +129,7 @@ export default {
         fontTop: -10,
         fontLeft: -10
       },
-      myChartIds: ['subjectChart1', 'subjectChart2'],
+      myChartIds: ['subjectChart1'],
       loading: false,
       linkFilter: 0.5,
       ct: 0,
@@ -165,8 +160,8 @@ export default {
         topSubject: [],
         allSubject: []
       },
-      subjectSizeDict: {} // 学科大小
-
+      subjectSizeDict: {}, // 学科大小
+      colorMap: {}
     }
   },
   computed: {
@@ -318,11 +313,18 @@ export default {
       const nodeArray = Array.from(allSunjectSet)
       const fObj = this.getSubjectFather()
       console.log(fObj)
+      const colorPoolCopy = colorPool.concat()
+      this.colorMap = {}
       const nodes = nodeArray.map((name, index) => {
+        const fname = Array.from(fObj[name]).join('+')
+        if (this.colorMap[fname] === undefined) {
+          this.colorMap[fname] = colorPoolCopy.pop()
+        }
         return {
           id: index,
           name: name,
-          fname: Array.from(fObj[name]).join(',')
+          fname: fname,
+          color: this.colorMap[fname]
         }
       })
       const links = allLine.map(item => {
@@ -416,7 +418,7 @@ export default {
     draw3DForceGraph(gData) {
       const elem = document.getElementById('3dgraph')
 
-      const height = Math.floor(window.innerHeight * 0.9)
+      const height = Math.floor(window.innerHeight * 1.2)
       const width = Math.floor(window.innerWidth) - 60
       const Graph = ForceGraph3D()(elem).width(width).height(height)
         .graphData(gData)
