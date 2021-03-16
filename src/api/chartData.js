@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-03-16 15:17:13
+ * @LastEditTime: 2021-03-16 15:31:41
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -1494,7 +1494,7 @@ export const ChartMap = {
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
-  'mag2020/ArticlesTotalByCoreNew_v5': {
+  'wikipedia/ArticlesTotalByCoreNew_v5': {
     ChName: 'core_v5文章数links统计',
     componentName: 'PageTemplate',
     HandleResponseFunc: (responseData, ChartObj) => {
@@ -1535,12 +1535,18 @@ export const ChartMap = {
     Select: [
       {
         name: 'subjects',
-        default: SELECT_MAG_DATA_V1,
+        default: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+          'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+          'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
+          'Medicine'].sort(),
         label: '目标学科',
         multiple: true,
         show: true,
         cols: 8,
-        items: MAGCoreCategorys2020_V1
+        items: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+          'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+          'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
+          'Medicine'].sort()
       }, {
         name: 'level',
         default: 3,

@@ -155,12 +155,6 @@ export default {
             text: 'MAG 学科自恋度',
             to: '/mag-lts/MagRefSelfRate',
             update: '2021-02-04T09:43:03.429Z'
-          },
-          {
-            title: 'MAG core_v5文章数links统计',
-            text: 'MAG core_v5文章数links统计',
-            to: '/mag2020/ArticlesTotalByCoreNew_v5',
-            update: '2021-03-16T09:43:03.429Z'
           }
           ],
           '学科相关度等': [
@@ -368,6 +362,12 @@ export default {
               text: '',
               to: '/wikipedia/ArticleCount',
               update: '2021-02-05T16:43:03.429Z'
+            },
+            {
+              title: 'core_v5文章数links统计',
+              text: 'core_v5文章数links统计',
+              to: '/wikipedia/ArticlesTotalByCoreNew_v5',
+              update: '2021-03-16T09:43:03.429Z'
             }
           ],
           'Core-学科相关度': [
