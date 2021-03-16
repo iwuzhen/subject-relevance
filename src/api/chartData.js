@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-03-12 17:46:46
+ * @LastEditTime: 2021-03-16 15:17:13
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -1489,6 +1489,82 @@ export const ChartMap = {
           'Literature', 'History'].sort()
       }
     ],
+    Slider: [],
+    RangeSlider: [],
+    xAxisName: 'Year',
+    yAxisName: 'Count'
+  },
+  'mag2020/ArticlesTotalByCoreNew_v5': {
+    ChName: 'core_v5文章数links统计',
+    componentName: 'PageTemplate',
+    HandleResponseFunc: (responseData, ChartObj) => {
+      const _opt = extendEchartsOpts({
+        title: {
+          text: responseData.data.title
+        },
+        legend: {
+          data: responseData.data.legend
+        },
+        xAxis: {
+          name: ChartObj.xAxisName,
+          type: 'category',
+          boundaryGap: false,
+          data: responseData.data.x
+        },
+        yAxis: {
+          name: ChartObj.yAxisName,
+          type: 'value'
+        },
+        series: zip(responseData.data.legend, responseData.data.y).map(item => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: item[1]
+          })
+        })
+      })
+      return _opt
+    },
+    RequestFunc: async(params) => {
+      // 当年
+      const data = await requestWrap('wiki/getArticlesTotalByCoreNew_v5', 'post', params)
+      console.log(data)
+      return data
+    },
+    Select: [
+      {
+        name: 'subjects',
+        default: SELECT_MAG_DATA_V1,
+        label: '目标学科',
+        multiple: true,
+        show: true,
+        cols: 8,
+        items: MAGCoreCategorys2020_V1
+      }, {
+        name: 'level',
+        default: 3,
+        label: '层数',
+        multiple: false,
+        cols: 2,
+        items: _.range(1, 4, 1)
+      }, {
+        name: 'type',
+        default: 'arts',
+        label: '数据',
+        multiple: false,
+        cols: 2,
+        items: [{
+          text: '文章数',
+          value: 'arts'
+        }, {
+          text: 'linksin数量',
+          value: 'linksin'
+        }, {
+          text: 'linksout数量',
+          value: 'linksout'
+        }]
+      }],
     Slider: [],
     RangeSlider: [],
     xAxisName: 'Year',
