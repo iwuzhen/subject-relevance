@@ -160,7 +160,7 @@ import ecStat from 'echarts-stat'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 import _ from 'lodash'
-MAGCoreCategorys2020_V1.push({
+const current_all_category = MAGCoreCategorys2020_V1.push({
   text: '论文-去Book 去Patent',
   value: 'all_v3'
 }, {
@@ -185,7 +185,7 @@ export default {
       typeSelect: 'zipf',
       typeOpt: [{ text: '世界', value: 'zipf' }, { text: '小世界', value: 'innerzipf' }],
       subjectSelect: SELECT_MAG_DATA_V1,
-      subjectOpt: MAGCoreCategorys2020_V1,
+      subjectOpt: current_all_category,
       loading: false,
       chartOpt: {},
       chartData: {},

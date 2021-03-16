@@ -1,15 +1,20 @@
 <template lang="pug">
-v-container(fluid='' :style="cssVars")
+v-container(fluid :style="cssVars")
   v-row
     v-col(cols='4')
-      v-select(v-model='vertexSubjects' :items='subjectOpt' chips='' multiple='' deletable-chips='' clearable='' dense='' label='定点学科' @change='Draw')
+      v-select(v-model='vertexSubjects' :items='subjectOpt' chips multiple deletable-chips clearable dense label='定点学科' @change='Draw')
 
     v-col(cols='8')
-      v-select(v-model='subjectRelevances' :items='categorys' chips='' multiple='' deletable-chips='' clearable='' dense='' label='目标学科' @change='Draw')
+      v-select(v-model='subjectRelevances' :items='categorys' chips multiple deletable-chips clearable dense label='目标学科' @change='Draw')
     v-col(cols="5")
       v-slider(hint="距离过滤器" label="距离过滤器" max=1 min=0 step=0.01 thumb-label="always" v-model="linkFilter" @change='liteDraw')
     v-col(cols="7")
       v-slider(hint="展示年份" label="展示年份" max=2020 min=1955 step=1 thumb-label="always" v-model="selectYear" @change='liteDraw')
+
+    v-col(cols="4")
+      v-select(v-model='version' :items='versionOpt' dense label='数据' @change='Draw')
+    v-col(cols="2")
+      v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='liteDraw')
     v-col(cols="2")
       v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='liteDraw')
     v-col(cols="2")
@@ -32,20 +37,20 @@ v-container(fluid='' :style="cssVars")
 
   v-row
     v-col(col='12')
-      v-card.mx-auto(outlined='' :loading='loading' height='90vh')
+      v-card.mx-auto(outlined :loading='loading' height='90vh')
         v-card-title
           | MAG {{selectYear}} linksin 测试 3D 引力图
-        v-container#3dgraph(fluid='' fill-height='')
+        v-container#3dgraph(fluid fill-height)
 
   v-row
     v-col(col='12')
-      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
-        v-container#subjectChart1(fluid='' fill-height='')
+      v-card.mx-auto(outlined :loading='loading' height='70vh')
+        v-container#subjectChart1(fluid fill-height)
 
   v-row
     v-col(col='12')
-      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
-        v-container#subjectChart2(fluid='' fill-height='')
+      v-card.mx-auto(outlined :loading='loading' height='70vh')
+        v-container#subjectChart2(fluid fill-height)
   v-row
     v-col
       comment(storagekey='Mag_graph_2020_Chart_1')
@@ -54,7 +59,7 @@ v-container(fluid='' :style="cssVars")
 
 <script>
 // 计算阈值
-import { MAGCoreCategorys2020, SELECT_MAG_DATA } from '@/api/data'
+import { MAGCoreCategorys2020_V1, SELECT_MAG_DATA_V1 } from '@/api/data'
 import Base from '@/utils/base'
 import ForceGraph3D from '3d-force-graph'
 import comment from '@/components/comment'
@@ -73,14 +78,6 @@ import { getMasDatav2, requestWrap } from '@/api/index'
 
 import { CSS2DObject, CSS2DRenderer } from '@/utils/three/CSS2DRenderer'
 
-const currentSubbjectOpt = MAGCoreCategorys2020.concat([{
-  text: 'Business',
-  value: 'Business'
-}, {
-  text: 'Art',
-  value: 'Art'
-}]).sort((a, b) => a.text.localeCompare(b.text))
-
 export default {
   name: 'MagGraph',
   components: {
@@ -90,9 +87,17 @@ export default {
   data() {
     return {
       pageName: 'Mag 相关度引力图测试',
-      vertexSubjects: ['Biology', 'Physics', 'Mathematics', 'Political science'],
-      subjectOpt: currentSubbjectOpt,
-      subjectRelevances: SELECT_MAG_DATA.concat(['Business', 'Art']).sort(),
+      vertexSubjects: ['Biology', 'Physics', 'Mathematics', 'Sociology'],
+      subjectOpt: MAGCoreCategorys2020_V1,
+      subjectRelevances: SELECT_MAG_DATA_V1,
+      version: 'delete_noref_v3_node',
+      versionOpt: [{
+        value: 'delete_noref_v3_node',
+        text: '文章的距离，去0，去Book和去Patent，按点'
+      }, {
+        value: 'tjbook_only_noPatent_delete_noref_v3_node',
+        text: '书的距离，去0，去Patent，按点'
+      }],
       BasicData: {},
       GraphData: {},
       showText: true,
@@ -105,7 +110,7 @@ export default {
         fontTop: -10,
         fontLeft: -10
       },
-      categorys: currentSubbjectOpt,
+      categorys: MAGCoreCategorys2020_V1,
       myChartIds: ['subjectChart1', 'subjectChart2'],
       loading: false,
       linkFilter: 0.5,
@@ -148,6 +153,9 @@ export default {
           from: 1955,
           to: 2020
         }
+        if (this.version === 'tjbook_only_noPatent_delete_noref_v3_node') {
+          opt.version = 'book_all_v3'
+        }
         const ret = await requestWrap('wiki/getMasArticlesTotal_v3', 'post', opt)
         for (const index in ret.data.y) {
           allNodesMap[ret.data.legend[index]] = {
@@ -169,7 +177,13 @@ export default {
           from: 1955,
           to: 2020,
           qs: -1,
-          version: 'delete_noref_v3_node'
+          version: this.version
+        }
+        if (this.version === 'tjbook_only_noPatent_delete_noref_v3_node') {
+          if (['Art', 'Business'].indexOf(opt.strA) > -1) {
+            continue
+          }
+          opt.strB = allData.filter(item => ['Art', 'Business'].indexOf(item) === -1).join(',')
         }
         const ret = await getMasDatav2(opt)
         if (strA === 'Engineering disciplines') {
