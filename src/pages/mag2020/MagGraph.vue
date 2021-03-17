@@ -14,6 +14,8 @@ v-container(fluid :style="cssVars")
     v-col(cols="4")
       v-select(v-model='version' :items='versionOpt' dense label='数据' @change='Draw')
     v-col(cols="2")
+      v-select(v-model='method' :items='methodOpt' dense label='links' @change='Draw')
+    v-col(cols="2")
       v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='liteDraw')
     v-col(cols="2")
       v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='liteDraw')
@@ -98,6 +100,8 @@ export default {
         value: 'tjbook_only_noPatent_delete_noref_v3_node',
         text: '书的距离，去0，去Patent，按点'
       }],
+      method: 'linksin',
+      methodOpt: ['linksin', 'linksout'],
       BasicData: {},
       GraphData: {},
       showText: true,
@@ -173,7 +177,7 @@ export default {
         const opt = {
           strA,
           strB: allData.join(','),
-          method: 'linksin',
+          method: this.method,
           from: 1955,
           to: 2020,
           qs: -1,
