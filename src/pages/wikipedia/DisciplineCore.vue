@@ -232,7 +232,7 @@ export default {
   },
   methods: {
     async getData() {
-      if (this.levelSelect === 4 && this.$route.query.version === 'v5') {
+      if (this.$route.query.version === 'v5') {
         const v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
           'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
           'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
@@ -247,19 +247,6 @@ export default {
           }
           return {
             text: text,
-            value: item
-          }
-        })
-      } else if (this.levelSelect === 3 && this.$route.query.version === 'v5') {
-        const v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
-          'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-          'Literature', 'History'].sort()
-        this.subjectRelevances = this.subjectRelevances.filter(item =>
-          v5Subject.includes(item)
-        )
-        this.categorys = v5Subject.map(item => {
-          return {
-            text: item,
             value: item
           }
         })
