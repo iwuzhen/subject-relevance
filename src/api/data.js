@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2021-03-12 15:48:05
+ * @LastEditTime: 2021-03-18 14:35:09
  * @Description:
  */
 
@@ -283,6 +283,8 @@ export const coreCategorys = [
 })
 
 export const defaultCategorySelect = ['Physics', 'Mathematics', 'Biology', 'Medicine', 'History', 'Philosophy', 'Economics', 'Linguistics', 'Chemistry', 'Sociology', 'Political science', 'Engineering disciplines', 'Computer science']
+
+export const wikiZipfCategorySelect = ['Physics', 'Mathematics', 'Biology', 'History', 'Philosophy', 'Economics', 'Linguistics', 'Chemistry', 'Sociology', 'Political science', 'Engineering disciplines', 'Computer science']
 
 // 去掉 Earth science 使用 Geology
 export const defaultCategorySelect1 = ['Physics', 'Geology', 'Mathematics', 'Biology', 'Medicine', 'Philosophy', 'Economics', 'Linguistics', 'Chemistry', 'Sociology', 'Political science', 'Engineering disciplines', 'Computer science']

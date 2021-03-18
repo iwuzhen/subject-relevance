@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-13 18:06:14
  * @LastEditors: ider
- * @LastEditTime: 2020-09-04 16:15:29
+ * @LastEditTime: 2021-03-18 14:35:29
  * @Description:
  -->
 
@@ -117,7 +117,7 @@
 <script>
 import { getZipfByNodes } from '@/api/index'
 import ecStat from 'echarts-stat'
-import { basiCategorys, extendEchartsOpts, extendLineSeries, defaultCategorySelect } from '@/api/data'
+import { basiCategorys, extendEchartsOpts, extendLineSeries, wikiZipfCategorySelect } from '@/api/data'
 import { localCache } from '@/api/cache'
 import Base from '@/utils/base'
 
@@ -138,7 +138,7 @@ export default {
       loading: false,
       nodeRange: [250, 2500],
       nodeMin: 0,
-      subjectSelect: defaultCategorySelect,
+      subjectSelect: wikiZipfCategorySelect,
       nodeCountSelect: 10000,
       nodeCountOpt: [
         1000,

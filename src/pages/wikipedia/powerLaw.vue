@@ -44,7 +44,7 @@
 <script>
 import { getZipf } from '@/api/index'
 import ecStat from 'echarts-stat'
-import { basiCategorys, extendEchartsOpts, extendLineSeries, defaultCategorySelect } from '@/api/data'
+import { basiCategorys, extendEchartsOpts, extendLineSeries, wikiZipfCategorySelect } from '@/api/data'
 import Base from '@/utils/base'
 
 // tooyip 位置的x位置
@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       pageName: 'zipf 幂律',
-      subjectTarget: defaultCategorySelect,
+      subjectTarget: wikiZipfCategorySelect,
       categorys: basiCategorys,
       dataYear: 2019,
       dataYearopt: [

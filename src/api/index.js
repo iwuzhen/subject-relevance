@@ -599,7 +599,9 @@ export async function getZipfByNodes(params) {
     method: 'post',
     data: params
   }
-  return await cacheRequest(requestParams)
+  const res = await request(requestParams)
+  return res.data
+  // return await cacheRequest(requestParams)
 }
 export async function getPeopleZipfByNodes(params) {
   const requestParams = {
