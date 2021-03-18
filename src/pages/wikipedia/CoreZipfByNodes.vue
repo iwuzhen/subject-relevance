@@ -151,7 +151,7 @@ import Base from '@/utils/base'
 
 // eslint-disable-next-line new-cap
 const LC = new localCache({
-  storeName: 'corezipfbynodes', // Should be alphanumeric, with underscores.
+  storeName: 'corezipfbynodes_v1', // Should be alphanumeric, with underscores.
   description: 'store api'
 })
 // tooyip 位置的x位置
