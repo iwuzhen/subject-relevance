@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-03-16 15:31:41
+ * @LastEditTime: 2021-03-18 15:39:08
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -1553,7 +1553,7 @@ export const ChartMap = {
         label: '层数',
         multiple: false,
         cols: 2,
-        items: _.range(1, 4, 1)
+        items: _.range(1, 5, 1)
       }, {
         name: 'type',
         default: 'arts',
