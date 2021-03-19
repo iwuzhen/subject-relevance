@@ -155,6 +155,12 @@ export default {
             text: 'MAG 学科自恋度',
             to: '/mag-lts/MagRefSelfRate',
             update: '2021-02-04T09:43:03.429Z'
+          },
+          {
+            title: 'MAG 学科引用最高的文章',
+            text: '各学科引用最高的文章的逐年引用情况',
+            to: '/mag2020/topNLinksinByYear',
+            update: '2021-03-19T09:43:03.429Z'
           }
           ],
           '学科相关度等': [

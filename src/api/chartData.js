@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-03-18 15:39:08
+ * @LastEditTime: 2021-03-19 12:59:29
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -1573,6 +1573,75 @@ export const ChartMap = {
       }],
     Slider: [],
     RangeSlider: [],
+    xAxisName: 'Year',
+    yAxisName: 'Count'
+  },
+  'mag2020/topNLinksinByYear': {
+    ChName: '各学科引用最高的文章的逐年引用情况',
+    componentName: 'PageTemplate',
+    HandleResponseFunc: (responseData, ChartObj) => {
+      const _opt = extendEchartsOpts({
+        title: {
+          text: responseData.data.title
+        },
+        legend: {
+          data: responseData.data.legend
+        },
+        xAxis: {
+          name: ChartObj.xAxisName,
+          type: 'category',
+          boundaryGap: false,
+          data: responseData.data.x
+        },
+        yAxis: {
+          name: ChartObj.yAxisName,
+          type: 'value'
+        },
+        series: zip(responseData.data.legend, responseData.data.y).map(item => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: item[1]
+          })
+        })
+      })
+      return _opt
+    },
+    RequestFunc: async(params) => {
+      // 当年
+      const data = await requestWrap('mag/topNLinksinByYear', 'post', params)
+      console.log(data)
+      return data
+    },
+    Select: [
+      {
+        name: 'cat',
+        default: 'Physics',
+        label: '目标学科',
+        multiple: false,
+        show: true,
+        cols: 3,
+        items: MAGCoreCategorys2020_V1
+      }, {
+        name: 'N',
+        default: 3,
+        label: '每个学科的文章按linksin排名取topN',
+        multiple: false,
+        cols: 4,
+        items: _.range(1, 101, 1)
+      }],
+    Slider: [],
+    RangeSlider: [{
+      name: 'yearRange',
+      startName: 'from',
+      rangeDefault: [1995, 2020],
+      endName: 'to',
+      label: '目标学科年份范围',
+      cols: 12,
+      max: 2020,
+      min: 1900
+    }],
     xAxisName: 'Year',
     yAxisName: 'Count'
   }
