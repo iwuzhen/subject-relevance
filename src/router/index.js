@@ -166,6 +166,10 @@ const routes = [{
   name: 'MagAAAInfoV2',
   component: () => import('@/pages/mag2019v2/MagAAAInfoV2')
 }, {
+  path: '/wikipedia/CoreZipfByNodes_new',
+  name: 'CoreZipfByNodes_new',
+  component: () => import('@/pages/wikipedia/CoreZipfByNodes_new')
+}, {
   path: '/wikipedia/CoreSWUndirectLimit',
   name: 'CoreSWUndirectLimit',
   component: () => import('@/pages/wikipedia/CoreSWUndirectLimit')

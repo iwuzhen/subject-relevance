@@ -432,6 +432,12 @@ export default {
               title: 'wiki Core V3 Zipf 幂律斜率',
               text: 'wiki Core V3 逐年幂律图，及其斜率曲线',
               to: { path: '/wikipedia/CoreZipfByNodes', query: { version: 'v3' }}
+            },
+            {
+              title: 'wiki Core V5 幂律及其随时间变化趋势',
+              text: 'wiki Core V5 幂律及其随时间变化趋势',
+              to: '/wikipedia/CoreZipfByNodes_new',
+              update: '2021-03-19T09:43:03.429Z'
             }
           ],
           'Core-文章数': [

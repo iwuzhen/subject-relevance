@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-03-19 12:59:29
+ * @LastEditTime: 2021-03-19 16:43:50
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -143,31 +143,6 @@ const setChartOption_bar_2 = (retData, ChartObj) => {
   })
   return _opt
 }
-
-// const MAGCoreCategorys2020 = [
-//   'Algebra', 'Anthropology', 'Applied mathematics',
-//   'Applied physics', 'Artificial intelligence', 'Biological engineering',
-//   'Biology', 'Chemical engineering',
-//   'Chemistry', 'Civil engineering',
-//   'Cognitive science', 'Computer engineering',
-//   'Computer science', 'Deep learning',
-//   'Discrete mathematics', 'Earth science', 'Economics',
-//   'Electrical engineering', 'Engineering disciplines',
-//   'Environmental engineering', 'Environmental science', 'Experimental physics',
-//   'Genetic engineering', 'Genome editing',
-//   'Geography', 'Geology', 'Geometry', 'History',
-//   'Industrial engineering', 'Linguistics', 'Literature',
-//   'Logic', 'Machine learning', 'Materials science',
-//   'Mathematics', 'Mechanical engineering',
-//   'Medicine', 'Neuroscience', 'Number theory', 'Operating system',
-//   'Philosophy', 'Physics', 'Political science', 'Psychology',
-//   'Quantum computing', 'Sociology', 'Theoretical computer science', 'Theoretical physics'
-// ].sort().map(each => {
-//   return {
-//     text: each === 'Engineering disciplines' ? 'Engineering' : each,
-//     value: each
-//   }
-// })
 
 export const ChartMap = {
   'mag2020/AuthorsAndArticleInfoByYear': {
