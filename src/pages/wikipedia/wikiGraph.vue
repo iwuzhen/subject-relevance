@@ -12,6 +12,10 @@ v-container(fluid=''  :style="cssVars")
       v-slider(hint="展示年份" label="展示年份" max=2021 min=2007 step=1 thumb-label="always" v-model="selectYear" @change='liteDraw')
     v-col(cols='2')
       v-select(v-model='methodValue' :items='methodOpt' dense='' label='方向' @change='Draw')
+    v-col(cols='2')
+      v-select(v-model='btype' :items='btypeOpt' dense='' label='数据范围' @change='Draw')
+    v-col(cols='2')
+      v-select(v-model='level' :items='levelOpt' dense='' :disabled="btype!=='v5_xueshu_node'" label='level' @change='Draw')
     v-col(cols="2")
       v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='liteDraw')
     v-col(cols="2")
@@ -89,6 +93,16 @@ export default {
       subjectRelevances: v5Subject,
       methodValue: 'linksin',
       methodOpt: ['linksin', 'linksout'],
+      btype: 'v5_xueshu_node',
+      btypeOpt: [{
+        text: '学术圈',
+        value: 'v5_xueshu_node'
+      }, {
+        text: '全集',
+        value: 'v5_node'
+      }],
+      level: 4,
+      levelOpt: [3, 4],
       BasicData: {},
       GraphData: {},
       showText: true,
@@ -132,7 +146,6 @@ export default {
       const allNodesMap = {}
       const allNodeLinks = []
       const allData = Array.from(new Set(this.subjectRelevances.concat(this.vertexSubjects)))
-      requestWrap
       try {
         // 学科大小
         const opt = {
@@ -141,6 +154,10 @@ export default {
           type: 0,
           level: 4
         }
+        // if (this.btype === 'v5_xueshu_node') {
+        //   opt.version = 'v5_xueshu_node'
+        //   opt.level = this.level
+        // }
         const ret = await requestWrap('wiki/getArticlesTotalByCoreNew_v', 'post', opt)
         allData.forEach((item, index) => {
           if (item === 'Engineering disciplines') {
@@ -165,7 +182,10 @@ export default {
           method: this.methodValue,
           level: -1,
           levelType: 4,
-          btype: 'v5_node'
+          btype: this.btype
+        }
+        if (this.btype === 'v5_xueshu_node') {
+          opt.levelType = this.level
         }
         const ret = await getDistanceCore(opt)
         if (strA === 'Engineering disciplines') {

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-03-19 16:43:50
+ * @LastEditTime: 2021-03-21 01:55:07
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
