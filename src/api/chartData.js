@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-03-21 01:55:07
+ * @LastEditTime: 2021-03-22 00:33:02
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -1444,8 +1444,7 @@ export const ChartMap = {
     RequestFunc: async(params) => {
       // 当年
       params.type = 0
-      params.version = 'v5'
-      params.level = 3
+      // params.level = 3
       const data = await requestWrap('wiki/getArticlesTotalByCoreNew_v', 'post', params)
       return data
     },
@@ -1462,6 +1461,29 @@ export const ChartMap = {
         items: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
           'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
           'Literature', 'History'].sort()
+      }, {
+        name: 'version',
+        default: 'v5',
+        label: '版本',
+        multiple: false,
+        show: true,
+        cols: 2,
+        items: [{
+          text: 'v5',
+          value: 'v5'
+        }, {
+          text: 'v5学术',
+          value: 'v5_xueshu'
+
+        }]
+      }, {
+        name: 'level',
+        default: 3,
+        label: 'level',
+        show: true,
+        multiple: false,
+        cols: 2,
+        items: [3, 4]
       }
     ],
     Slider: [],

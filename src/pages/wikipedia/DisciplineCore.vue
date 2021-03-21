@@ -203,8 +203,8 @@ export default {
       this.methodValue = 'linksout'
       this.pageCountSelect = -1
       this.pageCountOpt = [-1]
-      this.versionSelect = 'v5_node'
-      this.versionOpt = ['v5_node', 'v5_edge']
+      this.versionSelect = 'v5_xueshu_node'
+      this.versionOpt = ['v5_node', 'v5_edge', { text: '学术圈', value: 'v5_xueshu_node' }]
 
       this.categorys = v5Subject.map(item => {
         let text = item

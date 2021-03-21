@@ -155,7 +155,7 @@ export default {
           level: 4
         }
         // if (this.btype === 'v5_xueshu_node') {
-        //   opt.version = 'v5_xueshu_node'
+        //   opt.version = 'v5_xueshu'
         //   opt.level = this.level
         // }
         const ret = await requestWrap('wiki/getArticlesTotalByCoreNew_v', 'post', opt)
