@@ -15,7 +15,7 @@ v-container(fluid=''  :style="cssVars")
     v-col(cols='2')
       v-select(v-model='btype' :items='btypeOpt' dense='' label='数据范围' @change='Draw')
     v-col(cols='2')
-      v-select(v-model='level' :items='levelOpt' dense='' :disabled="btype!=='v5_xueshu_node'" label='level' @change='Draw')
+      v-select(v-model='level' :items='levelOpt' dense='' :disabled="!['v5_xueshu_noHistoryAndLiterature_node','v5_xueshu_node'].includes(btype)" label='level' @change='Draw')
     v-col(cols="2")
       v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='liteDraw')
     v-col(cols="2")
@@ -93,14 +93,19 @@ export default {
       subjectRelevances: v5Subject,
       methodValue: 'linksin',
       methodOpt: ['linksin', 'linksout'],
-      btype: 'v5_xueshu_node',
-      btypeOpt: [{
-        text: '学术圈',
-        value: 'v5_xueshu_node'
-      }, {
-        text: '全集',
-        value: 'v5_node'
-      }],
+      btype: 'v5_xueshu_noHistoryAndLiterature_node',
+      btypeOpt: [
+        {
+          text: '学术圈去历史文学',
+          value: 'v5_xueshu_noHistoryAndLiterature_node'
+        },
+        {
+          text: '学术圈',
+          value: 'v5_xueshu_node'
+        }, {
+          text: '全集',
+          value: 'v5_node'
+        }],
       level: 4,
       levelOpt: [3, 4],
       BasicData: {},
@@ -145,7 +150,10 @@ export default {
     async getData() {
       const allNodesMap = {}
       const allNodeLinks = []
-      const allData = Array.from(new Set(this.subjectRelevances.concat(this.vertexSubjects)))
+      let allData = Array.from(new Set(this.subjectRelevances.concat(this.vertexSubjects)))
+      if (this.btype === 'v5_xueshu_noHistoryAndLiterature_node') {
+        allData = allData.filter(item => !['History', 'Literature'].includes(item))
+      }
       try {
         // 学科大小
         const opt = {

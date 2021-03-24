@@ -203,8 +203,13 @@ export default {
       this.methodValue = 'linksout'
       this.pageCountSelect = -1
       this.pageCountOpt = [-1]
-      this.versionSelect = 'v5_xueshu_node'
-      this.versionOpt = ['v5_node', 'v5_edge', { text: '学术圈', value: 'v5_xueshu_node' }]
+      this.versionSelect = 'v5_xueshu_noHistoryAndLiterature_node'
+      this.versionOpt = ['v5_node', 'v5_edge',
+        { text: '学术圈', value: 'v5_xueshu_node' },
+        {
+          text: '学术圈去历史文学',
+          value: 'v5_xueshu_noHistoryAndLiterature_node'
+        }]
 
       this.categorys = v5Subject.map(item => {
         let text = item
@@ -233,10 +238,13 @@ export default {
   methods: {
     async getData() {
       if (this.$route.query.version === 'v5') {
-        const v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+        let v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
           'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
           'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
           'Medicine'].sort()
+        if (this.btype === 'v5_xueshu_noHistoryAndLiterature_node') {
+          v5Subject = v5Subject.filter(item => !['History', 'Literature'].includes(item))
+        }
         this.subjectRelevances = this.subjectRelevances.filter(item =>
           v5Subject.includes(item)
         )

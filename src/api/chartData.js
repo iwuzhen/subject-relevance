@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-03-22 00:33:02
+ * @LastEditTime: 2021-03-24 15:48:48
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -1475,6 +1475,10 @@ export const ChartMap = {
           text: 'v5学术',
           value: 'v5_xueshu'
 
+        },
+        {
+          text: '学术圈去历史文学',
+          value: 'v5_xueshu_noHistoryAndLiterature'
         }]
       }, {
         name: 'level',
