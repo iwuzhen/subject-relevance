@@ -162,8 +162,7 @@ export default {
           type: 0,
           level: 4
         }
-        // if (this.btype === 'v5_xueshu_node') {
-        //   opt.version = 'v5_xueshu'
+        // if (['v5_xueshu_noHistoryAndLiterature_node', 'v5_xueshu_node'].includes(this.btype)) {
         //   opt.level = this.level
         // }
         const ret = await requestWrap('wiki/getArticlesTotalByCoreNew_v', 'post', opt)
@@ -192,7 +191,7 @@ export default {
           levelType: 4,
           btype: this.btype
         }
-        if (this.btype === 'v5_xueshu_node') {
+        if (['v5_xueshu_noHistoryAndLiterature_node', 'v5_xueshu_node'].includes(this.btype)) {
           opt.levelType = this.level
         }
         const ret = await getDistanceCore(opt)
