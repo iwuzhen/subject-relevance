@@ -81,7 +81,7 @@ export default {
         value: 'xueshu_v5'
       }, {
         text: '学术 v5 去文学历史',
-        value: 'xueshu_noHistoryAndLiterature'
+        value: 'xueshu_noHistoryAndLiterature_v5'
       }],
       loading: false,
       chartOpt: {},
