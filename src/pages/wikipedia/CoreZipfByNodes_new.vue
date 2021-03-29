@@ -1,7 +1,7 @@
 <template lang="pug">
 v-container(fluid)
   v-row
-    v-col(cols='6')
+    v-col(cols='8')
       v-select(v-model='subjectSelect', :items='subjectOpt', small-chips, multiple, deletable-chips, clearable, label='目标学科', @click='getData').
 
     v-col(cols='2')
@@ -10,6 +10,8 @@ v-container(fluid)
       v-select(v-model='level', :items='levelOpt', label='层次', @click='getData').
     v-col(cols='2')
       v-select(v-model='yearSelect', :items='yearOpt', label='幂律分布指定年', @click='getData').
+    v-col(cols='3')
+      v-select(v-model='versionSelect', :items='versionOpt', label='version', @click='getData').
 
   v-row
     v-col(cols='11')
@@ -70,6 +72,17 @@ export default {
       typeOpt: [{ text: '世界', value: 'zipf' }, { text: '小世界', value: 'innerzipf' }],
       subjectSelect: subjectsV5,
       subjectOpt: subjectsV5,
+      versionSelect: 'v5',
+      versionOpt: [{
+        text: 'v5',
+        value: 'v5'
+      }, {
+        text: '学术 v5',
+        value: 'xueshu_v5'
+      }, {
+        text: '学术 v5 去文学历史',
+        value: 'xueshu_noHistoryAndLiterature'
+      }],
       loading: false,
       chartOpt: {},
       chartData: {},
@@ -154,7 +167,7 @@ export default {
         year: this.yearSelect,
         from_node: this.nodeRange[0],
         to_node: this.nodeRange[1],
-        version: 'v5',
+        version: this.versionSelect,
         level: this.level
       }
       try {
@@ -177,7 +190,7 @@ export default {
         to_node: this.nodeRange[1],
         from: this.yearRange[0],
         to: this.yearRange[1],
-        version: 'v5',
+        version: this.versionSelect,
         level: this.level
       }
       try {
