@@ -1,223 +1,70 @@
-<!--
- * @Version: 0.0.1
- * @Author: ider
- * @Date: 2020-04-08 11:55:19
- * @LastEditors: ider
- * @LastEditTime: 2021-01-27 17:45:27
- * @Description:
- -->
-<template>
-  <v-container fluid>
-    <v-dialog
-      v-model="overlay"
-      fullscreen
-      hide-overlay
-      transition="dialog-bottom-transition"
-    >
-      <v-card>
-        <v-toolbar
-          dark
-          color="primary"
-        >
-          <v-btn
-            icon
-            dark
-            @click="overlay = false"
-          >
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-          <v-toolbar-title>关闭对比面板</v-toolbar-title>
-          <v-spacer />
-          <v-toolbar-items>
-            <v-btn
-              dark
-              text
-              @click="overlay = false"
-            >Close</v-btn>
-          </v-toolbar-items>
-        </v-toolbar>
-        <v-col class="diffbox">
-          <div v-html="prettyHtml" />
-        </v-col>
-      </v-card>
-    </v-dialog>
-    <v-row>
-      <v-col>
-        <v-btn
-          color="primary"
-          @click="checkNode"
-        >对比选中的节点</v-btn>
-      </v-col>
-      <v-col>
-        <v-btn
-          :color="showDouble ? 'light-green' : 'lime'"
-          @click="showDouble = !showDouble"
-        >{{ showDouble ? "单排展示" : "双排对比" }}</v-btn>
-      </v-col>
-      <v-col>
-        <v-autocomplete
-          v-model="searchString"
-          label="搜索 category"
-          :loading="isLoadingButton"
-          clearable
-          cache-items
-          no-data-text="没有匹配值"
-          :search-input.sync="search"
-          :items="searchItems"
-        />
-      </v-col>
-    </v-row>
-    <v-row justify="space-between">
-      <v-col :cols="showDouble ? 6 : 12">
-        <v-card
-          hover
-          flat
-        >
-          <v-select
-            v-model="yearSelect1"
-            :items="yearOptions"
-            chips
-            label="年份"
-            @change="yearChange1"
-          />
-          <v-treeview
-            v-model="selection1"
-            :items="treeItems1"
-            :load-children="fetchChildren1"
-            :open.sync="openTree1"
-            selectable
-            activatable
-            dense
-            color="warning"
-            selection-type="leaf"
-            open-on-click
-            return-object
-            transition
-          >
-            <template v-slot:label="{ item }">
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <a
-                    v-if="item.father"
-                    :href="'https://wikimili.com/en/' + item.name.replace(/ /g,'_')"
-                    target="blank"
-                    v-on="on"
-                  ><strong
-                    v-if="isCoreSunject(item.name)"
-                    style="color:orange"
-                  >{{
-                    item.name
-                  }}</strong><span v-else>{{ item.name }}</span></a>
-                  <span v-else v-on="on">{{ item.name }}</span>
-                </template>
-                <span>{{ en2zhdict[item.name]===undefined?'Loading...': en2zhdict[item.name] }}</span>
-              </v-tooltip>
-            </template>
-            <template v-slot:append="{ item }">
-              <v-chip
-                v-if="item.nodetype == 'article'"
-                color="success"
-                outlined
-              >{{ arithclBirth[item.name] }}</v-chip>
-              <v-tooltip
-                v-if="item.father"
-                top
-              >
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                    text
-                    small
-                    color="primary"
-                    v-on="on"
-                  >
-                    <v-icon>mdi-wikipedia</v-icon>
-                    摘要
-                  </v-btn>
-                </template>
-
-                <span> {{ paragraph[item.name] }}</span>
-              </v-tooltip>
-            </template>
-          </v-treeview>
-        </v-card>
-      </v-col>
-      <v-col
-        v-if="showDouble"
-        cols="6"
-      >
-        <v-card
-          hover
-          flat
-        >
-          <v-select
-            v-model="yearSelect2"
-            :items="yearOptions"
-            chips
-            label="年份"
-            @change="yearChange2"
-          />
-          <v-treeview
-            v-model="selection2"
-            :items="treeItems2"
-            :load-children="fetchChildren2"
-            selectable
-            activatable
-            :open.sync="openTree2"
-            dense
-            color="warning"
-            selection-type="leaf"
-            open-on-click
-            return-object
-            transition
-          >
-            <template v-slot:label="{ item }">
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <a
-                    v-if="item.father"
-                    :href="'https://wikimili.com/en/' + item.name.replace(/ /g,'_')"
-                    target="blank"
-                    v-on="on"
-                  ><strong
-                    v-if="isCoreSunject(item.name)"
-                    style="color:orange"
-                  >{{
-                    item.name
-                  }}</strong><span v-else>{{ item.name }}</span></a>
-                  <span v-else v-on="on">{{ item.name }}</span>
-                </template>
-                <span>{{ en2zhdict[item.name]===undefined?'Loading...': en2zhdict[item.name] }}</span>
-              </v-tooltip>
-            </template>
-            <template v-slot:append="{ item }">
-              <v-chip
-                v-if="item.nodetype == 'article'"
-                color="success"
-                outlined
-              >{{ arithclBirth[item.name] }}</v-chip>
-              <v-tooltip
-                v-if="item.father"
-                top
-              >
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                    text
-                    small
-                    color="primary"
-                    v-on="on"
-                  >
-                    <v-icon>mdi-wikipedia</v-icon>
-                    摘要
-                  </v-btn>
-                </template>
-                <span> {{ paragraph[item.name] }}</span>
-              </v-tooltip>
-            </template>
-          </v-treeview>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+<template lang="pug">
+v-container(fluid='')
+  v-dialog(v-model='overlay' fullscreen='' hide-overlay='' transition='dialog-bottom-transition')
+    v-card
+      v-toolbar(dark='' color='primary')
+        v-btn(icon='' dark='' @click='overlay = false')
+          v-icon mdi-close
+        v-toolbar-title 关闭对比面板
+        v-spacer
+          v-toolbar-items
+            v-btn(dark='' text='' @click='overlay = false') Close
+      v-col.diffbox
+        div(v-html='prettyHtml')
+  v-row
+    v-col
+      v-btn(color='primary' @click='checkNode') 对比选中的节点
+    v-col
+      v-btn(:color="showDouble ? 'light-green' : 'lime'" @click='showDouble = !showDouble') {{ showDouble ? "单排展示" : "双排对比" }}
+    v-col
+      v-autocomplete(v-model='searchString' label='搜索 category' :loading='isLoadingButton' clearable='' cache-items='' no-data-text='没有匹配值' :search-input.sync='search' :items='searchItems')
+  v-row(justify='space-between')
+    v-col(:cols='showDouble ? 6 : 12')
+      v-card(hover='' flat='')
+        v-select(v-model='yearSelect1' :items='yearOptions' chips='' label='年份' @change='yearChange1')
+        v-treeview(v-model='selection1' :items='treeItems1' :load-children='fetchChildren1' :open.sync='openTree1' selectable='' activatable='' dense='' color='warning' selection-type='leaf' open-on-click='' return-object='' transition='')
+          template(v-slot:label='{ item }')
+            v-tooltip(top='')
+              template(v-slot:activator='{ on }')
+                a(v-if='item.father' :href="'https://wikimili.com/en/' + item.name.replace(/ /g,'_')" target='blank' v-on='on')
+                  strong(v-if='isCoreSunject(item.name)' style='color:orange')
+                    | {{
+                    | item.name
+                    | }}
+                  span(v-else='') {{ item.name }}
+                span(v-else='' v-on='on') {{ item.name }}
+              span {{ en2zhdict[item.name]===undefined?'Loading...': en2zhdict[item.name] }}
+          template(v-slot:append='{ item }')
+            v-chip(v-if="item.nodetype == 'article'" color='success' outlined='') {{ arithclBirth[item.name] }}
+            v-tooltip(v-if='item.father' top='')
+              template(v-slot:activator='{ on }')
+                v-btn(text='' small='' color='primary' v-on='on')
+                  v-icon mdi-wikipedia
+                  |                   摘要
+              span  {{ paragraph[item.name] }}
+    v-col(v-if='showDouble' cols='6')
+      v-card(hover='' flat='')
+        v-select(v-model='yearSelect2' :items='yearOptions' chips='' label='年份' @change='yearChange2')
+        v-treeview(v-model='selection2' :items='treeItems2' :load-children='fetchChildren2' selectable='' activatable='' :open.sync='openTree2' dense='' color='warning' selection-type='leaf' open-on-click='' return-object='' transition='')
+          template(v-slot:label='{ item }')
+            v-tooltip(top='')
+              template(v-slot:activator='{ on }')
+                a(v-if='item.father' :href="'https://wikimili.com/en/' + item.name.replace(/ /g,'_')" target='blank' v-on='on')
+                  strong(v-if='isCoreSunject(item.name)' style='color:orange')
+                    | {{
+                    | item.name
+                    | }}
+                  span(v-else='') {{ item.name }}
+                span(v-else='' v-on='on') {{ item.name }}
+              span {{ en2zhdict[item.name]===undefined?'Loading...': en2zhdict[item.name] }}
+          template(v-slot:append='{ item }')
+            v-chip(v-if="item.nodetype == 'article'" color='success' outlined='') {{ arithclBirth[item.name] }}
+            v-tooltip(v-if='item.father' top='')
+              template(v-slot:activator='{ on }')
+                v-btn(text='' small='' color='primary' v-on='on')
+                  v-icon mdi-wikipedia
+                  |                   摘要
+              span  {{ paragraph[item.name] }}
 </template>
 
 <script>
@@ -479,7 +326,7 @@ export default {
           articleLength = data.childList.length
           this._fectch_article_birth(data.childList)
           articleChildrens = data.childList.map(item => {
-            this.getParagraph(item)
+            setTimeout(() => { this.getParagraph(item) }, 1000)
             this.addTranslateChan(item)
             return {
               id: uuidv4(),
