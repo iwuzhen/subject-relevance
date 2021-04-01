@@ -7,7 +7,7 @@ v-container(fluid)
     v-col(cols='2')
       v-select(v-model='typeSelect', :items='typeOpt', label='世界类型', @click='getData').
     v-col(cols='2')
-      v-select(v-model='level', :items='levelOpt', label='层次', @click='getData').
+      v-select(v-model='level', :items='levelOpt', label='层次', @change='levelChange').
     v-col(cols='2')
       v-select(v-model='yearSelect', :items='yearOpt', label='幂律分布指定年', @click='getData').
     v-col(cols='3')
@@ -46,10 +46,17 @@ import ecStat from 'echarts-stat'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 import _ from 'lodash'
+
 const subjectsV5 = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
   'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
   'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
-  'Medicine']
+  'Medicine'].sort()
+
+const subjectsV5_lv2 = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+  'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+  'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
+  'Medicine', 'Art', 'Business'].sort()
+
 // tooyip 位置的x位置
 var tipLegend = 0
 export default {
@@ -65,7 +72,7 @@ export default {
       yearSelect: 2021,
       yearOpt: [2007, 2008, 2009, 2010, 2011, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021],
       level: 4,
-      levelOpt: [3, 4],
+      levelOpt: [2, 3, 4],
       nodeRange: [1, 1000],
       yearRange: [2007, 2021],
       typeSelect: 'innerzipf',
@@ -119,6 +126,55 @@ export default {
     this.getData()
   },
   methods: {
+    // 层次切换
+    levelChange() {
+      if (this.level === 2) {
+        this.versionSelect = 'xueshu_v5'
+        this.versionOpt = [
+          {
+            text: '学术 v5',
+            value: 'xueshu_v5'
+          }]
+
+        this.subjectSelect = subjectsV5_lv2
+        this.subjectOpt = subjectsV5_lv2.map(item => {
+          let text = item
+          if (item === 'Engineering disciplines') {
+            text = 'Engineering'
+          }
+          return {
+            text: text,
+            value: item
+          }
+        })
+      } else {
+        this.versionOpt = [{
+          text: 'v5',
+          value: 'v5'
+        }, {
+          text: '学术 v5',
+          value: 'xueshu_v5'
+        }, {
+          text: '学术 v5 去文学历史',
+          value: 'xueshu_noHistoryAndLiterature_v5'
+        }]
+        this.versionSelect = 'xueshu_v5'
+
+        this.subjectSelect = subjectsV5
+        this.subjectOpt = subjectsV5.map(item => {
+          let text = item
+          if (item === 'Engineering disciplines') {
+            text = 'Engineering'
+          }
+          return {
+            text: text,
+            value: item
+          }
+        })
+      }
+      this.getData()
+    },
+
     // 计算斜率
     calSlope() {
       const lines = []
