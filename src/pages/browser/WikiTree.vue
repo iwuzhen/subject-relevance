@@ -42,7 +42,7 @@ v-container(fluid)
             v-tooltip(v-if='item.father' top)
               template(v-slot:activator='{ on }')
                 v-chip(v-if="item.nodetype === 'article'" color='orange' small  v-on='on') {{ linksinCount.left[item.name]===undefined?'Loading...': linksinCount.left[item.name] }}
-              span linkin count
+              span linksin count
             v-tooltip(v-if='item.father' top)
               template(v-slot:activator='{ on }')
                 v-btn(text small color='primary' v-on='on')
@@ -71,7 +71,7 @@ v-container(fluid)
             v-tooltip(v-if='item.father' top)
               template(v-slot:activator='{ on }')
                 v-chip(v-if="item.nodetype === 'article'" color='orange' small  v-on='on') {{ linksinCount.right[item.name]===undefined?'Loading...': linksinCount.right[item.name] }}
-              span linkin count
+              span linksin count
             v-tooltip(v-if='item.father' top)
               template(v-slot:activator='{ on }')
                 v-btn(text small color='primary' v-on='on')
