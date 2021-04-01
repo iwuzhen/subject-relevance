@@ -1,21 +1,21 @@
 <template lang="pug">
-v-container(fluid=''  :style="cssVars")
+v-container(fluid  :style="cssVars")
   v-row
     v-col(cols='4')
-      v-select(v-model='vertexSubjects' :items='subjectOpt' chips='' multiple='' deletable-chips='' clearable='' dense='' label='定点学科' @change='Draw')
+      v-select(v-model='vertexSubjects' :items='subjectOpt' chips multiple deletable-chips clearable dense label='定点学科' @change='Draw')
 
     v-col(cols='8')
-      v-select(v-model='subjectRelevances' :items='categorys' chips='' multiple='' deletable-chips='' clearable='' dense='' label='目标学科' @change='Draw')
+      v-select(v-model='subjectRelevances' :items='categorys' chips multiple deletable-chips clearable dense label='目标学科' @change='Draw')
     v-col(cols="5")
       v-slider(hint="距离过滤器" label="距离过滤器" max=1 min=0 step=0.01 thumb-label="always" v-model="linkFilter" @change='liteDraw')
     v-col(cols="7")
       v-slider(hint="展示年份" label="展示年份" max=2021 min=2007 step=1 thumb-label="always" v-model="selectYear" @change='liteDraw')
     v-col(cols='2')
-      v-select(v-model='methodValue' :items='methodOpt' dense='' label='方向' @change='Draw')
+      v-select(v-model='methodValue' :items='methodOpt' dense label='方向' @change='Draw')
     v-col(cols='2')
-      v-select(v-model='btype' :items='btypeOpt' dense='' label='数据范围' @change='Draw')
+      v-select(v-model='btype' :items='btypeOpt' dense label='数据范围' @change='Draw')
     v-col(cols='2')
-      v-select(v-model='level' :items='levelOpt' dense='' :disabled="!['v5_xueshu_noHistoryAndLiterature_node','v5_xueshu_node'].includes(btype)" label='level' @change='Draw')
+      v-select(v-model='level' :items='levelOpt' dense :disabled="!['v5_xueshu_noHistoryAndLiterature_node','v5_xueshu_node'].includes(btype)" label='level' @change='levelChange')
     v-col(cols="2")
       v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='liteDraw')
     v-col(cols="2")
@@ -37,20 +37,20 @@ v-container(fluid=''  :style="cssVars")
         v-btn(@click="style.fontLeft++") - 1
   v-row
     v-col(col='12')
-      v-card.mx-auto(outlined='' :loading='loading' height='90vh')
+      v-card.mx-auto(outlined :loading='loading' height='90vh')
         v-card-title
           | MAG {{selectYear}} linksin 测试 3D 引力图
-        v-container#3dgraph(fluid='' fill-height='')
+        v-container#3dgraph(fluid fill-height)
 
   v-row
     v-col(col='12')
-      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
-        v-container#subjectChart1(fluid='' fill-height='')
+      v-card.mx-auto(outlined :loading='loading' height='70vh')
+        v-container#subjectChart1(fluid fill-height)
 
   v-row
     v-col(col='12')
-      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
-        v-container#subjectChart2(fluid='' fill-height='')
+      v-card.mx-auto(outlined :loading='loading' height='70vh')
+        v-container#subjectChart2(fluid fill-height)
   v-row
     v-col
       comment(storagekey='wiki_graph_2021_Chart_1')
@@ -78,7 +78,10 @@ const v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathemat
   'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
   'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
   'Medicine'].sort()
-
+const v5Subject_lv2 = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+  'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+  'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
+  'Medicine', 'Art', 'Business'].sort()
 export default {
   name: 'MagGraph',
   components: {
@@ -107,7 +110,7 @@ export default {
           value: 'v5_node'
         }],
       level: 4,
-      levelOpt: [3, 4],
+      levelOpt: [2, 3, 4],
       BasicData: {},
       GraphData: {},
       showText: true,
@@ -147,6 +150,63 @@ export default {
     this.Draw()
   },
   methods: {
+    levelChange() {
+      if (this.level === 2) {
+        this.btype = 'v5_xueshu_node'
+        this.btypeOpt = [
+          {
+            text: '学术圈',
+            value: 'v5_xueshu_node'
+          }, {
+            text: '全集',
+            value: 'v5_node'
+          }]
+
+        this.subjectRelevances = v5Subject_lv2
+        this.categorys = v5Subject_lv2.map(item => {
+          let text = item
+          if (item === 'Engineering disciplines') {
+            text = 'Engineering'
+          }
+          return {
+            text: text,
+            value: item
+          }
+        })
+      } else {
+        this.btypeOpt = [
+          {
+            text: '学术圈去历史文学',
+            value: 'v5_xueshu_noHistoryAndLiterature_node'
+          },
+          {
+            text: '学术圈',
+            value: 'v5_xueshu_node'
+          }, {
+            text: '全集',
+            value: 'v5_node'
+          }]
+        let currentV5Subject = []
+        if (this.btype === 'v5_xueshu_noHistoryAndLiterature_node') {
+          currentV5Subject = v5Subject.filter(item => !['History', 'Literature'].includes(item))
+        }
+        this.subjectRelevances = currentV5Subject
+        this.subjectRelevances = this.subjectRelevances.filter(item =>
+          currentV5Subject.includes(item)
+        )
+        this.categorys = v5Subject.map(item => {
+          let text = item
+          if (item === 'Engineering disciplines') {
+            text = 'Engineering'
+          }
+          return {
+            text: text,
+            value: item
+          }
+        })
+      }
+      this.Draw()
+    },
     async getData() {
       const allNodesMap = {}
       const allNodeLinks = []
@@ -159,13 +219,22 @@ export default {
         const opt = {
           subjects: allData.join(','),
           version: 'v5',
-          type: 0,
-          level: 4
+          type: 'arts',
+          level: this.level
         }
         // if (['v5_xueshu_noHistoryAndLiterature_node', 'v5_xueshu_node'].includes(this.btype)) {
         //   opt.level = this.level
         // }
-        const ret = await requestWrap('wiki/getArticlesTotalByCoreNew_v', 'post', opt)
+        const ret = await requestWrap('wiki/getArticlesTotalByCoreNew_v5', 'post', opt)
+        // 将数据拼接成结构体
+        const dataMap = {}
+        for (const i in ret.data.legend) {
+          const yearData = {}
+          for (const j in ret.data.x) {
+            yearData[ret.data.x[j]] = ret.data.y[i][j]
+          }
+          dataMap[ret.data.legend[i]] = yearData
+        }
         allData.forEach((item, index) => {
           if (item === 'Engineering disciplines') {
             item = 'Engineering'
@@ -173,13 +242,12 @@ export default {
           allNodesMap[item] = {
             id: index,
             label: item,
-            weight: ret[item]
+            weight: dataMap[item]
           }
         })
       } catch (error) {
         console.log(error)
       }
-
       let linkId = 0
       while (allData.length > 1) {
         let strA = allData.pop()
@@ -219,6 +287,7 @@ export default {
 
     parseGraphData(nodes, links, yindex) {
       const year = this.repYearRange[yindex]
+      console.log(nodes, year)
       const sizeMax = Math.pow(
         Math.max(..._.flattenDeep(nodes.map(each => each.weight[year]))), 1 / 3
       )
@@ -238,6 +307,7 @@ export default {
         nodes: nodes.map(each => {
           if (this.vertexSubjects.includes(each.label)) {
             const { fx, fy, fz } = vertuxArray.pop()
+            console.log(each.weight[year], sizeMin, sizeMax)
             return Object.assign(each, {
               id: each.id,
               name: each.label,

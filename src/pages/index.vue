@@ -363,12 +363,12 @@ export default {
               to: '/wikipedia/wikiGraph',
               update: '2021-02-05T16:43:03.429Z'
             },
-            {
-              title: 'wiki 文章数',
-              text: '',
-              to: '/wikipedia/ArticleCount',
-              update: '2021-02-05T16:43:03.429Z'
-            },
+            // {
+            //   title: 'wiki 文章数',
+            //   text: '',
+            //   to: '/wikipedia/ArticleCount',
+            //   update: '2021-02-05T16:43:03.429Z'
+            // },
             {
               title: 'core_v5文章数links统计',
               text: 'core_v5文章数links统计',

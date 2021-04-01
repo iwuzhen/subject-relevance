@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-03-24 15:48:48
+ * @LastEditTime: 2021-04-01 11:35:02
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -1407,94 +1407,94 @@ export const ChartMap = {
     xAxisName: 'Year',
     yAxisName: '自恋度'
   },
-  'wikipedia/ArticleCount': {
-    ChName: 'wiki Core 文章数',
-    componentName: 'PageTemplate',
-    HandleResponseFunc: (responseData, ChartObj) => {
-      const _opt = extendEchartsOpts({
-        title: {
-          text: 'wiki 学科文章数'
-        },
-        legend: {
-          data: Object.keys(responseData)
-        },
-        xAxis: {
-          name: ChartObj.xAxisName,
-          type: 'value',
-          boundaryGap: false,
-          min: 'dataMin',
-          max: 'dataMax'
-        },
-        yAxis: {
-          name: ChartObj.yAxisName,
-          type: 'value'
-        },
-        series: zip(Object.keys(responseData), Object.values(responseData)).map(item => {
-          return extendLineSeries({
-            name: item[0],
-            type: 'line',
-            smooth: false,
-            data: Object.entries(item[1])
-          })
-        })
-      })
-      console.log(_opt)
-      return _opt
-    },
-    RequestFunc: async(params) => {
-      // 当年
-      params.type = 0
-      // params.level = 3
-      const data = await requestWrap('wiki/getArticlesTotalByCoreNew_v', 'post', params)
-      return data
-    },
-    Select: [
-      {
-        name: 'subjects',
-        default: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
-          'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-          'Literature', 'History'],
-        label: '目标学科',
-        multiple: true,
-        show: true,
-        cols: 8,
-        items: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
-          'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-          'Literature', 'History'].sort()
-      }, {
-        name: 'version',
-        default: 'v5',
-        label: '版本',
-        multiple: false,
-        show: true,
-        cols: 2,
-        items: [{
-          text: 'v5',
-          value: 'v5'
-        }, {
-          text: 'v5学术',
-          value: 'v5_xueshu'
+  // 'wikipedia/ArticleCount': {
+  //   ChName: 'wiki Core 文章数',
+  //   componentName: 'PageTemplate',
+  //   HandleResponseFunc: (responseData, ChartObj) => {
+  //     const _opt = extendEchartsOpts({
+  //       title: {
+  //         text: 'wiki 学科文章数'
+  //       },
+  //       legend: {
+  //         data: Object.keys(responseData)
+  //       },
+  //       xAxis: {
+  //         name: ChartObj.xAxisName,
+  //         type: 'value',
+  //         boundaryGap: false,
+  //         min: 'dataMin',
+  //         max: 'dataMax'
+  //       },
+  //       yAxis: {
+  //         name: ChartObj.yAxisName,
+  //         type: 'value'
+  //       },
+  //       series: zip(Object.keys(responseData), Object.values(responseData)).map(item => {
+  //         return extendLineSeries({
+  //           name: item[0],
+  //           type: 'line',
+  //           smooth: false,
+  //           data: Object.entries(item[1])
+  //         })
+  //       })
+  //     })
+  //     console.log(_opt)
+  //     return _opt
+  //   },
+  //   RequestFunc: async(params) => {
+  //     // 当年
+  //     params.type = 0
+  //     // params.level = 3
+  //     const data = await requestWrap('wiki/getArticlesTotalByCoreNew_v', 'post', params)
+  //     return data
+  //   },
+  //   Select: [
+  //     {
+  //       name: 'subjects',
+  //       default: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+  //         'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+  //         'Literature', 'History'],
+  //       label: '目标学科',
+  //       multiple: true,
+  //       show: true,
+  //       cols: 8,
+  //       items: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+  //         'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+  //         'Literature', 'History'].sort()
+  //     }, {
+  //       name: 'version',
+  //       default: 'v5',
+  //       label: '版本',
+  //       multiple: false,
+  //       show: true,
+  //       cols: 2,
+  //       items: [{
+  //         text: 'v5',
+  //         value: 'v5'
+  //       }, {
+  //         text: 'v5学术',
+  //         value: 'v5_xueshu'
 
-        },
-        {
-          text: '学术圈去历史文学',
-          value: 'v5_xueshu_noHistoryAndLiterature'
-        }]
-      }, {
-        name: 'level',
-        default: 3,
-        label: 'level',
-        show: true,
-        multiple: false,
-        cols: 2,
-        items: [3, 4]
-      }
-    ],
-    Slider: [],
-    RangeSlider: [],
-    xAxisName: 'Year',
-    yAxisName: 'Count'
-  },
+  //       },
+  //       {
+  //         text: '学术圈去历史文学',
+  //         value: 'v5_xueshu_noHistoryAndLiterature'
+  //       }]
+  //     }, {
+  //       name: 'level',
+  //       default: 3,
+  //       label: 'level',
+  //       show: true,
+  //       multiple: false,
+  //       cols: 2,
+  //       items: [3, 4]
+  //     }
+  //   ],
+  //   Slider: [],
+  //   RangeSlider: [],
+  //   xAxisName: 'Year',
+  //   yAxisName: 'Count'
+  // },
   'wikipedia/ArticlesTotalByCoreNew_v5': {
     ChName: 'core_v5文章数links统计',
     componentName: 'PageTemplate',
@@ -1539,7 +1539,7 @@ export const ChartMap = {
         default: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
           'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
           'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
-          'Medicine'].sort(),
+          'Medicine', 'Art', 'Business'].sort(),
         label: '目标学科',
         multiple: true,
         show: true,
@@ -1547,7 +1547,7 @@ export const ChartMap = {
         items: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
           'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
           'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
-          'Medicine'].sort()
+          'Medicine', 'Art', 'Business'].sort()
       }, {
         name: 'level',
         default: 3,

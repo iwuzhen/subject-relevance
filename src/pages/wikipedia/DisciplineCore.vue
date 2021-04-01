@@ -1,81 +1,25 @@
-<template>
-  <v-container fluid>
-    <v-row>
-      <v-col cols="2">
-        <v-select
-          v-model="subjectTarget"
-          :items="categorys"
-          label="目标学科"
-          @change="getData"
-        />
-      </v-col>
-      <v-col cols="10">
-        <v-select
-          v-model="subjectRelevances"
-          :items="categorysOptions"
-          small-chips
-          multiple
-          deletable-chips
-          clearable
-          label="相关学科"
-          @change="getData"
-        />
-      </v-col>
-      <v-col cols="2">
-        <v-select
-          v-model="methodValue"
-          :items="methodOptions"
-          label="条件"
-          @change="getData"
-        />
-      </v-col>
-      <v-col v-if="pageCountOpt.length>1" cols="2">
-        <v-select
-          v-model="pageCountSelect"
-          :items="pageCountOpt"
-          label="文章数"
-          @change="getData"
-        />
-      </v-col>
-      <v-col cols="2">
-        <v-select
-          v-model="versionSelect"
-          :items="versionOpt"
-          label="version"
-          @change="getData"
-        />
-      </v-col>
-      <v-col v-if="levelOpt.length>1" cols="1">
-        <v-select
-          v-model="levelSelect"
-          :items="levelOpt"
-          label="层数"
-          @change="getData"
-        />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="70vh"
-        >
-          <v-container
-            id="subjectChart"
-            fluid
-            fill-height
-          />
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <comment v-if="storagekey!=''" :storagekey="storagekey" />
-      </v-col>
-    </v-row>
-  </v-container>
+<template lang="pug">
+v-container(fluid='')
+  v-row
+    v-col(cols='2')
+      v-select(v-model='subjectTarget' :items='categorys' label='目标学科' @change='getData')
+    v-col(cols='10')
+      v-select(v-model='subjectRelevances' :items='categorysOptions' small-chips='' multiple='' deletable-chips='' clearable='' label='相关学科' @change='getData')
+    v-col(cols='2')
+      v-select(v-model='methodValue' :items='methodOptions' label='条件' @change='getData')
+    v-col(v-if='pageCountOpt.length>1' cols='2')
+      v-select(v-model='pageCountSelect' :items='pageCountOpt' label='文章数' @change='getData')
+    v-col(cols='2')
+      v-select(v-model='versionSelect' :items='versionOpt' label='version' @change='getData')
+    v-col(v-if='levelOpt.length>1' cols='1')
+      v-select(v-model='levelSelect' :items='levelOpt' label='层数' @change='levelChange')
+  v-row
+    v-col(col='12')
+      v-card.mx-auto(outlined='' :loading='loading' height='70vh')
+        v-container#subjectChart(fluid='' fill-height='')
+  v-row
+    v-col
+      comment(v-if="storagekey!=''" :storagekey='storagekey')
 </template>
 
 <script>
@@ -198,7 +142,7 @@ export default {
       this.versionSelect = 'v4'
       this.versionOpt = ['v4']
     } else if (this.$route.query.version === 'v5') {
-      this.levelOpt = [3, 4]
+      this.levelOpt = [2, 3, 4]
       this.levelSelect = 4
       this.methodValue = 'linksout'
       this.pageCountSelect = -1
@@ -236,30 +180,68 @@ export default {
     )
   },
   methods: {
-    async getData() {
+    levelChange() {
       if (this.$route.query.version === 'v5') {
-        let v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
-          'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-          'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
-          'Medicine'].sort()
-        if (this.btype === 'v5_xueshu_noHistoryAndLiterature_node') {
-          v5Subject = v5Subject.filter(item => !['History', 'Literature'].includes(item))
-        }
-        this.subjectRelevances = this.subjectRelevances.filter(item =>
-          v5Subject.includes(item)
-        )
-        this.categorys = v5Subject.map(item => {
-          let text = item
-          if (item === 'Engineering disciplines') {
-            text = 'Engineering'
+        if (this.levelSelect === 2) {
+          this.versionSelect = 'v5_xueshu_node'
+          this.versionOpt = ['v5_node',
+            { text: '学术圈', value: 'v5_xueshu_node' }
+          ]
+          let v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+            'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+            'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
+            'Medicine', 'Art', 'Business'].sort()
+          if (this.versionSelect === 'v5_xueshu_noHistoryAndLiterature_node') {
+            v5Subject = v5Subject.filter(item => !['History', 'Literature'].includes(item))
           }
-          return {
-            text: text,
-            value: item
-          }
-        })
-      }
 
+          this.subjectRelevances = v5Subject
+          this.subjectRelevances = this.subjectRelevances.filter(item =>
+            v5Subject.includes(item)
+          )
+          this.categorys = v5Subject.map(item => {
+            let text = item
+            if (item === 'Engineering disciplines') {
+              text = 'Engineering'
+            }
+            return {
+              text: text,
+              value: item
+            }
+          })
+        } else {
+          this.versionOpt = ['v5_node', 'v5_edge',
+            { text: '学术圈', value: 'v5_xueshu_node' },
+            {
+              text: '学术圈去历史文学',
+              value: 'v5_xueshu_noHistoryAndLiterature_node'
+            }]
+          let v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+            'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+            'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
+            'Medicine'].sort()
+          if (this.versionSelect === 'v5_xueshu_noHistoryAndLiterature_node') {
+            v5Subject = v5Subject.filter(item => !['History', 'Literature'].includes(item))
+          }
+          this.subjectRelevances = v5Subject
+          this.subjectRelevances = this.subjectRelevances.filter(item =>
+            v5Subject.includes(item)
+          )
+          this.categorys = v5Subject.map(item => {
+            let text = item
+            if (item === 'Engineering disciplines') {
+              text = 'Engineering'
+            }
+            return {
+              text: text,
+              value: item
+            }
+          })
+        }
+      }
+      this.getData()
+    },
+    async getData() {
       if (!this.subjectTarget || this.subjectRelevances.length === 0) {
         return false
       }
