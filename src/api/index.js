@@ -707,7 +707,6 @@ export async function getWikiPageTree(params) {
 export async function getWikiCategoryTree(params) {
   let requestParams
   if (params.db === 'WIKI11') {
-    params.db = 'WIKI13'
     requestParams = {
       url: '/wikidb11/childCategories',
       method: 'get',
@@ -722,6 +721,31 @@ export async function getWikiCategoryTree(params) {
   } else {
     requestParams = {
       url: '/wiki/childCategories',
+      method: 'get',
+      params: params
+    }
+  }
+  return await cacheRequestWiki(requestParams)
+}
+
+// linksin 类 tree
+export async function getWikiCategoryLinksinTree(params) {
+  let requestParams
+  if (params.db === 'WIKI11') {
+    requestParams = {
+      url: '/wikidb11/childArticlesHasLinksinCount',
+      method: 'get',
+      params: params
+    }
+  } else if (params.db === 'WIKI13') {
+    requestParams = {
+      url: '/wikidb13/childArticlesHasLinksinCount',
+      method: 'get',
+      params: params
+    }
+  } else {
+    requestParams = {
+      url: '/wiki/childArticlesHasLinksinCount',
       method: 'get',
       params: params
     }

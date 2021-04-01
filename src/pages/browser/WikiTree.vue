@@ -1,14 +1,14 @@
 <template lang="pug">
-v-container(fluid='')
-  v-dialog(v-model='overlay' fullscreen='' hide-overlay='' transition='dialog-bottom-transition')
+v-container(fluid)
+  v-dialog(v-model='overlay' fullscreen hide-overlay transition='dialog-bottom-transition')
     v-card
-      v-toolbar(dark='' color='primary')
-        v-btn(icon='' dark='' @click='overlay = false')
+      v-toolbar(dark color='primary')
+        v-btn(icon dark @click='overlay = false')
           v-icon mdi-close
         v-toolbar-title 关闭对比面板
         v-spacer
           v-toolbar-items
-            v-btn(dark='' text='' @click='overlay = false') Close
+            v-btn(dark text @click='overlay = false') Close
       v-col.diffbox
         div(v-html='prettyHtml')
   v-row
@@ -17,53 +17,65 @@ v-container(fluid='')
     v-col
       v-btn(:color="showDouble ? 'light-green' : 'lime'" @click='showDouble = !showDouble') {{ showDouble ? "单排展示" : "双排对比" }}
     v-col
-      v-autocomplete(v-model='searchString' label='搜索 category' :loading='isLoadingButton' clearable='' cache-items='' no-data-text='没有匹配值' :search-input.sync='search' :items='searchItems')
+      v-autocomplete(v-model='searchString' label='搜索 category' :loading='isLoadingButton' clearable cache-items no-data-text='没有匹配值' :search-input.sync='search' :items='searchItems')
   v-row(justify='space-between')
     v-col(:cols='showDouble ? 6 : 12')
-      v-card(hover='' flat='')
-        v-select(v-model='yearSelect1' :items='yearOptions' chips='' label='年份' @change='yearChange1')
-        v-treeview(v-model='selection1' :items='treeItems1' :load-children='fetchChildren1' :open.sync='openTree1' selectable='' activatable='' dense='' color='warning' selection-type='leaf' open-on-click='' return-object='' transition='')
+      v-card(hover flat)
+        v-select(v-model='yearSelect1' :items='yearOptions' chips label='年份' @change='yearChange1')
+        v-treeview(v-model='selection1' :items='treeItems1' :load-children='fetchChildren1' :open.sync='openTree1' selectable activatable dense color='warning' selection-type='leaf' open-on-click return-object transition)
           template(v-slot:label='{ item }')
-            v-tooltip(top='')
+            v-tooltip(top)
               template(v-slot:activator='{ on }')
                 a(v-if='item.father' :href="'https://wikimili.com/en/' + item.name.replace(/ /g,'_')" target='blank' v-on='on')
                   strong(v-if='isCoreSunject(item.name)' style='color:orange')
                     | {{
                     | item.name
                     | }}
-                  span(v-else='') {{ item.name }}
-                span(v-else='' v-on='on') {{ item.name }}
+                  span(v-else) {{ item.name }}
+                span(v-else v-on='on') {{ item.name }}
               span {{ en2zhdict[item.name]===undefined?'Loading...': en2zhdict[item.name] }}
           template(v-slot:append='{ item }')
-            v-chip(v-if="item.nodetype == 'article'" color='success' outlined='') {{ arithclBirth[item.name] }}
-            v-tooltip(v-if='item.father' top='')
+            v-tooltip(v-if='item.father' top)
               template(v-slot:activator='{ on }')
-                v-btn(text='' small='' color='primary' v-on='on')
+                v-chip(v-if="item.nodetype === 'article' && arithclBirth[item.name]!== ''" small color='success' outlined  v-on='on') {{ arithclBirth[item.name] }}
+              span birthday
+            v-tooltip(v-if='item.father' top)
+              template(v-slot:activator='{ on }')
+                v-chip(v-if="item.nodetype === 'article'" color='orange' small  v-on='on') {{ linksinCount.left[item.name]===undefined?'Loading...': linksinCount.left[item.name] }}
+              span linkin count
+            v-tooltip(v-if='item.father' top)
+              template(v-slot:activator='{ on }')
+                v-btn(text small color='primary' v-on='on')
                   v-icon mdi-wikipedia
-                  |                   摘要
               span  {{ paragraph[item.name] }}
     v-col(v-if='showDouble' cols='6')
-      v-card(hover='' flat='')
-        v-select(v-model='yearSelect2' :items='yearOptions' chips='' label='年份' @change='yearChange2')
-        v-treeview(v-model='selection2' :items='treeItems2' :load-children='fetchChildren2' selectable='' activatable='' :open.sync='openTree2' dense='' color='warning' selection-type='leaf' open-on-click='' return-object='' transition='')
+      v-card(hover flat)
+        v-select(v-model='yearSelect2' :items='yearOptions' chips label='年份' @change='yearChange2')
+        v-treeview(v-model='selection2' :items='treeItems2' :load-children='fetchChildren2' selectable activatable :open.sync='openTree2' dense color='warning' selection-type='leaf' open-on-click return-object transition)
           template(v-slot:label='{ item }')
-            v-tooltip(top='')
+            v-tooltip(top)
               template(v-slot:activator='{ on }')
                 a(v-if='item.father' :href="'https://wikimili.com/en/' + item.name.replace(/ /g,'_')" target='blank' v-on='on')
                   strong(v-if='isCoreSunject(item.name)' style='color:orange')
                     | {{
                     | item.name
                     | }}
-                  span(v-else='') {{ item.name }}
-                span(v-else='' v-on='on') {{ item.name }}
+                  span(v-else) {{ item.name }}
+                span(v-else v-on='on') {{ item.name }}
               span {{ en2zhdict[item.name]===undefined?'Loading...': en2zhdict[item.name] }}
           template(v-slot:append='{ item }')
-            v-chip(v-if="item.nodetype == 'article'" color='success' outlined='') {{ arithclBirth[item.name] }}
-            v-tooltip(v-if='item.father' top='')
+            v-tooltip(v-if='item.father' top)
               template(v-slot:activator='{ on }')
-                v-btn(text='' small='' color='primary' v-on='on')
+                v-chip(v-if="item.nodetype === 'article' && arithclBirth[item.name]!== ''" small color='success' outlined  v-on='on') {{ arithclBirth[item.name] }}
+              span birthday
+            v-tooltip(v-if='item.father' top)
+              template(v-slot:activator='{ on }')
+                v-chip(v-if="item.nodetype === 'article'" color='orange' small  v-on='on') {{ linksinCount.right[item.name]===undefined?'Loading...': linksinCount.right[item.name] }}
+              span linkin count
+            v-tooltip(v-if='item.father' top)
+              template(v-slot:activator='{ on }')
+                v-btn(text small color='primary' v-on='on')
                   v-icon mdi-wikipedia
-                  |                   摘要
               span  {{ paragraph[item.name] }}
 </template>
 
@@ -71,6 +83,7 @@ v-container(fluid='')
 import {
   getWikiPageTree,
   getWikiCategoryTree,
+  getWikiCategoryLinksinTree,
   getCacheSummary,
   getWikiBirthday
 } from '@/api/index'
@@ -118,7 +131,11 @@ export default {
         2021
       ],
       basiCategorys: basiCategorys,
-      arithclBirth: {}
+      arithclBirth: {},
+      linksinCount: {
+        left: {},
+        right: {}
+      }
     }
   },
   computed: {
@@ -236,6 +253,7 @@ export default {
       })
     },
     yearChange1() {
+      this.linksinCount.left = {}
       this.treeItems1 = this.basiccategorys.map(item => {
         return {
           id: uuidv4(),
@@ -245,6 +263,7 @@ export default {
       })
     },
     yearChange2() {
+      this.linksinCount.right = {}
       this.treeItems2 = this.basiccategorys.map(item => {
         return {
           id: uuidv4(),
@@ -286,6 +305,16 @@ export default {
       this.diffs = DiffString
       this.overlay = !this.overlay
     },
+    // 更新 links 数量信息
+    async updateLinksin(name, db, position) {
+      const ret = await getWikiCategoryLinksinTree({
+        query: Buffer.from(name).toString('base64'),
+        type: 'CATEGORY',
+        db: `WIKI${db}`
+      })
+      this.$set(this.linksinCount, position, Object.assign(this.linksinCount[position], ret.data))
+      console.log(this.linksinCount)
+    },
 
     async getParagraph(name) {
       const opt = { title: name }
@@ -305,7 +334,6 @@ export default {
         // this.arithclBirth[key] = ret[key]
         this.$set(this.arithclBirth, key, ret[key])
       }
-      console.log(ret)
     },
 
     async _fetchChildren(treeitem, _wikiDB) {
@@ -336,7 +364,6 @@ export default {
               nodetype: 'article'
             }
           })
-
           data = await getWikiCategoryTree({
             categoryTitle: Buffer.from(treeitem.name).toString('base64'),
             db: `WIKI${_wikiDB}`
@@ -391,6 +418,8 @@ export default {
     },
     async fetchChildren1(treeitem) {
       const _wikiDB = String(this.yearSelect1).slice(2, 4)
+
+      this.updateLinksin(treeitem.name, _wikiDB, 'left')
       await this._fetchChildren(treeitem, _wikiDB)
       if (
         treeitem.children.length > 1 &&
@@ -399,6 +428,8 @@ export default {
     },
     async fetchChildren2(treeitem) {
       const _wikiDB = String(this.yearSelect2).slice(2, 4)
+
+      this.updateLinksin(treeitem.name, _wikiDB, 'right')
       await this._fetchChildren(treeitem, _wikiDB)
       if (
         treeitem.children.length > 1 &&
