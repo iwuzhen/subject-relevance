@@ -186,7 +186,7 @@ export default {
             text: '全集',
             value: 'v5_node'
           }]
-        let currentV5Subject = []
+        let currentV5Subject = v5Subject
         if (this.btype === 'v5_xueshu_noHistoryAndLiterature_node') {
           currentV5Subject = v5Subject.filter(item => !['History', 'Literature'].includes(item))
         }
