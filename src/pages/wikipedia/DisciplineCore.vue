@@ -285,7 +285,11 @@ export default {
     setOptions(data) {
       const _opt = extendEchartsOpts({
         title: {
-          text: data.title
+          text: this.subjectTarget,
+          textStyle: {
+            fontSize: 16,
+            fontWeight: 'normal'
+          }
         },
         legend: {
           data: data.legend
@@ -294,12 +298,23 @@ export default {
           name: 'Year',
           type: 'category',
           boundaryGap: false,
-          data: data.x
+          data: data.x,
+          minorSplitLine: {
+            fontSize: 14
+          }
         },
         yAxis: {
-          name: 'Semantic Distance',
+          name: 'Knowledge Distance',
           type: 'value',
-          max: 1
+          minorSplitLine: {
+            fontSize: 14
+          },
+          // max: 1,
+          // max: 'dataMax',
+          min: function(value) {
+            console.log(Math.floor(value.min * 10 - 1) / 10)
+            return Math.floor(value.min * 10) / 10
+          }
         },
         series: data.y.map((item, index) => {
           return extendLineSeries({

@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2021-03-31 19:44:29
+ * @LastEditTime: 2021-04-01 19:02:44
  * @Description:
  */
 
@@ -443,13 +443,15 @@ export function extendEchartsOpts(opt) {
       containLabel: true
     },
     toolbox: {
-      right: '5%',
+      right: 0,
+      top: 0,
+      orient: 'vertical',
       feature: {
         saveAsImage: {},
         dataZoom: {
           yAxisIndex: 'none'
         },
-        dataView: { readOnly: false },
+        // dataView: { readOnly: false },
         // magicType: { type: ['line', 'bar'] },
         restore: {}
       }
