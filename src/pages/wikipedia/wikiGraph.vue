@@ -6,8 +6,6 @@ v-container(fluid  :style="cssVars")
 
     v-col(cols='8')
       v-select(v-model='subjectRelevances' :items='categorys' chips multiple deletable-chips clearable dense label='目标学科' @change='Draw')
-    v-col(cols="5")
-      v-slider(hint="距离过滤器" label="距离过滤器" max=1 min=0 step=0.01 thumb-label="always" v-model="linkFilter" @change='liteDraw')
     v-col(cols="7")
       v-slider(hint="展示年份" label="展示年份" max=2021 min=2007 step=1 thumb-label="always" v-model="selectYear" @change='liteDraw')
     v-col(cols='2')
@@ -35,6 +33,9 @@ v-container(fluid  :style="cssVars")
       v-btn-toggle(dense)
         v-btn(@click="style.fontLeft--") + 1
         v-btn(@click="style.fontLeft++") - 1
+
+    v-col(cols="5")
+      v-slider(hint="距离过滤器" label="距离过滤器" max=1 min=0 step=0.01 thumb-label="always" v-model="linkFilter" @change='liteDraw')
   v-row
     v-col(col='12')
       v-card.mx-auto(outlined :loading='loading' height='90vh')
