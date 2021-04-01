@@ -384,8 +384,7 @@ export default {
             nodetype: 'type'
           })
         } catch (error) {
-          this.$emit('e ge', `请求失败,${error}`)
-
+          this.$emit('emitMesage', `请求失败,${error}`)
           throw error
         }
       }
