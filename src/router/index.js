@@ -165,7 +165,13 @@ const routes = [{
   path: '/mag2019v2/MagAAAInfoV2',
   name: 'MagAAAInfoV2',
   component: () => import('@/pages/mag2019v2/MagAAAInfoV2')
-}, {
+},
+// {
+//   path: '/wikipedia/RefSelfRate',
+//   name: 'RefSelfRate',
+//   component: () => import('@/pages/wikipedia/RefSelfRate')
+// },
+{
   path: '/wikipedia/CoreZipfByNodes_new',
   name: 'CoreZipfByNodes_new',
   component: () => import('@/pages/wikipedia/CoreZipfByNodes_new')
