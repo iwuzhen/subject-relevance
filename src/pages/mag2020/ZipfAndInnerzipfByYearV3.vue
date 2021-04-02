@@ -1,156 +1,41 @@
-<template>
-  <v-container fluid>
-    <v-row>
-      <v-col cols="10">
-        <v-select
-          v-model="subjectSelect"
-          :items="subjectOpt"
-          small-chips
-          multiple
-          deletable-chips
-          clearable
-          label="目标学科"
-          @click="getData"
-        />
-      </v-col>
-      <v-col cols="2">
-        <v-select
-          v-model="typeSelect"
-          :items="typeOpt"
-          label="世界类型"
-          @click="getData"
-        />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="11">
-        <v-slider
-          v-model="yearSelect"
-          :max="2020"
-          :min="1955"
-          dense
-          hide-details
-          step="1"
-          hint="幂律分布指定年"
-          thumb-label="always"
-          thumb-size="32"
-          label="幂律分布指定年"
-          ticks
-          class="align-center"
-          @change="getData"
-        />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="11">
-        <v-range-slider
-          v-model="nodeRange"
-          :max="100000"
-          :min="1"
-          dense
-          hide-details
-          hint="求斜率范围"
-          class="align-center"
-          @change="getData"
-        >
-          <template v-slot:prepend>
-            <p style="width: 100px">求斜率范围</p>
-            <v-text-field
-              :value="nodeRange[0]"
-              class="mt-0 pt-0"
-              hide-details
-              single-line
-              type="number"
-              style="width: 60px"
-              @change="$set(nodeRange, 0, $event)"
-            />
-          </template>
-          <template v-slot:append>
-            <v-text-field
-              :value="nodeRange[1]"
-              class="mt-0 pt-0"
-              hide-details
-              single-line
-              type="number"
-              style="width: 60px"
-              @change="$set(nodeRange, 1, $event)"
-            />
-          </template>
-        </v-range-slider>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="11">
-        <v-range-slider
-          v-model="yearRange"
-          :max="2020"
-          :min="1955"
-          dense
-          hide-details
-          hint="学科趋势年份范围"
-          class="align-center"
-          @change="getData"
-        >
-          <template v-slot:prepend>
-            <p style="width: 100px">学科趋势年份范围</p>
-            <v-text-field
-              :value="yearRange[0]"
-              class="mt-0 pt-0"
-              hide-details
-              single-line
-              type="number"
-              style="width: 60px"
-              @change="$set(yearRange, 0, $event)"
-            />
-          </template>
-          <template v-slot:append>
-            <v-text-field
-              :value="yearRange[1]"
-              class="mt-0 pt-0"
-              hide-details
-              single-line
-              type="number"
-              style="width: 60px"
-              @change="$set(nodeRange, 1, $event)"
-            />
-          </template>
-        </v-range-slider>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col col="12">
-        <v-card>
-          <v-data-table
-            :headers="girdHeaders"
-            hide-default-footer
-            :items="gridData"
-            class="elevation-1"
-          />
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row v-for="chartid of myChartIds" :key="chartid">
-      <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="70vh"
-        >
-          <v-container
-            :id="chartid"
-            fluid
-            fill-height
-          />
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <comment storagekey="ZipfAndInnerzipfByYearV3_graph_1" />
-      </v-col>
-    </v-row>
-  </v-container>
+<template lang="pug">
+v-container(fluid)
+  v-row
+    v-col(cols='10')
+      v-select(v-model='subjectSelect' :items='subjectOpt' small-chips multiple deletable-chips clearable label='目标学科' @click='getData')
+    v-col(cols='2')
+      v-select(v-model='typeSelect' :items='typeOpt' label='世界类型' @click='getData')
+  v-row
+    v-col(cols='11')
+      v-slider.align-center(v-model='yearSelect' :max='2020' :min='1955' dense hide-details step='1' hint='幂律分布指定年' thumb-label='always' thumb-size='32' label='幂律分布指定年' ticks @change='getData')
+  v-row
+    v-col(cols='11')
+      v-range-slider.align-center(v-model='nodeRange' :max='100000' :min='1' dense hide-details hint='求斜率范围' @change='getData')
+        template(v-slot:prepend)
+          p(style='width: 100px') 求斜率范围
+          v-text-field.mt-0.pt-0(:value='nodeRange[0]' hide-details single-line type='number' style='width: 60px' @change='$set(nodeRange, 0, $event)')
+        template(v-slot:append)
+          v-text-field.mt-0.pt-0(:value='nodeRange[1]' hide-details single-line type='number' style='width: 60px' @change='$set(nodeRange, 1, $event)')
+  v-row
+    v-col(cols='11')
+      v-range-slider.align-center(v-model='yearRange' :max='2020' :min='1955' dense hide-details hint='学科趋势年份范围' @change='getData')
+        template(v-slot:prepend)
+          p(style='width: 100px') 学科趋势年份范围
+          v-text-field.mt-0.pt-0(:value='yearRange[0]' hide-details single-line type='number' style='width: 60px' @change='$set(yearRange, 0, $event)')
+        template(v-slot:append)
+          v-text-field.mt-0.pt-0(:value='yearRange[1]' hide-details single-line type='number' style='width: 60px' @change='$set(nodeRange, 1, $event)')
+  v-row
+    v-col(col='12')
+      v-card
+        v-data-table.elevation-1(:headers='girdHeaders' hide-default-footer :items='gridData')
+  v-row(v-for='chartid of myChartIds' :key='chartid')
+    v-col(col='12')
+      v-card.mx-auto(outlined :loading='loading' height='70vh')
+        v-container(:id='chartid' fluid fill-height)
+  v-row
+    v-col
+      comment(storagekey='ZipfAndInnerzipfByYearV3_graph_1')
+
 </template>
 
 <script>
@@ -160,7 +45,9 @@ import ecStat from 'echarts-stat'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 import _ from 'lodash'
-const current_all_category = MAGCoreCategorys2020_V1.push({
+const current_all_category = MAGCoreCategorys2020_V1.concat()
+
+current_all_category.push({
   text: '论文-去Book 去Patent',
   value: 'all_v3'
 }, {
