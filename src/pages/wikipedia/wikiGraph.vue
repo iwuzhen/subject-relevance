@@ -565,8 +565,9 @@ export default {
           boundaryGap: false
         },
         yAxis: {
-          name: 'Distance',
-          type: 'value'
+          name: 'Knowledge Distance',
+          type: 'value',
+          min: 0.2
         },
         series: _.zip(_.range(maxcompents, 0, -1), retDataT).map(item => {
           return extendLineSeries({
