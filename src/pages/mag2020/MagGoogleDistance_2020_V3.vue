@@ -1,152 +1,46 @@
-<template>
-  <v-container fluid>
-    <v-row>
-      <v-col cols="2">
-        <v-select
-          v-model="subjectTarget"
-          :items="categorys"
-          dense
-          deletable-chips
-          label="目标学科"
-          @change="getData"
-        />
-      </v-col>
-      <v-col cols="6">
-        <v-select
-          v-model="subjectRelevances"
-          :items="categorysOptions"
-          dense
-          small-chips
-          deletable-chips
-          clearable
-          multiple
-          label="相关学科"
-          @change="getData"
-        />
-      </v-col>
-      <v-col cols="2">
-        <v-select
-          v-model="version"
-          :items="versionOpt"
-          dense
-          label="过滤条件"
-          @change="getData"
-        />
-      </v-col>
-      <v-col cols="2">
-        <v-select
-          v-model="methodValue"
-          :items="methodOptions"
-          dense
-          label="条件"
-          @change="getData"
-        />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="7">
-        <v-range-slider
-          v-model="years"
-          :max="2020"
-          :min="1955"
-          dense
-          hide-details
-          hint="年份范围"
-          class="align-center"
-          @change="getData"
-        >
-          <template v-slot:prepend>
-            <p style="width: 100px">年份范围</p>
-            <v-text-field
-              :value="years[0]"
-              class="mt-0 pt-0"
-              hide-details
-              single-line
-              type="number"
-              style="width: 60px"
-              @change="$set(years, 0, $event)"
-            />
-          </template>
-          <template v-slot:append>
-            <v-text-field
-              :value="years[1]"
-              class="mt-0 pt-0"
-              hide-details
-              single-line
-              type="number"
-              style="width: 60px"
-              @change="$set(years, 1, $event)"
-            />
-          </template>
-        </v-range-slider>
-      </v-col>
-      <v-col cols="1">
-        <v-btn
-          :color="showAve ? 'light-green' : 'lime'"
-          @click="
-            showAve = !showAve;
-            getData();
-          "
-        >{{ showAve ? "关闭平均距离" : "开启平均距离" }}</v-btn>
-      </v-col>
-      <v-col cols="1">
-        <v-btn
-          color="light-green"
-          :disabled="currentAverageLine.name===null"
-          @click="recordAveLine"
-        >记录平均距离</v-btn>
-      </v-col>
-      <v-col cols="1">
-        <v-btn
-          :disabled="averageLinedata.legend.length===0"
-          color="light-green"
-          @click="initAverageLinedata"
-        >清空平均距离图</v-btn>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="70vh"
-        >
-          <v-container
-            id="masChart1"
-            fluid
-            fill-height
-          />
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <comment storagekey="Mag_google_distance_Chart_2020_1" />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col col="12">
-        <v-card
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="70vh"
-        >
-          <v-container
-            id="masChart2"
-            fluid
-            fill-height
-          />
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <comment storagekey="Mag_google_distance_Chart_2020_2" />
-      </v-col>
-    </v-row>
-  </v-container>
+<template lang="pug">
+v-container(fluid)
+  v-row
+    v-col(cols='2')
+      v-select(v-model='subjectTarget' :items='categorys' dense deletable-chips label='目标学科' @change='getData')
+    v-col(cols='6')
+      v-select(v-model='subjectRelevances' :items='categorysOptions' dense small-chips deletable-chips clearable multiple label='相关学科' @change='getData')
+    v-col(cols='2')
+      v-select(v-model='version' :items='versionOpt' dense label='过滤条件' @change='getData')
+    v-col(cols='2')
+      v-select(v-model='methodValue' :items='methodOptions' dense label='条件' @change='getData')
+  v-row
+    v-col(cols='7')
+      v-range-slider.align-center(v-model='years' :max='2020' :min='1955' dense hide-details hint='年份范围' @change='getData')
+        template(v-slot:prepend)
+          p(style='width: 100px') 年份范围
+          v-text-field.mt-0.pt-0(:value='years[0]' hide-details single-line type='number' style='width: 60px' @change='$set(years, 0, $event)')
+        template(v-slot:append)
+          v-text-field.mt-0.pt-0(:value='years[1]' hide-details single-line type='number' style='width: 60px' @change='$set(years, 1, $event)')
+    v-col(cols='1')
+      v-btn(:color="showAve ? 'light-green' : 'lime'" @click='\
+      showAve = !showAve;\
+      getData();\
+      ') {{ showAve ? "关闭平均距离" : "开启平均距离" }}
+    v-col(cols='1')
+      v-btn(color='light-green' :disabled='currentAverageLine.name===null' @click='recordAveLine') 记录平均距离
+    v-col(cols='1')
+      v-btn(:disabled='averageLinedata.legend.length===0' color='light-green' @click='initAverageLinedata') 清空平均距离图
+  v-row
+    v-col(col='12')
+      v-card.mx-auto(outlined :loading='loading' height='70vh')
+        v-container#masChart1(fluid fill-height)
+  v-row
+    v-col
+      comment(storagekey='Mag_google_distance_Chart_2020_1')
+  v-row
+    v-col(col='12')
+      v-card.mx-auto(outlined :loading='loading' height='70vh')
+        v-container#masChart2(fluid fill-height)
+  v-row
+    v-col
+      comment(storagekey='Mag_google_distance_Chart_2020_2')
+
 </template>
 
 <script>
@@ -336,7 +230,7 @@ export default {
       })
       const _opt = extendEchartsOpts({
         title: {
-          text: data.title
+          text: this.subjectTarget
         },
         legend: {
           type: 'scroll',
@@ -355,12 +249,22 @@ export default {
           name: 'Year',
           type: 'category',
           boundaryGap: false,
-          data: data.x
+          data: data.x,
+          minorSplitLine: {
+            fontSize: 14
+          }
         },
         yAxis: {
-          name: 'Semantic Distance',
+          name: 'Knowledge Distance',
           type: 'value',
-          max: 1,
+          // max: 1,
+          min: function(value) {
+            console.log(Math.floor(value.min * 10 - 1) / 10)
+            return Math.floor(value.min * 10) / 10
+          },
+          minorSplitLine: {
+            fontSize: 14
+          },
           splitLine: {
             show: false
           }
