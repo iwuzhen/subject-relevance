@@ -258,10 +258,7 @@ export default {
           name: 'Knowledge Distance',
           type: 'value',
           // max: 1,
-          min: function(value) {
-            console.log(Math.floor(value.min * 10 - 1) / 10)
-            return Math.floor(value.min * 10) / 10
-          },
+          min: 0.2,
           minorSplitLine: {
             fontSize: 14
           },
