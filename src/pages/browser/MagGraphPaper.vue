@@ -289,8 +289,8 @@ export default {
         .linkWidth(link => {
           return link.value
         })
-        .linkColor(() => '#ffa400')
-        .linkOpacity(0.8)
+        .linkColor(() => '#808080')
+        .linkOpacity(1)
         .onNodeClick(node => {
           // Aim at node from outside it
           const distance = 40
