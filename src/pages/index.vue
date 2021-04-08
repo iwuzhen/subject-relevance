@@ -70,6 +70,21 @@ export default {
               title: 'MAG Fos',
               text: 'Mag Fos 层次浏览',
               to: '/browser/MagFosTree'
+            },
+            {
+              title: 'Paper',
+              text: '论文图',
+              to: '/browser/Paper'
+            },
+            {
+              title: 'MagGraphPaper',
+              text: 'MagGraph论文图',
+              to: '/browser/MagGraphPaper'
+            },
+            {
+              title: 'wikiGraphPaper',
+              text: 'wikiGraph论文图',
+              to: '/browser/wikiGraphPaper'
             }
           ],
           'Explorer': [

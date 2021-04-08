@@ -244,6 +244,18 @@ const routes = [{
   name: 'WikiTree',
   component: () => import('@/pages/browser/WikiTree')
 }, {
+  path: '/browser/Paper',
+  name: 'PaperChart',
+  component: () => import('@/pages/browser/Paper')
+}, {
+  path: '/browser/MagGraphPaper',
+  name: 'MagGraphPaperChart',
+  component: () => import('@/pages/browser/MagGraphPaper')
+}, {
+  path: '/browser/wikiGraphPaper',
+  name: 'wikiGraphPaperChart',
+  component: () => import('@/pages/browser/wikiGraphPaper')
+}, {
   path: '/wikipedia/BanShuaiQi',
   name: 'BanShuaiQi',
   component: () => import('@/pages/wikipedia/BanShuaiQi')

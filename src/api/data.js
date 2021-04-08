@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2021-04-08 11:10:30
+ * @LastEditTime: 2021-04-08 14:58:39
  * @Description:
  */
 
@@ -394,6 +394,11 @@ export function extendEchartsOpts(opt) {
     yAxis: {
       axisLine: {
         show: true
+      },
+      axisLabel: {
+        formatter: value => {
+          console.log(value)
+        }
       }
     },
     tooltip: {
