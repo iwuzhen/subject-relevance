@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2021-04-01 19:02:44
+ * @LastEditTime: 2021-04-08 11:10:30
  * @Description:
  */
 
@@ -451,7 +451,7 @@ export function extendEchartsOpts(opt) {
         dataZoom: {
           yAxisIndex: 'none'
         },
-        // dataView: { readOnly: false },
+        dataView: { readOnly: false },
         // magicType: { type: ['line', 'bar'] },
         restore: {}
       }
