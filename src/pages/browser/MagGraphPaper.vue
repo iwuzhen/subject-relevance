@@ -39,12 +39,12 @@ v-container(fluid :style="cssVars")
 
   v-row
     page(size="A4")
-      v-card.mx-auto(outlined :loading='loading' height='15cm')
+      v-card.mx-auto(outlined :loading='loading' height='14.2cm')
         v-container#3dgraph(fluid fill-height)
 
   v-row.mt50
     page(size="A4")
-      v-card.mx-auto(outlined :loading='loading' height='15cm')
+      v-card.mx-auto(outlined :loading='loading' height='14.2cm')
         v-container#subjectChart1(fluid fill-height)
 
   v-row
@@ -272,7 +272,9 @@ export default {
 
     draw3DForceGraph(gData) {
       const elem = document.getElementById('3dgraph')
-      const Graph = ForceGraph3D()(elem).width(elem.clientWidth).height(elem.clientHeight).backgroundColor('#fff')
+      const Graph = ForceGraph3D()(elem).width(elem.clientWidth).height(elem.clientHeight)
+        .backgroundColor('rgba(240, 240, 240, 0.75)')
+        // .backgroundColor('rgba(255,250,205, 0.75)')
         .graphData(gData)
         .nodeResolution(20)
         .nodeVal('value')
@@ -291,16 +293,7 @@ export default {
         })
         .linkColor(() => '#808080')
         .linkOpacity(1)
-        .onNodeClick(node => {
-          // Aim at node from outside it
-          const distance = 40
-          const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z)
-          Graph.cameraPosition(
-            { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }, // new position
-            node, // lookAt ({ x, y, z })
-            3000 // ms transition duration
-          )
-        })
+        .linkWidth(2)
         .nodeThreeObjectExtend(true)
       Graph
         .d3Force('link')
@@ -469,14 +462,17 @@ export default {
           {
             text: 'MAG',
             left: 'center',
-            fontSize: 20
+            textStyle: {
+              fontWeight: 'normal',
+              fontSize: 20
+            }
           }, {
             text: 'Number of cluster',
             textStyle: {
               fontSize: 14,
               fontWeight: 'normal'
             },
-            left: '80%',
+            left: '82%',
             top: '23%'
           }
         ],
@@ -518,7 +514,7 @@ export default {
         legend: {
           data: _.range(1, maxcompents + 1, 1).map(item => String(item)),
           right: 'left',
-          left: '82%',
+          left: '80%',
           textStyle: {
             fontSize: 18,
             color: '#000'
@@ -531,7 +527,7 @@ export default {
           boundaryGap: false,
           nameTextStyle: {
             color: '#000',
-            align: 'right',
+            align: 'center',
             fontSize: 18,
             verticalAlign: 'bottom'
           },
@@ -544,7 +540,9 @@ export default {
             formatter: value => {
               return value
             }
-          }
+          },
+          nameLocation: 'middle',
+          nameGap: 50
         },
         yAxis: {
           name: 'Knowledge Distance',
@@ -554,11 +552,13 @@ export default {
           minorSplitLine: {
             fontSize: 18
           },
+          nameLocation: 'middle',
+          nameGap: 40,
           nameTextStyle: {
-            align: 'left',
+            align: 'center',
             // fontWeight: 'bolder',
             fontSize: 18,
-            color: '#000'
+            color: '#center'
           },
           interval: 0.1,
           splitLine: {
@@ -571,9 +571,9 @@ export default {
           }
         },
         grid: {
-          left: '0',
+          left: '5%',
           right: '20%',
-          bottom: '5%',
+          bottom: '8%',
           containLabel: true
         },
         series: _.zip(_.range(maxcompents, 0, -1), retDataT).map(item => {

@@ -28,7 +28,7 @@ v-container(fluid)
           v-text-field.mt-0.pt-0(:value='chart1.years[1]' hide-details single-line type='number' style='width: 60px' @change='$set(chart1.years, 1, $event)')
   v-row
     page(size="A4")
-      v-card.mx-auto(outlined :loading='chart1.loading' height='15cm')
+      v-card.mx-auto(outlined :loading='chart1.loading' height='14.2cm')
         v-container#masChart1(fluid fill-height)
   v-row
     v-col
@@ -171,19 +171,19 @@ export default {
       }
 
       try {
-        let opt = InitRequestOpt(this.chart1.subjectTarget_1)
-        let res = await getMasDatav2(opt)
-        // const series1 = getSeries(res.data)
-        opt = InitRequestOpt(this.chart1.subjectTarget_2)
-        res = await getMasDatav2(opt)
+        // let opt = InitRequestOpt(this.chart1.subjectTarget_1)
+        // let res = await getMasDatav2(opt)
+        // // const series1 = getSeries(res.data)
+        // opt = InitRequestOpt(this.chart1.subjectTarget_2)
+        // res = await getMasDatav2(opt)
 
-        // const series2 = getSeries(res.data)
-        opt = InitRequestOpt(this.chart1.subjectTarget_3)
-        res = await getMasDatav2(opt)
+        // // const series2 = getSeries(res.data)
+        // opt = InitRequestOpt(this.chart1.subjectTarget_3)
+        // res = await getMasDatav2(opt)
 
         // const series3 = getSeries(res.data)
-        opt = InitRequestOpt(this.chart1.subjectTarget_4)
-        res = await getMasDatav2(opt)
+        const opt = InitRequestOpt(this.chart1.subjectTarget_4)
+        const res = await getMasDatav2(opt)
 
         const series4 = getSeries(res.data)
         const data = res.data
@@ -191,7 +191,10 @@ export default {
         const chartOpt = extendEchartsOpts({
           title: {
             text: this.chart1.subjectTarget_4,
-            fontSize: 20
+            textStyle: {
+              fontWeight: 'normal',
+              fontSize: 20
+            }
           },
           legend: {
             type: 'scroll',
@@ -217,15 +220,29 @@ export default {
             },
             axisLabel: {
               fontSize: 16,
-              rotate: -45,
-              color: '#000'
+              // rotate: -90,
+              color: '#000',
+              interval: (index, value) => {
+                if (index === 0) {
+                  return true
+                } else if (value === '1960') {
+                  return false
+                }
+                if (Number(value) % 10 === 0) {
+                  return true
+                }
+                return false
+              }
             },
             axisTick: {
-              interval: 10
+              show: true,
+              interval: 'auto'
             },
+            nameLocation: 'middle',
+            nameGap: 50,
             nameTextStyle: {
               color: '#000',
-              align: 'right',
+              align: 'center',
               fontSize: 18,
               verticalAlign: 'bottom'
             }
@@ -238,8 +255,10 @@ export default {
             minorSplitLine: {
               fontSize: 18
             },
+            nameLocation: 'middle',
+            nameGap: 40,
             nameTextStyle: {
-              align: 'left',
+              align: 'center',
               // fontWeight: 'bolder',
               fontSize: 18,
               color: '#000'
@@ -256,12 +275,15 @@ export default {
                   return value
                 } return ''
               }
+            },
+            axisTick: {
+              show: true
             }
           },
           grid: {
-            left: '0',
+            left: '5%',
             right: '33%',
-            bottom: '5%',
+            bottom: '8%',
             containLabel: true
           },
           series: series4

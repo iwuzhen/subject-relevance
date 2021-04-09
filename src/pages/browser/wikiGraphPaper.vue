@@ -45,7 +45,7 @@ v-container(fluid  :style="cssVars")
 
   v-row
     page.mt-60(size="A4")
-      v-card.mx-auto(outlined :loading='loading' height='15cm')
+      v-card.mx-auto(outlined :loading='loading' height='14.2cm')
         v-container#subjectChart1(fluid fill-height)
 
   v-row
@@ -519,8 +519,11 @@ export default {
         title: [
           {
             text: 'Wikipedia',
-            fontSize: 20,
-            left: 'center'
+            left: 'center',
+            textStyle: {
+              fontWeight: 'normal',
+              fontSize: 20
+            }
           },
           {
             text: 'Number of cluster',
@@ -528,7 +531,7 @@ export default {
               fontSize: 14,
               fontWeight: 'normal'
             },
-            left: '80%',
+            left: '82%',
             top: '23%'
           }
         ],
@@ -570,7 +573,7 @@ export default {
         legend: {
           data: _.range(1, maxcompents + 1, 1).map(item => String(item)),
           right: 'left',
-          left: '82%',
+          left: '80%',
           textStyle: {
             fontSize: 18,
             color: '#000'
@@ -587,7 +590,7 @@ export default {
           boundaryGap: false,
           nameTextStyle: {
             color: '#000',
-            align: 'right',
+            align: 'center',
             fontSize: 18,
             verticalAlign: 'bottom'
           },
@@ -600,7 +603,9 @@ export default {
             formatter: value => {
               return value
             }
-          }
+          },
+          nameLocation: 'middle',
+          nameGap: 50
         },
         yAxis: {
           name: 'Knowledge Distance',
@@ -610,8 +615,10 @@ export default {
           minorSplitLine: {
             fontSize: 18
           },
+          nameLocation: 'middle',
+          nameGap: 40,
           nameTextStyle: {
-            align: 'left',
+            align: 'center',
             // fontWeight: 'bolder',
             fontSize: 18,
             color: '#000'
@@ -627,9 +634,9 @@ export default {
           }
         },
         grid: {
-          left: '0',
+          left: '5%',
           right: '20%',
-          bottom: '5%',
+          bottom: '8%',
           containLabel: true
         },
         series: _.zip(_.range(maxcompents, 0, -1), retDataT).map(item => {
