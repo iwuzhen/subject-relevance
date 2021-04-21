@@ -54,6 +54,10 @@ const routes = [{
   name: 'MagGoogleDistanceCurrentV2',
   component: () => import('@/pages/mag2019v2/MagGoogleDistanceCurrentV2')
 }, {
+  path: '/wikipedia/WikiPlantGraph',
+  name: 'WikiPlantGraph',
+  component: () => import('@/pages/wikipedia/WikiPlantGraph')
+}, {
   path: '/mag2020/MagPlantGraph',
   name: 'Mag2020PlantGraph',
   component: () => import('@/pages/mag2020/MagPlantGraph')

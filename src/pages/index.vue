@@ -432,10 +432,16 @@ export default {
               update: '2020-11-18T09:43:03.429Z'
             },
             {
-              title: 'wiki v5 学术圈 Google 距离',
-              text: 'wiki v5 学术圈 Google 距离',
+              title: 'wiki v5 学术圈二级学科 Google 距离',
+              text: 'wiki v5 学术圈二级学科 Google 距离',
               to: { path: '/wikipedia/WikiPlantDistance' },
               update: '2021-04-21T09:43:03.429Z'
+            },
+            {
+              title: 'wiki  学术圈二级学科引力图',
+              text: 'wiki v5 学术圈二级学科引力图',
+              to: { path: '/wikipedia/WikiPlantGraph' },
+              update: '2021-04-22T09:43:03.429Z'
             }
           ],
           'Core-幂律': [

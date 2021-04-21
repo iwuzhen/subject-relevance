@@ -66,7 +66,7 @@ import comment from '@/components/comment'
 import _ from 'lodash'
 
 export default {
-  name: 'WikiPlantGoogleDistance',
+  name: 'WikiGoogleDistance',
   components: {
     comment
   },
@@ -118,6 +118,7 @@ export default {
     //   })
     //   this.activeSubLevel(142362112, 'Art')
     // })
+    this.activeSubLevel('Biology')
   },
   methods: {
     // 将学科更新到表格
