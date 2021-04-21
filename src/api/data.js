@@ -396,8 +396,9 @@ export function extendEchartsOpts(opt) {
         show: true
       },
       axisLabel: {
+        show: true,
         formatter: value => {
-          console.log(value)
+          return value
         }
       }
     },

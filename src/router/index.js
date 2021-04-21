@@ -26,6 +26,10 @@ const routes = [{
   name: 'Mag2020MagPlantDistance',
   component: () => import('@/pages/mag2020/MagPlantDistance')
 }, {
+  path: '/wikipedia/WikiPlantDistance',
+  name: 'WikiPlantDistance',
+  component: () => import('@/pages/wikipedia/WikiPlantDistance')
+}, {
   path: '/mag2020/BubbleDistance',
   name: 'BubbleDistance',
   component: () => import('@/pages/mag2020/BubbleDistance')
