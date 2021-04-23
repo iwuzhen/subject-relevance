@@ -3,7 +3,6 @@ v-container(fluid :style="cssVars")
   v-row
     v-col(cols='4')
       v-select(@click="dialog.pid=0;dialog.stats=!dialog.stats" v-model='currentSubject.allSubject' :items='currentSubject.allSubject' chips multiple dense label='定点学科')
-
     v-col(cols='8')
       v-select(@click="dialog.pid=1;dialog.stats=!dialog.stats" v-model='targetSubject.allSubject' :items='targetSubject.allSubject' chips multiple dense label='目标学科')
     v-col(cols='2')
@@ -11,7 +10,7 @@ v-container(fluid :style="cssVars")
     v-col(cols="5")
       v-slider(hint="距离过滤器" label="距离过滤器" max=1 min=0 step=0.01 thumb-label="always" v-model="linkFilter" @change='liteDraw')
     v-col(cols="7")
-      v-slider(hint="展示年份" label="展示年份" max=2020 min=1955 step=1 thumb-label="always" v-model="selectYear" @change='liteDraw')
+      v-slider(hint="展示年份" label="展示年份" max=2021 min=2007 step=1 thumb-label="always" v-model="selectYear" @change='liteDraw')
     v-col(cols="2")
       v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='liteDraw')
     v-col(cols="2")
@@ -284,22 +283,24 @@ export default {
           }
         }
       }
-
       // 获得学科大小
-      const alltopSet = new Set(this.currentSubject.topSubject.concat(this.targetSubject.topSubject))
+      const allSubjectSet = new Set(this.currentSubject.topSubject.concat(this.currentSubject.allSubject).concat(this.targetSubject.topSubject).concat(this.targetSubject.allSubject))
       try {
         // 学科大小
         const opt = {
           level: 2,
-          subjects: Array.from(alltopSet).join(','),
+          subjects: Array.from(allSubjectSet).join(','),
           version: 'v5_xueshu_level1',
           type: 0
         }
         const response = await requestWrap('wiki/getArticlesTotalByCoreNew_v', 'post', opt)
-        this.subjectSizeDict = response.data
+        console.log(response)
+        this.subjectSizeDict = response
       } catch (error) {
         console.log(error)
       }
+
+      console.log(this.subjectSizeDict)
 
       // console.log(allLine)
       const nodeArray = Array.from(allSunjectSet)
@@ -345,13 +346,13 @@ export default {
       console.log(retObj)
       return retObj
     },
-
     parseGraphData(nodes, links) {
+      console.log(this.subjectSizeDict)
       const sizeMax = Math.pow(
-        Math.max(..._.flattenDeep(nodes.map(item => this.subjectSizeDict[item]))), 1 / 3
+        Math.max(..._.flattenDeep(nodes.map(item => this.subjectSizeDict?.[item]?.[String(this.selectYear) ?? 1]))), 1 / 3
       )
       const sizeMin = Math.pow(
-        Math.min(..._.flattenDeep(nodes.map(item => this.subjectSizeDict[item]))), 1 / 3
+        Math.min(..._.flattenDeep(nodes.map(item => this.subjectSizeDict?.[item]?.[String(this.selectYear)] ?? 1))), 1 / 3
       )
       console.log(sizeMax, sizeMin)
 
@@ -528,6 +529,10 @@ export default {
     },
 
     liteDraw: _.debounce(async function() {
+      if (this.currentSubject.allSubject.length === 0 || this.targetSubject.allSubject.length === 0) {
+        // this.$message.error("请选择完整");
+        return false
+      }
       this.loading = true
       let { links } = await this.getData()
       this.GraphData = this.parseGraphData(this.GraphData.nodes, links)

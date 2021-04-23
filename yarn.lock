@@ -1573,11 +1573,14 @@
   resolved "https://registry.npm.taobao.org/@xtuc/long/download/@xtuc/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha1-0pHGpOl5ibXGHZrPOWrk/hM6cY0=
 
+<<<<<<< Updated upstream
 "@yomguithereal/helpers@^1.1.1":
   version "1.1.1"
   resolved "https://registry.npm.taobao.org/@yomguithereal/helpers/download/@yomguithereal/helpers-1.1.1.tgz#185dfb0f88ca2beec53d0adf6eed15c33b1c549d"
   integrity sha1-GF37D4jKK+7FPQrfbu0VwzscVJ0=
 
+=======
+>>>>>>> Stashed changes
 accepts@~1.3.4, accepts@~1.3.5, accepts@~1.3.7:
   version "1.3.7"
   resolved "https://registry.npm.taobao.org/accepts/download/accepts-1.3.7.tgz#531bc726517a3b2b41f850021c6cc15eaab507cd"
@@ -4776,6 +4779,7 @@ graphlib@^2.1.7, graphlib@^2.1.8:
   dependencies:
     lodash "^4.17.15"
 
+<<<<<<< Updated upstream
 graphology-components@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npm.taobao.org/graphology-components/download/graphology-components-1.1.0.tgz#0a4a1b9e84556e783cb19f38b32ea44432009d34"
@@ -4802,6 +4806,8 @@ graphology@^0.19.3:
     events "^3.2.0"
     obliterator "^1.6.1"
 
+=======
+>>>>>>> Stashed changes
 gzip-size@^5.0.0:
   version "5.1.1"
   resolved "https://registry.npm.taobao.org/gzip-size/download/gzip-size-5.1.1.tgz?cache=0&sync_timestamp=1605523125680&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fgzip-size%2Fdownload%2Fgzip-size-5.1.1.tgz#cb9bee692f87c0612b232840a873904e4c135274"
@@ -8999,11 +9005,14 @@ three-render-objects@^1.24.6:
     kapsule "^1.13.3"
     polished "^3.6.6"
 
+<<<<<<< Updated upstream
 three-spritetext@^1.5.3:
   version "1.5.3"
   resolved "https://registry.npm.taobao.org/three-spritetext/download/three-spritetext-1.5.3.tgz#c0b0576166fd0d485621ce8023157071a56bf604"
   integrity sha1-wLBXYWb9DUhWIc6AIxVwcaVr9gQ=
 
+=======
+>>>>>>> Stashed changes
 three@^0.124.0:
   version "0.124.0"
   resolved "https://registry.npm.taobao.org/three/download/three-0.124.0.tgz#14ab1a26ba6c56e51190e1b55695cd3c1e69ea55"

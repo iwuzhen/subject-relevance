@@ -34,6 +34,10 @@ const routes = [{
   name: 'BubbleDistance',
   component: () => import('@/pages/mag2020/BubbleDistance')
 }, {
+  path: '/mag2020/MagDirectedDistance',
+  name: 'MagDirectedDistance',
+  component: () => import('@/pages/mag2020/MagDirectedDistance')
+}, {
   path: '/mag2020/linkscf',
   name: 'linkscf',
   component: () => import('@/pages/mag2020/Linkscf')

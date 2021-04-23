@@ -467,10 +467,20 @@ export default {
               fontSize: 20
             }
           }, {
-            text: 'Number of cluster',
+            text: '{titleBg|Number of clusters}',
+            // text: 'Number of clusters',
             textStyle: {
               fontSize: 14,
-              fontWeight: 'normal'
+              fontWeight: 'normal',
+              // formatter: '{titleBg|Number of clusters}',
+              rich: {
+                titleBg: {
+                  color: 'red',
+                  rotate: 90,
+                  verticalAlign: 'middle',
+                  width: '100%'
+                }
+              }
             },
             left: '82%',
             top: '23%'

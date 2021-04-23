@@ -176,6 +176,12 @@ export default {
             text: '各学科引用最高的文章的逐年引用情况',
             to: '/mag2020/topNLinksinByYear',
             update: '2021-03-19T09:43:03.429Z'
+          },
+          {
+            title: 'MAG 小世界有向距离',
+            text: 'mag 小世界有向距离',
+            to: '/mag2020/MagDirectedDistance',
+            update: '2021-04-24T09:43:03.429Z'
           }
           ],
           '学科相关度等': [

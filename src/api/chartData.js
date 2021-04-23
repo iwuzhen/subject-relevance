@@ -3,7 +3,11 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-04-02 10:54:09
+<<<<<<< Updated upstream
+ * @LastEditTime: 2021-04-23 18:23:07
+=======
+ * @LastEditTime: 2021-01-26 14:24:48
+>>>>>>> Stashed changes
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -1069,7 +1073,6 @@ export const ChartMap = {
     },
     RequestFunc: async(params) => {
       const data = await requestWrap('mag/getNodeAndEdgeThatTimeByCats', 'post', params)
-
       return data.data
     },
     Select: [

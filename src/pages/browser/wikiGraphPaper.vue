@@ -526,7 +526,7 @@ export default {
             }
           },
           {
-            text: 'Number of cluster',
+            text: 'Number of clusters',
             textStyle: {
               fontSize: 14,
               fontWeight: 'normal'

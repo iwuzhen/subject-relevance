@@ -3,11 +3,8 @@
  * @Author: ider
  * @Date: 2021-01-06 17:39:20
  * @LastEditors: ider
-<<<<<<< Updated upstream
- * @LastEditTime: 2021-01-26 19:25:17
-=======
+ * @LastEditTime: 2021-04-22 13:23:50
  * @LastEditTime: 2021-01-26 17:54:43
->>>>>>> Stashed changes
  * @Description:
 -->
 <template lang="pug">
