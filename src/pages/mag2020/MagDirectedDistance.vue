@@ -2,13 +2,13 @@
 v-container(fluid)
   v-row
     v-col(cols='2')
-      v-select(v-model='currentSubject.select' :items='currentSubject.option' label='当前学科' @click='getData')
+      v-select(v-model='currentSubject.select' :items='currentSubject.option' label='当前学科' @change='getData')
     v-col(cols='10')
-      v-select(v-model='targetSubject.select' :items='targetSubject.option' small-chips multiple deletable-chips clearable label='目标学科' @click='getData')
+      v-select(v-model='targetSubject.select' :items='targetSubject.option' small-chips multiple deletable-chips clearable label='目标学科' @change='getData')
     v-col(cols='2')
-      v-select(v-model='version.select' :items='version.option' label='version' @click='getData')
+      v-select(v-model='version.select' :items='version.option' label='version' @change='getData')
     v-col(cols='2')
-      v-select(v-model='view.select' :items='view.option' label='展示类型' @click='getData')
+      v-select(v-model='view.select' :items='view.option' label='展示类型' @change='getData')
 
   v-row(v-for='chartid of myChartIds' :key='chartid')
     v-col(col='12')
@@ -112,6 +112,12 @@ export default {
           const [RetSeries, RetLegend] = _.unzip(tmpData)
 
           // 处理数据
+          let yname = 'average distance'
+          if (this.view.select === 2) {
+            yname = '总联通数'
+          } else if (this.view.select === 3) {
+            yname = '总路径长度'
+          }
 
           const _opt = extendEchartsOpts({
             title: {
@@ -158,7 +164,7 @@ export default {
               max: 'dataMax'
             },
             yAxis: {
-              name: 'power law',
+              name: yname,
               type: 'value'
             },
             series: _.zip(RetSeries, RetLegend).map(item => {
