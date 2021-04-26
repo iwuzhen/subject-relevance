@@ -30,12 +30,12 @@ v-container(fluid)
             v-list(dense)
               v-subheader 一级学科
               v-list-item-group(v-model="topSelect" multiple)
-                v-list-item(v-for="(item) in topSubject" :key="item.text" @click="activeSubLevel(item.value)")
+                v-list-item(v-for="(item) in topSubject" :key="item" @click="activeSubLevel(item)")
                   template( v-slot:default="{ active }")
                     v-list-item-action
                       v-checkbox(:input-value="active")
                     v-list-item-content
-                      v-list-item-title {{item.text}}
+                      v-list-item-title {{item}}
 
           v-col(cols='4')
             v-list(dense)
@@ -59,8 +59,8 @@ v-container(fluid)
 </template>
 
 <script>
-import { getWikiCategoryTree, getDistanceCore } from '@/api/index'
-import { basiCategorys, extendEchartsOpts, extendLineSeries } from '@/api/data'
+import { getDistanceCore, requestWrap } from '@/api/index'
+import { extendEchartsOpts, extendLineSeries } from '@/api/data'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 import _ from 'lodash'
@@ -89,7 +89,7 @@ export default {
         pid: 0
       },
       topSelect: [],
-      topSubject: basiCategorys,
+      topSubject: {},
       subLevel: {
         currentName: null,
         subject: {},
@@ -103,7 +103,8 @@ export default {
       targetSubject: {
         topSubject: [],
         allSubject: []
-      }
+      },
+      leveTree: {}
     }
   },
   computed: {
@@ -118,9 +119,21 @@ export default {
     //   })
     //   this.activeSubLevel(142362112, 'Art')
     // })
-    this.activeSubLevel('Biology')
+    this.initLevel()
+    setTimeout(() => { this.activeSubLevel('Biology') }, 1000)
   },
   methods: {
+    initLevel() {
+      const opt = {
+        'year': '2021'
+      }
+      requestWrap('wiki/getWikiLevel1CatTree', 'POST', opt).then(response => {
+        console.log(response.data)
+        this.leveTree = response.data
+        this.topSubject = Object.keys(response.data).sort()
+      })
+    },
+
     // 将学科更新到表格
     changeSubject() {
       this.dialog.stats = false
@@ -128,8 +141,8 @@ export default {
       const allSelect = []
       // 遍历一级学科
       for (const id of this.topSelect) {
-        topSelect.push(this.topSubject[id].value)
-        allSelect.push(this.topSubject[id].value)
+        topSelect.push(this.topSubject[id])
+        allSelect.push(this.topSubject[id])
       }
       console.log(this.subLevel.select)
       // 遍历 二级学科
@@ -179,26 +192,9 @@ export default {
     },
     // 激活二级学科菜单
     activeSubLevel(subjectValue) {
-      getWikiCategoryTree({
-        categoryTitle: Buffer.from(subjectValue).toString('base64'),
-        db: 'WIKI21'
-      }).then(data => {
-        this.selectAllStats = 1
-        this.subLevel.currentName = subjectValue
-        this.subLevel.subject[subjectValue] = data.childList
-      })
-
-      // getChildCategories({
-      //   id: subjectID
-      // }).then(data => {
-      //   this.selectAllStats = 1
-      //   this.subLevel.currentName = subjectName
-      //   this.subLevel.subject[subjectName] = data.data.map(item => {
-      //   // 首字母外小写
-      //     item.name = item.name.charAt(0) + item.name.slice(1).toLowerCase()
-      //     return item
-      //   })
-      // })
+      this.selectAllStats = 1
+      this.subLevel.currentName = subjectValue
+      this.subLevel.subject[subjectValue] = this.leveTree[subjectValue]
     },
 
     async getData() {

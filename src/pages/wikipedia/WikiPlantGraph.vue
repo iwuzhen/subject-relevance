@@ -58,12 +58,12 @@ v-container(fluid :style="cssVars")
             v-list(dense)
               v-subheader 一级学科
               v-list-item-group(v-model="topSelect" multiple)
-                v-list-item(v-for="(item) in topSubject" @click="activeSubLevel(item.value)")
+                v-list-item(v-for="(item) in topSubject" @click="activeSubLevel(item)")
                   template( v-slot:default="{ active }")
                     v-list-item-action
                       v-checkbox(:input-value="active")
                     v-list-item-content
-                      v-list-item-title {{item.value}}
+                      v-list-item-title {{item}}
 
           v-col(cols='4')
             v-list(dense)
@@ -97,7 +97,7 @@ import { basiCategorys, extendEchartsOpts, extendLineSeries } from '@/api/data'
 const Graph = require('graphology')
 import { connectedComponents } from 'graphology-components'
 
-import { getWikiCategoryTree, getDistanceCore, requestWrap } from '@/api/index'
+import { getDistanceCore, requestWrap } from '@/api/index'
 
 const colorPool = ['#CCCCFF', '#99CC33', '#FF99CC', '#FFFFFF', '#339999', '#3399CC', '#CC6666', '#CCCC99', '#009966', '#CC0033',
   '#FFFFCC', '#9999CC', '#FFCCCC', '#FF6666', '#99CC66', '#FFFF00', '#99CC00', '#FF9900', '#0099CC', '#CC9933', '#CCFFFF', '#CCCC00', '#00FF00']
@@ -160,7 +160,8 @@ export default {
         allSubject: []
       },
       subjectSizeDict: {}, // 学科大小
-      colorMap: {}
+      colorMap: {},
+      leveTree: {}
     }
   },
   computed: {
@@ -183,9 +184,20 @@ export default {
     //   })
     //   this.activeSubLevel(142362112, 'Art')
     // })
-    this.activeSubLevel('Biology')
+    this.initLevel()
+    setTimeout(() => { this.activeSubLevel('Biology') }, 1000)
   },
   methods: {
+    initLevel() {
+      const opt = {
+        'year': '2021'
+      }
+      requestWrap('wiki/getWikiLevel1CatTree', 'POST', opt).then(response => {
+        console.log(response.data)
+        this.leveTree = response.data
+        this.topSubject = Object.keys(response.data).sort()
+      })
+    },
     // 将学科更新到表格
     changeSubject() {
       this.dialog.stats = false
@@ -193,8 +205,8 @@ export default {
       const allSelect = []
       // 遍历一级学科
       for (const id of this.topSelect) {
-        topSelect.push(this.topSubject[id].value)
-        allSelect.push(this.topSubject[id].value)
+        topSelect.push(this.topSubject[id])
+        allSelect.push(this.topSubject[id])
       }
       // 遍历 二级学科
       for (const key of Object.keys(this.subLevel.select)) {
@@ -241,14 +253,9 @@ export default {
     },
     // 激活二级学科菜单
     activeSubLevel(subjectValue) {
-      getWikiCategoryTree({
-        categoryTitle: Buffer.from(subjectValue).toString('base64'),
-        db: 'WIKI21'
-      }).then(data => {
-        this.selectAllStats = 1
-        this.subLevel.currentName = subjectValue
-        this.subLevel.subject[subjectValue] = data.childList
-      })
+      this.selectAllStats = 1
+      this.subLevel.currentName = subjectValue
+      this.subLevel.subject[subjectValue] = this.leveTree[subjectValue]
     },
     async getData() {
       const opt = {

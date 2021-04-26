@@ -3,11 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
-<<<<<<< Updated upstream
- * @LastEditTime: 2021-04-23 18:23:07
-=======
- * @LastEditTime: 2021-01-26 14:24:48
->>>>>>> Stashed changes
+ * @LastEditTime: 2021-04-26 19:21:18
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -152,8 +148,12 @@ export const ChartMap = {
   'mag2020/AuthorsAndArticleInfoByYear': {
     ChName: '作者数逐年统计',
     componentName: 'PageTemplate',
-    RequestFunc: async(params) => {
-      return await requestWrap('mag/getMagAuthorsAndArticleInfo_year_v2', 'post', params)
+    RequestFunc: async params => {
+      return await requestWrap(
+        'mag/getMagAuthorsAndArticleInfo_year_v2',
+        'post',
+        params
+      )
     },
     HandleResponseFunc: setChartOption_1,
     Select: [
@@ -164,91 +164,116 @@ export const ChartMap = {
         label: '目标学科',
         cols: 4,
         items: MAGCoreCategorys2020
-      }, {
+      },
+      {
         name: 'returnType',
         default: 0,
         multiple: false,
         label: '过滤器',
         cols: 2,
-        items: [{
-          text: '逐年作者数(去重)',
-          value: 0
-        }, {
-          text: '逐年作者数(不去重)',
-          value: 1
-        }, {
-          text: '逐年文章数(去掉无作者的)',
-          value: 2
-        }, {
-          text: '逐年作者数(去重)/文章数-不靠谱',
-          value: 3
-        }, {
-          text: '逐年作者数(不去重)/文章数',
-          value: 4
-        }]
-      }, {
+        items: [
+          {
+            text: '逐年作者数(去重)',
+            value: 0
+          },
+          {
+            text: '逐年作者数(不去重)',
+            value: 1
+          },
+          {
+            text: '逐年文章数(去掉无作者的)',
+            value: 2
+          },
+          {
+            text: '逐年作者数(去重)/文章数-不靠谱',
+            value: 3
+          },
+          {
+            text: '逐年作者数(不去重)/文章数',
+            value: 4
+          }
+        ]
+      },
+      {
         name: 'queryType',
         default: 0,
         label: '数据集',
         multiple: false,
         cols: 2,
-        items: [{
-          text: '全集',
-          value: 0
-        }, {
-          text: '去除引用为0的数据',
-          value: 1
-        }]
-      }, {
+        items: [
+          {
+            text: '全集',
+            value: 0
+          },
+          {
+            text: '去除引用为0的数据',
+            value: 1
+          }
+        ]
+      },
+      {
         name: 'yearType',
         default: -1,
         label: '作者数筛选',
         multiple: false,
         cols: 2,
-        items: [{
-          text: '不筛选',
-          value: -1
-        }, {
-          text: '作者数在100内的论文',
-          value: 0
-        }, {
-          text: '作者数超过100的论文',
-          value: 1
-        }]
-      }, {
+        items: [
+          {
+            text: '不筛选',
+            value: -1
+          },
+          {
+            text: '作者数在100内的论文',
+            value: 0
+          },
+          {
+            text: '作者数超过100的论文',
+            value: 1
+          }
+        ]
+      },
+      {
         name: 'version',
         default: 'v3_tjart_nopb',
         label: '版本',
         multiple: false,
         cols: 2,
-        items: [{
-          text: '论文(去Book，去Patent)',
-          value: 'v3_tjart_nopb'
-        }, {
-          text: '论文(去Patent)',
-          value: 'v3_tjart_only_noPatent'
-        }]
+        items: [
+          {
+            text: '论文(去Book，去Patent)',
+            value: 'v3_tjart_nopb'
+          },
+          {
+            text: '论文(去Patent)',
+            value: 'v3_tjart_only_noPatent'
+          }
+        ]
       }
     ],
-    RangeSlider: [{
-      name: 'yearRange',
-      startName: 'from',
-      rangeDefault: [1945, 2018],
-      endName: 'to',
-      label: '年份范围',
-      cols: 8,
-      max: 2020,
-      min: 1900
-    }],
+    RangeSlider: [
+      {
+        name: 'yearRange',
+        startName: 'from',
+        rangeDefault: [1945, 2018],
+        endName: 'to',
+        label: '年份范围',
+        cols: 8,
+        max: 2020,
+        min: 1900
+      }
+    ],
     xAxisName: 'Year',
     yAxisName: 'Count'
-
   },
   'mag2019v2/AuthorsAndArticleInfoByYear': {
     ChName: '作者数逐年统计',
     componentName: 'PageTemplate',
-    RequestFunc: async(params) => {
-      return await requestWrap('mag/getMagAuthorsAndArticleInfo_year_v2', 'post', params)
+    RequestFunc: async params => {
+      return await requestWrap(
+        'mag/getMagAuthorsAndArticleInfo_year_v2',
+        'post',
+        params
+      )
     },
     HandleResponseFunc: setChartOption_1,
     Select: [
@@ -259,78 +284,95 @@ export const ChartMap = {
         label: '目标学科',
         cols: 6,
         items: magCategory
-      }, {
+      },
+      {
         name: 'returnType',
         default: 0,
         multiple: false,
         label: '过滤器',
         cols: 2,
-        items: [{
-          text: '逐年作者数(去重)',
-          value: 0
-        }, {
-          text: '逐年作者数(不去重)',
-          value: 1
-        }, {
-          text: '逐年文章数(去掉无作者的)',
-          value: 2
-        }, {
-          text: '逐年作者数(去重)/文章数-不靠谱',
-          value: 3
-        }, {
-          text: '逐年作者数(不去重)/文章数',
-          value: 4
-        }]
-      }, {
+        items: [
+          {
+            text: '逐年作者数(去重)',
+            value: 0
+          },
+          {
+            text: '逐年作者数(不去重)',
+            value: 1
+          },
+          {
+            text: '逐年文章数(去掉无作者的)',
+            value: 2
+          },
+          {
+            text: '逐年作者数(去重)/文章数-不靠谱',
+            value: 3
+          },
+          {
+            text: '逐年作者数(不去重)/文章数',
+            value: 4
+          }
+        ]
+      },
+      {
         name: 'queryType',
         default: 0,
         label: '数据集',
         multiple: false,
         cols: 2,
-        items: [{
-          text: '全集',
-          value: 0
-        }, {
-          text: '去除引用为0的数据',
-          value: 1
-        }]
-      }, {
+        items: [
+          {
+            text: '全集',
+            value: 0
+          },
+          {
+            text: '去除引用为0的数据',
+            value: 1
+          }
+        ]
+      },
+      {
         name: 'yearType',
         default: -1,
         label: '作者数筛选',
         multiple: false,
         cols: 2,
-        items: [{
-          text: '不筛选',
-          value: -1
-        }, {
-          text: '作者数在100内的论文',
-          value: 0
-        }, {
-          text: '作者数超过100的论文',
-          value: 1
-        }]
+        items: [
+          {
+            text: '不筛选',
+            value: -1
+          },
+          {
+            text: '作者数在100内的论文',
+            value: 0
+          },
+          {
+            text: '作者数超过100的论文',
+            value: 1
+          }
+        ]
       }
     ],
-    RangeSlider: [{
-      name: 'yearRange',
-      startName: 'from',
-      rangeDefault: [1945, 2018],
-      endName: 'to',
-      label: '年份范围',
-      cols: 8,
-      max: 2020,
-      min: 1900
-    }],
+    RangeSlider: [
+      {
+        name: 'yearRange',
+        startName: 'from',
+        rangeDefault: [1945, 2018],
+        endName: 'to',
+        label: '年份范围',
+        cols: 8,
+        max: 2020,
+        min: 1900
+      }
+    ],
     xAxisName: 'Year',
     yAxisName: 'Count'
-
   },
   'mag2019v2/LinkTjByYear': {
     ChName: '引用关系逐年统计',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_1,
-    RequestFunc: async(params) => {
+    RequestFunc: async params => {
       return await requestWrap('mag/getLinkTj_year_v2', 'post', params)
     },
     Select: [
@@ -341,51 +383,62 @@ export const ChartMap = {
         label: '目标学科',
         cols: 6,
         items: magCategory
-      }, {
+      },
+      {
         name: 'method',
         default: 'linksin',
         multiple: false,
         label: '引用方式',
         cols: 2,
         items: ['linksin', 'linksout']
-      }, {
+      },
+      {
         name: 'version',
         default: 'v2',
         label: '数据集',
         multiple: false,
         cols: 2,
-        items: [{
-          text: '全集',
-          value: 'v2'
-        }, {
-          text: '去掉引用为0的数据',
-          value: 'delete_noref_v2'
-        }]
-      }, {
+        items: [
+          {
+            text: '全集',
+            value: 'v2'
+          },
+          {
+            text: '去掉引用为0的数据',
+            value: 'delete_noref_v2'
+          }
+        ]
+      },
+      {
         name: 'authorType',
         default: 0,
         label: '作者数筛选',
         multiple: false,
         cols: 2,
-        items: [{
-          text: '不筛选',
-          value: 0
-        }, {
-          text: '作者数超过100的论文',
-          value: 1
-        }]
+        items: [
+          {
+            text: '不筛选',
+            value: 0
+          },
+          {
+            text: '作者数超过100的论文',
+            value: 1
+          }
+        ]
       }
     ],
-    RangeSlider: [{
-      name: 'yearRange',
-      startName: 'from',
-      rangeDefault: [1945, 2018],
-      endName: 'to',
-      label: '年份范围',
-      cols: 8,
-      max: 2020,
-      min: 1900
-    }],
+    RangeSlider: [
+      {
+        name: 'yearRange',
+        startName: 'from',
+        rangeDefault: [1945, 2018],
+        endName: 'to',
+        label: '年份范围',
+        cols: 8,
+        max: 2020,
+        min: 1900
+      }
+    ],
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
@@ -393,7 +446,7 @@ export const ChartMap = {
     ChName: 'fos学科领域逐年分布',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_1,
-    RequestFunc: async(params) => {
+    RequestFunc: async params => {
       return await requestWrap('mag/getFosTj_year_v2', 'post', params)
     },
     Select: [
@@ -404,31 +457,37 @@ export const ChartMap = {
         label: '目标学科',
         cols: 10,
         items: magCategory
-      }, {
+      },
+      {
         name: 'version',
         default: 'v2',
         label: '数据集',
         multiple: false,
         cols: 2,
-        items: [{
-          text: '全集',
-          value: 'v2'
-        }, {
-          text: '去掉引用为0的数据',
-          value: 'delete_noref_v2'
-        }]
+        items: [
+          {
+            text: '全集',
+            value: 'v2'
+          },
+          {
+            text: '去掉引用为0的数据',
+            value: 'delete_noref_v2'
+          }
+        ]
       }
     ],
-    RangeSlider: [{
-      name: 'yearRange',
-      startName: 'from',
-      rangeDefault: [1945, 2018],
-      endName: 'to',
-      label: '年份范围',
-      cols: 8,
-      max: 2020,
-      min: 1900
-    }],
+    RangeSlider: [
+      {
+        name: 'yearRange',
+        startName: 'from',
+        rangeDefault: [1945, 2018],
+        endName: 'to',
+        label: '年份范围',
+        cols: 8,
+        max: 2020,
+        min: 1900
+      }
+    ],
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
@@ -436,8 +495,12 @@ export const ChartMap = {
     ChName: 'MAG 文章数 v2',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_2,
-    RequestFunc: async(params) => {
-      return await requestWrap('wiki/getMasArticlesTotal_v2', 'post', params)
+    RequestFunc: async params => {
+      return await requestWrap(
+        'wiki/getMasArticlesTotal_v2',
+        'post',
+        params
+      )
     },
     Select: [
       {
@@ -457,8 +520,12 @@ export const ChartMap = {
     ChName: 'MAG 文章数',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_2,
-    RequestFunc: async(params) => {
-      return await requestWrap('wiki/getMasArticlesTotal', 'post', params)
+    RequestFunc: async params => {
+      return await requestWrap(
+        'wiki/getMasArticlesTotal',
+        'post',
+        params
+      )
     },
     Select: [
       {
@@ -478,7 +545,7 @@ export const ChartMap = {
     ChName: 'mag topN学科逐年分布',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_1,
-    RequestFunc: async(params) => {
+    RequestFunc: async params => {
       return await requestWrap('mag/getTjYearByTopN', 'post', params)
     },
     Select: [
@@ -489,37 +556,45 @@ export const ChartMap = {
         label: '目标学科',
         cols: 8,
         items: magCategory
-      }, {
+      },
+      {
         name: 'type',
         default: 'zipf',
         label: '排名规则',
         multiple: false,
         cols: 2,
-        items: [{
-          text: '按世界排名',
-          value: 'zipf'
-        }, {
-          text: '按小世界排名',
-          value: 'innerzipf'
-        }]
-      }, {
+        items: [
+          {
+            text: '按世界排名',
+            value: 'zipf'
+          },
+          {
+            text: '按小世界排名',
+            value: 'innerzipf'
+          }
+        ]
+      },
+      {
         name: 'N',
         default: 20000,
         label: 'TopN',
         multiple: false,
         cols: 2,
         items: [10000, 20000, 30000, 40000, 50000]
-      }],
-    RangeSlider: [{
-      name: 'yearRange',
-      startName: 'from',
-      rangeDefault: [1945, 2018],
-      endName: 'to',
-      label: '年份范围',
-      cols: 8,
-      max: 2020,
-      min: 1900
-    }],
+      }
+    ],
+    RangeSlider: [
+      {
+        name: 'yearRange',
+        startName: 'from',
+        rangeDefault: [1945, 2018],
+        endName: 'to',
+        label: '年份范围',
+        cols: 8,
+        max: 2020,
+        min: 1900
+      }
+    ],
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
@@ -527,14 +602,26 @@ export const ChartMap = {
     ChName: 'mag 历年点边数据统计',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_3,
-    RequestFunc: async(params) => {
+    RequestFunc: async params => {
       params.db = 'mag'
       // 当年
-      const data_a = await requestWrap('mag/getNodeAndEdgeByYear', 'post', params)
+      const data_a = await requestWrap(
+        'mag/getNodeAndEdgeByYear',
+        'post',
+        params
+      )
       // 截至年
-      const data_b = await requestWrap('mag/getNodeAndEdgeThatTime', 'post', params)
-      data_a.data.legend = data_a.data.legend.map(item => `${item}-当年`)
-      data_b.data.legend = data_b.data.legend.map(item => `${item}-当时（包含过去）`)
+      const data_b = await requestWrap(
+        'mag/getNodeAndEdgeThatTime',
+        'post',
+        params
+      )
+      data_a.data.legend = data_a.data.legend.map(
+        item => `${item}-当年`
+      )
+      data_b.data.legend = data_b.data.legend.map(
+        item => `${item}-当时（包含过去）`
+      )
       return [data_a.data, data_b.data]
     },
     Select: [
@@ -544,33 +631,51 @@ export const ChartMap = {
         label: '当时（包含过去）数据集',
         show: true,
         cols: 2,
-        items: [{ text: '去0', value: 'delete_noref_v2' }, { text: '全集', value: 'v2' }]
-      }],
-    RangeSlider: [{
-      name: 'yearRange',
-      startName: 'from',
-      rangeDefault: [1900, 2019],
-      endName: 'to',
-      label: '年份范围',
-      cols: 12,
-      max: 2020,
-      min: 1900
-    }],
+        items: [
+          { text: '去0', value: 'delete_noref_v2' },
+          { text: '全集', value: 'v2' }
+        ]
+      }
+    ],
+    RangeSlider: [
+      {
+        name: 'yearRange',
+        startName: 'from',
+        rangeDefault: [1900, 2019],
+        endName: 'to',
+        label: '年份范围',
+        cols: 12,
+        max: 2020,
+        min: 1900
+      }
+    ],
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
-  'DisruptionByYearc': {
+  DisruptionByYearc: {
     ChName: '学科颠覆度年度分布',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_3,
-    RequestFunc: async(params) => {
+    RequestFunc: async params => {
       params.db = 'mag'
       // 当年
-      const data_a = await requestWrap('mag/getNodeAndEdgeByYear', 'post', params)
+      const data_a = await requestWrap(
+        'mag/getNodeAndEdgeByYear',
+        'post',
+        params
+      )
       // 截至年
-      const data_b = await requestWrap('mag/getNodeAndEdgeThatTime', 'post', params)
-      data_a.data.legend = data_a.data.legend.map(item => `${item}-当年`)
-      data_b.data.legend = data_b.data.legend.map(item => `${item}-当时（包含过去）`)
+      const data_b = await requestWrap(
+        'mag/getNodeAndEdgeThatTime',
+        'post',
+        params
+      )
+      data_a.data.legend = data_a.data.legend.map(
+        item => `${item}-当年`
+      )
+      data_b.data.legend = data_b.data.legend.map(
+        item => `${item}-当时（包含过去）`
+      )
       return [data_a.data, data_b.data]
     },
     Select: [
@@ -582,88 +687,142 @@ export const ChartMap = {
         show: true,
         cols: 12,
         items: MAGCoreCategorys2020
-      }, {
+      },
+      {
         name: 'linksOutCount',
         default: 0,
         label: 'linksout 最小数量',
         show: true,
         cols: 2,
         items: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30]
-      }, {
+      },
+      {
         name: 'linksInCount',
         default: 0,
         label: 'linksin 最小数量',
         show: true,
         cols: 2,
         items: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30]
-      }, {
+      },
+      {
         name: 'filterD',
         default: 1,
         label: 'D 上限',
         show: true,
         cols: 2,
         items: [0.8, 0.85, 0.9, 0.95, 0.9999, 1]
-      }, {
+      },
+      {
         name: 'topLimit',
         default: 100,
         label: '固定点数上限（优先）',
         show: true,
         cols: 2,
-        items: [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000, 3000, 4000, 5000, 10000]
-      }, {
+        items: [
+          100,
+          200,
+          300,
+          400,
+          500,
+          600,
+          700,
+          800,
+          900,
+          1000,
+          2000,
+          3000,
+          4000,
+          5000,
+          10000
+        ]
+      },
+      {
         name: 'topPercent',
         default: 0,
         label: '固定百分比上限',
         show: true,
         cols: 2,
-        items: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 70, 75, 80, 85, 90, 95, 100]
-      }, {
+        items: [
+          5,
+          10,
+          15,
+          20,
+          25,
+          30,
+          35,
+          40,
+          45,
+          50,
+          55,
+          60,
+          64,
+          70,
+          75,
+          80,
+          85,
+          90,
+          95,
+          100
+        ]
+      },
+      {
         name: 'decimalLen',
         default: 5,
         label: '保留小数位',
         show: true,
         cols: 2,
         items: [5, 6, 7, 8, 9, 10]
-      }],
-    RangeSlider: [{
-      name: 'yearRange',
-      startName: 'yearStart',
-      rangeDefault: [1900, 2019],
-      endName: 'yearEnd',
-      label: '年份范围',
-      cols: 12,
-      max: 2020,
-      min: 1900
-    }],
+      }
+    ],
+    RangeSlider: [
+      {
+        name: 'yearRange',
+        startName: 'yearStart',
+        rangeDefault: [1900, 2019],
+        endName: 'yearEnd',
+        label: '年份范围',
+        cols: 12,
+        max: 2020,
+        min: 1900
+      }
+    ],
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
   'mag2020/MagArticlesTotalV3': {
     ChName: '统计学科论文数量',
     componentName: 'PageTemplate',
-    HandleResponseFunc: ({ retData_1, retData_2, retData_3, retData_4 }, ChartObj) => {
+    HandleResponseFunc: (
+      { retData_1, retData_2, retData_3, retData_4 },
+      ChartObj
+    ) => {
       console.log(retData_4)
       const _opt = extendEchartsOpts({
-        title: [{
-          left: 'center',
-          gridIndex: 0,
-          text: retData_2.data.title
-        }, {
-          top: '25%',
-          left: 'center',
-          gridIndex: 1,
-          text: 'mag2020 论文年差量'
-        }, {
-          top: '50%',
-          left: 'center',
-          gridIndex: 1,
-          text: retData_1.title
-        }, {
-          top: '75%',
-          left: 'center',
-          gridIndex: 2,
-          text: retData_3.title
-        }],
+        title: [
+          {
+            left: 'center',
+            gridIndex: 0,
+            text: retData_2.data.title
+          },
+          {
+            top: '25%',
+            left: 'center',
+            gridIndex: 1,
+            text: 'mag2020 论文年差量'
+          },
+          {
+            top: '50%',
+            left: 'center',
+            gridIndex: 1,
+            text: retData_1.title
+          },
+          {
+            top: '75%',
+            left: 'center',
+            gridIndex: 2,
+            text: retData_3.title
+          }
+        ],
         legend: [
           {
             orient: 'vertical',
@@ -694,8 +853,7 @@ export const ChartMap = {
             }
           }
         ],
-        xAxis:
-        [
+        xAxis: [
           {
             gridIndex: 0,
             name: 'subject',
@@ -708,7 +866,8 @@ export const ChartMap = {
           },
           {
             name: ChartObj.xAxisName,
-            type: 'category', gridIndex: 1,
+            type: 'category',
+            gridIndex: 1,
             axisLabel: {
               interval: 0,
               rotate: -75
@@ -717,7 +876,8 @@ export const ChartMap = {
           },
           {
             name: ChartObj.xAxisName,
-            type: 'category', gridIndex: 2,
+            type: 'category',
+            gridIndex: 2,
             axisLabel: {
               interval: 0,
               rotate: -25
@@ -726,21 +886,21 @@ export const ChartMap = {
           },
           {
             name: 'item',
-            type: 'category', gridIndex: 3,
+            type: 'category',
+            gridIndex: 3,
             axisLabel: {
               interval: 0,
               rotate: -25
             },
             data: Object.keys(retData_3.data)
-          }],
-        yAxis:
-        [
+          }
+        ],
+        yAxis: [
           {
             gridIndex: 0,
             name: ChartObj.yAxisName,
             type: 'value',
             nameTextStyle: { fontSize: 18 }
-
           },
           {
             gridIndex: 1,
@@ -762,14 +922,10 @@ export const ChartMap = {
           }
         ],
         grid: [
-          { top: '3%', bottom: '79%',
-            right: '20%' },
-          { top: '28%', bottom: '53%',
-            right: '20%' },
-          { top: '55%', bottom: '28%',
-            right: '20%' },
-          { top: '78%', bottom: '3%',
-            right: '20%' }
+          { top: '3%', bottom: '79%', right: '20%' },
+          { top: '28%', bottom: '53%', right: '20%' },
+          { top: '55%', bottom: '28%', right: '20%' },
+          { top: '78%', bottom: '3%', right: '20%' }
         ],
         series: [
           {
@@ -805,11 +961,12 @@ export const ChartMap = {
             name: '数量',
             type: 'bar',
             data: Object.values(retData_3.data)
-          }]
+          }
+        ]
       })
       return _opt
     },
-    RequestFunc: async(params) => {
+    RequestFunc: async params => {
       // 此处处理三个请求
       // 统计学科不按年分布
       let newParams = {
@@ -818,7 +975,11 @@ export const ChartMap = {
         version: params.version,
         yeartype: 1
       }
-      const retData_1 = await requestWrap('wiki/getMasArticlesTotal_v3', 'post', newParams)
+      const retData_1 = await requestWrap(
+        'wiki/getMasArticlesTotal_v3',
+        'post',
+        newParams
+      )
 
       // 统计学科按年分布
       newParams = {
@@ -829,7 +990,11 @@ export const ChartMap = {
         from: params.from,
         to: params.to
       }
-      const retData_2 = await requestWrap('wiki/getMasArticlesTotal_v3', 'post', newParams)
+      const retData_2 = await requestWrap(
+        'wiki/getMasArticlesTotal_v3',
+        'post',
+        newParams
+      )
 
       // 统计论文类型分布
       newParams = {
@@ -837,7 +1002,11 @@ export const ChartMap = {
         version: params.version,
         bltype: params.bltype
       }
-      const retData_3 = await requestWrap('wiki/getMasArticlesTotal_v3', 'post', newParams)
+      const retData_3 = await requestWrap(
+        'wiki/getMasArticlesTotal_v3',
+        'post',
+        newParams
+      )
 
       // 一阶差分
       newParams = {
@@ -849,7 +1018,11 @@ export const ChartMap = {
         from: params.from,
         to: params.to
       }
-      const retData_4 = await requestWrap('wiki/getMasArticlesTotal_v3', 'post', newParams)
+      const retData_4 = await requestWrap(
+        'wiki/getMasArticlesTotal_v3',
+        'post',
+        newParams
+      )
 
       return { retData_1, retData_2, retData_3, retData_4 }
     },
@@ -862,33 +1035,47 @@ export const ChartMap = {
         label: '目标学科',
         cols: 8,
         items: MAGCoreCategorys2020_V1
-      }, {
+      },
+      {
         name: 'bltype',
         default: '1',
         show: true,
         label: '数值类型',
         cols: 2,
-        items: [{ text: '统计数值', value: '0' }, { text: '统计比例', value: '1' }]
-      }, {
+        items: [
+          { text: '统计数值', value: '0' },
+          { text: '统计比例', value: '1' }
+        ]
+      },
+      {
         name: 'version',
         default: 'v3',
         label: '过滤条件',
         show: true,
         cols: 2,
-        items: [{ text: '论文(去Book 去Patent)', value: 'v3' }, { text: '论文(去0 去Book 去Patent)', value: 'delete_noref_v3' },
-          { text: '论文(只含Book)', value: 'book_all_v3' }, { text: '论文=(只含Patent)', value: 'patent_all_v3' }]
+        items: [
+          { text: '论文(去Book 去Patent)', value: 'v3' },
+          {
+            text: '论文(去0 去Book 去Patent)',
+            value: 'delete_noref_v3'
+          },
+          { text: '论文(只含Book)', value: 'book_all_v3' },
+          { text: '论文=(只含Patent)', value: 'patent_all_v3' }
+        ]
       }
     ],
-    RangeSlider: [{
-      name: 'yearRange',
-      startName: 'from',
-      rangeDefault: [1955, 2020],
-      endName: 'to',
-      label: '年份范围',
-      cols: 12,
-      max: 2020,
-      min: 1900
-    }],
+    RangeSlider: [
+      {
+        name: 'yearRange',
+        startName: 'from',
+        rangeDefault: [1955, 2020],
+        endName: 'to',
+        label: '年份范围',
+        cols: 12,
+        max: 2020,
+        min: 1900
+      }
+    ],
     xAxisName: 'Year',
     chartHeight: '280vh',
     yAxisName: 'Count'
@@ -897,9 +1084,13 @@ export const ChartMap = {
     ChName: 'topN学科逐年分布',
     componentName: 'PageTemplate',
     HandleResponseFunc: setChartOption_bar_2,
-    RequestFunc: async(params) => {
+    RequestFunc: async params => {
       // 当年
-      const data = await requestWrap('mag/getTjYearByTopN_v3', 'post', params)
+      const data = await requestWrap(
+        'mag/getTjYearByTopN_v3',
+        'post',
+        params
+      )
       return data.data
     },
     Select: [
@@ -911,72 +1102,105 @@ export const ChartMap = {
         show: true,
         cols: 8,
         items: MAGCoreCategorys2020
-      }, {
+      },
+      {
         name: 'version',
         default: 'nopb_delete_noref_v3',
         label: '过滤条件',
         show: true,
         cols: 4,
-        items: [{
-          text: '论文(去0 去Book 去Patent)',
-          value: 'nopb_delete_noref_v3'
-        }]
-      }, {
+        items: [
+          {
+            text: '论文(去0 去Book 去Patent)',
+            value: 'nopb_delete_noref_v3'
+          }
+        ]
+      },
+      {
         name: 'N',
         default: 40000,
         label: '固定点数上限（优先）',
         show: true,
         cols: 2,
-        items: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 20000, 30000, 40000, 50000]
-      }, {
+        items: [
+          1000,
+          2000,
+          3000,
+          4000,
+          5000,
+          6000,
+          7000,
+          8000,
+          9000,
+          10000,
+          20000,
+          30000,
+          40000,
+          50000
+        ]
+      },
+      {
         name: 'type',
         default: 'zipf',
         label: '排名规则',
         multiple: false,
         cols: 2,
-        items: [{
-          text: '按世界排名',
-          value: 'zipf'
-        }, {
-          text: '按小世界排名',
-          value: 'innerzipf'
-        }]
-      }, {
+        items: [
+          {
+            text: '按世界排名',
+            value: 'zipf'
+          },
+          {
+            text: '按小世界排名',
+            value: 'innerzipf'
+          }
+        ]
+      },
+      {
         name: 'islog',
         default: 0,
         label: '是否取双对数',
         multiple: false,
         cols: 2,
-        items: [{
-          text: '不取对数',
-          value: 0
-        }, {
-          text: '双对数',
-          value: 1
-        }, {
-          text: 'y轴单对数',
-          value: 2
-        }]
-      }],
-    Slider: [{
-      name: 'year',
-      Default: 2020,
-      label: '数据截止',
-      step: 1,
-      cols: 10,
-      max: 2020,
-      min: 1900
-    }],
-    RangeSlider: [{
-      name: 'yearRange',
-      startName: 'from',
-      rangeDefault: [1980, 2020],
-      endName: 'to',
-      label: '年份范围',
-      cols: 12,
-      max: 2020,
-      min: 1900
-    }],
+        items: [
+          {
+            text: '不取对数',
+            value: 0
+          },
+          {
+            text: '双对数',
+            value: 1
+          },
+          {
+            text: 'y轴单对数',
+            value: 2
+          }
+        ]
+      }
+    ],
+    Slider: [
+      {
+        name: 'year',
+        Default: 2020,
+        label: '数据截止',
+        step: 1,
+        cols: 10,
+        max: 2020,
+        min: 1900
+      }
+    ],
+    RangeSlider: [
+      {
+        name: 'yearRange',
+        startName: 'from',
+        rangeDefault: [1980, 2020],
+        endName: 'to',
+        label: '年份范围',
+        cols: 12,
+        max: 2020,
+        min: 1900
+      }
+    ],
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
@@ -987,16 +1211,19 @@ export const ChartMap = {
     HandleResponseFunc: (responseData, ChartObj) => {
       console.log(responseData)
       const _opt = extendEchartsOpts({
-        title: [{
-          left: 'center',
-          gridIndex: 0,
-          text: responseData.edge.title
-        }, {
-          top: '50%',
-          left: 'center',
-          gridIndex: 1,
-          text: responseData.node.title
-        }],
+        title: [
+          {
+            left: 'center',
+            gridIndex: 0,
+            text: responseData.edge.title
+          },
+          {
+            top: '50%',
+            left: 'center',
+            gridIndex: 1,
+            text: responseData.node.title
+          }
+        ],
         legend: {
           top: '6%',
           data: responseData.edge.legend
@@ -1021,7 +1248,8 @@ export const ChartMap = {
               rotate: -75
             },
             data: responseData.node.x
-          }],
+          }
+        ],
         yAxis: [
           {
             gridIndex: 0,
@@ -1040,39 +1268,47 @@ export const ChartMap = {
             axisLine: {
               show: true
             }
-          }],
-        grid: [
-          { top: '10%', bottom: '58%',
-            right: '20%' },
-          { top: '58%', bottom: '5%',
-            right: '20%' }
+          }
         ],
-        series: [...zip(responseData.edge.legend, responseData.edge.y).map(item => {
-          return extendLineSeries({
-            xAxisIndex: 0,
-            yAxisIndex: 0,
-            name: item[0],
-            type: 'line',
-            smooth: false,
-            data: item[1]
-          })
-        }),
-        ...zip(responseData.node.legend, responseData.node.y).map(item => {
-          return extendLineSeries({
-            xAxisIndex: 1,
-            yAxisIndex: 1,
-            name: item[0],
-            type: 'line',
-            smooth: false,
-            data: item[1]
-          })
-        })
+        grid: [
+          { top: '10%', bottom: '58%', right: '20%' },
+          { top: '58%', bottom: '5%', right: '20%' }
+        ],
+        series: [
+          ...zip(responseData.edge.legend, responseData.edge.y).map(
+            item => {
+              return extendLineSeries({
+                xAxisIndex: 0,
+                yAxisIndex: 0,
+                name: item[0],
+                type: 'line',
+                smooth: false,
+                data: item[1]
+              })
+            }
+          ),
+          ...zip(responseData.node.legend, responseData.node.y).map(
+            item => {
+              return extendLineSeries({
+                xAxisIndex: 1,
+                yAxisIndex: 1,
+                name: item[0],
+                type: 'line',
+                smooth: false,
+                data: item[1]
+              })
+            }
+          )
         ]
       })
       return _opt
     },
-    RequestFunc: async(params) => {
-      const data = await requestWrap('mag/getNodeAndEdgeThatTimeByCats', 'post', params)
+    RequestFunc: async params => {
+      const data = await requestWrap(
+        'mag/getNodeAndEdgeThatTimeByCats',
+        'post',
+        params
+      )
       return data.data
     },
     Select: [
@@ -1084,48 +1320,60 @@ export const ChartMap = {
         show: true,
         cols: 8,
         items: MAGCoreCategorys2020
-      }, {
+      },
+      {
         name: 'version',
         default: 'v3',
         label: '版本',
         show: true,
         cols: 2,
-        items: [{
-          text: '不去0',
-          value: 'v3'
-        }]
-      }, {
+        items: [
+          {
+            text: '不去0',
+            value: 'v3'
+          }
+        ]
+      },
+      {
         name: 'type',
         default: 'tjart_nopb',
         label: '引用条件',
         show: true,
         cols: 2,
-        items: [{
-          text: '论文(去Book 去Patent)',
-          value: 'tjart_nopb'
-        }]
-      }, {
+        items: [
+          {
+            text: '论文(去Book 去Patent)',
+            value: 'tjart_nopb'
+          }
+        ]
+      },
+      {
         name: 'db',
         default: 'mag',
         label: '数据库',
         show: false,
         cols: 2,
-        items: [{
-          text: 'mag',
-          value: 'mag'
-        }]
-      }],
+        items: [
+          {
+            text: 'mag',
+            value: 'mag'
+          }
+        ]
+      }
+    ],
     Slider: [],
-    RangeSlider: [{
-      name: 'yearRange',
-      startName: 'from',
-      rangeDefault: [1955, 2019],
-      endName: 'to',
-      label: '目标学科年份范围',
-      cols: 12,
-      max: 2020,
-      min: 1945
-    }],
+    RangeSlider: [
+      {
+        name: 'yearRange',
+        startName: 'from',
+        rangeDefault: [1955, 2019],
+        endName: 'to',
+        label: '目标学科年份范围',
+        cols: 12,
+        max: 2020,
+        min: 1945
+      }
+    ],
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
@@ -1151,14 +1399,16 @@ export const ChartMap = {
             name: yaisa,
             type: 'value'
           },
-          series: zip(responseData.data.legend, responseData.data.y).map(item => {
-            return extendLineSeries({
-              name: item[0],
-              type: 'line',
-              smooth: false,
-              data: item[1]
-            })
-          })
+          series: zip(responseData.data.legend, responseData.data.y).map(
+            item => {
+              return extendLineSeries({
+                name: item[0],
+                type: 'line',
+                smooth: false,
+                data: item[1]
+              })
+            }
+          )
         })
         return _opt
       } else {
@@ -1179,19 +1429,21 @@ export const ChartMap = {
             name: yaisa,
             type: 'value'
           },
-          series:
-           extendLineSeries({
-             type: 'bar',
-             data: responseData.data.y
-           })
-
+          series: extendLineSeries({
+            type: 'bar',
+            data: responseData.data.y
+          })
         })
         return _opt
       }
     },
-    RequestFunc: async(params) => {
+    RequestFunc: async params => {
       // 当年
-      const data = await requestWrap('mag/tjhaslinksinByCats', 'post', params)
+      const data = await requestWrap(
+        'mag/tjhaslinksinByCats',
+        'post',
+        params
+      )
       let yaisa = 'percent'
       if (params.returnType === '0') {
         yaisa = 'count'
@@ -1207,44 +1459,55 @@ export const ChartMap = {
         show: true,
         cols: 8,
         items: MAGCoreCategorys2020
-      }, {
+      },
+      {
         name: 'returnType',
         default: '1',
         label: '展示类型',
         multiple: false,
         cols: 2,
-        items: [{
-          text: '数值',
-          value: '0'
-        }, {
-          text: '比例',
-          value: '1'
-        }]
-      }, {
+        items: [
+          {
+            text: '数值',
+            value: '0'
+          },
+          {
+            text: '比例',
+            value: '1'
+          }
+        ]
+      },
+      {
         name: 'yearType',
         default: '1',
         label: '是否按年',
         multiple: false,
         cols: 2,
-        items: [{
-          text: '不按年',
-          value: '0'
-        }, {
-          text: '按年',
-          value: '1'
-        }]
-      }],
+        items: [
+          {
+            text: '不按年',
+            value: '0'
+          },
+          {
+            text: '按年',
+            value: '1'
+          }
+        ]
+      }
+    ],
     Slider: [],
-    RangeSlider: [{
-      name: 'yearRange',
-      startName: 'from_year',
-      rangeDefault: [1955, 2020],
-      endName: 'to_year',
-      label: '目标学科年份范围',
-      cols: 12,
-      max: 2020,
-      min: 1900
-    }],
+    RangeSlider: [
+      {
+        name: 'yearRange',
+        startName: 'from_year',
+        rangeDefault: [1955, 2020],
+        endName: 'to_year',
+        label: '目标学科年份范围',
+        cols: 12,
+        max: 2020,
+        min: 1900
+      }
+    ],
     xAxisName: 'Subject',
     yAxisName: 'Count'
   },
@@ -1269,20 +1532,26 @@ export const ChartMap = {
           name: ChartObj.yAxisName,
           type: 'value'
         },
-        series: zip(responseData.data.legend, responseData.data.y).map(item => {
-          return extendLineSeries({
-            name: item[0],
-            type: 'line',
-            smooth: false,
-            data: item[1]
-          })
-        })
+        series: zip(responseData.data.legend, responseData.data.y).map(
+          item => {
+            return extendLineSeries({
+              name: item[0],
+              type: 'line',
+              smooth: false,
+              data: item[1]
+            })
+          }
+        )
       })
       return _opt
     },
-    RequestFunc: async(params) => {
+    RequestFunc: async params => {
       // 当年
-      const data = await requestWrap('mag/getBanshuaiqiByYear', 'post', params)
+      const data = await requestWrap(
+        'mag/getBanshuaiqiByYear',
+        'post',
+        params
+      )
       return data
     },
     Select: [
@@ -1294,45 +1563,55 @@ export const ChartMap = {
         show: true,
         cols: 8,
         items: MAGCoreCategorys2020_V1
-      }, {
+      },
+      {
         name: 'percent',
         default: 10,
         label: '百分比',
         multiple: false,
         cols: 2,
         items: _.range(10, 91, 10)
-      }, {
+      },
+      {
         name: 'version',
         default: 'delete_noref_v3',
         label: '数据',
         multiple: false,
         cols: 2,
-        items: [{
-          text: '去0',
-          value: 'delete_noref_v3'
-        }]
-      }, {
+        items: [
+          {
+            text: '去0',
+            value: 'delete_noref_v3'
+          }
+        ]
+      },
+      {
         name: 'type',
         default: 'tjart_nopb',
         label: '数据',
         multiple: false,
         cols: 2,
-        items: [{
-          text: '论文(去Book，去Patent)',
-          value: 'tjart_nopb'
-        }]
-      }],
+        items: [
+          {
+            text: '论文(去Book，去Patent)',
+            value: 'tjart_nopb'
+          }
+        ]
+      }
+    ],
     Slider: [],
-    RangeSlider: [{
-      name: 'yearRange',
-      startName: 'from',
-      rangeDefault: [1955, 2020],
-      endName: 'to',
-      label: '目标学科年份范围',
-      cols: 12,
-      max: 2020,
-      min: 1955
-    }],
+    RangeSlider: [
+      {
+        name: 'yearRange',
+        startName: 'from',
+        rangeDefault: [1955, 2020],
+        endName: 'to',
+        label: '目标学科年份范围',
+        cols: 12,
+        max: 2020,
+        min: 1955
+      }
+    ],
     xAxisName: 'Year',
     yAxisName: '衰减期'
   },
@@ -1357,106 +1636,190 @@ export const ChartMap = {
           name: ChartObj.yAxisName,
           type: 'value'
         },
-        series: zip(responseData.data.legend, responseData.data.y).map(item => {
-          return extendLineSeries({
-            name: item[0],
-            type: 'line',
-            smooth: false,
-            data: item[1]
-          })
-        })
+        series: zip(responseData.data.legend, responseData.data.y).map(
+          item => {
+            return extendLineSeries({
+              name: item[0],
+              type: 'line',
+              smooth: false,
+              data: item[1]
+            })
+          }
+        )
       })
       return _opt
     },
-    RequestFunc: async(params) => {
+    RequestFunc: async params => {
       // 当年
-      const data = await requestWrap('wiki/getWikiRefSelfRate', 'post', params)
+      const data = await requestWrap(
+        'wiki/getWikiRefSelfRate',
+        'post',
+        params
+      )
       return data
     },
     Select: [
       {
         name: 'str',
-        default: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
-          'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-          'Literature', 'History'],
+        default: [
+          'Geology',
+          'Geography',
+          'Psychology',
+          'Philosophy',
+          'Mathematics',
+          'Physics',
+          'Biology',
+          'Chemistry',
+          'Sociology',
+          'Economics',
+          'Political science',
+          'Linguistics',
+          'Computer science',
+          'Literature',
+          'History'
+        ],
         label: '目标学科',
         multiple: true,
         show: true,
         cols: 8,
-        items: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
-          'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-          'Literature', 'History'].sort()
-      }, {
+        items: [
+          'Geology',
+          'Geography',
+          'Psychology',
+          'Philosophy',
+          'Mathematics',
+          'Physics',
+          'Biology',
+          'Chemistry',
+          'Sociology',
+          'Economics',
+          'Political science',
+          'Linguistics',
+          'Computer science',
+          'Literature',
+          'History'
+        ].sort()
+      },
+      {
         name: 'method',
         default: 'linksout',
         label: '链接方向',
         multiple: false,
         cols: 2,
         items: ['linksout', 'linksin']
-      }, {
+      },
+      {
         name: 'version',
         default: 'v5',
         label: '版本',
         multiple: false,
         cols: 3,
-        items: [{
-          text: 'v5 学术(排除文学历史)',
-          value: 'v5_xueshu_noHistoryAndLiterature'
-        }, {
-          text: 'v5 学术',
-          value: 'v5_xueshu'
-        }, {
-          text: 'v5',
-          value: 'v5'
-        }]
-      }, {
+        items: [
+          {
+            text: 'v5 学术(排除文学历史)',
+            value: 'v5_xueshu_noHistoryAndLiterature'
+          },
+          {
+            text: 'v5 学术',
+            value: 'v5_xueshu'
+          },
+          {
+            text: 'v5',
+            value: 'v5'
+          }
+        ]
+      },
+      {
         name: 'level',
         default: 3,
         label: 'level',
         multiple: false,
         cols: 2,
         items: [2, 3, 4],
-        func: (that) => {
+        func: that => {
           that.options.version = 'v5'
           if (that.options.level === 2) {
-            const v5Subject_lv2 = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
-              'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-              'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
-              'Medicine', 'Art', 'Business'].sort()
+            const v5Subject_lv2 = [
+              'Geology',
+              'Geography',
+              'Psychology',
+              'Philosophy',
+              'Mathematics',
+              'Physics',
+              'Biology',
+              'Chemistry',
+              'Sociology',
+              'Economics',
+              'Political science',
+              'Linguistics',
+              'Computer science',
+              'Literature',
+              'History',
+              'Materials science',
+              'Engineering disciplines',
+              'Environmental science',
+              'Medicine',
+              'Art',
+              'Business'
+            ].sort()
             that.options.str = v5Subject_lv2
             for (const i in that.ChartObj.Select) {
               if (that.ChartObj.Select[i].name === 'version') {
-                that.ChartObj.Select[i].items = [{
-                  text: 'v5 学术',
-                  value: 'v5_xueshu'
-                }, {
-                  text: 'v5',
-                  value: 'v5'
-                }]
+                that.ChartObj.Select[i].items = [
+                  {
+                    text: 'v5 学术',
+                    value: 'v5_xueshu'
+                  },
+                  {
+                    text: 'v5',
+                    value: 'v5'
+                  }
+                ]
               }
               if (that.ChartObj.Select[i].name === 'str') {
                 that.ChartObj.Select[i].items = v5Subject_lv2
               }
             }
           } else {
-            const v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
-              'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-              'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
-              'Medicine'].sort()
+            const v5Subject = [
+              'Geology',
+              'Geography',
+              'Psychology',
+              'Philosophy',
+              'Mathematics',
+              'Physics',
+              'Biology',
+              'Chemistry',
+              'Sociology',
+              'Economics',
+              'Political science',
+              'Linguistics',
+              'Computer science',
+              'Literature',
+              'History',
+              'Materials science',
+              'Engineering disciplines',
+              'Environmental science',
+              'Medicine'
+            ].sort()
 
             that.options.str = v5Subject
             for (const i in that.ChartObj.Select) {
               if (that.ChartObj.Select[i].name === 'version') {
-                that.ChartObj.Select[i].items = [{
-                  text: 'v5 学术(排除文学历史)',
-                  value: 'v5_xueshu_noHistoryAndLiterature'
-                }, {
-                  text: 'v5 学术',
-                  value: 'v5_xueshu'
-                }, {
-                  text: 'v5',
-                  value: 'v5'
-                }]
+                that.ChartObj.Select[i].items = [
+                  {
+                    text: 'v5 学术(排除文学历史)',
+                    value: 'v5_xueshu_noHistoryAndLiterature'
+                  },
+                  {
+                    text: 'v5 学术',
+                    value: 'v5_xueshu'
+                  },
+                  {
+                    text: 'v5',
+                    value: 'v5'
+                  }
+                ]
               }
               if (that.ChartObj.Select[i].name === 'str') {
                 that.ChartObj.Select[i].items = v5Subject
@@ -1494,62 +1857,113 @@ export const ChartMap = {
           name: ChartObj.yAxisName,
           type: 'value'
         },
-        series: zip(responseData.data.legend, responseData.data.y).map(item => {
-          return extendLineSeries({
-            name: item[0],
-            type: 'line',
-            smooth: false,
-            data: item[1]
-          })
-        })
+        series: zip(responseData.data.legend, responseData.data.y).map(
+          item => {
+            return extendLineSeries({
+              name: item[0],
+              type: 'line',
+              smooth: false,
+              data: item[1]
+            })
+          }
+        )
       })
       return _opt
     },
-    RequestFunc: async(params) => {
+    RequestFunc: async params => {
       // 当年
-      const data = await requestWrap('wiki/getArticlesTotalByCoreNew_v5', 'post', params)
+      const data = await requestWrap(
+        'wiki/getArticlesTotalByCoreNew_v5',
+        'post',
+        params
+      )
       console.log(data)
       return data
     },
     Select: [
       {
         name: 'subjects',
-        default: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
-          'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-          'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
-          'Medicine', 'Art', 'Business'].sort(),
+        default: [
+          'Geology',
+          'Geography',
+          'Psychology',
+          'Philosophy',
+          'Mathematics',
+          'Physics',
+          'Biology',
+          'Chemistry',
+          'Sociology',
+          'Economics',
+          'Political science',
+          'Linguistics',
+          'Computer science',
+          'Literature',
+          'History',
+          'Materials science',
+          'Engineering disciplines',
+          'Environmental science',
+          'Medicine',
+          'Art',
+          'Business'
+        ].sort(),
         label: '目标学科',
         multiple: true,
         show: true,
         cols: 8,
-        items: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
-          'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-          'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
-          'Medicine', 'Art', 'Business'].sort()
-      }, {
+        items: [
+          'Geology',
+          'Geography',
+          'Psychology',
+          'Philosophy',
+          'Mathematics',
+          'Physics',
+          'Biology',
+          'Chemistry',
+          'Sociology',
+          'Economics',
+          'Political science',
+          'Linguistics',
+          'Computer science',
+          'Literature',
+          'History',
+          'Materials science',
+          'Engineering disciplines',
+          'Environmental science',
+          'Medicine',
+          'Art',
+          'Business'
+        ].sort()
+      },
+      {
         name: 'level',
         default: 3,
         label: '层数',
         multiple: false,
         cols: 2,
         items: _.range(1, 5, 1)
-      }, {
+      },
+      {
         name: 'type',
         default: 'arts',
         label: '数据',
         multiple: false,
         cols: 2,
-        items: [{
-          text: '文章数',
-          value: 'arts'
-        }, {
-          text: 'linksin数量',
-          value: 'linksin'
-        }, {
-          text: 'linksout数量',
-          value: 'linksout'
-        }]
-      }],
+        items: [
+          {
+            text: '文章数',
+            value: 'arts'
+          },
+          {
+            text: 'linksin数量',
+            value: 'linksin'
+          },
+          {
+            text: 'linksout数量',
+            value: 'linksout'
+          }
+        ]
+      }
+    ],
     Slider: [],
     RangeSlider: [],
     xAxisName: 'Year',
@@ -1576,20 +1990,26 @@ export const ChartMap = {
           name: ChartObj.yAxisName,
           type: 'value'
         },
-        series: zip(responseData.data.legend, responseData.data.y).map(item => {
-          return extendLineSeries({
-            name: item[0],
-            type: 'line',
-            smooth: false,
-            data: item[1]
-          })
-        })
+        series: zip(responseData.data.legend, responseData.data.y).map(
+          item => {
+            return extendLineSeries({
+              name: item[0],
+              type: 'line',
+              smooth: false,
+              data: item[1]
+            })
+          }
+        )
       })
       return _opt
     },
-    RequestFunc: async(params) => {
+    RequestFunc: async params => {
       // 当年
-      const data = await requestWrap('mag/topNLinksinByYear', 'post', params)
+      const data = await requestWrap(
+        'mag/topNLinksinByYear',
+        'post',
+        params
+      )
       console.log(data)
       return data
     },
@@ -1602,25 +2022,82 @@ export const ChartMap = {
         show: true,
         cols: 3,
         items: MAGCoreCategorys2020_V1
-      }, {
+      },
+      {
         name: 'N',
         default: 3,
         label: '每个学科的文章按linksin排名取topN',
         multiple: false,
         cols: 4,
         items: _.range(1, 101, 1)
-      }],
+      }
+    ],
     Slider: [],
-    RangeSlider: [{
-      name: 'yearRange',
-      startName: 'from',
-      rangeDefault: [1995, 2020],
-      endName: 'to',
-      label: '目标学科年份范围',
-      cols: 12,
-      max: 2020,
-      min: 1900
-    }],
+    RangeSlider: [
+      {
+        name: 'yearRange',
+        startName: 'from',
+        rangeDefault: [1995, 2020],
+        endName: 'to',
+        label: '目标学科年份范围',
+        cols: 12,
+        max: 2020,
+        min: 1900
+      }
+    ],
+    xAxisName: 'Year',
+    yAxisName: 'Count'
+  },
+  'wikipedia/WikiCountByYear': {
+    ChName: 'wiki总文章和边数按年趋势',
+    componentName: 'PageTemplate',
+    HandleResponseFunc: (responseData, ChartObj) => {
+      const _opt = extendEchartsOpts({
+        title: {
+          text: responseData.data.title
+        },
+        xAxis: {
+          name: ChartObj.xAxisName,
+          type: 'category',
+          boundaryGap: false,
+          data: responseData.data.x
+        },
+        yAxis: {
+          name: ChartObj.yAxisName,
+          type: 'value'
+        },
+        series: extendLineSeries({
+          name: 'line',
+          type: 'line',
+          smooth: false,
+          data: responseData.data.y
+        })
+      })
+      return _opt
+    },
+    RequestFunc: async params => {
+      // 当年
+      const data = await requestWrap(
+        'wiki/getWikiCountByYear',
+        'post',
+        params
+      )
+      console.log(data)
+      return data
+    },
+    Select: [
+      {
+        name: 'type',
+        default: 'node',
+        label: '数据维度',
+        multiple: false,
+        show: true,
+        cols: 3,
+        items: ['node', 'edge']
+      }
+    ],
+    Slider: [],
+    RangeSlider: [],
     xAxisName: 'Year',
     yAxisName: 'Count'
   }
