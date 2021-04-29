@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-04-26 19:21:18
+ * @LastEditTime: 2021-04-29 13:32:37
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2048,7 +2048,7 @@ export const ChartMap = {
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
-  'wikipedia/WikiCountByYear': {
+  'wikipedia/WikiAndMagCountByYear': {
     ChName: 'wiki总文章和边数按年趋势',
     componentName: 'PageTemplate',
     HandleResponseFunc: (responseData, ChartObj) => {
@@ -2078,7 +2078,7 @@ export const ChartMap = {
     RequestFunc: async params => {
       // 当年
       const data = await requestWrap(
-        'wiki/getWikiCountByYear',
+        'wiki/getWikiAndMagCountByYear',
         'post',
         params
       )
@@ -2086,6 +2086,15 @@ export const ChartMap = {
       return data
     },
     Select: [
+      {
+        name: 'db',
+        default: 'wiki',
+        label: '数据库',
+        multiple: false,
+        show: true,
+        cols: 3,
+        items: ['wiki', 'mag']
+      },
       {
         name: 'type',
         default: 'node',

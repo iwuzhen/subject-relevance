@@ -387,7 +387,7 @@ export default {
             {
               title: 'wiki 总文章和边数按年趋势',
               text: 'wiki总文章和边数按年趋势',
-              to: '/wikipedia/WikiCountByYear',
+              to: '/wikipedia/WikiAndMagCountByYear',
               update: '2021-04-26T16:43:03.429Z'
             },
             {
