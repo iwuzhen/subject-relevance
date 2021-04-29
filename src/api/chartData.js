@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-04-29 13:32:37
+ * @LastEditTime: 2021-04-29 14:29:04
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2010,7 +2010,6 @@ export const ChartMap = {
         'post',
         params
       )
-      console.log(data)
       return data
     },
     Select: [
@@ -2050,7 +2049,7 @@ export const ChartMap = {
   },
   'wikipedia/WikiAndMagCountByYear': {
     ChName: 'wiki总文章和边数按年趋势',
-    componentName: 'PageTemplate',
+    componentName: 'PageDynamicSelectTemplate',
     HandleResponseFunc: (responseData, ChartObj) => {
       const _opt = extendEchartsOpts({
         title: {
@@ -2093,7 +2092,24 @@ export const ChartMap = {
         multiple: false,
         show: true,
         cols: 3,
-        items: ['wiki', 'mag']
+        items: ['wiki', 'mag', { text: 'wiki 学术 level 2', value: 'xueshu_lv2' }, { text: 'wiki 学术 level 3', value: 'xueshu_lv3' }],
+        func: that => {
+          if (['xueshu_lv2', 'xueshu_lv3'].includes(that.options.db)) {
+            that.options.type = 'node'
+            for (const i in that.ChartObj.Select) {
+              if (that.ChartObj.Select[i].name === 'type') {
+                that.ChartObj.Select[i].items = ['node']
+              }
+            }
+          } else {
+            for (const i in that.ChartObj.Select) {
+              if (that.ChartObj.Select[i].name === 'type') {
+                that.ChartObj.Select[i].items = ['node', 'edge', { text: '边数/点数', value: 'avg' }]
+              }
+            }
+          }
+          that.getData()
+        }
       },
       {
         name: 'type',
@@ -2102,7 +2118,7 @@ export const ChartMap = {
         multiple: false,
         show: true,
         cols: 3,
-        items: ['node', 'edge']
+        items: ['node', 'edge', { text: '边数/点数', value: 'avg' }, 'xueshu_lv2', 'xueshu_lv3']
       }
     ],
     Slider: [],
