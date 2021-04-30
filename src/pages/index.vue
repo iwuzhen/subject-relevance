@@ -102,7 +102,7 @@ export default {
             },
             {
               title: 'MAG 哑铃图',
-              text: '学科间幂率层次关系，可自主调节关系',
+              text: '学科间幂律层次关系，可自主调节关系',
               to: '/explorer/MagFunnel'
             }
           ]
@@ -294,21 +294,21 @@ export default {
             }
 
           ],
-          '幂率': [
+          '幂律': [
             {
-              title: 'MAG 幂率相关统计数据',
+              title: 'MAG 幂律相关统计数据',
               text: 'MAG v2幂律相关统计数据',
               to: '/mag2019v2/MagInnerZipTj'
             },
             {
-              title: 'MAG 小世界幂率',
-              text: 'MAG 小世界幂率',
+              title: 'MAG 小世界幂律',
+              text: 'MAG 小世界幂律',
               to: '/mag2019v2/MagInnerZipfV2'
             },
 
             {
-              title: 'MAG 世界幂率',
-              text: 'MAG 世界幂率',
+              title: 'MAG 世界幂律',
+              text: 'MAG 世界幂律',
               to: '/mag2019v2/MagZipfV2'
             }
           ],
@@ -538,7 +538,7 @@ export default {
               to: '/wikipedia/SubDiscipline'
             }
           ],
-          '幂率': [
+          '幂律': [
             {
               title: 'wiki Zipf 幂律(世界)斜率 (人)',
               text: 'people 计算出的世界逐年幂律图',
