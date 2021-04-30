@@ -7,6 +7,8 @@ v-container(fluid :style="cssVars")
       v-select(@click="dialog.pid=1;dialog.stats=!dialog.stats" v-model='targetSubject.allSubject' :items='targetSubject.allSubject' chips multiple dense label='目标学科')
     v-col(cols='2')
       v-select(v-model='methodValue' :items='methodOptions' dense label='条件' @change='changeSubject')
+    v-col(cols='2')
+      v-select(v-model='levelType.value' :items='levelType.option' dense label='层数' @change='getData')
     v-col(cols="5")
       v-slider(hint="距离过滤器" label="距离过滤器" max=1 min=0 step=0.01 thumb-label="always" v-model="linkFilter" @change='liteDraw')
     v-col(cols="7")
@@ -116,6 +118,10 @@ export default {
       vertexSubjects: ['Biology', 'Physics', 'Mathematics', 'Political science'],
       BasicData: {},
       GraphData: {},
+      levelType: {
+        value: 2,
+        option: [2, 3]
+      },
       methodValue: 'linksin',
       methodOptions: ['linksin', 'linksout'],
       showText: false,
@@ -175,15 +181,6 @@ export default {
     }
   },
   mounted() {
-    // todo 异常未处理
-    // getOriginCategories().then(data => {
-    //   this.topSubject = data.data.map(item => {
-    //     // 首字母外小写
-    //     item.name = item.name.charAt(0) + item.name.slice(1).toLowerCase()
-    //     return item
-    //   })
-    //   this.activeSubLevel(142362112, 'Art')
-    // })
     this.initLevel()
     setTimeout(() => { this.activeSubLevel('Biology') }, 1000)
   },
@@ -262,7 +259,7 @@ export default {
         method: this.methodValue,
         catlevel: 1,
         // level: 1,
-        levelType: 2,
+        levelType: this.levelType.value,
         level: -1,
         btype: 'v5_xueshu_node_level1'
       }

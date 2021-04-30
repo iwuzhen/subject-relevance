@@ -7,6 +7,8 @@ v-container(fluid)
       v-select(@click="dialog.pid=1;dialog.stats=!dialog.stats"  v-model='targetSubject.allSubject' :items='targetSubject.allSubject' dense small-chips multiple label='相关学科')
 
     v-col(cols='2')
+      v-select(v-model='levelType.value' :items='levelType.option' dense label='层数' @change='getData')
+    v-col(cols='2')
       v-select(v-model='methodValue' :items='methodOptions' dense label='条件' @change='getData')
   v-row(v-for="chartid of myChartIds" :key="chartid")
     v-col(col='12')
@@ -76,6 +78,10 @@ export default {
       pageName: 'Wiki v5 学术圈二级学科距离',
       methodValue: 'linksin',
       methodOptions: ['linksin', 'linksout'],
+      levelType: {
+        value: 2,
+        option: [2, 3]
+      },
       loading: {
         masChart0: false,
         masChart1: false,
@@ -110,15 +116,6 @@ export default {
   computed: {
   },
   mounted() {
-    // todo 异常未处理
-    // getOriginCategories().then(data => {
-    //   this.topSubject = data.data.map(item => {
-    //     // 首字母外小写
-    //     item.name = item.name.charAt(0) + item.name.slice(1).toLowerCase()
-    //     return item
-    //   })
-    //   this.activeSubLevel(142362112, 'Art')
-    // })
     this.initLevel()
     setTimeout(() => { this.activeSubLevel('Biology') }, 1000)
   },
@@ -216,7 +213,7 @@ export default {
         method: this.methodValue,
         catlevel: 0,
         // level: 1,
-        levelType: 2,
+        levelType: this.levelType.value,
         level: -1,
         btype: 'v5_xueshu_node_level1'
       }
