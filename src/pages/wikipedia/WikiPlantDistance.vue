@@ -87,7 +87,13 @@ export default {
         masChart1: false,
         masChart2: false,
         masChart3: false,
-        masChart4: false
+        masChart4: false,
+        masChart5: false,
+        masChart6: false,
+        masChart7: false,
+        masChart8: false,
+        masChart9: false,
+        masChart10: false
       },
       myChartIds: ['masChart1'],
       dialog: {
