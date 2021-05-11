@@ -15,7 +15,7 @@ v-container(fluid)
 
   v-row
     v-col(cols='11')
-      v-range-slider.align-center(v-model='nodeRange', thumb-label='always', :max='100000', :min='1', dense, hide-details, label='求斜率范围', hint='求斜率范围', @change='getData')
+      v-range-slider.align-center(v-model='nodeRange', thumb-label='always', :max='30000', :min='1', dense, hide-details, label='求斜率范围', hint='求斜率范围', @change='getData')
         template(v-slot:prepend)
         template(v-slot:append)
   v-row
