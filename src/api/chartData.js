@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-05-14 11:39:43
+ * @LastEditTime: 2021-05-14 11:41:30
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2098,7 +2098,7 @@ export const ChartMap = {
             that.options.type = 'node'
             for (const i in that.ChartObj.Select) {
               if (that.ChartObj.Select[i].name === 'type') {
-                that.ChartObj.Select[i].items = ['node']
+                that.ChartObj.Select[i].items = ['node', 'node_dx']
               }
             }
           } else if (that.options.db === 'mag') {
