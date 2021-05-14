@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-04-29 14:29:04
+ * @LastEditTime: 2021-05-14 11:39:43
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2092,7 +2092,7 @@ export const ChartMap = {
         multiple: false,
         show: true,
         cols: 3,
-        items: ['wiki', 'mag', { text: 'wiki 学术 level 2', value: 'xueshu_lv2' }, { text: 'wiki 学术 level 3', value: 'xueshu_lv3' }],
+        items: ['wiki', 'mag', { text: 'wiki 两层学术圈', value: 'xueshu_lv2' }, { text: 'wiki 三层学术圈', value: 'xueshu_lv3' }],
         func: that => {
           if (['xueshu_lv2', 'xueshu_lv3'].includes(that.options.db)) {
             that.options.type = 'node'
@@ -2101,10 +2101,16 @@ export const ChartMap = {
                 that.ChartObj.Select[i].items = ['node']
               }
             }
+          } else if (that.options.db === 'mag') {
+            for (const i in that.ChartObj.Select) {
+              if (that.ChartObj.Select[i].name === 'type') {
+                that.ChartObj.Select[i].items = ['node', 'edge', { text: '边数/点数', value: 'avg' }, 'node_dx', 'edge_dx', 'fos_dx']
+              }
+            }
           } else {
             for (const i in that.ChartObj.Select) {
               if (that.ChartObj.Select[i].name === 'type') {
-                that.ChartObj.Select[i].items = ['node', 'edge', { text: '边数/点数', value: 'avg' }]
+                that.ChartObj.Select[i].items = ['node', 'edge', { text: '边数/点数', value: 'avg' }, 'node_dx', 'edge_dx']
               }
             }
           }
@@ -2118,7 +2124,7 @@ export const ChartMap = {
         multiple: false,
         show: true,
         cols: 3,
-        items: ['node', 'edge', { text: '边数/点数', value: 'avg' }, 'xueshu_lv2', 'xueshu_lv3']
+        items: ['node', 'edge', { text: '边数/点数', value: 'avg' }, 'node_dx', 'edge_dx']
       }
     ],
     Slider: [],
