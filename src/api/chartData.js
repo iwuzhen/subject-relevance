@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-05-14 16:25:17
+ * @LastEditTime: 2021-05-15 16:51:25
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2110,7 +2110,15 @@ export const ChartMap = {
           } else {
             for (const i in that.ChartObj.Select) {
               if (that.ChartObj.Select[i].name === 'type') {
-                that.ChartObj.Select[i].items = ['node', 'edge', { text: '边数/点数', value: 'avg' }, 'node_dx', 'edge_dx']
+                that.ChartObj.Select[i].items = [
+                  'node',
+                  'edge',
+                  { text: '边数/点数', value: 'avg' },
+                  'node_dx',
+                  'edge_dx',
+                  'category',
+                  'category_dx'
+                ]
               }
             }
           }
@@ -2124,7 +2132,7 @@ export const ChartMap = {
         multiple: false,
         show: true,
         cols: 3,
-        items: ['node', 'edge', { text: '边数/点数', value: 'avg' }, 'node_dx', 'edge_dx']
+        items: ['node', 'edge', { text: '边数/点数', value: 'avg' }, 'node_dx', 'edge_dx', 'category', 'category_dx']
       }
     ],
     Slider: [],
