@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-05-15 16:51:25
+ * @LastEditTime: 2021-05-18 00:43:36
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2092,7 +2092,12 @@ export const ChartMap = {
         multiple: false,
         show: true,
         cols: 3,
-        items: ['wiki', 'mag', { text: 'wiki 两层学术圈', value: 'xueshu_lv2' }, { text: 'wiki 三层学术圈', value: 'xueshu_lv3' }],
+        items: [
+          'wiki',
+          'mag',
+          { text: 'wiki 两层学术圈', value: 'xueshu_lv2' },
+          { text: 'wiki 三层学术圈', value: 'xueshu_lv3' }
+        ],
         func: that => {
           if (['xueshu_lv2', 'xueshu_lv3'].includes(that.options.db)) {
             that.options.type = 'node'
@@ -2104,7 +2109,15 @@ export const ChartMap = {
           } else if (that.options.db === 'mag') {
             for (const i in that.ChartObj.Select) {
               if (that.ChartObj.Select[i].name === 'type') {
-                that.ChartObj.Select[i].items = ['node', 'edge', { text: '边数/点数', value: 'avg' }, 'node_dx', 'edge_dx', 'fos_dx', 'fos']
+                that.ChartObj.Select[i].items = [
+                  'node',
+                  'edge',
+                  { text: '边数/点数', value: 'avg' },
+                  'node_dx',
+                  'edge_dx',
+                  'fos_dx',
+                  'fos'
+                ]
               }
             }
           } else {
@@ -2132,7 +2145,117 @@ export const ChartMap = {
         multiple: false,
         show: true,
         cols: 3,
-        items: ['node', 'edge', { text: '边数/点数', value: 'avg' }, 'node_dx', 'edge_dx', 'category', 'category_dx']
+        items: [
+          'node',
+          'edge',
+          { text: '边数/点数', value: 'avg' },
+          'node_dx',
+          'edge_dx',
+          'category',
+          'category_dx'
+        ]
+      }
+    ],
+    Slider: [],
+    RangeSlider: [],
+    xAxisName: 'Year',
+    yAxisName: 'Count'
+  },
+  'mag2020/MAG_ZldByTopN_every5000': {
+    ChName: 'MAG 学科topN 每隔5000的自恋度',
+    componentName: 'PageDynamicSelectTemplate',
+    HandleResponseFunc: (responseData, ChartObj) => {
+      const _opt = extendEchartsOpts({
+        title: {
+          text: responseData.data.title
+        },
+        legend: {
+          data: responseData.data.legend
+        },
+        xAxis: {
+          name: ChartObj.xAxisName,
+          type: 'category',
+          boundaryGap: false,
+          data: responseData.data.x
+        },
+        yAxis: {
+          name: ChartObj.yAxisName,
+          type: 'value'
+        },
+        series: _.zip(responseData.data.legend, responseData.data.y).map(item => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: item[1]
+          })
+        })
+
+      })
+      return _opt
+    },
+    RequestFunc: async params => {
+      // 当年
+      const data = await requestWrap(
+        'mag/getZldByTopN_every5000',
+        'post',
+        params
+      )
+      console.log(data)
+      return data
+    },
+    Select: [
+      {
+        name: 'cat',
+        default: ['Physics', 'Mathematics'],
+        label: '目标学科',
+        multiple: true,
+        show: true,
+        cols: 8,
+        items: [
+          'History',
+          'Geology',
+          'Economics',
+          'Geography',
+          'Chemistry',
+          'Philosophy',
+          'Sociology',
+          'Materials science',
+          'Mathematics',
+          'Biology',
+          'Computer science',
+          'Political science',
+          'Engineering disciplines',
+          'Psychology',
+          'Environmental science',
+          'Business',
+          'Physics',
+          'Medicine',
+          'Art'
+        ]
+      },
+      {
+        name: 'type',
+        default: 'delete_noref_v3_nopb',
+        label: '数据维度',
+        multiple: false,
+        show: true,
+        cols: 3,
+        items: [
+          {
+            text: 'v3 去0 去patent和book',
+            value: 'delete_noref_v3_nopb'
+          }
+        ]
+      },
+      {
+        name: 'method',
+        default: 'linksout',
+        label: '边的方向',
+        multiple: false,
+        show: true,
+        cols: 3,
+        items: ['linksout']
       }
     ],
     Slider: [],

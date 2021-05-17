@@ -182,6 +182,12 @@ export default {
             text: 'mag 小世界有向距离',
             to: '/mag2020/MagDirectedDistance',
             update: '2021-04-24T09:43:03.429Z'
+          },
+          {
+            title: 'MAG 学科topN 每隔5000的自恋度',
+            text: 'MAG 学科topN 每隔5000的自恋度',
+            to: '/mag2020/MAG_ZldByTopN_every5000',
+            update: '2021-05-18T09:43:03.429Z'
           }
           ],
           '学科相关度等': [
