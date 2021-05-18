@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-05-18 00:43:36
+ * @LastEditTime: 2021-05-18 15:55:04
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2207,7 +2207,25 @@ export const ChartMap = {
     Select: [
       {
         name: 'cat',
-        default: ['Physics', 'Mathematics'],
+        default: ['History',
+          'Geology',
+          'Economics',
+          'Geography',
+          'Chemistry',
+          'Philosophy',
+          'Sociology',
+          'Materials science',
+          'Mathematics',
+          'Biology',
+          'Computer science',
+          'Political science',
+          'Engineering disciplines',
+          'Psychology',
+          'Environmental science',
+          'Business',
+          'Physics',
+          'Medicine',
+          'Art'],
         label: '目标学科',
         multiple: true,
         show: true,
