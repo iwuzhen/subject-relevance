@@ -85,6 +85,12 @@ export default {
               title: 'wikiGraphPaper',
               text: 'wikiGraph论文图',
               to: '/browser/wikiGraphPaper'
+            },
+            {
+              title: '数据规模统计-石墨 excel',
+              text: '专利，论文，编辑次数等等，稍后更新',
+              href: 'https://shimo.im/sheets/gQgrvYXtRyYRv9qr/MODOC/',
+              update: '2021-06-31T09:43:03.429Z'
             }
           ],
           'Explorer': [
