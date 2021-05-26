@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-05-26 17:28:26
+ * @LastEditTime: 2021-05-27 02:09:24
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -144,6 +144,15 @@ const setChartOption_bar_2 = (retData, ChartObj) => {
   return _opt
 }
 
+const ALLMAGCoreCategorys2020 = MAGCoreCategorys2020.concat()
+ALLMAGCoreCategorys2020.unshift({
+  value: 'all',
+  text: 'all，不按学科分类'
+})
+
+const ALL_SELECT_MAG_DATA = SELECT_MAG_DATA.concat()
+ALL_SELECT_MAG_DATA.unshift('all')
+
 export const ChartMap = {
   'mag2020/AuthorsAndArticleInfoByYear': {
     ChName: '作者数逐年统计',
@@ -159,11 +168,11 @@ export const ChartMap = {
     Select: [
       {
         name: 'str',
-        default: SELECT_MAG_DATA,
+        default: ALL_SELECT_MAG_DATA,
         multiple: true,
         label: '目标学科',
         cols: 4,
-        items: MAGCoreCategorys2020
+        items: ALLMAGCoreCategorys2020
       },
       {
         name: 'returnType',
