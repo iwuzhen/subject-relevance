@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-05-18 15:55:04
+ * @LastEditTime: 2021-05-26 17:28:26
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -228,6 +228,23 @@ export const ChartMap = {
           },
           {
             text: '作者数超过100的论文',
+            value: 1
+          }
+        ]
+      },
+      {
+        name: 'isdx',
+        default: 0,
+        label: '是否取增量',
+        multiple: false,
+        cols: 2,
+        items: [
+          {
+            text: '原值',
+            value: 0
+          },
+          {
+            text: 'dx 增量',
             value: 1
           }
         ]
@@ -2182,15 +2199,16 @@ export const ChartMap = {
           name: ChartObj.yAxisName,
           type: 'value'
         },
-        series: _.zip(responseData.data.legend, responseData.data.y).map(item => {
-          return extendLineSeries({
-            name: item[0],
-            type: 'line',
-            smooth: false,
-            data: item[1]
-          })
-        })
-
+        series: _.zip(responseData.data.legend, responseData.data.y).map(
+          item => {
+            return extendLineSeries({
+              name: item[0],
+              type: 'line',
+              smooth: false,
+              data: item[1]
+            })
+          }
+        )
       })
       return _opt
     },
@@ -2207,7 +2225,8 @@ export const ChartMap = {
     Select: [
       {
         name: 'cat',
-        default: ['History',
+        default: [
+          'History',
           'Geology',
           'Economics',
           'Geography',
@@ -2225,7 +2244,8 @@ export const ChartMap = {
           'Business',
           'Physics',
           'Medicine',
-          'Art'],
+          'Art'
+        ],
         label: '目标学科',
         multiple: true,
         show: true,
