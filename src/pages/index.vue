@@ -194,6 +194,12 @@ export default {
             text: 'MAG 学科topN 每隔5000的自恋度',
             to: '/mag2020/MAG_ZldByTopN_every5000',
             update: '2021-05-18T09:43:03.429Z'
+          },
+          {
+            title: 'MAG N年之后的文章所引用的文章的逐年趋势',
+            text: 'MAG N年之后的文章所引用的文章的逐年趋势',
+            to: '/mag2020/MAG_PreCountByYear',
+            update: '2021-06-05T09:43:03.429Z'
           }
           ],
           '学科相关度等': [

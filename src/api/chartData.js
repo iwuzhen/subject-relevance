@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-05-27 02:09:24
+ * @LastEditTime: 2021-05-31 20:58:06
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2304,6 +2304,69 @@ export const ChartMap = {
         cols: 3,
         items: ['linksout']
       }
+    ],
+    Slider: [],
+    RangeSlider: [],
+    xAxisName: 'Year',
+    yAxisName: 'Count'
+  },
+  'mag2020/MAG_PreCountByYear': {
+    ChName: 'MAG N年之后的文章所引用的文章的逐年趋势',
+    componentName: 'PageDynamicSelectTemplate',
+    HandleResponseFunc: (responseData, ChartObj) => {
+      const _opt = extendEchartsOpts({
+        title: {
+          text: responseData.data.title
+        },
+        legend: {
+          data: responseData.data.legend
+        },
+        xAxis: {
+          name: ChartObj.xAxisName,
+          type: 'category',
+          boundaryGap: false,
+          data: responseData.data.x
+        },
+        yAxis: {
+          name: ChartObj.yAxisName,
+          type: 'value'
+        },
+        series: _.zip(responseData.data.legend, responseData.data.y).map(
+          item => {
+            return extendLineSeries({
+              name: item[0],
+              type: 'line',
+              smooth: false,
+              data: item[1]
+            })
+          }
+        )
+      })
+      return _opt
+    },
+    RequestFunc: async params => {
+      // 当年
+      const data = await requestWrap(
+        'mag/getPreCountByYear',
+        'post',
+        params
+      )
+      console.log(data)
+      return data
+    },
+    Select: [
+      {
+        name: 'year',
+        default: 2000,
+        label: 'year',
+        multiple: false,
+        show: true,
+        cols: 4,
+        items: [
+          2000, 2003, 2005, 2008, 2010
+        ]
+      }
+
     ],
     Slider: [],
     RangeSlider: [],
