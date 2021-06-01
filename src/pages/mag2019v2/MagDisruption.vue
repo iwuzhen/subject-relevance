@@ -298,6 +298,7 @@ export default {
         pargs.push(`Disruption_page_by_year_${name}`)
       }
       const itemdata = await this.getStorageData(pargs)
+      console.log(itemdata)
       datasets = itemdata.map(item => item.Data)
 
       // 提取对应百分比的数据
@@ -437,88 +438,98 @@ export default {
         pargs.push(`Disruption_PowerLaw_${name}`)
       }
       let itemdata = await this.getStorageData(pargs)
-      datasets = itemdata.map(item => item.Data)
+      try {
+        datasets = itemdata.map(item => item.Data)
 
-      // lengde
-      let fuseData = _.zip(names, datasets)
-      fuseData.sort((x, y) =>
-        y[1][y[1].length - 1] - x[1][x[1].length - 1]
-      )
-      let tp = _.unzip(fuseData)
-      names = tp[0]
-      datasets = tp[1].map(item => Float32Array.from(item))
-      // 加入 x 轴
-      datasets.unshift(xaxis.slice(0, 100000))
-
-      opt = extendEchartsOpts({
-        tooltip: {
-          trigger: 'axis',
-          textStyle: {
-            align: 'left'
-          },
-          axisPointer: {
-            type: 'cross',
-            animation: true,
-            label: {
-              backgroundColor: '#505765'
-            }
-          },
-          formatter: function(params) {
-            params.sort((x, y) => {
-              return y.data[y.encode.y[0]] - x.data[x.encode.y[0]]
-            })
-            let showHtm = ` ${params[0].axisValueLabel}<br>`
-            for (let i = 0; i < params.length; i++) {
-              const _text = params[i].seriesName
-              const _data = params[i].data[i + 1]
-              if (_data === undefined) {
-                continue
-              }
-              const _marker = params[i].marker
-              showHtm += `${_marker}${_text}：${_data}<br>`
-            }
-            return showHtm
+        // lengde
+        const fuseData = _.zip(names, datasets)
+        fuseData.sort((x, y) => {
+          try {
+            return y[1][y[1].length - 1] - x[1][x[1].length - 1]
+          } catch (error) {
+            return -1
           }
-        },
-        title: {
-          text: 'Subject Disruption PowerLaw'
-        },
-        legend: {
-          data: names
-        },
-        xAxis: {
-          name: 'Rank log',
-          type: 'value',
-          boundaryGap: false
-          // max: 'dataMax'
-        },
-        yAxis: {
-          name: 'PowerLaw',
-          type: 'value'
-          // min: 'dataMin'
-        },
-        dataset: {
-          source: datasets,
-          sourceHeader: false
-        },
-        animation: false,
-        series: names.map((name, index) => {
-          return {
-            name: name,
-            type: 'scatter',
-            smooth: false,
-            symbolSize: 5,
-            seriesLayoutBy: 'row',
-            encode: {
-              x: 0,
-              y: index + 1
+        }
+
+        )
+        const tp = _.unzip(fuseData)
+        names = tp[0]
+        datasets = tp[1].map(item => Float32Array.from(item))
+        // 加入 x 轴
+        datasets.unshift(xaxis.slice(0, 100000))
+
+        opt = extendEchartsOpts({
+          tooltip: {
+            trigger: 'axis',
+            textStyle: {
+              align: 'left'
             },
-            large: true
-          }
+            axisPointer: {
+              type: 'cross',
+              animation: true,
+              label: {
+                backgroundColor: '#505765'
+              }
+            },
+            formatter: function(params) {
+              params.sort((x, y) => {
+                return y.data[y.encode.y[0]] - x.data[x.encode.y[0]]
+              })
+              let showHtm = ` ${params[0].axisValueLabel}<br>`
+              for (let i = 0; i < params.length; i++) {
+                const _text = params[i].seriesName
+                const _data = params[i].data[i + 1]
+                if (_data === undefined) {
+                  continue
+                }
+                const _marker = params[i].marker
+                showHtm += `${_marker}${_text}：${_data}<br>`
+              }
+              return showHtm
+            }
+          },
+          title: {
+            text: 'Subject Disruption PowerLaw'
+          },
+          legend: {
+            data: names
+          },
+          xAxis: {
+            name: 'Rank log',
+            type: 'value',
+            boundaryGap: false
+          // max: 'dataMax'
+          },
+          yAxis: {
+            name: 'PowerLaw',
+            type: 'value'
+          // min: 'dataMin'
+          },
+          dataset: {
+            source: datasets,
+            sourceHeader: false
+          },
+          animation: false,
+          series: names.map((name, index) => {
+            return {
+              name: name,
+              type: 'scatter',
+              smooth: false,
+              symbolSize: 5,
+              seriesLayoutBy: 'row',
+              encode: {
+                x: 0,
+                y: index + 1
+              },
+              large: true
+            }
+          })
         })
-      })
-      console.log(opt)
-      this.myChartObjs[2].setOption(opt, true)
+        console.log(opt)
+        this.myChartObjs[2].setOption(opt, true)
+      } catch (error) {
+        console.log(error)
+      }
 
       // p4
       names = []
@@ -540,11 +551,11 @@ export default {
       datasets = itemdata.map(item => item.Data)
 
       // lendge
-      fuseData = _.zip(names, datasets)
+      const fuseData = _.zip(names, datasets)
       fuseData.sort((x, y) =>
         y[1][y[1].length - 1] - x[1][x[1].length - 1]
       )
-      tp = _.unzip(fuseData)
+      const tp = _.unzip(fuseData)
       names = tp[0]
       datasets = tp[1]
       // 加入 x 轴
