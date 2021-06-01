@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-05-31 20:58:06
+ * @LastEditTime: 2021-06-01 11:22:48
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2363,7 +2363,7 @@ export const ChartMap = {
         show: true,
         cols: 4,
         items: [
-          2000, 2003, 2005, 2008, 2010
+          2000, 2003, 2005, 2008, 2010, 2012, 2013, 2015, 2018
         ]
       }
 
