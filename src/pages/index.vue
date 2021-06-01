@@ -413,6 +413,12 @@ export default {
               text: 'core_v5文章数links统计',
               to: '/wikipedia/ArticlesTotalByCoreNew_v5',
               update: '2021-03-16T09:43:03.429Z'
+            },
+            {
+              title: '学科单篇文章的的历年长度',
+              text: '学科单篇文章的的历年长度',
+              to: '/wikipedia/SubjectArticleCount',
+              update: '2021-06-02T09:43:03.429Z'
             }
           ],
           'Core-学科相关度': [

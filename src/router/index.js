@@ -118,6 +118,10 @@ const routes = [{
   name: 'WikiTrade',
   component: () => import('@/pages/wikipedia/WikiTrade')
 }, {
+  path: '/wikipedia/SubjectArticleCount',
+  name: 'SubjectArticleCount',
+  component: () => import('@/pages/wikipedia/SubjectArticleCount')
+}, {
   path: '/wikipedia/wikiGraph',
   name: 'wikiGraph',
   component: () => import('@/pages/wikipedia/wikiGraph')
