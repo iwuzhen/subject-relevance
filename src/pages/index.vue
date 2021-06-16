@@ -129,6 +129,11 @@ export default {
             text: '',
             to: '/mag2020/tjhaslinksinByCats',
             update: '2021-01-11T09:43:03.429Z'
+          }, {
+            title: 'MAG 颠覆度年度分布',
+            text: '',
+            to: '/mag2020/DisruptionTrendByYear',
+            update: '2021-06-30T09:43:03.429Z'
           },
           {
             title: 'MAG 因果关系-贸易比例',

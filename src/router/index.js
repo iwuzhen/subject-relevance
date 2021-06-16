@@ -118,6 +118,10 @@ const routes = [{
   name: 'WikiTrade',
   component: () => import('@/pages/wikipedia/WikiTrade')
 }, {
+  path: '/mag2020/DisruptionTrendByYear',
+  name: 'DisruptionTrendByYear',
+  component: () => import('@/pages/mag2020/DisruptionTrendByYear')
+}, {
   path: '/wikipedia/SubjectArticleCount',
   name: 'SubjectArticleCount',
   component: () => import('@/pages/wikipedia/SubjectArticleCount')
