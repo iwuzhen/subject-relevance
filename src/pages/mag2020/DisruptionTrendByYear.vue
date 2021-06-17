@@ -143,7 +143,7 @@ export default {
       const startYear = 1950
       const endYear = 2020
       const year_range = _.range(this.years[0], this.years[1] + 1)
-
+      const endindex = this.years[1] - startYear
       let revRow = []
       for (const key of this.lineRange.select) {
         const opt = {
@@ -162,7 +162,7 @@ export default {
           console.log(error)
         }
       }
-      line_data.sort((a, b) => b[1].slice(-1) - a[1].slice(-1))
+      line_data.sort((a, b) => b[1].slice(endindex)[0] - a[1].slice(endindex)[0])
 
       let _opt = extendEchartsOpts({
         title: {
@@ -242,7 +242,7 @@ export default {
         }
       }
 
-      ddx_line_data.sort((a, b) => b[1].slice(-1) - a[1].slice(-1))
+      ddx_line_data.sort((a, b) => b[1].slice(endindex)[0] - a[1].slice(endindex)[0])
 
       _opt = extendEchartsOpts({
         title: {
@@ -322,7 +322,7 @@ export default {
         }
       }
 
-      sum_line_data.sort((a, b) => b[1].slice(-1) - a[1].slice(-1))
+      sum_line_data.sort((a, b) => b[1].slice(endindex)[0] - a[1].slice(endindex)[0])
       _opt = extendEchartsOpts({
         title: {
           text: `总量 分布`
