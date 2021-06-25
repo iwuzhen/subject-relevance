@@ -44,6 +44,10 @@ const lineData = {
     'startD': -1,
     'endD': 1
   },
+  '0': {
+    'startD': 0,
+    'endD': 0
+  },
   '-0.4 ~ 0.4': {
     'startD': -0.4,
     'endD': 0.4
