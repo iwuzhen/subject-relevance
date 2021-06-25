@@ -113,7 +113,7 @@ export default {
       pageName: 'MGA 颠覆度年度分布',
       lineRange: {
         option: Object.keys(lineData),
-        select: ['all mag', '0.0008 ~ 1']
+        select: ['all mag', 'no linksin', '0.0008 ~ 1', '-1 ~ 1', '0.1 ~ 1']
       },
       revLine: {
         option: Object.keys(lineData),
