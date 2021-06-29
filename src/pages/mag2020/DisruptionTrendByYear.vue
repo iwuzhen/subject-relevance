@@ -170,7 +170,7 @@ export default {
 
       let _opt = extendEchartsOpts({
         title: {
-          text: `dx 分布`
+          text: `每年新增（dx 分布）`
         },
         tooltip: {
           trigger: 'axis',
