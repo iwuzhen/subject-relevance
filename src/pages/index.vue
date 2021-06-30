@@ -251,6 +251,16 @@ export default {
             }
           ]
         },
+        'Wikipedia-历史重建': {
+          '统计数据': [
+            {
+              title: 'wiki 文章数',
+              text: 'wiki 文章数查询',
+              to: '/wikipedia-load/ArticlesTotal',
+              update: '2021-06-30T09:43:03.429Z'
+            }
+          ]
+        },
         Wikipedia: {
           '统计数据': [
             {

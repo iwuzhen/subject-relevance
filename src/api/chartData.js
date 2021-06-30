@@ -3,12 +3,12 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-06-01 11:22:48
+ * @LastEditTime: 2021-06-30 12:14:18
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
 import { requestWrap } from '@/api/index'
-import { coreCategorys, magCategory, SELECT_MAG_DATA, MAGCoreCategorys2020, SELECT_MAG_DATA_V1, MAGCoreCategorys2020_V1, defaultCategorySelect, extendEchartsOpts, extendLineSeries } from '@/api/data'
+import { basiCategorys, defaultCategorySelect, coreCategorys, magCategory, SELECT_MAG_DATA, MAGCoreCategorys2020, SELECT_MAG_DATA_V1, MAGCoreCategorys2020_V1, extendEchartsOpts, extendLineSeries } from '@/api/data'
 import _ from 'lodash'
 
 const zip = (...rows) => [...rows[0]].map((_, c) => rows.map(row => row[c]))
@@ -72,6 +72,14 @@ const setChartOption_2 = (responseData, ChartObj) => {
     })
   })
   return _opt
+}
+
+function formatNum(value) {
+  if (!value && value !== 0) return 0
+
+  const str = value.toString()
+  const reg = str.indexOf('.') > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(?:\d{3})+$)/g
+  return str.replace(reg, '$1,')
 }
 
 // 合并2张图表，数据一起展示
@@ -2367,6 +2375,106 @@ export const ChartMap = {
         ]
       }
 
+    ],
+    Slider: [],
+    RangeSlider: [],
+    xAxisName: 'Year',
+    yAxisName: 'Count'
+  },
+  'wikipedia-load/ArticlesTotal': {
+    ChName: 'wiki总文章和边数按年趋势',
+    componentName: 'PageDynamicSelectTemplate',
+    HandleResponseFunc: (responseData, ChartObj) => {
+      console.log(responseData)
+      const _opt = extendEchartsOpts({
+        title: {
+          text: 'Article Count'
+        },
+        tooltip: {
+          trigger: 'axis',
+          textStyle: {
+            align: 'left'
+          },
+          axisPointer: {
+            type: 'cross',
+            animation: true,
+            label: {
+              backgroundColor: '#505765'
+            }
+          },
+          formatter: function(params) {
+            params.sort((x, y) => {
+              if (y.data === undefined) { return -1 }
+              return y.data[1] - x.data[1]
+            })
+            let showHtm = ` ${params[0].data[0]}<br>`
+            for (let i = 0; i < params.length; i++) {
+              if (params[i].data === undefined) {
+                continue
+              }
+              const _text = params[i].seriesName
+              const _data = formatNum(params[i].data[1])
+              const _marker = params[i].marker
+              showHtm += `${_marker}${_text}：${_data}<br>`
+            }
+            return showHtm
+          }
+        },
+        xAxis: {
+          name: ChartObj.xAxisName,
+          type: 'value',
+          boundaryGap: false,
+          min: 'dataMin',
+          max: 'dataMax'
+        },
+        yAxis: {
+          name: ChartObj.yAxisName,
+          type: 'value',
+          axisLabel: {
+            formatter: value => formatNum(value)
+          }
+        },
+        series: Object.entries(responseData).map(item => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: Object.entries(item[1])
+          })
+        })
+      })
+      return _opt
+    },
+    RequestFunc: async params => {
+      params.type = 0
+      params.version = 'v5_newDB'
+      // 当年
+      const data = await requestWrap(
+        'wiki/getArticlesTotalByCoreNew_v',
+        'post',
+        params
+      )
+      return data
+    },
+    Select: [
+      {
+        name: 'subjects',
+        default: defaultCategorySelect,
+        label: '学科',
+        multiple: true,
+        show: true,
+        cols: 8,
+        items: basiCategorys
+      },
+      {
+        name: 'level',
+        default: 2,
+        label: 'level',
+        multiple: false,
+        show: true,
+        cols: 2,
+        items: [2, 3]
+      }
     ],
     Slider: [],
     RangeSlider: [],
