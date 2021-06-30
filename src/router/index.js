@@ -130,6 +130,10 @@ const routes = [{
   name: 'wikiGraph',
   component: () => import('@/pages/wikipedia/wikiGraph')
 }, {
+  path: '/wikipedia-build/wikiGraph',
+  name: 'wikiGraphBuild',
+  component: () => import('@/pages/wikipediaBuild/wikiGraph')
+}, {
   path: '/mag2019v2/GoogleDistance',
   name: 'GoogleDistance',
   component: () => import('@/pages/mag2019v2/GoogleDistance')

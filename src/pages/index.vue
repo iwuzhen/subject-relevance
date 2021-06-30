@@ -256,7 +256,7 @@ export default {
             {
               title: 'wiki 文章数',
               text: 'wiki 文章数查询',
-              to: '/wikipedia-load/ArticlesTotal',
+              to: '/wikipedia-build/ArticlesTotal',
               update: '2021-06-30T09:43:03.429Z'
             },
             {
@@ -264,6 +264,12 @@ export default {
               text: '各 Core V5 学科的逐年相关度',
               to: { path: '/wikipedia/DisciplineCore', query: { version: 'v5_new' }},
               update: '2021-06-30T09:43:03.429Z'
+            },
+            {
+              title: 'wiki 3D 引力图',
+              text: '',
+              to: '/wikipedia-build/wikiGraph',
+              update: '2021-07-05T16:43:03.429Z'
             }
           ]
         },
@@ -549,7 +555,7 @@ export default {
       }
     }
     retArray.sort((a, b) => { return new Date(b.update).getTime() - new Date(a.update).getTime() })
-    for (const item of retArray.slice(0, 3)) {
+    for (const item of retArray.slice(0, 5)) {
       this.$notify({
         group: 'foo',
         duration: 3000,

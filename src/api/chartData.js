@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-06-30 13:10:53
+ * @LastEditTime: 2021-06-30 13:29:32
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2381,7 +2381,7 @@ export const ChartMap = {
     xAxisName: 'Year',
     yAxisName: 'Count'
   },
-  'wikipedia-load/ArticlesTotal': {
+  'wikipedia-build/ArticlesTotal': {
     ChName: 'wiki总文章和边数按年趋势',
     componentName: 'PageDynamicSelectTemplate',
     HandleResponseFunc: (responseData, ChartObj) => {
