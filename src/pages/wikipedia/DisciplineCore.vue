@@ -24,7 +24,7 @@ v-container(fluid='')
 
 <script>
 import { getDistanceCore } from '@/api/index'
-import { extendEchartsOpts, coreCategorys1, extendLineSeries, defaultCategorySelect1 } from '@/api/data'
+import { WIKI_TOP_CATEGORY, extendEchartsOpts, coreCategorys1, extendLineSeries, defaultCategorySelect1 } from '@/api/data'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 
@@ -183,6 +183,18 @@ export default {
       this.pageCountOpt = [-1]
       this.versionSelect = 'v5_node_newDB'
       this.versionOpt = ['v5_node_newDB']
+
+      this.subjectRelevances = WIKI_TOP_CATEGORY
+      this.categorys = WIKI_TOP_CATEGORY.map(item => {
+        let text = item
+        if (item === 'Engineering disciplines') {
+          text = 'Engineering'
+        }
+        return {
+          text: text,
+          value: item
+        }
+      })
     }
 
     this.subjectRelevances = this.subjectRelevances.filter(item =>
