@@ -3,12 +3,12 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-06-30 12:14:18
+ * @LastEditTime: 2021-06-30 13:10:53
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
 import { requestWrap } from '@/api/index'
-import { basiCategorys, defaultCategorySelect, coreCategorys, magCategory, SELECT_MAG_DATA, MAGCoreCategorys2020, SELECT_MAG_DATA_V1, MAGCoreCategorys2020_V1, extendEchartsOpts, extendLineSeries } from '@/api/data'
+import { WIKI_TOP_CATEGORY, defaultCategorySelect, coreCategorys, magCategory, SELECT_MAG_DATA, MAGCoreCategorys2020, SELECT_MAG_DATA_V1, MAGCoreCategorys2020_V1, extendEchartsOpts, extendLineSeries } from '@/api/data'
 import _ from 'lodash'
 
 const zip = (...rows) => [...rows[0]].map((_, c) => rows.map(row => row[c]))
@@ -2459,12 +2459,12 @@ export const ChartMap = {
     Select: [
       {
         name: 'subjects',
-        default: defaultCategorySelect,
+        default: WIKI_TOP_CATEGORY.concat(),
         label: '学科',
         multiple: true,
         show: true,
         cols: 8,
-        items: basiCategorys
+        items: WIKI_TOP_CATEGORY
       },
       {
         name: 'level',

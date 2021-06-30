@@ -174,7 +174,17 @@ export default {
       this.pageCountOpt = [-1]
       this.versionSelect = 'article'
       this.versionOpt = ['article']
+    } else if (this.$route.query.version === 'v5_new') {
+      this.levelOpt = [2, 3]
+      this.levelSelect = 2
+      this.methodValue = 'linksin'
+      this.methodOptions = ['linksin', 'linksout']
+      this.pageCountSelect = -1
+      this.pageCountOpt = [-1]
+      this.versionSelect = 'v5_node_newDB'
+      this.versionOpt = ['v5_node_newDB']
     }
+
     this.subjectRelevances = this.subjectRelevances.filter(item =>
       v5Subject.includes(item)
     )

@@ -258,6 +258,12 @@ export default {
               text: 'wiki 文章数查询',
               to: '/wikipedia-load/ArticlesTotal',
               update: '2021-06-30T09:43:03.429Z'
+            },
+            {
+              title: 'wiki Core V5',
+              text: '各 Core V5 学科的逐年相关度',
+              to: { path: '/wikipedia/DisciplineCore', query: { version: 'v5_new' }},
+              update: '2021-06-30T09:43:03.429Z'
             }
           ]
         },
