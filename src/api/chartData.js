@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-06-30 13:29:32
+ * @LastEditTime: 2021-07-01 10:51:43
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2447,7 +2447,6 @@ export const ChartMap = {
     },
     RequestFunc: async params => {
       params.type = 0
-      params.version = 'v5_newDB'
       // 当年
       const data = await requestWrap(
         'wiki/getArticlesTotalByCoreNew_v',
@@ -2474,6 +2473,15 @@ export const ChartMap = {
         show: true,
         cols: 2,
         items: [2, 3]
+      },
+      {
+        name: 'version',
+        default: 'v5_newDB',
+        label: '数据范围',
+        multiple: false,
+        show: true,
+        cols: 2,
+        items: [{ text: 'v5', value: 'v5_newDB' }, { text: 'v5 学术圈', value: 'v5_newDB_xueshu' }]
       }
     ],
     Slider: [],

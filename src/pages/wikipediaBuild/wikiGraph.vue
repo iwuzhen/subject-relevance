@@ -91,8 +91,12 @@ export default {
       btype: 'v5_node_newDB',
       btypeOpt: [
         {
-          text: '学术圈',
+          text: 'v5',
           value: 'v5_node_newDB'
+        },
+        {
+          text: 'v5 学术圈',
+          value: 'v5_xueshu_node_newDB'
         }],
       level: 2,
       levelOpt: [2, 3],
@@ -142,9 +146,13 @@ export default {
 
       try {
         // 学科大小
+        let count_version = 'v5_newDB'
+        if (this.btype === 'v5_xueshu_node_newDB') {
+          count_version = 'v5_newDB_xueshu'
+        }
         const opt = {
           subjects: allData.join(','),
-          version: 'v5_newDB',
+          version: count_version,
           type: 0,
           level: this.level
         }

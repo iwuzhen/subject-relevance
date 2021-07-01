@@ -182,7 +182,7 @@ export default {
       this.pageCountSelect = -1
       this.pageCountOpt = [-1]
       this.versionSelect = 'v5_node_newDB'
-      this.versionOpt = ['v5_node_newDB']
+      this.versionOpt = [{ text: 'v5', value: 'v5_node_newDB' }, { text: 'v5 学术圈', value: 'v5_xueshu_node_newDB' }]
 
       this.subjectRelevances = WIKI_TOP_CATEGORY
       this.categorys = WIKI_TOP_CATEGORY.map(item => {
