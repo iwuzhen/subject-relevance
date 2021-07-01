@@ -4,7 +4,7 @@
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
 <<<<<<< Updated upstream
- * @LastEditTime: 2021-04-08 14:58:39
+ * @LastEditTime: 2021-07-01 13:05:23
 =======
  * @LastEditTime: 2021-01-26 14:58:52
 >>>>>>> Stashed changes
@@ -386,7 +386,7 @@ export function extendLineSeries(series) {
 
 export const WIKI_TOP_CATEGORY = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
   'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-  'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science', 'Medicine', 'Art', 'Business']
+  'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science', 'Medicine', 'Art', 'Business'].sort()
 
 // 单页图，使用这个模版
 export function extendEchartsOpts(opt) {
