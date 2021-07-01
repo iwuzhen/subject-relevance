@@ -326,10 +326,6 @@ export default {
     },
 
     Draw: _.debounce(async function() {
-      if (this.selectYear === 2012) {
-        this.$emit('emitMesage', '年份不能为 2012')
-        return
-      }
       this.loading = true
       let { nodes, links } = await this.getData()
       // console.log(links)
@@ -375,10 +371,6 @@ export default {
       return label
     },
     liteDraw: _.debounce(async function() {
-      if (this.selectYear === 2012) {
-        this.$emit('emitMesage', '年份不能为 2012')
-        return
-      }
       this.loading = true
       let { links } = await this.getData()
       this.GraphData = this.parseGraphData(this.GraphData.nodes, links, this.repYearRange.indexOf(String(this.selectYear)))
@@ -430,9 +422,9 @@ export default {
         return retData.map(function(row, j) {
           const tmpRow = row[i]
           tmpRow[0] = 2021 - j
-          if (tmpRow[0] >= 2012) {
-            tmpRow[0] += 1
-          }
+          // if (tmpRow[0] >= 2012) {
+          //   tmpRow[0] += 1
+          // }
           return tmpRow
         })
       })
