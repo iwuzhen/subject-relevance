@@ -13,7 +13,7 @@ v-container(fluid  :style="cssVars")
     v-col(cols='2')
       v-select(v-model='btype' :items='btypeOpt' dense label='数据范围' @change='Draw')
     v-col(cols='2')
-      v-select(v-model='level' :items='levelOpt' dense :disabled="!['v5_xueshu_noHistoryAndLiterature_node','v5_xueshu_node'].includes(btype)" label='level' @change='levelChange')
+      v-select(v-model='level' :items='levelOpt' dense label='level')
     v-col(cols="2")
       v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='liteDraw')
     v-col(cols="2")
@@ -44,7 +44,7 @@ v-container(fluid  :style="cssVars")
         v-container#3dgraph(fluid fill-height)
 
   v-row
-    page.mt-60(size="A4")
+    article.mt-60(size="A4")
       v-card.mx-auto(outlined :loading='loading' height='14.2cm')
         v-container#subjectChart1(fluid fill-height)
 
@@ -64,7 +64,7 @@ import Base from '@/utils/base'
 import ForceGraph3D from '3d-force-graph'
 import comment from '@/components/comment'
 import _ from 'lodash'
-import { extendEchartsOpts, extendLineSeries } from '@/api/data'
+import { WIKI_TOP_CATEGORY, extendEchartsOpts, extendLineSeries } from '@/api/data'
 
 const Graph = require('graphology')
 import { connectedComponents } from 'graphology-components'
@@ -75,14 +75,6 @@ import { getDistanceCore, requestWrap } from '@/api/index'
 // import SpriteText from 'three-spritetext'
 import { CSS2DObject, CSS2DRenderer } from '@/utils/three/CSS2DRenderer'
 
-const v5Subject = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
-  'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-  'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
-  'Medicine'].sort()
-const v5Subject_lv2 = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
-  'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-  'Literature', 'History', 'Materials science', 'Engineering disciplines', 'Environmental science',
-  'Medicine', 'Art', 'Business'].sort()
 export default {
   name: 'MagGraph',
   components: {
@@ -91,27 +83,24 @@ export default {
   extends: Base,
   data() {
     return {
-      pageName: 'wikipedia 相关度引力图测试',
+      pageName: 'wikipedia 相关度引力图',
       vertexSubjects: ['Biology', 'Physics', 'Mathematics', 'Political science'],
-      subjectOpt: v5Subject,
-      subjectRelevances: v5Subject,
+      subjectOpt: WIKI_TOP_CATEGORY,
+      subjectRelevances: WIKI_TOP_CATEGORY,
       methodValue: 'linksin',
       methodOpt: ['linksin', 'linksout'],
-      btype: 'v5_xueshu_noHistoryAndLiterature_node',
+      btype: 'v5_xueshu_node_newDB',
       btypeOpt: [
         {
-          text: '学术圈去历史文学',
-          value: 'v5_xueshu_noHistoryAndLiterature_node'
+          text: 'v5',
+          value: 'v5_node_newDB'
         },
         {
-          text: '学术圈',
-          value: 'v5_xueshu_node'
-        }, {
-          text: '全集',
-          value: 'v5_node'
+          text: 'v5 学术圈',
+          value: 'v5_xueshu_node_newDB'
         }],
-      level: 4,
-      levelOpt: [2, 3, 4],
+      level: 3,
+      levelOpt: [2, 3],
       BasicData: {},
       GraphData: {},
       showText: true,
@@ -125,7 +114,7 @@ export default {
         fontTop: -10,
         fontLeft: -10
       },
-      categorys: v5Subject,
+      categorys: WIKI_TOP_CATEGORY,
       myChartIds: ['subjectChart1', 'subjectChart2'],
       loading: false,
       linkFilter: 0.75,
@@ -151,91 +140,30 @@ export default {
     this.Draw()
   },
   methods: {
-    levelChange() {
-      if (this.level === 2) {
-        this.btype = 'v5_xueshu_node'
-        this.btypeOpt = [
-          {
-            text: '学术圈',
-            value: 'v5_xueshu_node'
-          }, {
-            text: '全集',
-            value: 'v5_node'
-          }]
-
-        this.subjectRelevances = v5Subject_lv2
-        this.categorys = v5Subject_lv2.map(item => {
-          let text = item
-          if (item === 'Engineering disciplines') {
-            text = 'Engineering'
-          }
-          return {
-            text: text,
-            value: item
-          }
-        })
-      } else {
-        this.btypeOpt = [
-          {
-            text: '学术圈去历史文学',
-            value: 'v5_xueshu_noHistoryAndLiterature_node'
-          },
-          {
-            text: '学术圈',
-            value: 'v5_xueshu_node'
-          }, {
-            text: '全集',
-            value: 'v5_node'
-          }]
-        let currentV5Subject = v5Subject
-        if (this.btype === 'v5_xueshu_noHistoryAndLiterature_node') {
-          currentV5Subject = v5Subject.filter(item => !['History', 'Literature'].includes(item))
-        }
-        this.subjectRelevances = currentV5Subject
-        this.subjectRelevances = this.subjectRelevances.filter(item =>
-          currentV5Subject.includes(item)
-        )
-        this.categorys = v5Subject.map(item => {
-          let text = item
-          if (item === 'Engineering disciplines') {
-            text = 'Engineering'
-          }
-          return {
-            text: text,
-            value: item
-          }
-        })
-      }
-      this.Draw()
-    },
     async getData() {
       const allNodesMap = {}
       const allNodeLinks = []
-      let allData = Array.from(new Set(this.subjectRelevances.concat(this.vertexSubjects)))
-      if (this.btype === 'v5_xueshu_noHistoryAndLiterature_node') {
-        allData = allData.filter(item => !['History', 'Literature'].includes(item))
-      }
+      const allData = Array.from(new Set(this.subjectRelevances.concat(this.vertexSubjects)))
+
       try {
+        let count_version = 'v5_newDB'
+        if (this.btype === 'v5_xueshu_node_newDB') {
+          count_version = 'v5_newDB_xueshu'
+        }
         // 学科大小
         const opt = {
           subjects: allData.join(','),
-          version: 'v5',
-          type: 'arts',
+          version: count_version,
+          type: 0,
           level: this.level
         }
         // if (['v5_xueshu_noHistoryAndLiterature_node', 'v5_xueshu_node'].includes(this.btype)) {
         //   opt.level = this.level
         // }
-        const ret = await requestWrap('wiki/getArticlesTotalByCoreNew_v5', 'post', opt)
+        const ret = await requestWrap('wiki/getArticlesTotalByCoreNew_v', 'post', opt)
         // 将数据拼接成结构体
-        const dataMap = {}
-        for (const i in ret.data.legend) {
-          const yearData = {}
-          for (const j in ret.data.x) {
-            yearData[ret.data.x[j]] = ret.data.y[i][j]
-          }
-          dataMap[ret.data.legend[i]] = yearData
-        }
+        const dataMap = ret
+
         allData.forEach((item, index) => {
           if (item === 'Engineering disciplines') {
             item = 'Engineering'
@@ -257,12 +185,11 @@ export default {
           strB: allData.join(','),
           method: this.methodValue,
           level: -1,
-          levelType: 4,
-          btype: this.btype
+          levelType: this.level,
+          btype: this.btype,
+          catlevel: 0
         }
-        if (['v5_xueshu_noHistoryAndLiterature_node', 'v5_xueshu_node'].includes(this.btype)) {
-          opt.levelType = this.level
-        }
+
         const ret = await getDistanceCore(opt)
         if (strA === 'Engineering disciplines') {
           strA = 'Engineering'
@@ -403,10 +330,6 @@ export default {
     },
 
     Draw: _.debounce(async function() {
-      if (this.selectYear === 2012) {
-        this.$emit('emitMesage', '年份不能为 2012')
-        return
-      }
       this.loading = true
       let { nodes, links } = await this.getData()
       // console.log(links)
@@ -452,10 +375,6 @@ export default {
       return label
     },
     liteDraw: _.debounce(async function() {
-      if (this.selectYear === 2012) {
-        this.$emit('emitMesage', '年份不能为 2012')
-        return
-      }
       this.loading = true
       let { links } = await this.getData()
       this.GraphData = this.parseGraphData(this.GraphData.nodes, links, this.repYearRange.indexOf(String(this.selectYear)))
@@ -507,9 +426,6 @@ export default {
         return retData.map(function(row, j) {
           const tmpRow = row[i]
           tmpRow[0] = 2021 - j
-          if (tmpRow[0] >= 2012) {
-            tmpRow[0] += 1
-          }
           return tmpRow
         })
       })
@@ -746,7 +662,7 @@ export default {
   font-size: var(--fontSize);
 }
 
-page[size="A4"] {
+article[size="A4"] {
   background: white;
   width: 21cm;
   height: 29.7cm;

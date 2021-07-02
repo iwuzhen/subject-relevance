@@ -176,12 +176,12 @@ export default {
       this.versionOpt = ['article']
     } else if (this.$route.query.version === 'v5_new') {
       this.levelOpt = [2, 3]
-      this.levelSelect = 2
-      this.methodValue = 'linksin'
+      this.levelSelect = 3
+      this.methodValue = 'linksout'
       this.methodOptions = ['linksin', 'linksout']
       this.pageCountSelect = -1
       this.pageCountOpt = [-1]
-      this.versionSelect = 'v5_node_newDB'
+      this.versionSelect = 'v5_xueshu_node_newDB'
       this.versionOpt = [{ text: 'v5', value: 'v5_node_newDB' }, { text: 'v5 学术圈', value: 'v5_xueshu_node_newDB' }]
 
       this.subjectRelevances = WIKI_TOP_CATEGORY

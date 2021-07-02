@@ -27,7 +27,7 @@ v-container(fluid)
         template(v-slot:append)
           v-text-field.mt-0.pt-0(:value='chart1.years[1]' hide-details single-line type='number' style='width: 60px' @change='$set(chart1.years, 1, $event)')
   v-row
-    page(size="A4")
+    article(size="A4")
       v-card.mx-auto(outlined :loading='chart1.loading' height='14.2cm')
         v-container#masChart1(fluid fill-height)
   v-row
@@ -302,7 +302,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-page[size="A4"] {
+article[size="A4"] {
   background: white;
   width: 21cm;
   height: 29.7cm;

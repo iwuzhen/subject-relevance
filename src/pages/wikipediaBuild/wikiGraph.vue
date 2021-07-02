@@ -82,13 +82,13 @@ export default {
   extends: Base,
   data() {
     return {
-      pageName: 'wikipedia 相关度引力图测试',
+      pageName: 'wikipedia 相关度引力图',
       vertexSubjects: ['Biology', 'Physics', 'Mathematics', 'Political science'],
       subjectOpt: WIKI_TOP_CATEGORY,
       subjectRelevances: WIKI_TOP_CATEGORY,
-      methodValue: 'linksin',
+      methodValue: 'linksout',
       methodOpt: ['linksin', 'linksout'],
-      btype: 'v5_node_newDB',
+      btype: 'v5_xueshu_node_newDB',
       btypeOpt: [
         {
           text: 'v5',
@@ -98,7 +98,7 @@ export default {
           text: 'v5 学术圈',
           value: 'v5_xueshu_node_newDB'
         }],
-      level: 2,
+      level: 3,
       levelOpt: [2, 3],
       BasicData: {},
       GraphData: {},

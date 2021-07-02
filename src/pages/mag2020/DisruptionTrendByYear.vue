@@ -125,7 +125,7 @@ export default {
       },
       years: [1950, 2020],
       loading: false,
-      myChartIds: ['subjectChart1', 'subjectChart2', 'subjectChart3']
+      myChartIds: ['subjectChart1', 'subjectChart2', 'subjectChart3', 'subjectChart4']
     }
   },
   computed: {
@@ -232,6 +232,7 @@ export default {
       // 计算 ddx
       const ddx_line_data = []
       let revDdxRow = []
+      console.log('line_data', line_data)
       for (const row of line_data) {
         const ddx = [0]
         let last = 0
@@ -308,6 +309,86 @@ export default {
       })
       console.log(_opt)
       this.myChartObjs[1].setOption(_opt, true)
+
+      // 计算 dddx
+      const dddx_line_data = []
+      revDdxRow = []
+      for (const row of ddx_line_data) {
+        const ddx = [0]
+        let last = 0
+        for (const v of row[1]) {
+          ddx.push(v - last)
+          last = v
+        }
+        dddx_line_data.push([row[0], ddx])
+
+        if (this.revLine.select === row[0]) {
+          revDdxRow = ddx
+        }
+      }
+
+      dddx_line_data.sort((a, b) => b[1].slice(endindex)[0] - a[1].slice(endindex)[0])
+
+      _opt = extendEchartsOpts({
+        title: {
+          text: `dddx 分布`
+        },
+        tooltip: {
+          trigger: 'axis',
+          textStyle: {
+            align: 'left'
+          },
+          axisPointer: {
+            type: 'cross',
+            animation: true,
+            label: {
+              backgroundColor: '#505765'
+            }
+          },
+          formatter: function(params) {
+            params.sort((x, y) => {
+              if (y.data === undefined) { return -1 }
+              return y.data[1] - x.data[1]
+            })
+            let showHtm = ` ${params[0].data[0]}<br>`
+            for (let i = 0; i < params.length; i++) {
+              if (params[i].data === undefined) {
+                continue
+              }
+              const _text = params[i].seriesName
+              const _data = params[i].data[1]
+              const _marker = params[i].marker
+              showHtm += `${_marker}${_text}：${_data}<br>`
+            }
+            return showHtm
+          }
+        },
+        legend: {
+          data: ddx_line_data.map(item => item[0])
+        },
+        xAxis: {
+          name: 'Year',
+          type: 'value',
+          boundaryGap: false,
+          min: 'dataMin',
+          max: 'dataMax'
+        },
+        yAxis: {
+          name: revDdxRow.length === 0 ? 'count' : 'percent',
+          type: 'value'
+        },
+        series: dddx_line_data.map(item => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: year_range.map((year, index) => [year, revDdxRow.length === 0 ? item[1][index] : item[1][index] / revDdxRow[index]])
+          })
+        })
+
+      })
+      console.log(_opt)
+      this.myChartObjs[2].setOption(_opt, true)
 
       // 总量
       const sum_line_data = []
@@ -386,7 +467,7 @@ export default {
 
       })
       console.log(_opt)
-      this.myChartObjs[2].setOption(_opt, true)
+      this.myChartObjs[3].setOption(_opt, true)
 
       this.loading = false
     }, 2000)
