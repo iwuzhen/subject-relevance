@@ -502,7 +502,7 @@ export default {
           name: 'Year',
           type: 'value',
           min: 'dataMin',
-          max: 2020,
+          max: 2021,
           boundaryGap: false,
           nameTextStyle: {
             color: '#000',
