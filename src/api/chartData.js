@@ -3,13 +3,15 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-07-01 10:51:43
+ * @LastEditTime: 2021-07-07 08:24:47
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
 import { requestWrap } from '@/api/index'
 import { WIKI_TOP_CATEGORY, defaultCategorySelect, coreCategorys, magCategory, SELECT_MAG_DATA, MAGCoreCategorys2020, SELECT_MAG_DATA_V1, MAGCoreCategorys2020_V1, extendEchartsOpts, extendLineSeries } from '@/api/data'
 import _ from 'lodash'
+
+import wikipediaNetwork from '@/assets/data/wikipediaNetwork.json'
 
 const zip = (...rows) => [...rows[0]].map((_, c) => rows.map(row => row[c]))
 
@@ -2295,7 +2297,7 @@ export const ChartMap = {
         label: '数据维度',
         multiple: false,
         show: true,
-        cols: 3,
+        cols: 4,
         items: [
           {
             text: 'v3 去0 去patent和book',
@@ -2370,11 +2372,8 @@ export const ChartMap = {
         multiple: false,
         show: true,
         cols: 4,
-        items: [
-          2000, 2003, 2005, 2008, 2010, 2012, 2013, 2015, 2018
-        ]
+        items: [2000, 2003, 2005, 2008, 2010, 2012, 2013, 2015, 2018]
       }
-
     ],
     Slider: [],
     RangeSlider: [],
@@ -2404,7 +2403,9 @@ export const ChartMap = {
           },
           formatter: function(params) {
             params.sort((x, y) => {
-              if (y.data === undefined) { return -1 }
+              if (y.data === undefined) {
+                return -1
+              }
               return y.data[1] - x.data[1]
             })
             let showHtm = ` ${params[0].data[0]}<br>`
@@ -2481,7 +2482,151 @@ export const ChartMap = {
         multiple: false,
         show: true,
         cols: 2,
-        items: [{ text: 'v5', value: 'v5_newDB' }, { text: 'v5 学术圈', value: 'v5_newDB_xueshu' }]
+        items: [
+          { text: 'v5', value: 'v5_newDB' },
+          { text: 'v5 学术圈', value: 'v5_newDB_xueshu' }
+        ]
+      }
+    ],
+    Slider: [],
+    RangeSlider: [],
+    xAxisName: 'Year',
+    yAxisName: 'Count'
+  },
+  'wikipedia-build/smallworld': {
+    ChName: 'wiki 学科小世界',
+    componentName: 'PageDynamicSelectTemplate',
+    HandleResponseFunc: ([responseData, vName], ChartObj) => {
+      const _opt = extendEchartsOpts({
+        title: {
+          text: '小世界属性'
+        },
+
+        xAxis: {
+          name: ChartObj.xAxisName,
+          type: 'category',
+          boundaryGap: false,
+          data: _.range(2007, 2022, 1)
+        },
+        yAxis: {
+          name: vName,
+          type: 'value',
+          axisLabel: {
+            formatter: value => formatNum(value)
+          },
+          min: function(value) {
+            return Math.floor(value.min * 10) / 10
+          }
+        },
+        series: responseData.map(item => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: item[1]
+          })
+        })
+      })
+      return _opt
+    },
+    RequestFunc: async params => {
+      // 先过滤学科
+
+      const filter_data = []
+      for (const item of Object.entries(wikipediaNetwork)) {
+        if (params.subjects.includes(item[0])) {
+          if (params.type <= 3) {
+            filter_data.push([
+              item[0],
+              item[1].map(value => value[params.type])
+            ])
+          } else {
+            filter_data.push([
+              item[0],
+              item[1].map(value => value[2] / value[3])
+            ])
+          }
+        }
+      }
+      filter_data.sort((a, b) => b[1].slice(-1) - a[1].slice(-1))
+
+      let vName = '平均最短距离'
+      if (params.type === 1) {
+        vName = '集聚系数'
+      } else if (params.type === 2) {
+        vName = '联通文章数'
+      } else if (params.type === 3) {
+        vName = '文章数'
+      } else if (params.type === 4) {
+        vName = '联通文章数/文章数'
+      }
+      return [filter_data, vName]
+    },
+    Select: [
+      {
+        name: 'subjects',
+        default: [
+          'Biology',
+          'Business',
+          'Chemistry',
+          'Computer science',
+          'Economics',
+          'Engineering disciplines',
+          'Environmental science',
+          'Geography',
+          'Geology',
+          'History',
+          'Linguistics',
+          'Materials science',
+          'Mathematics',
+          'Medicine',
+          'Philosophy',
+          'Physics',
+          'Political science',
+          'Psychology',
+          'Sociology'
+        ],
+        label: '学科',
+        multiple: true,
+        show: true,
+        cols: 8,
+        items: [
+          'Biology',
+          'Business',
+          'Chemistry',
+          'Computer science',
+          'Economics',
+          'Engineering disciplines',
+          'Environmental science',
+          'Geography',
+          'Geology',
+          'History',
+          'Linguistics',
+          'Literature',
+          'Materials science',
+          'Mathematics',
+          'Medicine',
+          'Philosophy',
+          'Physics',
+          'Political science',
+          'Psychology',
+          'Sociology'
+        ]
+      },
+      {
+        name: 'type',
+        default: 0,
+        label: '数据维度',
+        multiple: false,
+        show: true,
+        cols: 2,
+        items: [
+          { text: '平均最短距离', value: 0 },
+          { text: '集聚系数', value: 1 },
+          { text: '联通文章数', value: 2 },
+          { text: '文章数', value: 3 },
+          { text: '联通文章数/文章数', value: 4 }
+        ]
       }
     ],
     Slider: [],

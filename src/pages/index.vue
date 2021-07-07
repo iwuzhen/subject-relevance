@@ -270,7 +270,14 @@ export default {
               text: '',
               to: '/wikipedia-build/wikiGraph',
               update: '2021-07-05T16:43:03.429Z'
+            },
+            {
+              title: 'wiki 小世界',
+              text: 'wiki 小世界网络',
+              to: '/wikipedia-build/smallworld',
+              update: '2021-07-10T16:43:03.429Z'
             }
+
           ]
         },
         Wikipedia: {
