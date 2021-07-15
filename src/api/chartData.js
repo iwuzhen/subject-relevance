@@ -12,6 +12,7 @@ import { WIKI_TOP_CATEGORY, defaultCategorySelect, coreCategorys, magCategory, S
 import _ from 'lodash'
 
 import wikipediaNetwork from '@/assets/data/wikipediaNetwork.json'
+import wikipediaDirectNetWork from '@/assets/data/wikipediaDirectNetWork.json'
 
 const zip = (...rows) => [...rows[0]].map((_, c) => rows.map(row => row[c]))
 
@@ -2530,10 +2531,13 @@ export const ChartMap = {
       return _opt
     },
     RequestFunc: async params => {
+      let networkData = wikipediaNetwork
+      if (params.isDirect) {
+        networkData = wikipediaDirectNetWork
+      }
       // 先过滤学科
-
       const filter_data = []
-      for (const item of Object.entries(wikipediaNetwork)) {
+      for (const item of Object.entries(networkData)) {
         if (params.subjects.includes(item[0])) {
           if (params.type <= 3) {
             filter_data.push([
@@ -2626,6 +2630,18 @@ export const ChartMap = {
           { text: '联通文章数', value: 2 },
           { text: '文章数', value: 3 },
           { text: '联通文章数/文章数', value: 4 }
+        ]
+      },
+      {
+        name: 'isDirect',
+        default: true,
+        label: '网络方向',
+        multiple: false,
+        show: true,
+        cols: 2,
+        items: [
+          { text: '无向', value: false },
+          { text: '有向', value: true }
         ]
       }
     ],
