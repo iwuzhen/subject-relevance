@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-07-07 08:24:47
+ * @LastEditTime: 2021-07-21 20:20:28
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2385,7 +2385,6 @@ export const ChartMap = {
     ChName: 'wiki总文章和边数按年趋势',
     componentName: 'PageDynamicSelectTemplate',
     HandleResponseFunc: (responseData, ChartObj) => {
-      console.log(responseData)
       const _opt = extendEchartsOpts({
         title: {
           text: 'Article Count'
@@ -2449,6 +2448,9 @@ export const ChartMap = {
     },
     RequestFunc: async params => {
       params.type = 0
+      if (params.version !== 'v5_newDB_xueshu_new_noLiterature') {
+        delete params.month
+      }
       // 当年
       const data = await requestWrap(
         'wiki/getArticlesTotalByCoreNew_v',
@@ -2478,15 +2480,45 @@ export const ChartMap = {
       },
       {
         name: 'version',
-        default: 'v5_newDB',
+        default: 'v5_newDB_xueshu_new_noLiterature',
         label: '数据范围',
         multiple: false,
         show: true,
         cols: 2,
         items: [
           { text: 'v5', value: 'v5_newDB' },
-          { text: 'v5 学术圈', value: 'v5_newDB_xueshu' }
-        ]
+          { text: 'v5 学术圈', value: 'v5_newDB_xueshu' },
+          {
+            text: 'v5 学术圈排除文学',
+            value: 'v5_newDB_xueshu_new_noLiterature'
+          }
+        ],
+        func: that => {
+          if (
+            that.options.version !== 'v5_newDB_xueshu_new_noLiterature'
+          ) {
+            for (const i in that.ChartObj.Select) {
+              if (that.ChartObj.Select[i].name === 'month') {
+                that.ChartObj.Select[i].show = false
+              }
+            }
+          } else {
+            for (const i in that.ChartObj.Select) {
+              if (that.ChartObj.Select[i].name === 'month') {
+                that.ChartObj.Select[i].show = true
+              }
+            }
+          }
+        }
+      },
+      {
+        name: 'month',
+        default: 3,
+        label: 'month',
+        multiple: false,
+        show: true,
+        cols: 2,
+        items: [3, 6, 9, 12]
       }
     ],
     Slider: [],
