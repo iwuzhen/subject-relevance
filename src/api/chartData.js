@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-07-21 20:20:28
+ * @LastEditTime: 2021-07-21 20:58:50
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -13,6 +13,13 @@ import _ from 'lodash'
 
 import wikipediaNetwork from '@/assets/data/wikipediaNetwork.json'
 import wikipediaDirectNetWork from '@/assets/data/wikipediaDirectNetWork.json'
+
+const SessionXData = []
+for (const year of _.range(2007, 2022)) {
+  for (const session of _.range(1, 5)) {
+    SessionXData.push(`${year}-S${session}`)
+  }
+}
 
 const zip = (...rows) => [...rows[0]].map((_, c) => rows.map(row => row[c]))
 
@@ -2385,79 +2392,147 @@ export const ChartMap = {
     ChName: 'wiki总文章和边数按年趋势',
     componentName: 'PageDynamicSelectTemplate',
     HandleResponseFunc: (responseData, ChartObj) => {
-      const _opt = extendEchartsOpts({
-        title: {
-          text: 'Article Count'
-        },
-        tooltip: {
-          trigger: 'axis',
-          textStyle: {
-            align: 'left'
+      if (responseData.type === 1) {
+        // 单图
+        const _opt = extendEchartsOpts({
+          title: {
+            text: 'Article Count'
           },
-          axisPointer: {
-            type: 'cross',
-            animation: true,
-            label: {
-              backgroundColor: '#505765'
+          tooltip: {
+            trigger: 'axis',
+            textStyle: {
+              align: 'left'
+            },
+            axisPointer: {
+              type: 'cross',
+              animation: true,
+              label: {
+                backgroundColor: '#505765'
+              }
+            },
+            formatter: function(params) {
+              params.sort((x, y) => {
+                if (y.data === undefined) {
+                  return -1
+                }
+                return y.data[1] - x.data[1]
+              })
+              let showHtm = ` ${params[0].data[0]}<br>`
+              for (let i = 0; i < params.length; i++) {
+                if (params[i].data === undefined) {
+                  continue
+                }
+                const _text = params[i].seriesName
+                const _data = formatNum(params[i].data[1])
+                const _marker = params[i].marker
+                showHtm += `${_marker}${_text}：${_data}<br>`
+              }
+              return showHtm
             }
           },
-          formatter: function(params) {
-            params.sort((x, y) => {
-              if (y.data === undefined) {
-                return -1
-              }
-              return y.data[1] - x.data[1]
+          xAxis: {
+            name: ChartObj.xAxisName,
+            type: 'value',
+            boundaryGap: false,
+            min: 'dataMin',
+            max: 'dataMax'
+          },
+          yAxis: {
+            name: ChartObj.yAxisName,
+            type: 'value',
+            axisLabel: {
+              formatter: value => formatNum(value)
+            }
+          },
+          series: Object.entries(responseData.data).map(item => {
+            return extendLineSeries({
+              name: item[0],
+              type: 'line',
+              smooth: false,
+              data: Object.entries(item[1])
             })
-            let showHtm = ` ${params[0].data[0]}<br>`
-            for (let i = 0; i < params.length; i++) {
-              if (params[i].data === undefined) {
-                continue
-              }
-              const _text = params[i].seriesName
-              const _data = formatNum(params[i].data[1])
-              const _marker = params[i].marker
-              showHtm += `${_marker}${_text}：${_data}<br>`
-            }
-            return showHtm
-          }
-        },
-        xAxis: {
-          name: ChartObj.xAxisName,
-          type: 'value',
-          boundaryGap: false,
-          min: 'dataMin',
-          max: 'dataMax'
-        },
-        yAxis: {
-          name: ChartObj.yAxisName,
-          type: 'value',
-          axisLabel: {
-            formatter: value => formatNum(value)
-          }
-        },
-        series: Object.entries(responseData).map(item => {
-          return extendLineSeries({
-            name: item[0],
-            type: 'line',
-            smooth: false,
-            data: Object.entries(item[1])
           })
         })
-      })
-      return _opt
+        return _opt
+      } else {
+        // 按季度
+
+        const keys = Object.keys(responseData.data[0])
+        const newData = {}
+        for (const name of keys) {
+          newData[name] = []
+          const tmpData = []
+          for (const i in responseData.data) {
+            // 翻转 数组
+            tmpData.push(_.reverse(Object.values(responseData.data[i][name])))
+          }
+          while (tmpData[0].length > 0) {
+            for (const i in tmpData) {
+              if (tmpData[i].length > 0) {
+                newData[name].push(
+                  tmpData[i].pop()
+                )
+              }
+            }
+          }
+        }
+        const _opt = extendEchartsOpts({
+          title: {
+            text: 'Article Count'
+          },
+          xAxis: {
+            name: ChartObj.xAxisName,
+            type: 'category',
+            boundaryGap: false,
+            data: SessionXData
+          },
+          yAxis: {
+            name: ChartObj.yAxisName,
+            type: 'value',
+            axisLabel: {
+              formatter: value => formatNum(value)
+            }
+          },
+          series: Object.entries(newData).map(item => {
+            return extendLineSeries({
+              name: item[0],
+              type: 'line',
+              smooth: false,
+              data: item[1]
+            })
+          })
+        })
+        console.log(_opt)
+        return _opt
+      }
     },
     RequestFunc: async params => {
       params.type = 0
-      if (params.version !== 'v5_newDB_xueshu_new_noLiterature') {
-        delete params.month
+      const handleData = {}
+      if (params.version === 'v5_newDB_xueshu_new_noLiterature') {
+        handleData.type = 2
+        handleData.data = []
+        for (const month of [3, 6, 9, 12]) {
+          params.month = month
+          const data = await requestWrap(
+            'wiki/getArticlesTotalByCoreNew_v',
+            'post',
+            params
+          )
+          handleData.data.push(data)
+        }
+        return handleData
+      } else {
+        // 当年
+        const data = await requestWrap(
+          'wiki/getArticlesTotalByCoreNew_v',
+          'post',
+          params
+        )
+        handleData.type = 1
+        handleData.data = data
+        return handleData
       }
-      // 当年
-      const data = await requestWrap(
-        'wiki/getArticlesTotalByCoreNew_v',
-        'post',
-        params
-      )
-      return data
     },
     Select: [
       {
@@ -2492,33 +2567,24 @@ export const ChartMap = {
             text: 'v5 学术圈排除文学',
             value: 'v5_newDB_xueshu_new_noLiterature'
           }
-        ],
-        func: that => {
-          if (
-            that.options.version !== 'v5_newDB_xueshu_new_noLiterature'
-          ) {
-            for (const i in that.ChartObj.Select) {
-              if (that.ChartObj.Select[i].name === 'month') {
-                that.ChartObj.Select[i].show = false
-              }
-            }
-          } else {
-            for (const i in that.ChartObj.Select) {
-              if (that.ChartObj.Select[i].name === 'month') {
-                that.ChartObj.Select[i].show = true
-              }
-            }
-          }
-        }
-      },
-      {
-        name: 'month',
-        default: 3,
-        label: 'month',
-        multiple: false,
-        show: true,
-        cols: 2,
-        items: [3, 6, 9, 12]
+        ]
+        // func: that => {
+        //   if (
+        //     that.options.version !== 'v5_newDB_xueshu_new_noLiterature'
+        //   ) {
+        //     for (const i in that.ChartObj.Select) {
+        //       if (that.ChartObj.Select[i].name === 'month') {
+        //         that.ChartObj.Select[i].show = false
+        //       }
+        //     }
+        //   } else {
+        //     for (const i in that.ChartObj.Select) {
+        //       if (that.ChartObj.Select[i].name === 'month') {
+        //         that.ChartObj.Select[i].show = true
+        //       }
+        //     }
+        //   }
+        // }
       }
     ],
     Slider: [],
