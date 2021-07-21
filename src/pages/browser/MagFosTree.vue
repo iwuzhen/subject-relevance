@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-12-17 15:09:46
+ * @LastEditTime: 2021-07-21 17:51:59
  * @Description:
  -->
 <template>
@@ -65,7 +65,7 @@
 
 <script>
 import { getOriginCategories, getChildCategories } from '@/api/index'
-import { v4 as uuidv4 } from 'uuid'
+import { nanoid } from 'nanoid'
 import Base from '@/utils/base'
 
 export default {
@@ -92,7 +92,7 @@ export default {
       } else {
         this.treeItems1 = [
           {
-            id: uuidv4(),
+            id: nanoid(),
             name: this.searchString,
             children: []
           }

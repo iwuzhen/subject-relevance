@@ -90,7 +90,7 @@ import {
 import * as Diff2Html from 'diff2html'
 import * as diff from 'diff'
 import { basiCategorys } from '@/api/data'
-import { v4 as uuidv4 } from 'uuid'
+import { nanoid } from 'nanoid'
 import Base from '@/utils/base'
 
 export default {
@@ -178,14 +178,14 @@ export default {
       } else {
         this.treeItems1 = [
           {
-            id: uuidv4(),
+            id: nanoid(),
             name: this.searchString,
             children: []
           }
         ]
         this.treeItems2 = [
           {
-            id: uuidv4(),
+            id: nanoid(),
             name: this.searchString,
             children: []
           }
@@ -239,14 +239,14 @@ export default {
       this.treeItems1 = this.basiccategorys.map(item => {
         this.addTranslateChan(item)
         return {
-          id: uuidv4(),
+          id: nanoid(),
           name: item,
           children: []
         }
       })
       this.treeItems2 = this.basiccategorys.map(item => {
         return {
-          id: uuidv4(),
+          id: nanoid(),
           name: item,
           children: []
         }
@@ -256,7 +256,7 @@ export default {
       this.linksinCount.left = {}
       this.treeItems1 = this.basiccategorys.map(item => {
         return {
-          id: uuidv4(),
+          id: nanoid(),
           name: item,
           children: []
         }
@@ -266,7 +266,7 @@ export default {
       this.linksinCount.right = {}
       this.treeItems2 = this.basiccategorys.map(item => {
         return {
-          id: uuidv4(),
+          id: nanoid(),
           name: item,
           children: []
         }
@@ -357,7 +357,7 @@ export default {
             setTimeout(() => { this.getParagraph(item) }, 1000)
             this.addTranslateChan(item)
             return {
-              id: uuidv4(),
+              id: nanoid(),
               father: 'page',
               name: item,
               leaf: true,
@@ -371,7 +371,7 @@ export default {
           categoryChildrens = data.childList.map(item => {
             this.addTranslateChan(item)
             return {
-              id: uuidv4(),
+              id: nanoid(),
               name: item,
               leaf: true,
               children: [],
@@ -381,7 +381,7 @@ export default {
 
           categoryParents = data.parentList.map(item => {
             return {
-              id: uuidv4(),
+              id: nanoid(),
               name: item,
               leaf: true,
               children: [],
@@ -390,21 +390,21 @@ export default {
           })
 
           treeitem.children.push({
-            id: uuidv4(),
+            id: nanoid(),
             name: `文章 ${articleLength}`,
             children: articleChildrens,
             file: 'article',
             nodetype: 'type'
           })
           treeitem.children.push({
-            id: uuidv4(),
+            id: nanoid(),
             name: `子类 ${data.childList.length}`,
             children: categoryChildrens,
             file: 'category',
             nodetype: 'type'
           })
           treeitem.children.push({
-            id: uuidv4(),
+            id: nanoid(),
             name: `父类 ${data.parentList.length}`,
             children: categoryParents,
             file: 'category',

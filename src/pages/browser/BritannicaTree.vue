@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-08 11:55:19
  * @LastEditors: ider
- * @LastEditTime: 2020-12-17 15:07:44
+ * @LastEditTime: 2021-07-21 17:51:18
  * @Description:
  -->
 <template>
@@ -65,7 +65,7 @@
 
 <script>
 import { getBritannicaTree } from '@/api/index'
-import { v4 as uuidv4 } from 'uuid'
+import { nanoid } from 'nanoid'
 import Base from '@/utils/base'
 
 export default {
@@ -96,7 +96,7 @@ export default {
       } else {
         this.treeItems1 = [
           {
-            id: uuidv4(),
+            id: nanoid(),
             name: this.searchString,
             children: []
           }
@@ -127,7 +127,7 @@ export default {
       this.treeItems1 = this.basiccategorys.map(item => {
         this.addTranslateChan(item)
         return {
-          id: uuidv4(),
+          id: nanoid(),
           name: item,
           children: []
         }
@@ -147,7 +147,7 @@ export default {
             categoryChildrens = res.data.childList.map(item => {
               this.addTranslateChan(item)
               return {
-                id: uuidv4(),
+                id: nanoid(),
                 name: item,
                 leaf: true,
                 children: []
