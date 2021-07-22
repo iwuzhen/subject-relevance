@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-07-21 20:58:50
+ * @LastEditTime: 2021-07-22 11:26:09
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -17,6 +17,9 @@ import wikipediaDirectNetWork from '@/assets/data/wikipediaDirectNetWork.json'
 const SessionXData = []
 for (const year of _.range(2007, 2022)) {
   for (const session of _.range(1, 5)) {
+    if (year === 2021 && session === 2) {
+      break
+    }
     SessionXData.push(`${year}-S${session}`)
   }
 }

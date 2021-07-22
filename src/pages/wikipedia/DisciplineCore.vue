@@ -27,11 +27,22 @@ import { getDistanceCore } from '@/api/index'
 import { WIKI_TOP_CATEGORY, extendEchartsOpts, coreCategorys1, extendLineSeries, defaultCategorySelect1 } from '@/api/data'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
+import _ from 'lodash'
 
 coreCategorys1.push({
   text: 'Theoretical physics',
   value: 'Theoretical physics'
 })
+
+const SessionXData = []
+for (const year of _.range(2007, 2022)) {
+  for (const session of _.range(1, 5)) {
+    if (year === 2021 && session === 2) {
+      break
+    }
+    SessionXData.push(`${year}-S${session}`)
+  }
+}
 
 export default {
   name: 'CoreWiki',
@@ -181,8 +192,13 @@ export default {
       this.methodOptions = ['linksin', 'linksout']
       this.pageCountSelect = -1
       this.pageCountOpt = [-1]
-      this.versionSelect = 'v5_xueshu_node_newDB'
-      this.versionOpt = [{ text: 'v5', value: 'v5_node_newDB' }, { text: 'v5 学术圈', value: 'v5_xueshu_node_newDB' }]
+      this.versionSelect = 'v5_xueshu_node_newDB_new_noLiterature_session'
+      this.versionOpt = [
+        { text: 'v5', value: 'v5_node_newDB' },
+        { text: 'v5 学术圈', value: 'v5_xueshu_node_newDB' },
+        { text: 'v5 排除文学-季度', value: 'v5_node_newDB_new_noLiterature_session' },
+        { text: 'v5 学术圈 排除文学-季度', value: 'v5_xueshu_node_newDB_new_noLiterature_session' }
+      ]
 
       this.subjectRelevances = WIKI_TOP_CATEGORY
       this.categorys = WIKI_TOP_CATEGORY.map(item => {
@@ -263,6 +279,57 @@ export default {
       }
       this.getData()
     },
+    async session_draw_1(opt) {
+      // 非学术圈
+      const session = ['v5_node_newDB_new_noLiterature_3', 'v5_node_newDB_new_noLiterature_6', 'v5_node_newDB_new_noLiterature_9', 'v5_node_newDB_new_noLiterature_12']
+      await this.session_do_draw(session, opt)
+    },
+    async session_draw_2(opt) {
+      // 学术圈
+      const session = ['v5_xueshu_node_newDB_new_noLiterature_3', 'v5_xueshu_node_newDB_new_noLiterature_6', 'v5_xueshu_node_newDB_new_noLiterature_9', 'v5_xueshu_node_newDB_new_noLiterature_12']
+      await this.session_do_draw(session, opt)
+    },
+    async session_do_draw(session, opt) {
+      const nextData = []
+      for (const sess of session) {
+        opt.btype = sess
+        const data = await getDistanceCore(opt)
+        nextData.push(data.data)
+      }
+      // 重组 data
+      const retData = {
+        title: nextData[0].title,
+        legend: nextData[0].legend,
+        x: SessionXData,
+        y: []
+      }
+      // eslint-disable-next-line no-unused-vars
+      for (const _ in retData.legend) {
+        retData.y.push([])
+      }
+      // 组合
+      const yDictList = []
+      for (const i in nextData) {
+        const tmpDict = {}
+        for (const j in nextData[i].legend) {
+          tmpDict[nextData[i].legend[j]] = _.reverse(nextData[i].y[j])
+        }
+        yDictList.push(tmpDict)
+      }
+      while (yDictList[0][retData.legend[0]].length > 0) {
+        for (const i in yDictList) {
+          for (const leg_i in retData.legend) {
+            if (yDictList[i][retData.legend[leg_i]].length > 0) {
+              retData.y[leg_i].push(
+                yDictList[i][retData.legend[leg_i]].pop()
+              )
+            }
+          }
+        }
+      }
+      console.log(retData)
+      this.drawChart(retData)
+    },
     async getData() {
       if (!this.subjectTarget || this.subjectRelevances.length === 0) {
         return false
@@ -284,20 +351,28 @@ export default {
         levelType: this.levelSelect,
         btype: this.versionSelect
       }
-      getDistanceCore(opt)
-        .then(res => {
-          if (res.data) {
-            this.drawChart(res.data)
-          } else {
+      if (this.versionSelect === 'v5_node_newDB_new_noLiterature_session') {
+        await this.session_draw_1(opt)
+        this.loading = false
+      } else if (this.versionSelect === 'v5_xueshu_node_newDB_new_noLiterature_session') {
+        await this.session_draw_2(opt)
+        this.loading = false
+      } else {
+        getDistanceCore(opt)
+          .then(res => {
+            if (res.data) {
+              this.drawChart(res.data)
+            } else {
+              this.loading = false
+              // this.$emit("emitMesage", "请求失败");
+              return false
+            }
+          })
+          .catch(rej => {
             this.loading = false
-            // this.$emit("emitMesage", "请求失败");
-            return false
-          }
-        })
-        .catch(rej => {
-          this.loading = false
-          this.$emit('emitMesage', `请求失败:${rej}`)
-        })
+            this.$emit('emitMesage', `请求失败:${rej}`)
+          })
+      }
     },
     drawChart(data) {
       const options = this.setOptions(data)
