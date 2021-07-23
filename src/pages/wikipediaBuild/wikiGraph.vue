@@ -46,6 +46,14 @@ v-container(fluid  :style="cssVars")
     v-col(col='12')
       v-card.mx-auto(outlined :loading='loading' height='70vh')
         v-container#subjectChart1(fluid fill-height)
+  v-row
+    v-col(col='12')
+      v-card.mx-auto(outlined :loading='loading' height='70vh')
+        v-container#subjectChart3(fluid fill-height)
+  v-row
+    v-col(col='12')
+      v-card.mx-auto(outlined :loading='loading' height='70vh')
+        v-container#subjectChart4(fluid fill-height)
 
   v-row
     v-col(col='12')
@@ -74,6 +82,17 @@ import { getDistanceCore, requestWrap } from '@/api/index'
 // import SpriteText from 'three-spritetext'
 import { CSS2DObject, CSS2DRenderer } from '@/utils/three/CSS2DRenderer'
 
+const SessionXData = []
+for (const year of _.range(2007, 2022)) {
+  for (const session of _.range(1, 5)) {
+    // if (year === 2021 && session === 2) {
+    //   break
+    // }
+    SessionXData.push(`${year}-S${session}`)
+  }
+}
+
+const reverseSessionXData = _.reverse(SessionXData.concat())
 export default {
   name: 'MagGraph',
   components: {
@@ -88,15 +107,39 @@ export default {
       subjectRelevances: WIKI_TOP_CATEGORY,
       methodValue: 'linksout',
       methodOpt: ['linksin', 'linksout'],
-      btype: 'v5_xueshu_node_newDB',
+      btype: 'v5_node_newDB_new_noLiterature_3',
       btypeOpt: [
         {
-          text: 'v5',
-          value: 'v5_node_newDB'
+          text: 'v5 一季度',
+          value: 'v5_node_newDB_new_noLiterature_3'
         },
         {
-          text: 'v5 学术圈',
-          value: 'v5_xueshu_node_newDB'
+          text: 'v5 二季度',
+          value: 'v5_node_newDB_new_noLiterature_6'
+        },
+        {
+          text: 'v5 三季度',
+          value: 'v5_node_newDB_new_noLiterature_9'
+        },
+        {
+          text: 'v5 四季度',
+          value: 'v5_node_newDB_new_noLiterature_12'
+        },
+        {
+          text: 'v5 学术圈 一季度',
+          value: 'v5_xueshu_node_newDB_new_noLiterature_3'
+        },
+        {
+          text: 'v5 学术圈 二季度',
+          value: 'v5_xueshu_node_newDB_new_noLiterature_6'
+        },
+        {
+          text: 'v5 学术圈 三季度',
+          value: 'v5_xueshu_node_newDB_new_noLiterature_9'
+        },
+        {
+          text: 'v5 学术圈 四季度',
+          value: 'v5_xueshu_node_newDB_new_noLiterature_12'
         }],
       level: 3,
       levelOpt: [2, 3],
@@ -114,7 +157,7 @@ export default {
         fontLeft: -10
       },
       categorys: WIKI_TOP_CATEGORY,
-      myChartIds: ['subjectChart1', 'subjectChart2'],
+      myChartIds: ['subjectChart1', 'subjectChart2', 'subjectChart3', 'subjectChart4'],
       loading: false,
       linkFilter: 0.75,
       ct: 0,
@@ -137,8 +180,179 @@ export default {
   mounted() {
     // this.getData()
     this.Draw()
+    this.session_draw_1()
+    this.session_draw_2()
   },
   methods: {
+    async session_draw_1() {
+      // 非学术圈
+      const session = ['v5_node_newDB_new_noLiterature_3', 'v5_node_newDB_new_noLiterature_6', 'v5_node_newDB_new_noLiterature_9', 'v5_node_newDB_new_noLiterature_12']
+      const _opt = await this.session_do_draw(session)
+      console.log('opt', _opt)
+      _opt.title.text = '非学术圈 季度 阈值图'
+      this.myChartObjs[2].setOption(_opt, true)
+    },
+    async session_draw_2() {
+      // 学术圈
+      const session = ['v5_xueshu_node_newDB_new_noLiterature_3', 'v5_xueshu_node_newDB_new_noLiterature_6', 'v5_xueshu_node_newDB_new_noLiterature_9', 'v5_xueshu_node_newDB_new_noLiterature_12']
+      const _opt = await this.session_do_draw(session)
+      console.log('opt', _opt)
+      _opt.title.text = '学术圈 季度 阈值图'
+      this.myChartObjs[3].setOption(_opt, true)
+    },
+    async session_do_draw(session) {
+      const allDataBasic = Array.from(new Set(this.subjectRelevances.concat(this.vertexSubjects)))
+
+      // let opt =
+
+      // }
+
+      // const nextData = []
+      const allNodesMap = {}
+      allDataBasic.forEach((item, index) => {
+        if (item === 'Engineering disciplines') {
+          item = 'Engineering'
+        }
+        allNodesMap[item] = {
+          id: index,
+          label: item
+        }
+      })
+      const linksMapList = []
+      for (const sess of session) {
+        let linkId = 0
+        const allNodeLinks = {}
+        const allData = allDataBasic.concat()
+        while (allData.length > 1) {
+          let strA = allData.pop()
+          const opt = {
+            strA,
+            strB: allData.join(','),
+            method: this.methodValue,
+            level: -1,
+            levelType: this.level,
+            btype: sess,
+            catlevel: 0
+          }
+          const ret = await getDistanceCore(opt)
+          if (strA === 'Engineering disciplines') {
+            strA = 'Engineering'
+          }
+          if (this.repYearRange === null) {
+            this.repYearRange = ret.data.x
+          }
+
+          const souceId = allNodesMap[strA].id
+          for (const index in ret.data.legend) {
+            const key = `${souceId}-${allNodesMap[ret.data.legend[index]].id}`
+            allNodeLinks[key] = {
+              source: souceId,
+              target: allNodesMap[ret.data.legend[index]].id,
+              id: linkId,
+              weight: _.reverse(ret.data.y[index])
+            }
+            // allNodeLinks.push({
+            //   source: souceId,
+            //   target: allNodesMap[ret.data.legend[index]].id,
+            //   id: linkId,
+            //   weight: ret.data.y[index]
+            // })
+            linkId += 1
+          }
+        }
+        linksMapList.push(allNodeLinks)
+
+        // opt.btype = sess
+        // const data = await getDistanceCore(opt)
+        // nextData.push(data.data)
+      }
+      const newRetData = {}
+      for (const item of Object.entries(linksMapList[0])) {
+        newRetData[item[0]] = {
+          source: item[1].source,
+          target: item[1].target,
+          id: item[1].id,
+          weight: []
+        }
+      }
+      while (linksMapList[0]['1-0'].weight.length > 0) {
+        for (const i in linksMapList) {
+          for (const key of Object.keys(newRetData)) {
+            newRetData[key].weight.push(linksMapList[i][key].weight.pop())
+          }
+        }
+      }
+      console.log('newRetData', newRetData)
+      console.log('allNodesMap', allNodesMap)
+      console.log('allNodeLinks', linksMapList)
+      const _opt = this.drawSessionTable(Object.values(allNodesMap), Object.values(newRetData))
+      return _opt
+    },
+    drawSessionTable(nodes, links, maxcompents = 8) {
+      const retData = []
+      for (let weightId = links[0].weight.length - 1; weightId >= 0; weightId--) {
+        const tmpData = []
+        links = links.sort((x, y) => x.weight[weightId] - y.weight[weightId])
+        const graph = new Graph()
+        for (const { id } of nodes) {
+          graph.addNode(id)
+        }
+        let tmpLength = nodes.length
+        for (const obj of links) {
+          graph.addEdge(obj.source, obj.target)
+          const components = connectedComponents(graph)
+          if (components.length < tmpLength && maxcompents >= components.length) {
+            tmpData.push([components.length, obj.weight[ weightId]])
+            tmpLength = components.length
+          }
+        }
+        retData.push(tmpData)
+      }
+
+      // 转置矩阵
+      const retDataT = retData[0].map(function(col, i) {
+        return retData.map(function(row, j) {
+          const tmpRow = row[i]
+          // tmpRow[0] = 2021 - j
+          tmpRow[0] = reverseSessionXData[j ]
+          return tmpRow
+        })
+      })
+      for (const i in retDataT) {
+        _.reverse(retDataT[i])
+      }
+      console.log('retDataT', retDataT)
+
+      const _opt = extendEchartsOpts({
+        title: {
+          text: '季度阈值图'
+        },
+        legend: {
+          data: _.range(1, maxcompents + 1, 1).map(item => String(item))
+        },
+        xAxis: {
+          name: 'Year',
+          type: 'category',
+          boundaryGap: false,
+          data: SessionXData.filter(item => item <= '2021-S1')
+        },
+        yAxis: {
+          name: 'Knowledge Distance',
+          type: 'value',
+          min: 0.2
+        },
+        series: _.zip(_.range(maxcompents, 0, -1), retDataT).map(item => {
+          return extendLineSeries({
+            name: String(item[0]),
+            type: 'line',
+            smooth: false,
+            data: item[1].map(each => each[1])
+          })
+        })
+      })
+      return _opt
+    },
+
     async getData() {
       const allNodesMap = {}
       const allNodeLinks = []
