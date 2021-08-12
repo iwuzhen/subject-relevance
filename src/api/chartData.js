@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-07-22 11:26:09
+ * @LastEditTime: 2021-08-11 16:32:23
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -12,6 +12,8 @@ import { WIKI_TOP_CATEGORY, defaultCategorySelect, coreCategorys, magCategory, S
 import _ from 'lodash'
 
 import wikipediaNetwork from '@/assets/data/wikipediaNetwork.json'
+import wikipediaNetworkQuarter from '@/assets/data/wikipediaNetwork_Quarter.json'
+
 import wikipediaDirectNetWork from '@/assets/data/wikipediaDirectNetWork.json'
 
 const SessionXData = []
@@ -2467,14 +2469,14 @@ export const ChartMap = {
           const tmpData = []
           for (const i in responseData.data) {
             // 翻转 数组
-            tmpData.push(_.reverse(Object.values(responseData.data[i][name])))
+            tmpData.push(
+              _.reverse(Object.values(responseData.data[i][name]))
+            )
           }
           while (tmpData[0].length > 0) {
             for (const i in tmpData) {
               if (tmpData[i].length > 0) {
-                newData[name].push(
-                  tmpData[i].pop()
-                )
+                newData[name].push(tmpData[i].pop())
               }
             }
           }
@@ -2598,7 +2600,7 @@ export const ChartMap = {
   'wikipedia-build/smallworld': {
     ChName: 'wiki 学科小世界',
     componentName: 'PageDynamicSelectTemplate',
-    HandleResponseFunc: ([responseData, vName], ChartObj) => {
+    HandleResponseFunc: ([responseData, vName, xData], ChartObj) => {
       const _opt = extendEchartsOpts({
         title: {
           text: '小世界属性'
@@ -2608,7 +2610,7 @@ export const ChartMap = {
           name: ChartObj.xAxisName,
           type: 'category',
           boundaryGap: false,
-          data: _.range(2007, 2022, 1)
+          data: xData
         },
         yAxis: {
           name: vName,
@@ -2633,8 +2635,23 @@ export const ChartMap = {
     },
     RequestFunc: async params => {
       let networkData = wikipediaNetwork
+
+      let xData = _.range(2007, 2022, 1)
       if (params.isDirect) {
         networkData = wikipediaDirectNetWork
+      }
+
+      if (params.source === 1) {
+        networkData = wikipediaNetworkQuarter
+        xData = []
+        for (const year of _.range(2007, 2022, 1)) {
+          for (const q of [1, 2, 3, 4]) {
+            if (year === 2021 && q > 1) {
+              continue
+            }
+            xData.push(`${year}Q${q}`)
+          }
+        }
       }
       // 先过滤学科
       const filter_data = []
@@ -2665,7 +2682,7 @@ export const ChartMap = {
       } else if (params.type === 4) {
         vName = '联通文章数/文章数'
       }
-      return [filter_data, vName]
+      return [filter_data, vName, xData]
     },
     Select: [
       {
@@ -2734,11 +2751,23 @@ export const ChartMap = {
         ]
       },
       {
+        name: 'source',
+        default: 0,
+        label: '数据',
+        multiple: false,
+        show: true,
+        cols: 2,
+        items: [
+          { text: '年度', value: 0 },
+          { text: '季度', value: 1 }
+        ]
+      },
+      {
         name: 'isDirect',
         default: true,
         label: '网络方向',
         multiple: false,
-        show: true,
+        show: false,
         cols: 2,
         items: [
           { text: '无向', value: false },
