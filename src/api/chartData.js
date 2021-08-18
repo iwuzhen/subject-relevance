@@ -1035,6 +1035,8 @@ export const ChartMap = {
         doctype: 1,
         cats: params.cats,
         version: params.version,
+        isLj: params.isLj,
+        islog: params.islog,
         yeartype: 0,
         from: params.from,
         to: params.to
@@ -1044,7 +1046,6 @@ export const ChartMap = {
         'post',
         newParams
       )
-
       // 统计论文类型分布
       newParams = {
         doctype: 0,
@@ -1090,10 +1091,32 @@ export const ChartMap = {
         default: '1',
         show: true,
         label: '数值类型',
-        cols: 2,
+        cols: 1,
         items: [
           { text: '统计数值', value: '0' },
           { text: '统计比例', value: '1' }
+        ]
+      },
+      {
+        name: 'isLj',
+        default: 0,
+        show: true,
+        label: '是否逐年',
+        cols: 1,
+        items: [
+          { text: '逐年', value: 0 },
+          { text: '累计', value: 1 }
+        ]
+      },
+      {
+        name: 'islog',
+        default: 0,
+        show: true,
+        label: '是否log',
+        cols: 1,
+        items: [
+          { text: '否', value: 0 },
+          { text: '是', value: 1 }
         ]
       },
       {
@@ -1101,7 +1124,7 @@ export const ChartMap = {
         default: 'v3',
         label: '过滤条件',
         show: true,
-        cols: 2,
+        cols: 1,
         items: [
           { text: '论文(去Book 去Patent)', value: 'v3' },
           {
