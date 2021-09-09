@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2021-07-22 11:24:37
+ * @LastEditTime: 2021-09-09 23:05:07
  * @Description:
  */
 
@@ -382,7 +382,7 @@ export function extendLineSeries(series) {
 
 export const WIKI_TOP_CATEGORY = ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
   'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
-  'History', 'Materials science', 'Engineering disciplines', 'Environmental science', 'Medicine', 'Art', 'Business'].sort()
+  'Materials science', 'Engineering disciplines', 'Environmental science', 'Medicine'].sort()
 
 // 单页图，使用这个模版
 export function extendEchartsOpts(opt) {
