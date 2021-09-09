@@ -489,7 +489,7 @@ export default {
       const elem = document.getElementById('3dgraph')
       const height = Math.floor(window.innerHeight * 0.9)
       const width = Math.floor(window.innerWidth) - 60
-      const Graph = ForceGraph3D()(elem).width(width).height(height)
+      const Graph = ForceGraph3D()(elem).width(width).height(height).backgroundColor('#fff')
         .graphData(gData)
         .nodeResolution(30)
         .nodeVal('value')
