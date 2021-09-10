@@ -180,15 +180,13 @@ export default {
   mounted() {
     // this.getData()
     this.Draw()
-    this.session_draw_1()
-    this.session_draw_2()
   },
   methods: {
     async session_draw_1() {
       // 非学术圈
       const session = ['v5_node_newDB_new_noLiterature_3', 'v5_node_newDB_new_noLiterature_6', 'v5_node_newDB_new_noLiterature_9', 'v5_node_newDB_new_noLiterature_12']
       const _opt = await this.session_do_draw(session)
-      console.log('opt', _opt)
+      console.log('非学术圈 opt', _opt)
       _opt.title.text = '非学术圈 季度 阈值图'
       this.myChartObjs[2].setOption(_opt, true)
     },
@@ -196,7 +194,7 @@ export default {
       // 学术圈
       const session = ['v5_xueshu_node_newDB_new_noLiterature_3', 'v5_xueshu_node_newDB_new_noLiterature_6', 'v5_xueshu_node_newDB_new_noLiterature_9', 'v5_xueshu_node_newDB_new_noLiterature_12']
       const _opt = await this.session_do_draw(session)
-      console.log('opt', _opt)
+      console.log('学术圈 opt', _opt)
       _opt.title.text = '学术圈 季度 阈值图'
       this.myChartObjs[3].setOption(_opt, true)
     },
@@ -562,6 +560,9 @@ export default {
       } else {
         this.Graph.nodeThreeObject('null')
       }
+
+      this.session_draw_1()
+      this.session_draw_2()
 
       this.loading = false
     }, 2500),
