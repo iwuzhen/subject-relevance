@@ -39,7 +39,7 @@ v-container(fluid  :style="cssVars")
     v-col(col='12')
       v-card.mx-auto(outlined :loading='loading' height='90vh')
         v-card-title
-          | MAG {{selectYear}} linksin 测试 3D 引力图
+          | MAG {{selectYear}} {{methodValue}} 3D 引力图
         v-container#3dgraph(fluid fill-height)
 
   v-row
