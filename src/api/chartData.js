@@ -11,7 +11,6 @@ import { requestWrap } from '@/api/index'
 import { WIKI_TOP_CATEGORY, defaultCategorySelect, coreCategorys, magCategory, SELECT_MAG_DATA, MAGCoreCategorys2020, SELECT_MAG_DATA_V1, MAGCoreCategorys2020_V1, extendEchartsOpts, extendLineSeries } from '@/api/data'
 import _ from 'lodash'
 
-import wikipediaNetwork from '@/assets/data/wikipediaNetwork.json'
 import wikipediaNetworkQuarter from '@/assets/data/wikipediaNetwork_Quarter.json'
 
 import wikipediaDirectNetWork from '@/assets/data/wikipediaDirectNetWork.json'
@@ -2657,13 +2656,9 @@ export const ChartMap = {
       return _opt
     },
     RequestFunc: async params => {
-      let networkData = wikipediaNetwork
-
       let xData = _.range(2007, 2022, 1)
-      if (params.isDirect) {
-        networkData = wikipediaDirectNetWork
-      }
-
+      console.log(wikipediaDirectNetWork)
+      let networkData = wikipediaNetworkQuarter
       if (params.source === 1) {
         networkData = wikipediaNetworkQuarter
         xData = []
@@ -2775,10 +2770,10 @@ export const ChartMap = {
       },
       {
         name: 'source',
-        default: 0,
+        default: 1,
         label: '数据',
         multiple: false,
-        show: true,
+        show: false,
         cols: 2,
         items: [
           { text: '年度', value: 0 },
