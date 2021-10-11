@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-08-11 16:32:23
+ * @LastEditTime: 2021-10-11 15:30:20
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2656,6 +2656,7 @@ export const ChartMap = {
       return _opt
     },
     RequestFunc: async params => {
+      const base10000 = 0.83 * Math.log(10000)
       let xData = _.range(2007, 2022, 1)
       console.log(wikipediaDirectNetWork)
       let networkData = wikipediaNetworkQuarter
@@ -2680,10 +2681,15 @@ export const ChartMap = {
               item[0],
               item[1].map(value => value[params.type])
             ])
-          } else {
+          } else if (params.type === 4) {
             filter_data.push([
               item[0],
               item[1].map(value => value[2] / value[3])
+            ])
+          } else if (params.type === 5) {
+            filter_data.push([
+              item[0],
+              item[1].map(value => value[0] / (0.83 * Math.log(value[3]) / base10000))
             ])
           }
         }
@@ -2755,7 +2761,7 @@ export const ChartMap = {
       },
       {
         name: 'type',
-        default: 0,
+        default: 5,
         label: '数据维度',
         multiple: false,
         show: true,
@@ -2765,7 +2771,8 @@ export const ChartMap = {
           { text: '集聚系数', value: 1 },
           { text: '联通文章数', value: 2 },
           { text: '文章数', value: 3 },
-          { text: '联通文章数/文章数', value: 4 }
+          { text: '联通文章数/文章数', value: 4 },
+          { text: '0.83ln文章数 - 平均最短距离', value: 5 }
         ]
       },
       {
