@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-10-11 15:30:20
+ * @LastEditTime: 2021-10-14 17:36:17
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2691,6 +2691,11 @@ export const ChartMap = {
               item[0],
               item[1].map(value => value[0] / (0.83 * Math.log(value[3]) / base10000))
             ])
+          } else if (params.type === 6) {
+            filter_data.push([
+              item[0],
+              item[1].map(value => value[0] / (Math.log(value[3]) / Math.log(Math.log(value[3])) / base10000))
+            ])
           }
         }
       }
@@ -2772,7 +2777,8 @@ export const ChartMap = {
           { text: '联通文章数', value: 2 },
           { text: '文章数', value: 3 },
           { text: '联通文章数/文章数', value: 4 },
-          { text: '0.83ln文章数 - 平均最短距离', value: 5 }
+          { text: '0.83ln文章数 - 平均最短距离', value: 5 },
+          { text: '巴拉巴西-文章数 - 平均最短距离', value: 6 }
         ]
       },
       {
