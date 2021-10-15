@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-10-15 14:05:32
+ * @LastEditTime: 2021-10-15 14:13:30
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2778,8 +2778,8 @@ export const ChartMap = {
           { text: '联通文章数', value: 2 },
           { text: '文章数', value: 3 },
           { text: '联通文章数/文章数', value: 4 },
-          { text: '章数 - 平均最短距离', value: 5 },
-          { text: '巴拉巴西-文章数 - 平均最短距离', value: 6 }
+          { text: 'ln - 平均最短距离', value: 5 },
+          { text: '巴拉巴西 - 平均最短距离', value: 6 }
         ]
       },
       {
