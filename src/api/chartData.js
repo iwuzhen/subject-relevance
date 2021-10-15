@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-10-15 14:13:30
+ * @LastEditTime: 2021-10-15 14:40:41
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2774,12 +2774,12 @@ export const ChartMap = {
         cols: 2,
         items: [
           { text: '平均最短距离', value: 0 },
+          { text: 'ln - 平均最短距离', value: 5 },
+          { text: '巴拉巴西 - 平均最短距离', value: 6 },
           { text: '集聚系数', value: 1 },
           { text: '联通文章数', value: 2 },
           { text: '文章数', value: 3 },
-          { text: '联通文章数/文章数', value: 4 },
-          { text: 'ln - 平均最短距离', value: 5 },
-          { text: '巴拉巴西 - 平均最短距离', value: 6 }
+          { text: '联通文章数/文章数', value: 4 }
         ]
       },
       {
