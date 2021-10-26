@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-10-26 14:22:32
+ * @LastEditTime: 2021-10-26 18:28:56
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2117,7 +2117,6 @@ ChartMap['wikipedia-build/smallworld'] = {
       title: {
         text: '小世界属性'
       },
-
       xAxis: {
         name: ChartObj.xAxisName,
         type: 'category',
@@ -2175,8 +2174,11 @@ ChartMap['wikipedia-build/smallworld'] = {
       }
     }
 
-    console.log(networkData)
     // 先过滤学科
+    if (params.type === 7) {
+      params.subjects += ',xueshu'
+      console.log(params.subjects)
+    }
     const filter_data = []
     for (const item of Object.entries(networkData)) {
       if (params.subjects.includes(item[0])) {
