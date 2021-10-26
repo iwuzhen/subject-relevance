@@ -275,9 +275,14 @@ export default {
               title: 'wiki 小世界',
               text: 'wiki 小世界网络',
               to: '/wikipedia-build/smallworld',
-              update: '2021-07-10T16:43:03.429Z'
+              update: '2021-10-26T16:43:03.429Z'
+            },
+            {
+              title: 'wiki 拟合数据',
+              text: 'wiki 拟合数据',
+              to: '/wikipedia-build/WikiNiHe',
+              update: '2021-10-27T16:43:03.429Z'
             }
-
           ]
         },
         Wikipedia: {
