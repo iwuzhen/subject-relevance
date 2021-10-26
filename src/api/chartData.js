@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-10-26 14:15:05
+ * @LastEditTime: 2021-10-26 14:22:32
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2985,7 +2985,7 @@ ChartMap['wikipedia-build/WikiNiHe'] = {
         { value: 6, text: '编辑次数' },
         { value: 7, text: '平均文章编辑次数' },
         { value: 8, text: '作者数' },
-        { value: 9, text: '作者数除以文章书' },
+        { value: 9, text: '作者数除以文章数' },
         { value: 10, text: '平均作者编辑次数' },
         { value: 11, text: '边数除以总字数' }
       ]
