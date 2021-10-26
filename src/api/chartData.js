@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-10-26 13:54:22
+ * @LastEditTime: 2021-10-26 14:15:05
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -12,8 +12,8 @@ import { WIKI_TOP_CATEGORY, defaultCategorySelect, coreCategorys, magCategory, S
 import _ from 'lodash'
 
 import wikipediaNetworkQuarter from '@/assets/data/wikipediaNetwork_Quarter.json'
-// import wikipediaDirectNetWorkXueShu from '@/assets/data/wikipediaDirectNetWorkXueShu.json'
-import wikipediaDirectNetWork from '@/assets/data/wikipediaDirectNetWork.json'
+import wikipediaDirectNetWorkXueShu from '@/assets/data/wikipediaDirectNetWorkXueShu.json'
+// import wikipediaDirectNetWork from '@/assets/data/wikipediaDirectNetWork.json'
 
 const SessionXData = []
 for (const year of _.range(2007, 2022)) {
@@ -2149,7 +2149,6 @@ ChartMap['wikipedia-build/smallworld'] = {
     const base10000ln = Math.log(10000)
     const base10000lnln = Math.log(10000) / Math.log(Math.log(10000))
     let xData = _.range(2007, 2022, 1)
-    console.log(wikipediaDirectNetWork)
     let networkData = wikipediaNetworkQuarter
     if (params.source === 1) {
       networkData = wikipediaNetworkQuarter
@@ -2163,6 +2162,20 @@ ChartMap['wikipedia-build/smallworld'] = {
         }
       }
     }
+    if (params.type === 7) {
+      networkData = wikipediaDirectNetWorkXueShu
+      xData = []
+      for (const year of _.range(2007, 2022, 1)) {
+        for (const q of [1, 2, 3, 4]) {
+          if (year === 2021 && q > 1) {
+            continue
+          }
+          xData.push(`${year}Q${q}`)
+        }
+      }
+    }
+
+    console.log(networkData)
     // 先过滤学科
     const filter_data = []
     for (const item of Object.entries(networkData)) {
@@ -2186,6 +2199,11 @@ ChartMap['wikipedia-build/smallworld'] = {
           filter_data.push([
             item[0],
             item[1].map(value => value[0] / (Math.log(value[3]) / Math.log(Math.log(value[3])) / base10000lnln))
+          ])
+        } else if (params.type === 7) {
+          filter_data.push([
+            item[0],
+            item[1].map(value => value[0])
           ])
         }
       }
@@ -2212,13 +2230,8 @@ ChartMap['wikipedia-build/smallworld'] = {
         'Business',
         'Chemistry',
         'Computer science',
-        'Economics',
         'Engineering disciplines',
         'Environmental science',
-        'Geography',
-        'Geology',
-        'History',
-        'Linguistics',
         'Materials science',
         'Mathematics',
         'Medicine',
@@ -2257,15 +2270,16 @@ ChartMap['wikipedia-build/smallworld'] = {
     },
     {
       name: 'type',
-      default: 5,
+      default: 7,
       label: '数据维度',
       multiple: false,
       show: true,
-      cols: 2,
+      cols: 4,
       items: [
         { text: '平均最短距离', value: 0 },
         { text: 'ln - 平均最短距离', value: 5 },
         { text: '巴拉巴西 - 平均最短距离', value: 6 },
+        { text: '学术圈网络中的学科 - 平均最短距离', value: 7 },
         { text: '集聚系数', value: 1 },
         { text: '联通文章数', value: 2 },
         { text: '文章数', value: 3 },
@@ -2836,7 +2850,7 @@ ChartMap['mag2019v2/NodeAndEdgeByYear'] = {
 }
 
 ChartMap['wikipedia-build/WikiNiHe'] = {
-  ChName: 'wiki 学科小世界',
+  ChName: 'wiki 拟合数据',
   componentName: 'PageDynamicSelectTemplate',
   HandleResponseFunc: (data, ChartObj) => {
     const lines = _.zip(data.legend, _.zip.apply(_, data.y))
