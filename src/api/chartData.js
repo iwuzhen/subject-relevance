@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-10-28 17:17:13
+ * @LastEditTime: 2021-10-28 17:53:53
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2244,7 +2244,6 @@ ChartMap['wikipedia-build/smallworld'] = {
       name: 'subjects',
       default: [
         'Biology',
-        'Business',
         'Chemistry',
         'Computer science',
         'Engineering disciplines',
