@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-10-26 18:28:56
+ * @LastEditTime: 2021-10-28 17:17:13
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -13,6 +13,7 @@ import _ from 'lodash'
 
 import wikipediaNetworkQuarter from '@/assets/data/wikipediaNetwork_Quarter.json'
 import wikipediaDirectNetWorkXueShu from '@/assets/data/wikipediaDirectNetWorkXueShu.json'
+import wikipediaDirectNetWorkXueShuLV3 from '@/assets/data/wikipediaDirectNetWorkXueShuLV3.json'
 // import wikipediaDirectNetWork from '@/assets/data/wikipediaDirectNetWork.json'
 
 const SessionXData = []
@@ -2145,73 +2146,17 @@ ChartMap['wikipedia-build/smallworld'] = {
     return _opt
   },
   RequestFunc: async params => {
-    const base10000ln = Math.log(10000)
-    const base10000lnln = Math.log(10000) / Math.log(Math.log(10000))
-    let xData = _.range(2007, 2022, 1)
-    let networkData = wikipediaNetworkQuarter
-    if (params.source === 1) {
-      networkData = wikipediaNetworkQuarter
-      xData = []
-      for (const year of _.range(2007, 2022, 1)) {
-        for (const q of [1, 2, 3, 4]) {
-          if (year === 2021 && q > 1) {
-            continue
-          }
-          xData.push(`${year}Q${q}`)
-        }
-      }
-    }
-    if (params.type === 7) {
-      networkData = wikipediaDirectNetWorkXueShu
-      xData = []
-      for (const year of _.range(2007, 2022, 1)) {
-        for (const q of [1, 2, 3, 4]) {
-          if (year === 2021 && q > 1) {
-            continue
-          }
-          xData.push(`${year}Q${q}`)
-        }
-      }
-    }
+    console.log(wikipediaDirectNetWorkXueShuLV3)
 
-    // 先过滤学科
-    if (params.type === 7) {
-      params.subjects += ',xueshu'
-      console.log(params.subjects)
-    }
-    const filter_data = []
-    for (const item of Object.entries(networkData)) {
-      if (params.subjects.includes(item[0])) {
-        if (params.type <= 3) {
-          filter_data.push([
-            item[0],
-            item[1].map(value => value[params.type])
-          ])
-        } else if (params.type === 4) {
-          filter_data.push([
-            item[0],
-            item[1].map(value => value[2] / value[3])
-          ])
-        } else if (params.type === 5) {
-          filter_data.push([
-            item[0],
-            item[1].map(value => value[0] / (Math.log(value[3]) / base10000ln))
-          ])
-        } else if (params.type === 6) {
-          filter_data.push([
-            item[0],
-            item[1].map(value => value[0] / (Math.log(value[3]) / Math.log(Math.log(value[3])) / base10000lnln))
-          ])
-        } else if (params.type === 7) {
-          filter_data.push([
-            item[0],
-            item[1].map(value => value[0])
-          ])
+    const xData = []
+    for (const year of _.range(2007, 2022, 1)) {
+      for (const q of [1, 2, 3, 4]) {
+        if (year === 2021 && q > 1) {
+          continue
         }
+        xData.push(`${year}Q${q}`)
       }
     }
-    filter_data.sort((a, b) => b[1].slice(-1) - a[1].slice(-1))
-
     let vName = '平均最短距离'
     if (params.type === 1) {
       vName = '集聚系数'
@@ -2222,6 +2167,76 @@ ChartMap['wikipedia-build/smallworld'] = {
     } else if (params.type === 4) {
       vName = '联通文章数/文章数'
     }
+
+    let networkData
+    const filter_data = []
+    if (params.source === 0) {
+      const base10000ln = Math.log(10000)
+      const base10000lnln = Math.log(10000) / Math.log(Math.log(10000))
+      networkData = wikipediaNetworkQuarter
+      for (const item of Object.entries(networkData)) {
+        if (params.subjects.includes(item[0])) {
+          if (params.type <= 3) {
+            filter_data.push([
+              item[0],
+              item[1].map(value => value[params.type])
+            ])
+          } else if (params.type === 4) {
+            filter_data.push([
+              item[0],
+              item[1].map(value => value[2] / value[3])
+            ])
+          } else if (params.type === 5) {
+            filter_data.push([
+              item[0],
+              item[1].map(value => value[0] / (Math.log(value[3]) / base10000ln))
+            ])
+          } else if (params.type === 6) {
+            filter_data.push([
+              item[0],
+              item[1].map(value => value[0] / (Math.log(value[3]) / Math.log(Math.log(value[3])) / base10000lnln))
+            ])
+          }
+        }
+      }
+    } else {
+      // 先过滤学科
+      params.subjects += ',xueshu'
+      if (params.source === 1) {
+        networkData = wikipediaDirectNetWorkXueShu
+      }
+      if (params.source === 2) {
+        networkData = wikipediaDirectNetWorkXueShuLV3
+      }
+      for (const item of Object.entries(networkData)) {
+        if (params.subjects.includes(item[0])) {
+          if (params.type === 0) {
+            filter_data.push([
+              item[0],
+              item[1].map(value => value[0])
+            ])
+          } else if (params.type === 2) {
+            filter_data.push([
+              item[0],
+              item[1].map(value => value[1])
+            ])
+          } else if (params.type === 3) {
+            filter_data.push([
+              item[0],
+              item[1].map(value => value[2])
+            ])
+          } else if (params.type === 4) {
+            filter_data.push([
+              item[0],
+              item[1].map(value => value[1] / value[2])
+            ])
+          }
+        }
+      }
+    }
+
+    filter_data.sort((a, b) => b[1].slice(-1) - a[1].slice(-1))
+
     return [filter_data, vName, xData]
   },
   Select: [
@@ -2272,17 +2287,13 @@ ChartMap['wikipedia-build/smallworld'] = {
     },
     {
       name: 'type',
-      default: 7,
+      default: 0,
       label: '数据维度',
       multiple: false,
       show: true,
-      cols: 4,
+      cols: 2,
       items: [
         { text: '平均最短距离', value: 0 },
-        { text: 'ln - 平均最短距离', value: 5 },
-        { text: '巴拉巴西 - 平均最短距离', value: 6 },
-        { text: '学术圈网络中的学科 - 平均最短距离', value: 7 },
-        { text: '集聚系数', value: 1 },
         { text: '联通文章数', value: 2 },
         { text: '文章数', value: 3 },
         { text: '联通文章数/文章数', value: 4 }
@@ -2293,12 +2304,42 @@ ChartMap['wikipedia-build/smallworld'] = {
       default: 1,
       label: '数据',
       multiple: false,
-      show: false,
+      show: true,
       cols: 2,
       items: [
-        { text: '年度', value: 0 },
-        { text: '季度', value: 1 }
-      ]
+        { text: '学科网络 level-2', value: 0 },
+        { text: '学术圈网络 level-2', value: 1 },
+        { text: '学术圈网络 level-3', value: 2 }
+      ],
+      func: that => {
+        if (that.options.source === 0) {
+          for (const i in that.ChartObj.Select) {
+            if (that.ChartObj.Select[i].name === 'type') {
+              that.ChartObj.Select[i].items = [
+                { text: '平均最短距离', value: 0 },
+                { text: 'ln - 平均最短距离', value: 5 },
+                { text: '巴拉巴西 - 平均最短距离', value: 6 },
+                { text: '集聚系数', value: 1 },
+                { text: '联通文章数', value: 2 },
+                { text: '文章数', value: 3 },
+                { text: '联通文章数/文章数', value: 4 }
+              ]
+            }
+          }
+        } else if ([1, 2].indexOf(that.options.source) > 0) {
+          for (const i in that.ChartObj.Select) {
+            if (that.ChartObj.Select[i].name === 'type') {
+              that.ChartObj.Select[i].items = [
+                { text: '平均最短距离', value: 0 },
+                { text: '联通文章数', value: 2 },
+                { text: '文章数', value: 3 },
+                { text: '联通文章数/文章数', value: 4 }
+              ]
+            }
+          }
+        }
+        that.getData()
+      }
     },
     {
       name: 'isDirect',
