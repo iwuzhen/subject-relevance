@@ -16,6 +16,10 @@ import wikipediaDirectNetWorkXueShu from '@/assets/data/wikipediaDirectNetWorkXu
 import wikipediaDirectNetWorkXueShuLV3 from '@/assets/data/wikipediaDirectNetWorkXueShuLV3.json'
 import wikipeida_direct_xueshu_lv2 from '@/assets/data/wikipeida_direct_xueshu_lv2.json'
 import wikipeida_direct_xueshu_lv3 from '@/assets/data/wikipeida_direct_xueshu_lv3.json'
+import wikipeida_direct_subject_lv2 from '@/assets/data/wikipeida_direct_subject_lv2.json'
+import wikipeida_direct_subject_lv3 from '@/assets/data/wikipeida_direct_subject_lv3.json'
+import wikipeida_direct_subject_lv2_connect from '@/assets/data/wikipeida_direct_subject_lv2_connect.json'
+import wikipeida_direct_subject_lv3_connect from '@/assets/data/wikipeida_direct_subject_lv3_connect.json'
 
 const SessionXData = []
 for (const year of _.range(2007, 2022)) {
@@ -3111,10 +3115,21 @@ ChartMap['wikipedia-build/smallworld_20211103'] = {
       case 1:
         networkData = wikipeida_direct_xueshu_lv3
         break
+      case 2:
+        networkData = wikipeida_direct_subject_lv2
+        break
+      case 3:
+        networkData = wikipeida_direct_subject_lv3
+        break
+      case 6:
+        networkData = wikipeida_direct_subject_lv2_connect
+        break
+      case 7:
+        networkData = wikipeida_direct_subject_lv3_connect
+        break
       default:
         break
     }
-
     const xData = []
     for (const year of _.range(2004, 2022, 1)) {
       for (const q of [1, 2, 3, 4]) {
