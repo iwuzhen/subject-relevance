@@ -134,6 +134,10 @@ const routes = [{
   name: 'wikiGraphBuild',
   component: () => import('@/pages/wikipediaBuild/wikiGraph')
 }, {
+  path: '/wikipedia-build/smallworld_20211107',
+  name: 'smallWorld',
+  component: () => import('@/pages/wikipediaBuild/smallWorld')
+}, {
   path: '/mag2019v2/GoogleDistance',
   name: 'GoogleDistance',
   component: () => import('@/pages/mag2019v2/GoogleDistance')
