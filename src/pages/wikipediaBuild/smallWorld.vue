@@ -16,6 +16,10 @@ v-container(fluid)
       v-card
         v-card-title.text-h5.grey.lighten-2
           | {{dialog.title}}
+          v-spacer
+          v-btn(@click='biliState = !biliState,initDigloChart()')
+            | {{biliState?'显示数量':'显示比例'}}
+
         v-card.mx-auto(outlined :height='chartHeight')
           v-container#dialogChart(fluid fill-height)
 </template>
@@ -84,7 +88,9 @@ export default {
       pageName: 'wiki 学科小世界',
       myChartIds: ['subjectChart'],
       loading: false,
+      biliState: false,
       options: {},
+      paramscache: {},
       filter_data: {},
       dialog: {
         state: false,
@@ -138,16 +144,34 @@ export default {
     this.getData()
     this.myChartObjs[0].on('click', params => {
       // if (params.targetType === 'axisLabel') {
-      this.dialog.title = this.filter_data[params.seriesIndex][0] + ' ' + params.name
       this.dialog.state = true
-      setTimeout(this.initDigloChart, 500, params)
+      this.paramscache = params
+      setTimeout(this.initDigloChart, 500)
     })
   },
   methods: {
-    async initDigloChart(params) {
+    async initDigloChart() {
+      const params = this.paramscache
       const dialogChart = this.$echarts.init(document.getElementById('dialogChart'))
-      console.log(1122, params, dialogChart)
-      const data = this.filter_data[params.seriesIndex][2][params.dataIndex]
+      let data = this.filter_data[params.seriesIndex][2][params.dataIndex]
+      let ytype = 'log'
+      let b = '数量'
+      if (this.biliState) {
+        b = '比例'
+        let sum = 0
+        for (const item of data) {
+          sum += item
+        }
+        const cacheData = []
+        for (const item of data) {
+          cacheData.push((item / sum).toFixed(3))
+        }
+        data = cacheData
+        console.log(data)
+        ytype = 'value'
+      }
+
+      this.dialog.title = `${params.name} ${this.filter_data[params.seriesIndex][0]} ${b} 分布`
       const option = {
         backgroundColor: 'rgba(255,255,255,.3)',
         xAxis: [
@@ -159,7 +183,7 @@ export default {
         ],
         yAxis:
           {
-            type: 'log',
+            type: ytype,
             axisLabel: {
               formatter: formatNumE
             }
