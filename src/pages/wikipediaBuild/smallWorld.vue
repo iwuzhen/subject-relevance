@@ -11,6 +11,13 @@ v-container(fluid)
   v-row
     v-col
       comment(storagekey="wikipedia_smallworld_Chart_2021_1")
+  .text-center
+    v-dialog(v-model='dialog.state' width='80vw')
+      v-card
+        v-card-title.text-h5.grey.lighten-2
+          | {{dialog.title}}
+        v-card.mx-auto(outlined :height='chartHeight')
+          v-container#dialogChart(fluid fill-height)
 </template>
 
 <script>
@@ -36,6 +43,36 @@ function formatNum(value) {
   return str.replace(reg, '$1,')
 }
 
+function formatNumE(value) {
+  var res = value.toString()
+  var numN1 = 0
+  var numN2 = 1
+  var num1 = 0
+  var num2 = 0
+  var t1 = 1
+  for (var k = 0; k < res.length; k++) {
+    if (res[k] === '.') { t1 = 0 }
+    if (t1) { num1++ } else { num2++ }
+  }
+
+  if (Math.abs(value) < 1 && res.length > 4) {
+    for (var i = 2; i < res.length; i++) {
+      if (res[i] === '0') {
+        numN2++
+      } else if (res[i] === '.') { continue } else { break }
+    }
+    var v = parseFloat(value)
+    v = v * Math.pow(10, numN2)
+    return v.toString() + 'e-' + numN2
+  } else if (num1 > 4) {
+    if (res[0] === '-') { numN1 = num1 - 2 } else { numN1 = num1 - 1 }
+    v = parseFloat(value)
+    v = v / Math.pow(10, numN1)
+    if (num2 > 4) { v = v.toFixed(4) }
+    return v.toString() + 'e' + numN1
+  } else { return parseFloat(value) }
+}
+
 export default {
   name: 'Magbubbles',
   components: {
@@ -48,6 +85,11 @@ export default {
       myChartIds: ['subjectChart'],
       loading: false,
       options: {},
+      filter_data: {},
+      dialog: {
+        state: false,
+        title: 'my title'
+      },
       chartHeight: '70vh',
       select: [
         {
@@ -94,8 +136,58 @@ export default {
       this.options[row.name] = row.default
     }
     this.getData()
+    this.myChartObjs[0].on('click', params => {
+      // if (params.targetType === 'axisLabel') {
+      this.dialog.title = this.filter_data[params.seriesIndex][0] + ' ' + params.name
+      this.dialog.state = true
+      setTimeout(this.initDigloChart, 500, params)
+    })
   },
   methods: {
+    async initDigloChart(params) {
+      const dialogChart = this.$echarts.init(document.getElementById('dialogChart'))
+      console.log(1122, params, dialogChart)
+      const data = this.filter_data[params.seriesIndex][2][params.dataIndex]
+      const option = {
+        backgroundColor: 'rgba(255,255,255,.3)',
+        xAxis: [
+          {
+
+            type: 'category',
+            data: _.range(1, data.length + 1)
+          }
+        ],
+        yAxis:
+          {
+            type: 'log',
+            axisLabel: {
+              formatter: formatNumE
+            }
+          },
+        series: [
+          {
+            type: 'bar',
+            itemStyle: {
+              normal: {
+                label: {
+                  show: true,
+                  rotate: 90,
+                  position: 'insideBottom',
+                  align: 'left',
+                  verticalAlign: 'middle',
+                  formatter: obj => {
+                    return formatNum(obj.data)
+                  }
+                }
+              }
+            },
+            data: data
+          }
+        ]
+      }
+      console.log(option)
+      dialogChart.setOption(option, true)
+    },
     dynamicChange(func) {
       if (func) {
         func(this)
@@ -180,67 +272,74 @@ export default {
         // 点数
           filter_data.push([
             item[0],
-            item[1]['gs']
+            item[1]['gs'],
+            item[1]['ct']
           ])
         } else if (params.type === 2) {
         // 文章数
           filter_data.push([
             item[0],
-            item[1]['ss']
+            item[1]['ss'],
+            item[1]['ct']
           ])
         } else if (params.type === 7) {
         // ln(N)/ln(k)
           filter_data.push([
             item[0],
             item[1]['ct'].map((e, index) => {
-              if (e.length > 2 && e[1] !== item[1]['gs'][index] && item[1]['gs'][index] > 0) {
+              if (e && e.length > 2 && e[1] !== item[1]['gs'][index] && item[1]['gs'][index] > 0) {
                 return (Math.log(item[1]['gs'][index]) / Math.log(e[1] / item[1]['gs'][index])).toFixed(4)
               } else {
                 return null
               }
-            })
+            }),
+            item[1]['ct']
           ])
         } else if (params.type === 6) {
         // 距离最大数
           filter_data.push([
             item[0],
-            item[1]['ct'].map(e => { if (e.length > 0) return e.length - 1 })
+            item[1]['ct'] ? item[1]['ct'].map(e => { if (e && e.length > 0) return e.length - 1 }) : null,
+            item[1]['ct']
           ])
         } else if (params.type === 5) {
         // 距离中位数
           filter_data.push([
             item[0],
-            item[1]['ct'].map(e => getmiddle(e))
+            item[1]['ct'] ? item[1]['ct'].map(e => getmiddle(e)) : null,
+            item[1]['ct']
           ])
         } else if (params.type === 4) {
         // 平均最短距离
           filter_data.push([
             item[0],
-            item[1]['ad']
+            item[1]['ad'],
+            item[1]['ct']
           ])
         } else if (params.type === 3) {
         // 平均度
           filter_data.push([
             item[0],
             item[1]['ct'].map((e, index) => {
-              if (e.length > 2) return e[1] / item[1]['gs'][index]
+              if (e && e.length > 2) return e[1] / item[1]['gs'][index]
               else { return null }
-            })
+            }),
+            item[1]['ct']
           ])
         } else if (params.type === 1) {
         // 边数
           filter_data.push([
             item[0],
             item[1]['ct'].map(e => {
-              if (e.length > 2) return e[1]
+              if (e && e.length > 2) return e[1]
               else { return null }
-            })
+            }),
+            item[1]['ct']
           ])
         }
       }
-      console.log(filter_data)
       filter_data.sort((a, b) => b[1].slice(-1) - a[1].slice(-1))
-
+      this.filter_data = filter_data
       const _opt = extendEchartsOpts({
         title: {
           text: '小世界属性'
@@ -270,6 +369,7 @@ export default {
           })
         })
       })
+      console.log(_opt)
       this.myChartObjs[0].setOption(_opt, true)
       this.loading = false
     }, 1000)
