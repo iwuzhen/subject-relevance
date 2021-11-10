@@ -178,7 +178,7 @@ export default {
           {
 
             type: 'category',
-            data: _.range(1, data.length + 1)
+            data: _.range(0, data.length)
           }
         ],
         yAxis:
