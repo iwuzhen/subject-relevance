@@ -282,6 +282,12 @@ export default {
               text: 'wiki 拟合数据',
               to: '/wikipedia-build/WikiNiHe',
               update: '2021-10-27T16:43:03.429Z'
+            },
+            {
+              title: 'wiki 引用论文数过滤器',
+              text: 'wiki 引用论文数过滤器',
+              to: '/wikipedia-build/WikiFilter',
+              update: '2021-11-27T16:43:03.429Z'
             }
           ]
         },

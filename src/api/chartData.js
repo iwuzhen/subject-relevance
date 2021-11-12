@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-11-12 13:59:06
+ * @LastEditTime: 2021-11-12 14:44:59
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2927,7 +2927,7 @@ ChartMap['wikipedia-build/WikiNiHe'] = {
       })
     })
     if (data.remark) {
-      const text = data.remark.replaceAll('\\n', '\n')
+      const text = data.remark.replaceAll(/\\n/g, '\n')
       const graphic = [
         {
           type: 'text',
@@ -3063,6 +3063,116 @@ ChartMap['wikipedia-build/WikiNiHe'] = {
     }
   ],
   Slider: [],
+  RangeSlider: [],
+  xAxisName: 'Year',
+  yAxisName: 'Count'
+}
+
+ChartMap['wikipedia-build/WikiFilter'] = {
+  ChName: 'wiki 拟合数据',
+  componentName: 'PageDynamicSelectTemplate',
+  HandleResponseFunc: (data, ChartObj) => {
+    const _opt = extendEchartsOpts({
+      title: {
+        text: data.title
+      },
+      xAxis: {
+        name: ChartObj.xAxisName,
+        type: 'category',
+        boundaryGap: false,
+        data: data.x
+      },
+      yAxis: {
+        name: '',
+        type: 'value',
+        axisLabel: {
+          formatter: value => formatNum(value)
+        },
+        min: function(value) {
+          return Math.floor(value.min * 10) / 10
+        }
+      },
+      series: extendLineSeries({
+        name: '文章数年度分布',
+        type: 'line',
+        smooth: false,
+        data: data.y
+
+      })
+    })
+    return _opt
+  },
+  RequestFunc: async params => {
+    // params.db = 'mag'
+    const new_params = Object.assign({}, params)
+
+    // 当年
+    const data = await requestWrap(
+      'wiki/getDfd',
+      'post',
+      new_params
+    )
+    console.log(data)
+    return data.data
+  },
+  Select: [
+    {
+      name: 'cats',
+      default: WIKI_TOP_CATEGORY.concat(),
+      label: '学科',
+      multiple: true,
+      show: true,
+      cols: 10,
+      items: WIKI_TOP_CATEGORY
+    },
+    {
+      name: 'type',
+      default: 1,
+      label: '是否多次引用计多次',
+      multiple: false,
+      show: true,
+      cols: 2,
+      items: [
+        {
+          text: '是',
+          value: 1
+        },
+        {
+          text: '不是',
+          value: 0
+        }
+      ]
+    }
+  ],
+  Slider: [
+    {
+      name: 'dfd_yz',
+      Default: 0,
+      label: '颠覆度保留阈值',
+      step: 0.01,
+      cols: 10,
+      max: 1,
+      min: -1
+    },
+    {
+      name: 'linksin',
+      Default: 0,
+      label: 'linksin 保留阈值',
+      step: 1,
+      cols: 6,
+      max: 2000,
+      min: 0
+    },
+    {
+      name: 'level',
+      Default: 4,
+      label: 'level',
+      step: 1,
+      cols: 6,
+      max: 7,
+      min: 0
+    }
+  ],
   RangeSlider: [],
   xAxisName: 'Year',
   yAxisName: 'Count'
