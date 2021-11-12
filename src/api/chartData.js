@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-10-28 17:53:53
+ * @LastEditTime: 2021-11-12 13:59:06
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -2926,6 +2926,25 @@ ChartMap['wikipedia-build/WikiNiHe'] = {
         })
       })
     })
+    if (data.remark) {
+      const text = data.remark.replaceAll('\\n', '\n')
+      const graphic = [
+        {
+          type: 'text',
+          z: 100,
+          left: '15%',
+          top: '15%',
+          style: {
+            fill: '#333',
+            width: 400,
+            overflow: 'break',
+            text: text,
+            font: '18px/2 "Microsoft YaHei", sans-serif'
+          }
+        }
+      ]
+      _opt['graphic'] = graphic
+    }
     return _opt
   },
   RequestFunc: async params => {
