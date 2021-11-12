@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-11-12 14:44:59
+ * @LastEditTime: 2021-11-12 15:31:19
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -3127,8 +3127,8 @@ ChartMap['wikipedia-build/WikiFilter'] = {
     },
     {
       name: 'type',
-      default: 1,
-      label: '是否多次引用计多次',
+      default: 0,
+      label: '是否多次引用',
       multiple: false,
       show: true,
       cols: 2,
