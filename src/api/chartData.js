@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-11-12 15:31:19
+ * @LastEditTime: 2021-11-12 15:33:28
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -3118,7 +3118,9 @@ ChartMap['wikipedia-build/WikiFilter'] = {
   Select: [
     {
       name: 'cats',
-      default: WIKI_TOP_CATEGORY.concat(),
+      default: ['Geology', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+        'Chemistry', 'Sociology', 'Linguistics', 'Computer science',
+        'Materials science', 'Engineering disciplines', 'Environmental science'],
       label: '学科',
       multiple: true,
       show: true,
