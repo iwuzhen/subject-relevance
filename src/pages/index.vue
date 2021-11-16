@@ -288,6 +288,12 @@ export default {
               text: 'wiki 引用论文数过滤器',
               to: '/wikipedia-build/WikiFilter',
               update: '2021-11-27T16:43:03.429Z'
+            },
+            {
+              title: 'wiki幂律',
+              text: 'wiki幂律',
+              to: '/wikipedia-build/CoreZipfByNodes_wiki',
+              update: '2021-11-27T16:43:03.429Z'
             }
           ]
         },

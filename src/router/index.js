@@ -134,6 +134,10 @@ const routes = [{
   name: 'wikiGraphBuild',
   component: () => import('@/pages/wikipediaBuild/wikiGraph')
 }, {
+  path: '/wikipedia-build/CoreZipfByNodes_wiki',
+  name: 'CoreZipfByNodes_wiki',
+  component: () => import('@/pages/wikipediaBuild/CoreZipfByNodes_wiki')
+}, {
   path: '/wikipedia-build/smallworld_20211107',
   name: 'smallWorld',
   component: () => import('@/pages/wikipediaBuild/smallWorld')
