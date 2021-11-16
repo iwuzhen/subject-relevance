@@ -9,9 +9,9 @@ v-container(fluid)
     v-col(cols='2')
       v-select(v-model='option.level.select', :items='option.level.opt', label='层次', @change='getData').
     v-col(cols='2')
-      v-select(v-model='option.year.select', :items='option.year.opt', label='幂律分布指定年', @click='getData').
+      v-select(v-model='option.year.select', :items='option.year.opt', label='幂律分布指定年', @click='switchYearMonth').
     v-col(cols='3')
-      v-select(v-model='option.month.select', :items='option.month.opt', label='month', @click='getData').
+      v-select(v-model='option.month.select', :items='option.month.opt', label='month', @click='switchYearMonth').
 
   v-row
     v-col(cols='11')
@@ -156,7 +156,15 @@ export default {
     this.getData()
   },
   methods: {
-
+    switchYearMonth() {
+      if (this.option.month.select === 3 && this.option.year.select === 2004) {
+        this.option.month.select = 6
+      }
+      if (this.option.year.select === 2021) {
+        this.option.month.select = 3
+      }
+      this.getData()
+    },
     // 计算斜率
     calSlope() {
       const lines = []
