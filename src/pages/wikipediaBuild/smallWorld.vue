@@ -328,7 +328,6 @@ export default {
             item[1]['ct']
           ])
         } else if (params.type === 8) {
-          console.log(item[1]['ct'])
           // 90% 有效直径
           filter_data.push([
             item[0],
