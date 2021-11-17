@@ -113,6 +113,7 @@ export default {
             { text: '平均最短距离', value: 4 },
             { text: '距离中位数', value: 5 },
             { text: '距离最大数', value: 6 },
+            { text: '90%有效直径', value: 8 },
             { text: 'ln(N)/ln(k)', value: 7 }
           ]
         },
@@ -324,6 +325,30 @@ export default {
           filter_data.push([
             item[0],
             item[1]['ct'] ? item[1]['ct'].map(e => { if (e && e.length > 0) return e.length - 1 }) : null,
+            item[1]['ct']
+          ])
+        } else if (params.type === 8) {
+          console.log(item[1]['ct'])
+          // 90% 有效直径
+          filter_data.push([
+            item[0],
+            item[1]['ct'] ? item[1]['ct'].map(e => {
+              if (e && e.length > 0) {
+                // 计算总数
+                let sum = 0
+                for (const i in e) {
+                  sum += e[i]
+                }
+                let cache = 0
+                for (const i in e) {
+                  cache += e[i]
+                  if (cache > 0.9 * sum) {
+                    return i - 1
+                  }
+                }
+                return e.length - 1
+              }
+            }) : null,
             item[1]['ct']
           ])
         } else if (params.type === 5) {
