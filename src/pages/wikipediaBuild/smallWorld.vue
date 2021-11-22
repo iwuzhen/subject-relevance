@@ -34,6 +34,11 @@ import wikipedia_direct_subject_lv3_connect from '@/assets/data/wikipedia_direct
 import wikipedia_direct_xueshu_lv2_connect from '@/assets/data/wikipedia_direct_xueshu_lv2_connect.json'
 import wikipedia_direct_xueshu_lv3_connect from '@/assets/data/wikipedia_direct_xueshu_lv3_connect.json'
 
+import wikipeida_direct_xueshu_lv2_connect_v20211110 from '@/assets/data/wikipeida_direct_xueshu_lv2_connect_v20211110.json'
+import wikipeida_direct_xueshu_lv2_v20211110 from '@/assets/data/wikipeida_direct_xueshu_lv2_v20211110.json'
+import wikipeida_direct_xueshu_lv3_connect_v20211110 from '@/assets/data/wikipeida_direct_xueshu_lv3_connect_v20211110.json'
+import wikipeida_direct_xueshu_lv3_v20211110 from '@/assets/data/wikipeida_direct_xueshu_lv3_v20211110.json'
+
 import { extendEchartsOpts, extendLineSeries } from '@/api/data'
 import comment from '@/components/comment'
 import Base from '@/utils/base'
@@ -132,7 +137,11 @@ export default {
             { text: '学术圈-联通网络-lv2', value: 4 },
             { text: '学术圈-联通网络-lv3', value: 5 },
             { text: '单学科-联通网络-lv2', value: 6 },
-            { text: '单学科-联通网络-lv3', value: 7 }
+            { text: '单学科-联通网络-lv3', value: 7 },
+            { text: '精简学术圈-调和网络-lv2', value: 8 },
+            { text: '精简学术圈-调和网络-lv3', value: 9 },
+            { text: '精简学术圈-联通网络-lv2', value: 10 },
+            { text: '精简学术圈-联通网络-lv3', value: 11 }
           ]
         }
       ]
@@ -272,6 +281,18 @@ export default {
           break
         case 7:
           networkData = wikipedia_direct_subject_lv3_connect
+          break
+        case 8:
+          networkData = wikipeida_direct_xueshu_lv2_v20211110
+          break
+        case 9:
+          networkData = wikipeida_direct_xueshu_lv3_v20211110
+          break
+        case 10:
+          networkData = wikipeida_direct_xueshu_lv2_connect_v20211110
+          break
+        case 11:
+          networkData = wikipeida_direct_xueshu_lv3_connect_v20211110
           break
         default:
           break
