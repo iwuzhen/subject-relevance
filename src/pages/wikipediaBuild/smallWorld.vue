@@ -119,7 +119,8 @@ export default {
             { text: '距离中位数', value: 5 },
             { text: '距离最大数', value: 6 },
             { text: '90%有效直径', value: 8 },
-            { text: 'ln(N)/ln(k)', value: 7 }
+            { text: 'ln(N)/ln(k)', value: 7 },
+            { text: '边密度', value: 9 }
           ]
         },
         {
@@ -405,6 +406,17 @@ export default {
             }),
             item[1]['ct']
           ])
+        } else if (params.type === 9) {
+        // 边密度
+          filter_data.push([
+            item[0],
+            item[1]['ct'].map((e, index) => {
+              if (e && e.length > 2) return e[1] / (item[1]['gs'][index] * (item[1]['gs'][index] - 1))
+              else { return null }
+            }),
+            item[1]['ct']
+          ])
+          console.log(filter_data)
         }
       }
       filter_data.sort((a, b) => b[1].slice(-1) - a[1].slice(-1))
