@@ -3189,7 +3189,7 @@ ChartMap['wikipedia-build/entropy'] = {
   HandleResponseFunc: ([responseData, vName, xData], ChartObj) => {
     const _opt = extendEchartsOpts({
       title: {
-        text: '小世界属性'
+        text: '结构熵'
       },
       xAxis: {
         name: ChartObj.xAxisName,
