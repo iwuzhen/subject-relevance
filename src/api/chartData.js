@@ -3289,7 +3289,7 @@ ChartMap['wikipedia-build/entropy'] = {
     },
     {
       name: 'type',
-      default: 0,
+      default: 2,
       label: '数据维度',
       multiple: false,
       show: true,
