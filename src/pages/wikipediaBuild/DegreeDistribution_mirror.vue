@@ -11,6 +11,9 @@
       v-col(col='12')
         v-card.mx-auto(outlined='' :loading='loading' height='70vh')
           v-container#subjectChart(fluid='' fill-height='')
+    v-row
+      v-col
+        comment(storagekey="wikipedia_degree_Chart_2021_12")
 </template>
 
 <script>

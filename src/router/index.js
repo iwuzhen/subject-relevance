@@ -264,6 +264,10 @@ const routes = [{
   name: 'SmallWorldUndirectedLimit',
   component: () => import('@/pages/wikipedia/SmallWorldUndirectedLimit')
 }, {
+  path: '/wikipedia-build/DegreeDistribution',
+  name: 'DegreeDistribution',
+  component: () => import('@/pages/wikipediaBuild/DegreeDistribution')
+}, {
   path: '/wikipedia/DegreeDistribution',
   name: 'DegreeDistribution',
   component: () => import('@/pages/wikipedia/DegreeDistribution')
