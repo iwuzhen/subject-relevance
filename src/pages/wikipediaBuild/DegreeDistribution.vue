@@ -320,12 +320,12 @@ export default {
         xAxis: {
           type: 'value',
           // max: xmax,
-          name: 'log (rank)'
+          name: this.option.islog.select === 1 ? 'log (degree)' : 'degree'
         },
         yAxis: {
           type: 'value',
           // max: ymax,
-          name: 'log (citation)'
+          name: this.option.islog.select === 1 ? 'log (citation)' : 'citation'
         },
         series: seriesList
       })
