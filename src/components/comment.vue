@@ -40,8 +40,8 @@
 </template>
 
 <script>
-import MarkdownItVue from 'markdown-it-vue'
-import 'markdown-it-vue/dist/markdown-it-vue.css'
+import MarkdownItVue from '@ruangnazi/markdown-it-vue'
+import '@ruangnazi/markdown-it-vue/dist/markdown-it-vue.css'
 import { getStorage, createStorage } from '@/api/index'
 
 export default {

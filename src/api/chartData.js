@@ -15,6 +15,9 @@ import wikipediaNetworkQuarter from '@/assets/data/wikipediaNetwork_Quarter.json
 import wikipediaDirectNetWorkXueShu from '@/assets/data/wikipediaDirectNetWorkXueShu.json'
 import wikipediaDirectNetWorkXueShuLV3 from '@/assets/data/wikipediaDirectNetWorkXueShuLV3.json'
 
+import wikipedia_struct_entropy_lv2 from '@/assets/data/wikipedia_struct_entropy_lv2.json'
+import wikipedia_struct_entropy_lv3 from '@/assets/data/wikipedia_struct_entropy_lv3.json'
+
 const SessionXData = []
 for (const year of _.range(2007, 2022)) {
   for (const session of _.range(1, 5)) {
@@ -3175,6 +3178,142 @@ ChartMap['wikipedia-build/WikiFilter'] = {
       min: 0
     }
   ],
+  RangeSlider: [],
+  xAxisName: 'Year',
+  yAxisName: 'Count'
+}
+
+ChartMap['wikipedia-build/entropy'] = {
+  ChName: 'wiki 结构熵',
+  componentName: 'PageDynamicSelectTemplate',
+  HandleResponseFunc: ([responseData, vName, xData], ChartObj) => {
+    const _opt = extendEchartsOpts({
+      title: {
+        text: '标准结构熵'
+      },
+      xAxis: {
+        name: ChartObj.xAxisName,
+        type: 'category',
+        boundaryGap: false,
+        data: xData
+      },
+      yAxis: {
+        name: vName,
+        type: 'value',
+        axisLabel: {
+          formatter: value => formatNum(value)
+        },
+        min: function(value) {
+          return Math.floor(value.min * 10) / 10
+        }
+      },
+      series: responseData.map(item => {
+        return extendLineSeries({
+          name: item[0],
+          type: 'line',
+          smooth: false,
+          data: item[1]
+        })
+      })
+    })
+    return _opt
+  },
+  RequestFunc: async params => {
+    // console.log(wikipeida_direct_xueshu_lv2)
+    let networkData
+    switch (params.model) {
+      case 0:
+        networkData = wikipedia_struct_entropy_lv2
+        break
+      case 1:
+        networkData = wikipedia_struct_entropy_lv3
+        break
+      default:
+        break
+    }
+    const xData = []
+    for (const year of _.range(2004, 2022, 1)) {
+      for (const q of [1, 2, 3, 4]) {
+        if (year === 2021 && q > 1) {
+          continue
+        }
+        if (year === 2004 && q < 2) {
+          continue
+        }
+        xData.push(`${year}Q${q}`)
+      }
+    }
+    const vName = ''
+
+    const filter_data = []
+    for (const item of Object.entries(networkData)) {
+      if (params.subjects.indexOf(item[0]) < 0) {
+        continue
+      }
+      // console.log(item)
+      if (params.type === 0) {
+        // 点数
+        filter_data.push([
+          item[0],
+          item[1]['in']
+        ])
+      } else if (params.type === 1) {
+        // 文章数
+        filter_data.push([
+          item[0],
+          item[1]['out']
+        ])
+      } else if (params.type === 2) {
+        // ln(N)/ln(k)
+        filter_data.push([
+          item[0],
+          item[1]['all']
+        ])
+      }
+    }
+    console.log(filter_data)
+    filter_data.sort((a, b) => b[1].slice(-1) - a[1].slice(-1))
+    return [filter_data, vName, xData]
+  },
+  Select: [
+    {
+      name: 'subjects',
+      default: ['xueshu', 'Biology', 'Chemistry', 'Computer science', 'Engineering disciplines', 'Environmental science', 'Geology',
+        'Materials science', 'Mathematics', 'Philosophy', 'Physics', 'Political science', 'Psychology', 'Sociology'],
+      label: '学科',
+      multiple: true,
+      show: true,
+      cols: 8,
+      items: ['xueshu', 'Biology', 'Chemistry', 'Computer science', 'Engineering disciplines', 'Environmental science', 'Geology',
+        'Materials science', 'Mathematics', 'Philosophy', 'Physics', 'Political science', 'Psychology', 'Sociology']
+    },
+    {
+      name: 'type',
+      default: 2,
+      label: '数据维度',
+      multiple: false,
+      show: true,
+      cols: 2,
+      items: [
+        { text: 'linksin', value: 0 },
+        { text: 'linksout', value: 1 },
+        { text: '无向网络', value: 2 }
+      ]
+    },
+    {
+      name: 'model',
+      default: 0,
+      label: '有向网络模型',
+      multiple: false,
+      show: true,
+      cols: 3,
+      items: [
+        { text: '精简学术圈-lv2', value: 0 },
+        { text: '精简学术圈-lv3', value: 1 }
+      ]
+    }
+  ],
+  Slider: [],
   RangeSlider: [],
   xAxisName: 'Year',
   yAxisName: 'Count'

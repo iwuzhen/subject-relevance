@@ -294,6 +294,18 @@ export default {
               text: 'wiki幂律',
               to: '/wikipedia-build/CoreZipfByNodes_wiki',
               update: '2021-11-27T16:43:03.429Z'
+            },
+            {
+              title: 'wiki结构熵',
+              text: 'wiki结构熵',
+              to: '/wikipedia-build/entropy',
+              update: '2021-12-02T16:43:03.429Z'
+            },
+            {
+              title: 'wiki幂律度分布',
+              text: 'wiki 幂律度分布',
+              to: '/wikipedia-build/DegreeDistribution',
+              update: '2021-12-06T16:43:03.429Z'
             }
           ]
         },
