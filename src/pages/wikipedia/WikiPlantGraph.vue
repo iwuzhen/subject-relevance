@@ -1,91 +1,91 @@
 <template lang="pug">
-v-container(fluid :style="cssVars")
-  v-row
-    v-col(cols='4')
-      v-select(@click="dialog.pid=0;dialog.stats=!dialog.stats" v-model='currentSubject.allSubject' :items='currentSubject.allSubject' chips multiple dense label='定点学科')
-    v-col(cols='8')
-      v-select(@click="dialog.pid=1;dialog.stats=!dialog.stats" v-model='targetSubject.allSubject' :items='targetSubject.allSubject' chips multiple dense label='目标学科')
-    v-col(cols='2')
-      v-select(v-model='methodValue' :items='methodOptions' dense label='条件' @change='changeSubject')
-    v-col(cols='2')
-      v-select(v-model='levelType.value' :items='levelType.option' dense label='层数' @change='getData')
-    v-col(cols="5")
-      v-slider(hint="距离过滤器" label="距离过滤器" max=1 min=0 step=0.01 thumb-label="always" v-model="linkFilter" @change='liteDraw')
-    v-col(cols="7")
-      v-slider(hint="展示年份" label="展示年份" max=2021 min=2007 step=1 thumb-label="always" v-model="selectYear" @change='liteDraw')
-    v-col(cols="2")
-      v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='liteDraw')
-    v-col(cols="2")
-      v-switch(v-model="camera.status" :label="`Camera 自动环绕: ${showText.toString()}`"  @change='AutoCamera')
-    v-col(cols="2")
-      span  字体大小
-      v-btn-toggle(dense)
-        v-btn(@click="style.fontSize++") + 1
-        v-btn(@click="style.fontSize--") - 1
-    v-col(cols="2")
-      span  字体top
-      v-btn-toggle(dense)
-        v-btn(@click="style.fontTop--") + 1
-        v-btn(@click="style.fontTop++") - 1
-    v-col(cols="2")
-      span  字体left
-      v-btn-toggle(dense)
-        v-btn(@click="style.fontLeft--") + 1
-        v-btn(@click="style.fontLeft++") - 1
-  v-row
-    v-col(col=12)
-      span 一级学科标识
-      v-chip(v-for="(value,key) in colorMap" :color="value") {{key}}
-  v-row
-    v-col(col='12')
-      v-card.mx-auto(outlined :loading='loading' height='120vh')
-        v-card-title
-          | MAG {{selectYear}} linksin 测试 3D 引力图
-        v-container#3dgraph(fluid fill-height)
-  v-row
-    v-col
-      comment(storagekey='Mag_plant_graph_Chart_1')
+  v-container(fluid :style="cssVars")
+    v-row
+      v-col(cols='4')
+        v-select(@click="dialog.pid=0;dialog.stats=!dialog.stats" v-model='currentSubject.allSubject' :items='currentSubject.allSubject' chips multiple dense label='定点学科')
+      v-col(cols='8')
+        v-select(@click="dialog.pid=1;dialog.stats=!dialog.stats" v-model='targetSubject.allSubject' :items='targetSubject.allSubject' chips multiple dense label='目标学科')
+      v-col(cols='2')
+        v-select(v-model='methodValue' :items='methodOptions' dense label='条件' @change='changeSubject')
+      v-col(cols='2')
+        v-select(v-model='levelType.value' :items='levelType.option' dense label='层数' @change='getData')
+      v-col(cols="5")
+        v-slider(hint="距离过滤器" label="距离过滤器" max=1 min=0 step=0.01 thumb-label="always" v-model="linkFilter" @change='liteDraw')
+      v-col(cols="7")
+        v-slider(hint="展示年份" label="展示年份" max=2021 min=2007 step=1 thumb-label="always" v-model="selectYear" @change='liteDraw')
+      v-col(cols="2")
+        v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='liteDraw')
+      v-col(cols="2")
+        v-switch(v-model="camera.status" :label="`Camera 自动环绕: ${showText.toString()}`"  @change='AutoCamera')
+      v-col(cols="2")
+        span  字体大小
+        v-btn-toggle(dense)
+          v-btn(@click="style.fontSize++") + 1
+          v-btn(@click="style.fontSize--") - 1
+      v-col(cols="2")
+        span  字体top
+        v-btn-toggle(dense)
+          v-btn(@click="style.fontTop--") + 1
+          v-btn(@click="style.fontTop++") - 1
+      v-col(cols="2")
+        span  字体left
+        v-btn-toggle(dense)
+          v-btn(@click="style.fontLeft--") + 1
+          v-btn(@click="style.fontLeft++") - 1
+    v-row
+      v-col(col=12)
+        span 一级学科标识
+        v-chip(v-for="(value,key) in colorMap" :color="value") {{key}}
+    v-row
+      v-col(col='12')
+        v-card.mx-auto(outlined :loading='loading' height='120vh')
+          v-card-title
+            | MAG {{selectYear}} linksin 测试 3D 引力图
+          v-container#3dgraph(fluid fill-height)
+    v-row
+      v-col
+        comment(storagekey='Mag_plant_graph_Chart_1')
 
-  v-dialog(v-model="dialog.stats" )
-    v-card
-      v-card-title 学科以及二级学科选择器
-        v-spacer
-        div.v-btn--float
-          v-btn(rounded color="secondary" @click="cleanSelect" large) 清空
-          v-btn(rounded color="primary" @click="changeSubject" large) 提交
+    v-dialog(v-model="dialog.stats" )
+      v-card
+        v-card-title 学科以及二级学科选择器
+          v-spacer
+          div.v-btn--float
+            v-btn(rounded color="secondary" @click="cleanSelect" large) 清空
+            v-btn(rounded color="primary" @click="changeSubject" large) 提交
 
-      v-container(fluid)
-        v-row
-          v-col(cols='4')
-            v-list(dense)
-              v-subheader 一级学科
-              v-list-item-group(v-model="topSelect" multiple)
-                v-list-item(v-for="(item) in topSubject" @click="activeSubLevel(item)")
-                  template( v-slot:default="{ active }")
-                    v-list-item-action
-                      v-checkbox(:input-value="active")
-                    v-list-item-content
-                      v-list-item-title {{item}}
+        v-container(fluid)
+          v-row
+            v-col(cols='4')
+              v-list(dense)
+                v-subheader 一级学科
+                v-list-item-group(v-model="topSelect" multiple)
+                  v-list-item(v-for="(item) in topSubject" @click="activeSubLevel(item)")
+                    template( v-slot:default="{ active }")
+                      v-list-item-action
+                        v-checkbox(:input-value="active")
+                      v-list-item-content
+                        v-list-item-title {{item}}
 
-          v-col(cols='4')
-            v-list(dense)
-              v-subheader 二级学科 {{subLevel.currentName}}
+            v-col(cols='4')
+              v-list(dense)
+                v-subheader 二级学科 {{subLevel.currentName}}
 
-              v-list-item-group(v-if="subLevel.currentName != null" v-model="subLevel.selectAllStats[subLevel.currentName]")
-                v-list-item(@click="selectAllChange")
-                  template(v-slot:default="{ active }")
-                    v-list-item-action
-                      v-checkbox(:input-value="active")
-                    v-list-item-content
-                      v-list-item-title 全选
+                v-list-item-group(v-if="subLevel.currentName != null" v-model="subLevel.selectAllStats[subLevel.currentName]")
+                  v-list-item(@click="selectAllChange")
+                    template(v-slot:default="{ active }")
+                      v-list-item-action
+                        v-checkbox(:input-value="active")
+                      v-list-item-content
+                        v-list-item-title 全选
 
-              v-list-item-group(v-model="subLevel.select[subLevel.currentName]" multiple)
-                v-list-item(v-for="(item) in subLevel.subject[subLevel.currentName]")
-                  template( v-slot:default="{ active }")
-                    v-list-item-action
-                      v-checkbox(:input-value="active")
-                    v-list-item-content
-                      v-list-item-title {{item}}
+                v-list-item-group(v-model="subLevel.select[subLevel.currentName]" multiple)
+                  v-list-item(v-for="(item) in subLevel.subject[subLevel.currentName]")
+                    template( v-slot:default="{ active }")
+                      v-list-item-action
+                        v-checkbox(:input-value="active")
+                      v-list-item-content
+                        v-list-item-title {{item}}
 </template>
 
 <script>
