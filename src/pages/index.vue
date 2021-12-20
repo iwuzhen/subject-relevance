@@ -376,6 +376,12 @@ export default {
               text: '学科单篇文章的的历年长度',
               to: '/wikipedia/SubjectArticleCount',
               update: '2021-06-02T09:43:03.429Z'
+            },
+            {
+              title: 'People in wiki',
+              text: '人和人，学科的相关度',
+              to: '/wikipediaBuild/disciplinePeople',
+              update: '2021-12-25T09:43:03.429Z'
             }
           ]
         }

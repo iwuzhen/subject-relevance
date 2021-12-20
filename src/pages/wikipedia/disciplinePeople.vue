@@ -1,82 +1,22 @@
-<template>
-  <v-container fluid>
-    <v-row>
-      <v-col cols="2">
-        <v-select
-          v-model="peopleSubjectSelect"
-          :items="defaultPeopleSubjectOpt"
-          label="当前人"
-          @change="getData"
-        />
-      </v-col>
-      <v-col cols="5">
-        <v-select
-          v-model="targetSubjectSelect"
-          :items="subjectOpt"
-          chips
-          multiple
-          dense
-          clearable
-          deletable-chips
-          label="目标学科"
-          @change="targetSubjectChange"
-        />
-      </v-col>
-      <v-col cols="5">
-        <v-select
-          v-model="targetPeopleSubjectSelect"
-          :items="peopleSubjectOpt"
-          chips
-          multiple
-          dense
-          deletable-chips
-          clearable
-          label="目标人"
-          @change="targetPeopleSubjectChange"
-        />
-      </v-col>
-      <v-col cols="2">
-        <v-select
-          v-model="methodSelect"
-          :items="methodOpt"
-          dense
-          label="条件"
-          @change="getData"
-        />
-      </v-col>
-      <v-col cols="2">
-        <v-select
-          v-model="levelSelect"
-          :items="levelOpt"
-          dense
-          label="level"
-          @change="getData"
-        />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col col="12">
-        <v-card
-          id="subjectChart1"
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="45vh"
-        />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col col="12">
-        <v-card
-          id="subjectChart2"
-          class="mx-auto"
-          outlined
-          :loading="loading"
-          height="45vh"
-        />
-      </v-col>
-    </v-row>
-  </v-container>
+<template lang="pug">
+v-container(fluid='')
+  v-row
+    v-col(cols='2')
+      v-select(v-model='peopleSubjectSelect' :items='defaultPeopleSubjectOpt' label='当前人' @change='getData')
+    v-col(cols='5')
+      v-select(v-model='targetSubjectSelect' :items='subjectOpt' chips='' multiple='' dense='' clearable='' deletable-chips='' label='目标学科' @change='targetSubjectChange')
+    v-col(cols='5')
+      v-select(v-model='targetPeopleSubjectSelect' :items='peopleSubjectOpt' chips='' multiple='' dense='' deletable-chips='' clearable='' label='目标人' @change='targetPeopleSubjectChange')
+    v-col(cols='2')
+      v-select(v-model='methodSelect' :items='methodOpt' dense='' label='条件' @change='getData')
+    v-col(cols='2')
+      v-select(v-model='levelSelect' :items='levelOpt' dense='' label='level' @change='getData')
+  v-row
+    v-col(col='12')
+      v-card#subjectChart1.mx-auto(outlined='' :loading='loading' height='45vh')
+  v-row
+    v-col(col='12')
+      v-card#subjectChart2.mx-auto(outlined='' :loading='loading' height='45vh')
 </template>
 
 <script>
@@ -95,7 +35,7 @@ export default {
   extends: Base,
   data() {
     return {
-      pageName: '"wiki 人的相关度',
+      pageName: 'wiki 人的相关度',
       peopleSubjectSelect: '',
       targetSubjectSelect: [],
       targetPeopleSubjectSelect: [],

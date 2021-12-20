@@ -308,6 +308,10 @@ const routes = [{
   name: 'disciplinePeople',
   component: () => import('@/pages/wikipedia/disciplinePeople')
 }, {
+  path: '/wikipediaBuild/disciplinePeople',
+  name: 'disciplinePeople',
+  component: () => import('@/pages/wikipediaBuild/disciplinePeople')
+}, {
   path: '/wikipedia/PeopleZipfByNodes',
   name: 'PeopleZipfByNodes',
   component: () => import('@/pages/wikipedia/PeopleZipfByNodes')
