@@ -68,6 +68,9 @@ export default {
   },
   computed: {
   },
+  mounted() {
+    this.getData()
+  },
   methods: {
     async getSubjectDegree() {
       if (!this.option.peopleSubject.select || this.option.targetSubject.select.length === 0) {
