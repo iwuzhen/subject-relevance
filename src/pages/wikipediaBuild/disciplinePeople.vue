@@ -46,12 +46,14 @@ export default {
             'Chemistry', 'Sociology', 'Linguistics', 'Computer science']
         },
         targetSubject: {
-          select: ['Chemistry'],
+          select: ['Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+            'Chemistry', 'Sociology', 'Linguistics', 'Computer science'],
           opt: ['Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
             'Chemistry', 'Sociology', 'Linguistics', 'Computer science']
         },
         targetPeopleSubject: {
-          select: ['Chemistry'],
+          select: ['Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+            'Chemistry', 'Sociology', 'Linguistics', 'Computer science'],
           opt: ['Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
             'Chemistry', 'Sociology', 'Linguistics', 'Computer science']
         },
@@ -121,7 +123,7 @@ export default {
     },
     async getData() {
       this.getSubjectDegree()
-      // this.getPeopleDegree()
+      this.getPeopleDegree()
     },
 
     setOptions(data) {
