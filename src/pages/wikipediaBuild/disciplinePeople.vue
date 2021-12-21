@@ -52,10 +52,12 @@ export default {
           opt: peopleOpt
         },
         targetSubject: {
-          select: ['Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
-            'Chemistry', 'Sociology', 'Linguistics', 'Computer science'],
-          opt: ['Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
-            'Chemistry', 'Sociology', 'Linguistics', 'Computer science']
+          select: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+            'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+            'Materials science', 'Engineering disciplines', 'Environmental science', 'Medicine'],
+          opt: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+            'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+            'Materials science', 'Engineering disciplines', 'Environmental science', 'Medicine']
         },
         targetPeopleSubject: {
           select: ['Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
