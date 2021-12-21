@@ -25,11 +25,18 @@ import { requestWrap } from '@/api/index'
 
 import comment from '@/components/comment'
 import {
+  peopleCategorys,
   extendEchartsOpts,
   extendLineSeries
 } from '@/api/data'
 import Base from '@/utils/base'
 
+const peopleOpt = peopleCategorys.map(item => {
+  return {
+    value: item[0],
+    text: item[1]
+  }
+})
 export default {
   name: 'WikiPeople',
   components: {
@@ -42,8 +49,7 @@ export default {
       option: {
         peopleSubject: {
           select: 'Biology',
-          opt: ['Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
-            'Chemistry', 'Sociology', 'Linguistics', 'Computer science']
+          opt: peopleOpt
         },
         targetSubject: {
           select: ['Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
@@ -54,8 +60,7 @@ export default {
         targetPeopleSubject: {
           select: ['Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
             'Chemistry', 'Sociology', 'Linguistics', 'Computer science'],
-          opt: ['Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
-            'Chemistry', 'Sociology', 'Linguistics', 'Computer science']
+          opt: peopleOpt
         },
         method: {
           select: 'linksin',
@@ -83,10 +88,10 @@ export default {
         strA: this.option.peopleSubject.select,
         strB: this.option.targetSubject.select.filter(item => item !== this.option.peopleSubject.select).join(','),
         method: this.option.method.select,
-        'btype': 'peopleAndPeople'
+        'btype': 'peopleAndCat'
       }
       try {
-        const retData = await requestWrap('/wiki/getDistanceByPeoples_newDB', 'POST', opt)
+        const retData = await requestWrap('/wiki/getDistanceByPeopleAndCats_newDB', 'POST', opt)
         console.log(retData)
         const _opt = this.setOptions(retData.data)
         this.myChartObjs[0].setOption(_opt, true)
@@ -108,10 +113,10 @@ export default {
         strA: this.option.peopleSubject.select,
         strB: this.option.targetPeopleSubject.select.filter(item => item !== this.option.peopleSubject.select).join(','),
         method: this.option.method.select,
-        'btype': 'peopleAndCat'
+        'btype': 'peopleAndPeople'
       }
       try {
-        const retData = await requestWrap('/wiki/getDistanceByPeopleAndCats_newDB', 'POST', opt)
+        const retData = await requestWrap('/wiki/getDistanceByPeoples_newDB', 'POST', opt)
         console.log(retData)
         const _opt = this.setOptions(retData.data)
         this.myChartObjs[1].setOption(_opt, true)
