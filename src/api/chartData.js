@@ -3231,13 +3231,19 @@ ChartMap['wikipedia-build/entropy'] = {
       default:
         break
     }
+    networkData['wikipedia'] = {
+      all: [0.747, 0.751, 0.75, 0.751, 0.751, 0.751, 0.754, 0.751, 0.76, 0.762, 0.764, 0.766, 0.767, 0.766, 0.767, 0.767, 0.769, 0.774, 0.782, 0.783, 0.784, 0.785, 0.793, 0.793, 0.794, 0.794, 0.795, 0.795, 0.796, 0.797, 0.797, 0.796, 0.798, 0.798, 0.798, 0.795, 0.799, 0.799, 0.799, 0.799, 0.8, 0.8, 0.801, 0.801, 0.801, 0.801, 0.802, 0.802, 0.803, 0.803, 0.804, 0.804, 0.804, 0.805, 0.805, 0.806, 0.806, 0.806, 0.807, 0.807, 0.808, 0.778, 0.778, 0.778, 0.778, 0.778, 0.778],
+      in: [0.562, 0.574, 0.566, 0.567, 0.567, 0.568, 0.572, 0.567, 0.585, 0.589, 0.592, 0.595, 0.597, 0.595, 0.595, 0.595, 0.598, 0.61, 0.626, 0.628, 0.63, 0.632, 0.651, 0.652, 0.652, 0.653, 0.654, 0.655, 0.657, 0.658, 0.659, 0.667, 0.661, 0.661, 0.662, 0.679, 0.663, 0.664, 0.664, 0.664, 0.665, 0.666, 0.667, 0.667, 0.668, 0.669, 0.67, 0.671, 0.672, 0.673, 0.674, 0.675, 0.676, 0.677, 0.678, 0.679, 0.679, 0.68, 0.681, 0.682, 0.683, 0.701, 0.702, 0.702, 0.703, 0.704, 0.704],
+      out: [0.89, 0.888, 0.892, 0.893, 0.894, 0.894, 0.894, 0.893, 0.897, 0.897, 0.898, 0.899, 0.899, 0.9, 0.901, 0.901, 0.901, 0.902, 0.902, 0.902, 0.902, 0.902, 0.9, 0.901, 0.901, 0.901, 0.901, 0.901, 0.901, 0.901, 0.901, 0.9, 0.901, 0.9, 0.9, 0.898, 0.9, 0.9, 0.901, 0.901, 0.901, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.899, 0.899, 0.899, 0.899, 0.899, 0.898, 0.898, 0.898, 0.898, 0.898, 0.886, 0.886, 0.886, 0.886, 0.886, 0.886]
+    }
+    console.log(networkData)
     const xData = []
     for (const year of _.range(2004, 2022, 1)) {
       for (const q of [1, 2, 3, 4]) {
-        if (year === 2021 && q > 1) {
+        if (year === 2021 && q > 3) {
           continue
         }
-        if (year === 2004 && q < 2) {
+        if (year === 2004 && q <= 3) {
           continue
         }
         xData.push(`${year}Q${q}`)
@@ -3278,13 +3284,13 @@ ChartMap['wikipedia-build/entropy'] = {
   Select: [
     {
       name: 'subjects',
-      default: ['xueshu', 'Biology', 'Chemistry', 'Computer science', 'Engineering disciplines', 'Environmental science', 'Geology',
+      default: ['wikipedia', 'xueshu', 'Biology', 'Chemistry', 'Computer science', 'Engineering disciplines', 'Environmental science', 'Geology',
         'Materials science', 'Mathematics', 'Philosophy', 'Physics', 'Political science', 'Psychology', 'Sociology'],
       label: '学科',
       multiple: true,
       show: true,
       cols: 8,
-      items: ['xueshu', 'Biology', 'Chemistry', 'Computer science', 'Engineering disciplines', 'Environmental science', 'Geology',
+      items: ['wikipedia', 'xueshu', 'Biology', 'Chemistry', 'Computer science', 'Engineering disciplines', 'Environmental science', 'Geology',
         'Materials science', 'Mathematics', 'Philosophy', 'Physics', 'Political science', 'Psychology', 'Sociology']
     },
     {
