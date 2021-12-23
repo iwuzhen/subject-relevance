@@ -12,7 +12,16 @@ v-container(fluid)
     v-col(cols='3')
       v-select(v-model='option.month.select', :items='option.month.opt', label='month', @change='switchYearMonth').
     v-col(cols='2')
-      v-select(v-model='option.islog.select', :items='option.islog.opt', label='幂律分布指定年', @change='getData').
+      v-select(v-model='option.islog.select', :items='option.islog.opt',disabled, label='幂律分布指定年', @change='getData').
+  v-row
+    v-col(cols='11')
+      v-range-slider.align-center(v-model='option.nodeRange' :max='40000' :min='1' dense hide-details hint='求斜率范围' @change='getData')
+        template(v-slot:prepend)
+          p(style='width: 100px') 求斜率范围
+          v-text-field.mt-0.pt-0(:value='option.nodeRange[0]' hide-details single-line type='number' style='width: 60px' @change='$set(option.nodeRange, 0, $event)')
+        template(v-slot:append)
+          v-text-field.mt-0.pt-0(:value='option.nodeRange[1]' hide-details single-line type='number' style='width: 60px' @change='$set(option.nodeRange, 1, $event)')
+
   v-row
     v-col(col='12')
       v-card
@@ -73,6 +82,7 @@ export default {
       pageName: '幂律及其随时间变化趋势',
       girdHeaders: [],
       option: {
+        nodeRange: [100, 10000],
         year: {
           select: 2020,
           opt: _.range(2004, 2022)
@@ -203,6 +213,27 @@ export default {
       opt_.month = month
       return requestWrap('/wiki/getCoreZipfByNodes_newDB', 'POST', opt_)
     },
+    setSlope(data) {
+      const retData = { name: '斜率' }
+      const retHeader = [
+        {
+          text: '学科',
+          align: 'start',
+          value: 'name'
+        }
+      ]
+      for (const key in data) {
+        retData[key] = isNaN(data[key]) ? data[key] : data[key].toFixed(3)
+        retHeader.push({
+          text: key,
+          value: key
+        })
+      }
+      // Object.assign(retData, data)
+      // console.log('retData', retData)
+      this.gridData = [retData]
+      this.girdHeaders = retHeader
+    },
     getData: _.debounce(async function() {
       if (this.option.subject.select.length < 1) {
         return false
@@ -215,11 +246,15 @@ export default {
         year: this.option.year.select,
         month: this.option.month.select,
         level: this.option.level.select,
-        islog: this.option.islog.select
+        islog: this.option.islog.select,
+        x_from: this.option.nodeRange[0],
+        x_to: this.option.nodeRange[1],
+        y_to: 0.1
       }
       try {
         const res = await requestWrap('/wiki/getDfb_newDB', 'POST', opt)
         if (res.data) {
+          this.setSlope(res.xl)
           this.chartData = res.data
           this.chartOpt = this.setOptions_chart1(res.data)
           this.myChartObjs[0].setOption(this.chartOpt, true)
