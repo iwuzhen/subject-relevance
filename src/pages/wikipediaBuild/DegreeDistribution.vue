@@ -21,7 +21,8 @@ v-container(fluid)
           v-text-field.mt-0.pt-0(:value='option.nodeRange[0]' hide-details single-line type='number' style='width: 60px' @change='$set(option.nodeRange, 0, $event)')
         template(v-slot:append)
           v-text-field.mt-0.pt-0(:value='option.nodeRange[1]' hide-details single-line type='number' style='width: 60px' @change='$set(option.nodeRange, 1, $event)')
-
+    v-col(cols='11')
+      v-slider.align-center(v-model='option.y_to' :max='1' :min='0' dense hide-details :step='0.01' hint='度的数量大于这个值，过滤掉比这个值小的数据' thumb-label='always' thumb-size='32' label='度阈值' ticks @change='getData')
   v-row
     v-col(col='12')
       v-card
@@ -72,7 +73,7 @@ import _ from 'lodash'
 // tooyip 位置的x位置
 var tipLegend = 0
 export default {
-  name: 'MAV2',
+  name: 'Wikipedia',
   components: {
     comment
   },
@@ -82,6 +83,7 @@ export default {
       pageName: '幂律及其随时间变化趋势',
       girdHeaders: [],
       option: {
+        y_to: 0.1,
         nodeRange: [100, 10000],
         year: {
           select: 2020,
@@ -249,7 +251,7 @@ export default {
         islog: this.option.islog.select,
         x_from: this.option.nodeRange[0],
         x_to: this.option.nodeRange[1],
-        y_to: 0.1
+        y_to: this.option.y_to
       }
       try {
         const res = await requestWrap('/wiki/getDfb_newDB', 'POST', opt)
@@ -360,7 +362,7 @@ export default {
         yAxis: {
           type: 'value',
           // max: ymax,
-          name: this.option.islog.select === 1 ? 'log (citation)' : 'citation'
+          name: this.option.islog.select === 1 ? 'log (count)' : 'count'
         },
         series: seriesList
       })
