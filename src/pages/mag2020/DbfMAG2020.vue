@@ -6,13 +6,11 @@ v-container(fluid)
     v-col(cols='2')
       v-select(v-model='option.type.select', :items='option.type.opt', label='世界类型', @click='getData').
     v-col(cols='2')
-      v-select(v-model='option.level.select', :items='option.level.opt', label='层次', @change='getData').
-    v-col(cols='2')
       v-select(v-model='option.year.select', :items='option.year.opt', label='幂律分布指定年', @change='switchYearMonth').
-    v-col(cols='3')
-      v-select(v-model='option.month.select', :items='option.month.opt', label='month', @change='switchYearMonth').
+    v-col(cols='4')
+      v-select(v-model='option.isNoRef.select', :items='option.isNoRef.opt', label='过滤器', @change='getData').
     v-col(cols='2')
-      v-select(v-model='option.islog.select', :items='option.islog.opt',disabled, label='是否取 log', @change='getData').
+      v-select(v-model='option.islog.select', :items='option.islog.opt',disabled, label='幂律分布取 log', @change='getData').
   v-row
     v-col(cols='11')
       v-range-slider.align-center(v-model='option.nodeRange' :max='40000' :min='1' dense hide-details hint='求斜率范围' @change='getData')
@@ -35,40 +33,25 @@ v-container(fluid)
 
   v-row
     v-col
-      comment(storagekey='CoreZipfByNodes_new_graph_2').
+      comment(storagekey='DbfMAG2020_graph_1').
 
 </template>
 
 <script>
 import { requestWrap } from '@/api/index'
-import { extendEchartsOpts, extendLineSeries } from '@/api/data'
+import { extendEchartsOpts, extendLineSeries, MAGCoreCategorys2020_V1 } from '@/api/data'
 
 import ecStat from 'echarts-stat'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 import _ from 'lodash'
-// import axios from 'axios'
 
-// const mergeQuotaData = (dataArray) => {
-//   const x = []
-//   const y = []
-//   // eslint-disable-next-line no-unused-vars
-//   for (const _ in dataArray[0].legend) {
-//     y.push([])
-//   }
-//   for (const j in dataArray[0].x) {
-//     for (const i of [1, 2, 3, 0]) {
-//       x.push(dataArray[i].x[j])
-//       for (const f in dataArray[0].legend) {
-//         y[f].push(dataArray[i].y[f][j])
-//       }
-//     }
-//   }
-//   const ret = Object.assign({}, dataArray[0])
-//   ret.x = x
-//   ret.y = y
-//   return ret
-// }
+const current_all_category = MAGCoreCategorys2020_V1.concat()
+
+current_all_category.push({
+  text: '所有数据',
+  value: 'all'
+})
 
 // tooyip 位置的x位置
 var tipLegend = 0
@@ -80,26 +63,18 @@ export default {
   extends: Base,
   data() {
     return {
-      pageName: '幂律及其随时间变化趋势',
+      pageName: 'mag2020度分布',
       girdHeaders: [],
       option: {
         y_to: 0.1,
         nodeRange: [100, 10000],
         year: {
           select: 2020,
-          opt: _.range(2004, 2022)
-        },
-        level: {
-          select: 2,
-          opt: [2, 3]
-        },
-        month: {
-          select: 3,
-          opt: [3, 6, 9, 12]
+          opt: _.range(1955, 2022)
         },
         subject: {
-          select: ['Biology', 'Physics', 'Chemistry', 'Political science', 'Computer science', 'Psychology', 'Sociology', 'Engineering disciplines', 'Environmental science', 'Geology', 'Materials science', 'Mathematics', 'Philosophy'],
-          opt: ['Biology', 'Physics', 'Chemistry', 'Political science', 'Computer science', 'Psychology', 'Economics', 'Sociology', 'Engineering disciplines', 'Environmental science', 'Geography', 'Geology', 'Linguistics', 'Materials science', 'Mathematics', 'Medicine', 'Philosophy', 'all'].sort()
+          select: ['Biology', 'Physics', 'Chemistry', 'Psychology', 'Sociology', 'Mathematics'],
+          opt: current_all_category
 
         },
         type: {
@@ -127,6 +102,15 @@ export default {
           }, {
             text: '不取对数',
             value: 0
+          }] },
+        isNoRef: {
+          select: 0,
+          opt: [{
+            text: '保留引用为 0 的文章',
+            value: 0
+          }, {
+            text: '去掉引用为 0 的文章',
+            value: 1
           }] }
       },
       loading: false,
@@ -213,7 +197,7 @@ export default {
     monthReq(opt, month) {
       const opt_ = Object.assign({}, opt)
       opt_.month = month
-      return requestWrap('/wiki/getCoreZipfByNodes_newDB', 'POST', opt_)
+      return requestWrap('/wiki/getDfb_mag2020', 'POST', opt_)
     },
     setSlope(data) {
       const retData = { name: '斜率' }
@@ -246,9 +230,8 @@ export default {
         cats: this.option.subject.select.join(','),
         type: this.option.type.select,
         year: this.option.year.select,
-        month: this.option.month.select,
-        level: this.option.level.select,
         islog: this.option.islog.select,
+        isNoRef: this.option.isNoRef.select,
         x_from: this.option.nodeRange[0],
         x_to: this.option.nodeRange[1],
         y_to: this.option.y_to

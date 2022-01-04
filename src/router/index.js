@@ -371,6 +371,10 @@ const routes = [{
   path: '/mag2020/ZipfAndInnerzipfByYearV3',
   name: 'ZipfAndInnerzipfByYearV3',
   component: () => import('@/pages/mag2020/ZipfAndInnerzipfByYearV3')
+}, {
+  path: '/mag2020/DbfMAG2020',
+  name: 'DbfMAG2020',
+  component: () => import('@/pages/mag2020/DbfMAG2020')
 }
 ]
 // 自动化映入模板
