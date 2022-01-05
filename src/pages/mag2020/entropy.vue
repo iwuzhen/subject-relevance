@@ -257,7 +257,8 @@ export default {
         },
         yAxis: {
           name: 'e',
-          type: 'value'
+          type: 'value',
+          min: 9
         },
         series: series
       })
@@ -298,7 +299,8 @@ export default {
         },
         yAxis: {
           name: 'count',
-          type: 'value'
+          type: 'value',
+          min: 9
         },
         series: series
       })
@@ -338,7 +340,8 @@ export default {
         },
         yAxis: {
           name: 'count',
-          type: 'value'
+          type: 'value',
+          min: 5
         },
         series: series
       })
