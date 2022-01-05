@@ -354,7 +354,7 @@ export default {
       for (const ln in links_name) {
         series.push(
           extendLineSeries({
-            name: `${ln}`,
+            name: `${links_name[ln]}`,
             type: 'line',
             smooth: false,
             data: this.magE[ln]
