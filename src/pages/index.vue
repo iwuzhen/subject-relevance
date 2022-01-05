@@ -309,7 +309,7 @@ export default {
               title: 'wiki结构熵',
               text: 'wiki结构熵',
               to: '/wikipedia-build/entropy',
-              update: '2021-12-02T16:43:03.429Z'
+              update: '2022-12-02T16:43:03.429Z'
             },
             {
               title: 'wiki幂律度分布',
