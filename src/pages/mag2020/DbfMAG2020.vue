@@ -4,7 +4,7 @@ v-container(fluid)
     v-col(cols='8')
       v-select(v-model='option.subject.select', :items='option.subject.opt', small-chips, multiple, deletable-chips, clearable, label='目标学科', @change='getData')
     v-col(cols='2')
-      v-select(v-model='option.type.select', :items='option.type.opt', label='世界类型', @click='getData').
+      v-select(v-model='option.type.select', :items='option.type.opt', label='世界类型', @change='getData').
     v-col(cols='2')
       v-select(v-model='option.year.select', :items='option.year.opt', label='幂律分布指定年', @change='switchYearMonth').
     v-col(cols='4')
@@ -194,11 +194,6 @@ export default {
       this.gridData = [retData]
       this.girdHeaders = retHeader
     },
-    monthReq(opt, month) {
-      const opt_ = Object.assign({}, opt)
-      opt_.month = month
-      return requestWrap('/wiki/getDfb_mag2020', 'POST', opt_)
-    },
     setSlope(data) {
       const retData = { name: '斜率' }
       const retHeader = [
@@ -237,7 +232,7 @@ export default {
         y_to: this.option.y_to
       }
       try {
-        const res = await requestWrap('/wiki/getDfb_newDB', 'POST', opt)
+        const res = await requestWrap('/mag/getDfb_mag2020', 'POST', opt)
         if (res.data) {
           this.setSlope(res.xl)
           this.chartData = res.data
@@ -251,32 +246,7 @@ export default {
       } finally {
         this.loading = false
       }
-
-      // chart 2,3
-      // opt = {
-      //   cats: this.option.subject.select.join(','),
-      //   type: this.option.type.select,
-      //   year: '',
-      //   from_node: this.option.nodeRange[0],
-      //   to_node: this.option.nodeRange[1],
-      //   level: this.option.level.select
-      // }
-      // // console.log(mergeQuotaData, axios)
-      // axios.all([this.monthReq(opt, 3), this.monthReq(opt, 6), this.monthReq(opt, 9), this.monthReq(opt, 12)]).then(ret => {
-      //   let data = mergeQuotaData(ret.map(obj => obj.data))
-      //   this.chartOpt = this.setOptions(data, 'power law')
-      //   this.myChartObjs[1].setOption(this.chartOpt, true)
-
-      //   data = mergeQuotaData(ret.map(obj => obj.data_node))
-      //   console.log('allp:', data)
-      //   this.chartOpt = this.setOptions(data, 'count')
-      //   this.myChartObjs[2].setOption(this.chartOpt, true)
-      // }).catch(() => {
-      //   this.$emit('emitMesage', '请求失败')
-      // }).finally(() => {
-      //   this.loading = false
-      // })
-    }, 2000),
+    }, 1000),
     setOptions_chart1(data) {
       // let ymax = Math.max(...[].concat(...data.y));
       // ymax = Math.ceil(ymax * 10) / 10;

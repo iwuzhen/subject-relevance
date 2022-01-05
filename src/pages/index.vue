@@ -210,8 +210,13 @@ export default {
             text: 'MAG N年之后的文章所引用的文章的逐年趋势',
             to: '/mag2020/MAG_PreCountByYear',
             update: '2021-06-05T09:43:03.429Z'
-          }
-          ],
+          }],
+          '结构熵': [{
+            title: 'MAG 结构熵',
+            text: '结构熵 度分布',
+            to: '/mag2020/entropy',
+            update: '2022-01-14T09:43:03.429Z'
+          }],
           '学科相关度等': [
             {
               title: '2020 学科相关度',

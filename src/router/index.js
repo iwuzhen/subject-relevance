@@ -150,6 +150,10 @@ const routes = [{
   name: 'GoogleDistance',
   component: () => import('@/pages/mag2020/GoogleDistance')
 }, {
+  path: '/mag2020/entropy',
+  name: 'MAGEntropy',
+  component: () => import('@/pages/mag2020/entropy')
+}, {
   path: '/explorer/MagFunnel',
   name: 'MagFunnel',
   component: () => import('@/pages/explorer/MagFunnel')
