@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-04-23 15:47:50
  * @LastEditors: ider
- * @LastEditTime: 2021-09-09 23:05:07
+ * @LastEditTime: 2022-01-05 16:21:08
  * @Description:
  */
 
@@ -220,7 +220,7 @@ export const peopleCategorys = [
   ['History', 'Historian'],
   ['Industrial engineering', 'Industrial Engineer'],
   ['Linguistics', 'Linguist'],
-  ['logic', 'logician'],
+  ['Logic', 'Logician'],
   ['Machine learning', 'Machine learning'],
   ['Mathematics', 'Mathematician'],
   ['Mechanical engineering', 'Mechanical Engineer'],
