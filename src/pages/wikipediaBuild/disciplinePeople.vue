@@ -8,7 +8,7 @@ v-container(fluid)
     v-col(cols='5')
       v-select(v-model='option.targetPeopleSubject.select' :items='option.targetPeopleSubject.opt' chips multiple dense deletable-chips clearable label='目标人' @change='getPeopleDegree')
     v-col(cols='2')
-      v-select(v-model='option.method.select' :items='option.method.opt' disabled dense label='条件' @change='getData')
+      v-select(v-model='option.method.select' :items='option.method.opt' dense label='条件' @change='getData')
   v-row
     v-col(col='12')
       v-card#subjectChart1.mx-auto(outlined :loading='loading' height='45vh')
@@ -88,7 +88,7 @@ export default {
         },
         method: {
           select: 'linksin',
-          opt: ['linksin']
+          opt: ['linksin', 'linksout']
         }
       },
       loading2: false,
