@@ -315,7 +315,7 @@ export default {
               title: 'wiki幂律度分布',
               text: 'wiki 幂律度分布',
               to: '/wikipedia-build/DegreeDistribution',
-              update: '2021-12-06T16:43:03.429Z'
+              update: '2022-02-06T16:43:03.429Z'
             },
             {
               title: 'People in wiki',

@@ -13,6 +13,8 @@ v-container(fluid)
       v-select(v-model='option.month.select', :items='option.month.opt', label='month', @change='switchYearMonth').
     v-col(cols='2')
       v-select(v-model='option.islog.select', :items='option.islog.opt',disabled, label='是否取 log', @change='getData').
+    v-col(cols='4')
+      v-select(v-model='option.mode.select', :items='option.mode.opt', label='展示模式', @change='getData').
   v-row
     v-col(cols='11')
       v-range-slider.align-center(v-model='option.nodeRange' :max='40000' :min='1' dense hide-details hint='求斜率范围' @change='getData')
@@ -96,6 +98,10 @@ export default {
         month: {
           select: 3,
           opt: [3, 6, 9, 12]
+        },
+        mode: {
+          select: '一年的幂率度分布',
+          opt: ['一年的幂率度分布', '逐年的斜率分布']
         },
         subject: {
           select: ['Biology', 'Physics', 'Chemistry', 'Political science', 'Computer science', 'Psychology', 'Sociology', 'Engineering disciplines', 'Environmental science', 'Geology', 'Materials science', 'Mathematics', 'Philosophy'],
@@ -192,7 +198,6 @@ export default {
           value: 'name'
         }
       ]
-      console.log(lines)
       for (const i in lines) {
         const myRegression = ecStat.regression(
           'linear',
@@ -231,8 +236,6 @@ export default {
           value: key
         })
       }
-      // Object.assign(retData, data)
-      // console.log('retData', retData)
       this.gridData = [retData]
       this.girdHeaders = retHeader
     },
@@ -253,13 +256,21 @@ export default {
         x_to: this.option.nodeRange[1],
         y_to: this.option.y_to
       }
+      if (this.option.mode.select === '逐年的斜率分布') {
+        opt.year = 'all'
+      }
       try {
         const res = await requestWrap('/wiki/getDfb_newDB', 'POST', opt)
         if (res.data) {
-          this.setSlope(res.xl)
-          this.chartData = res.data
-          this.chartOpt = this.setOptions_chart1(res.data)
-          this.myChartObjs[0].setOption(this.chartOpt, true)
+          if (opt.year === 'all') {
+            this.chartOpt = this.setOptions(res.data)
+            this.myChartObjs[0].setOption(this.chartOpt, true)
+          } else {
+            this.setSlope(res.xl)
+            this.chartData = res.data
+            this.chartOpt = this.setOptions_chart1(res.data)
+            this.myChartObjs[0].setOption(this.chartOpt, true)
+          }
           // this.calSlope()
         }
       } catch (error) {
@@ -268,31 +279,6 @@ export default {
       } finally {
         this.loading = false
       }
-
-      // chart 2,3
-      // opt = {
-      //   cats: this.option.subject.select.join(','),
-      //   type: this.option.type.select,
-      //   year: '',
-      //   from_node: this.option.nodeRange[0],
-      //   to_node: this.option.nodeRange[1],
-      //   level: this.option.level.select
-      // }
-      // // console.log(mergeQuotaData, axios)
-      // axios.all([this.monthReq(opt, 3), this.monthReq(opt, 6), this.monthReq(opt, 9), this.monthReq(opt, 12)]).then(ret => {
-      //   let data = mergeQuotaData(ret.map(obj => obj.data))
-      //   this.chartOpt = this.setOptions(data, 'power law')
-      //   this.myChartObjs[1].setOption(this.chartOpt, true)
-
-      //   data = mergeQuotaData(ret.map(obj => obj.data_node))
-      //   console.log('allp:', data)
-      //   this.chartOpt = this.setOptions(data, 'count')
-      //   this.myChartObjs[2].setOption(this.chartOpt, true)
-      // }).catch(() => {
-      //   this.$emit('emitMesage', '请求失败')
-      // }).finally(() => {
-      //   this.loading = false
-      // })
     }, 2000),
     setOptions_chart1(data) {
       // let ymax = Math.max(...[].concat(...data.y));
@@ -369,7 +355,7 @@ export default {
       console.log(_opt)
       return _opt
     },
-    setOptions(data, yname) {
+    setOptions(data) {
       // 设置
       const seriesList = _.zip(data.legend, data.y).map(item => {
         return extendLineSeries({
@@ -386,12 +372,10 @@ export default {
 
       const _opt = extendEchartsOpts({
         title: {
-          text: data.title
+          text: '逐年的斜率分布'
         },
         legend: {
-          data: seriesList.map(item => {
-            return item.name
-          })
+          data: data.legend
         },
         xAxis: {
           type: 'category',
@@ -402,7 +386,7 @@ export default {
         yAxis: {
           type: 'value',
           // max: ymax,
-          name: yname
+          name: ''
         },
         series: seriesList
       })
