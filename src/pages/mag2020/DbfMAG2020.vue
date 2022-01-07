@@ -11,6 +11,8 @@ v-container(fluid)
       v-select(v-model='option.isNoRef.select', :items='option.isNoRef.opt', label='过滤器', @change='getData').
     v-col(cols='2')
       v-select(v-model='option.islog.select', :items='option.islog.opt',disabled, label='幂律分布取 log', @change='getData').
+    v-col(cols='4')
+      v-select(v-model='option.mode.select', :items='option.mode.opt', label='展示模式', @change='getData').
   v-row
     v-col(cols='11')
       v-range-slider.align-center(v-model='option.nodeRange' :max='40000' :min='1' dense hide-details hint='求斜率范围' @change='getData')
@@ -66,6 +68,10 @@ export default {
       pageName: 'mag2020度分布',
       girdHeaders: [],
       option: {
+        mode: {
+          select: '一年的幂率度分布',
+          opt: ['一年的幂率度分布', '逐年的斜率分布']
+        },
         y_to: 0.1,
         nodeRange: [100, 10000],
         year: {
@@ -231,14 +237,22 @@ export default {
         x_to: this.option.nodeRange[1],
         y_to: this.option.y_to
       }
+      if (this.option.mode.select === '逐年的斜率分布') {
+        opt.year = 'all'
+      }
       try {
         const res = await requestWrap('/mag/getDfb_mag2020', 'POST', opt)
         if (res.data) {
-          this.setSlope(res.xl)
-          this.chartData = res.data
-          this.chartOpt = this.setOptions_chart1(res.data)
-          this.myChartObjs[0].setOption(this.chartOpt, true)
+          if (opt.year === 'all') {
+            this.chartOpt = this.setOptions(res.data)
+            this.myChartObjs[0].setOption(this.chartOpt, true)
+          } else {
+            this.setSlope(res.xl)
+            this.chartData = res.data
+            this.chartOpt = this.setOptions_chart1(res.data)
+            this.myChartObjs[0].setOption(this.chartOpt, true)
           // this.calSlope()
+          }
         }
       } catch (error) {
         this.$emit('emitMesage', `请求失败:${error}`)
@@ -339,12 +353,10 @@ export default {
 
       const _opt = extendEchartsOpts({
         title: {
-          text: data.title
+          text: '逐年的斜率分布'
         },
         legend: {
-          data: seriesList.map(item => {
-            return item.name
-          })
+          data: data.legend
         },
         xAxis: {
           type: 'category',
@@ -355,7 +367,7 @@ export default {
         yAxis: {
           type: 'value',
           // max: ymax,
-          name: yname
+          name: ''
         },
         series: seriesList
       })
