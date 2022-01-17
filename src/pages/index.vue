@@ -322,6 +322,12 @@ export default {
               text: '人和人，学科的相关度',
               to: '/wikipediaBuild/disciplinePeople',
               update: '2021-12-25T09:43:03.429Z'
+            },
+            {
+              title: 'article length',
+              text: 'wikipedai 文章长度',
+              to: '/wikipedia-build/articleLength',
+              update: '2022-02-25T09:43:03.429Z'
             }
           ]
         },

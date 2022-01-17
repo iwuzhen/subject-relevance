@@ -3325,16 +3325,86 @@ ChartMap['wikipedia-build/entropy'] = {
   yAxisName: 'Count'
 }
 
+ChartMap['wikipedia-build/articleLength'] = {
+  ChName: 'wikipedia 文章长度',
+  componentName: 'PageDynamicSelectTemplate',
+  HandleResponseFunc: ([responseData, params], ChartObj) => {
+    console.log('responseData', responseData)
+    const _opt = extendEchartsOpts({
+      title: {
+        text: responseData.title
+      },
+      xAxis: {
+        name: ChartObj.xAxisName,
+        type: 'category',
+        boundaryGap: false,
+        data: responseData.x
+      },
+      yAxis: {
+        name: 'count',
+        type: params.islog === true ? 'log' : 'value',
+        axisLabel: {
+          formatter: value => formatNum(value)
+        },
+        min: function(value) {
+          return Math.floor(value.min * 10) / 10
+        }
+      },
+      series: extendLineSeries({
+        name: 'article word count',
+        type: 'line',
+        smooth: false,
+        data: responseData.y
+      })
+
+    })
+    return _opt
+  },
+  RequestFunc: async params => {
+    // console.log(wikipeida_direct_xueshu_lv2)
+    const data = await requestWrap(
+      'wiki/getArtSizeDfd',
+      'post',
+      params
+    )
+    return [data.data, params]
+  },
+  Select: [
+    {
+      name: 'size',
+      default: 50,
+      label: '间隔大小',
+      multiple: false,
+      show: true,
+      cols: 4,
+      items: [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000]
+    },
+    {
+      name: 'islog',
+      default: true,
+      label: '是否取log',
+      multiple: false,
+      show: true,
+      cols: 4,
+      items: [true, false]
+    }
+  ],
+  Slider: [],
+  RangeSlider: [],
+  xAxisName: 'Year',
+  yAxisName: 'Count'
+}
+
 // ChartMap['wikipedia-build/smallworld_20211103'] = {
 //   ChName: 'wiki 学科小世界',
 //   componentName: 'PageDynamicSelectTemplate',
-//   HandleResponseFunc: ([responseData, vName, xData], ChartObj) => {
+//   HandleResponseFunc: ([responseData, vName, xData], ) => {
 //     const _opt = extendEchartsOpts({
 //       title: {
 //         text: '小世界属性'
 //       },
 //       xAxis: {
-//         name: ChartObj.xAxisName,
+//         name: .xAxisName,
 //         type: 'category',
 //         boundaryGap: false,
 //         data: xData
