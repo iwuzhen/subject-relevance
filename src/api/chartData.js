@@ -3391,7 +3391,7 @@ ChartMap['wikipedia-build/articleLength'] = {
   ],
   Slider: [],
   RangeSlider: [],
-  xAxisName: 'Year',
+  xAxisName: 'Range',
   yAxisName: 'Count'
 }
 
