@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2021-11-12 15:33:28
+ * @LastEditTime: 2022-01-26 10:52:50
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -3336,13 +3336,15 @@ ChartMap['wikipedia-build/articleLength'] = {
       },
       xAxis: {
         name: ChartObj.xAxisName,
-        type: 'category',
-        boundaryGap: false,
-        data: responseData.x
+        type: 'value',
+        // type: params.islog === true ? 'log' : 'value',
+        boundaryGap: false
+        // data: responseData.x
       },
       yAxis: {
         name: 'count',
-        type: params.islog === true ? 'log' : 'value',
+        type: 'value',
+        // type: params.islog === true ? 'log' : 'value',
         axisLabel: {
           formatter: value => formatNum(value)
         },
@@ -3354,10 +3356,13 @@ ChartMap['wikipedia-build/articleLength'] = {
         name: 'article word count',
         type: 'line',
         smooth: false,
-        data: responseData.y
+        data: params.islog === true ? _.zip(_.range(responseData.x.length).map(item => Math.log10(item + 1)), responseData.y) : _.zip(_.range(responseData.x.length), responseData.y)
+        // data: responseData.y
       })
 
     })
+
+    console.log(_.zip(_.range(responseData.x.length).map(item => Math.log10(item)), responseData.y))
     return _opt
   },
   RequestFunc: async params => {
