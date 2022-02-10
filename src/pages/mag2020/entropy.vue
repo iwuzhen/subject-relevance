@@ -438,7 +438,7 @@ export default {
           data: _.range(1900, 2021)
         },
         yAxis: {
-          name: 'e',
+          name: 'density',
           type: 'value'
           // 'min': 0.8
         },
