@@ -415,7 +415,7 @@ export default {
             name: `${links_name[ln]}`,
             type: 'line',
             smooth: false,
-            data: this.sourceData[`d_${links_name[ln]}`]
+            data: this.sourceData_2[`d_${links_name[ln]}`]
           })
         )
       }
