@@ -17,7 +17,7 @@ v-container(fluid)
 
   v-row
     v-col
-      comment(storagekey='CoreZipfByNodes_new_graph_2').
+      comment(storagekey='wiki 结构熵_chart_1').
 
 </template>
 
