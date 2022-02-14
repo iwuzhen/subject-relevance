@@ -305,10 +305,16 @@ export default {
               to: '/wikipedia-build/CoreZipfByNodes_wiki',
               update: '2021-11-27T16:43:03.429Z'
             },
+            // {
+            //   title: 'wiki结构熵',
+            //   text: 'wiki结构熵',
+            //   to: '/wikipedia-build/entropy',
+            //   update: '2022-12-02T16:43:03.429Z'
+            // },
             {
-              title: 'wiki结构熵',
-              text: 'wiki结构熵',
-              to: '/wikipedia-build/entropy',
+              title: 'wiki结构熵,网络密度',
+              text: 'wiki结构熵，网络密度',
+              to: '/wikipedia-build/wikipediaEntropy',
               update: '2022-12-02T16:43:03.429Z'
             },
             {
@@ -320,7 +326,7 @@ export default {
             {
               title: 'People in wiki',
               text: '人和人，学科的相关度',
-              to: '/wikipediaBuild/disciplinePeople',
+              to: '/wikipedia-build/disciplinePeople',
               update: '2021-12-25T09:43:03.429Z'
             },
             {

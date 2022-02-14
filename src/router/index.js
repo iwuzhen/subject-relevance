@@ -379,6 +379,10 @@ const routes = [{
   path: '/mag2020/DbfMAG2020',
   name: 'DbfMAG2020',
   component: () => import('@/pages/mag2020/DbfMAG2020')
+}, {
+  path: '/wikipedia-build/wikipediaEntropy',
+  name: 'wikipediaEntropy',
+  component: () => import('@/pages/wikipediaBuild/wikipediaEntropy')
 }
 ]
 // 自动化映入模板

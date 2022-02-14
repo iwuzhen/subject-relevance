@@ -25,15 +25,22 @@ v-container(fluid)
 
 import wikipedia_struct_entropy_lv2_log2 from '@/assets/data/wikipedia_struct_entropy_lv2_log2.json'
 import wikipedia_struct_entropy_lv3_log2 from '@/assets/data/wikipedia_struct_entropy_lv3_log2.json'
-import wikipedia_struct_entropy_lv2_loge from '@/assets/data /wikipedia_struct_entropy_lv2_loge.json'
+import wikipedia_struct_entropy_lv2_loge from '@/assets/data/wikipedia_struct_entropy_lv2_loge.json'
 import wikipedia_struct_entropy_lv3_loge from '@/assets/data/wikipedia_struct_entropy_lv3_loge.json'
 
-import { requestWrap } from '@/api/index'
 import { extendEchartsOpts, extendLineSeries } from '@/api/data'
 
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 import _ from 'lodash'
+
+function formatNum(value) {
+  if (!value && value !== 0) return 0
+
+  const str = value.toString()
+  const reg = str.indexOf('.') > -1 ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(?:\d{3})+$)/g
+  return str.replace(reg, '$1,')
+}
 
 export default {
   name: 'WikipediaEntropy',
@@ -44,10 +51,9 @@ export default {
   data() {
     return {
       pageName: 'wikipeda entropy',
-      girdHeaders: [],
       option: {
         mode: {
-          select: '有向网络模型',
+          select: 0,
           opt: [
             { text: '精简学术圈-lv2', value: 0 },
             { text: '精简学术圈-lv3', value: 1 }
@@ -57,11 +63,10 @@ export default {
           select: ['wikipedia', 'xueshu', 'Biology', 'Chemistry', 'Computer science', 'Engineering disciplines', 'Environmental science', 'Geology',
             'Materials science', 'Mathematics', 'Philosophy', 'Physics', 'Political science', 'Psychology', 'Sociology'],
           opt: ['wikipedia', 'xueshu', 'Biology', 'Chemistry', 'Computer science', 'Engineering disciplines', 'Environmental science', 'Geology',
-            'Materials science', 'Mathematics', 'Philosophy', 'Physics', 'Political science', 'Psychology', 'Sociology'].sort()
-
+            'Materials science', 'Mathematics', 'Philosophy', 'Physics', 'Political science', 'Psychology', 'Sociology']
         },
         type: {
-          select: '2',
+          select: 2,
           opt: [
             { text: 'linksin', value: 0 },
             { text: 'linksout', value: 1 },
@@ -73,7 +78,7 @@ export default {
           opt: ['2', 'e'] }
       },
       loading: false,
-      myChartIds: ['subjectChart1']
+      myChartIds: ['subjectChart1', 'subjectChart2', 'subjectChart3', 'subjectChart4']
     }
   },
   computed: {
@@ -91,152 +96,232 @@ export default {
       }
       this.loading = true
       // chart 1
-      const opt = {
-        cats: this.option.subject.select.join(','),
-        type: this.option.type.select,
-        year: this.option.year.select,
-        month: this.option.month.select,
-        level: this.option.level.select,
-        islog: this.option.islog.select,
-        x_from: this.option.nodeRange[0],
-        x_to: this.option.nodeRange[1],
-        y_to: this.option.y_to
+      let networkData
+      switch (true) {
+        case (this.option.mode.select === 0 && this.option.logBase.select === '2'):
+          networkData = wikipedia_struct_entropy_lv2_log2
+          break
+        case (this.option.mode.select === 0 && this.option.logBase.select === 'e'):
+          networkData = wikipedia_struct_entropy_lv2_loge
+          break
+        case (this.option.mode.select === 1 && this.option.logBase.select === '2'):
+          networkData = wikipedia_struct_entropy_lv3_log2
+          break
+        case (this.option.mode.select === 1 && this.option.logBase.select === 'e'):
+          networkData = wikipedia_struct_entropy_lv3_loge
+          break
+        default:
+          break
       }
-      if (this.option.mode.select === '逐年的斜率分布') {
-        opt.year = 'all'
+      console.log('this.option.subject', this.option.subject.select)
+      networkData['wikipedia'] = {
+        all: [0.747, 0.751, 0.75, 0.751, 0.751, 0.751, 0.754, 0.751, 0.76, 0.762, 0.764, 0.766, 0.767, 0.766, 0.767, 0.767, 0.769, 0.774, 0.782, 0.783, 0.784, 0.785, 0.793, 0.793, 0.794, 0.794, 0.795, 0.795, 0.796, 0.797, 0.797, 0.796, 0.798, 0.798, 0.798, 0.795, 0.799, 0.799, 0.799, 0.799, 0.8, 0.8, 0.801, 0.801, 0.801, 0.801, 0.802, 0.802, 0.803, 0.803, 0.804, 0.804, 0.804, 0.805, 0.805, 0.806, 0.806, 0.806, 0.807, 0.807, 0.808, 0.778, 0.778, 0.778, 0.778, 0.778, 0.778],
+        in: [0.562, 0.574, 0.566, 0.567, 0.567, 0.568, 0.572, 0.567, 0.585, 0.589, 0.592, 0.595, 0.597, 0.595, 0.595, 0.595, 0.598, 0.61, 0.626, 0.628, 0.63, 0.632, 0.651, 0.652, 0.652, 0.653, 0.654, 0.655, 0.657, 0.658, 0.659, 0.667, 0.661, 0.661, 0.662, 0.679, 0.663, 0.664, 0.664, 0.664, 0.665, 0.666, 0.667, 0.667, 0.668, 0.669, 0.67, 0.671, 0.672, 0.673, 0.674, 0.675, 0.676, 0.677, 0.678, 0.679, 0.679, 0.68, 0.681, 0.682, 0.683, 0.701, 0.702, 0.702, 0.703, 0.704, 0.704],
+        out: [0.89, 0.888, 0.892, 0.893, 0.894, 0.894, 0.894, 0.893, 0.897, 0.897, 0.898, 0.899, 0.899, 0.9, 0.901, 0.901, 0.901, 0.902, 0.902, 0.902, 0.902, 0.902, 0.9, 0.901, 0.901, 0.901, 0.901, 0.901, 0.901, 0.901, 0.901, 0.9, 0.901, 0.9, 0.9, 0.898, 0.9, 0.9, 0.901, 0.901, 0.901, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.899, 0.899, 0.899, 0.899, 0.899, 0.898, 0.898, 0.898, 0.898, 0.898, 0.886, 0.886, 0.886, 0.886, 0.886, 0.886]
       }
-      try {
-        const res = await requestWrap('/wiki/getDfb_newDB', 'POST', opt)
-        if (res.data) {
-          if (opt.year === 'all') {
-            this.chartOpt = this.setOptions(res.data)
-            this.myChartObjs[0].setOption(this.chartOpt, true)
-          } else {
-            this.setSlope(res.xl)
-            this.chartData = res.data
-            this.chartOpt = this.setOptions_chart1(res.data)
-            this.myChartObjs[0].setOption(this.chartOpt, true)
+      console.log(networkData)
+      const xData = []
+      for (const year of _.range(2004, 2022, 1)) {
+        for (const q of [1, 2, 3, 4]) {
+          if (year === 2021 && q > 3) {
+            continue
           }
-          // this.calSlope()
+          if (year === 2004 && q <= 3) {
+            continue
+          }
+          xData.push(`${year}Q${q}`)
         }
-      } catch (error) {
-        this.$emit('emitMesage', `请求失败:${error}`)
-        throw error
-      } finally {
-        this.loading = false
       }
-    }, 2000),
-    setOptions_chart1(data) {
-      // let ymax = Math.max(...[].concat(...data.y));
-      // ymax = Math.ceil(ymax * 10) / 10;
-      console.log(data)
-      // let xmax = Math.max(...data.x)
-      // xmax = Math.ceil(xmax * 10) / 10
-      // 设置
-      const seriesList = []
-      for (const key in data) {
-        const dataValue = Object.entries(data[key]).map(item => [Number(item[0]), item[1]])
-        dataValue[0][0] = 0
-        seriesList.push({
-          name: key,
-          type: 'scatter',
-          symbolSize: 5,
-          large: true,
-          data: dataValue
-        })
-      } // 排序;
-      // seriesList.sort((x, y) => {
-      //   // console.log(y.data.slice(-1)[0][1], x.data.slice(-1)[0][1]);
-      //   return y.data.slice(-1)[0][1] - x.data.slice(-1)[0][1]
-      // })
 
-      const _opt = extendEchartsOpts({
-        tooltip: {
-          trigger: 'axis',
-          textStyle: {
-            align: 'left'
+      const filter_data = []
+      let filter_e_data = []
+      let filter_dd_data = []
+      let filter_nd_data = []
+      for (const item of Object.entries(networkData)) {
+        if (this.option.subject.select.indexOf(item[0]) < 0) {
+          continue
+        }
+        // 网络密度
+        filter_dd_data.push([
+          item[0],
+          item[1]['d_d']
+        ])
+        filter_nd_data.push([
+          item[0],
+          item[1]['d_n']
+        ])
+        // console.log(item)
+        if (this.option.type.select === 0) {
+        // 点数
+          filter_data.push([
+            item[0],
+            item[1]['in']
+          ])
+          filter_e_data.push([
+            item[0],
+            item[1]['in_e']
+          ])
+        } else if (this.option.type.select === 1) {
+        // 文章数
+          filter_data.push([
+            item[0],
+            item[1]['out']
+          ])
+          filter_e_data.push([
+            item[0],
+            item[1]['out_e']
+          ])
+        } else if (this.option.type.select === 2) {
+        // ln(N)/ln(k)
+          filter_data.push([
+            item[0],
+            item[1]['all']
+          ])
+          filter_e_data.push([
+            item[0],
+            item[1]['all_e']
+          ])
+        }
+      }
+      console.log(filter_data, filter_e_data)
+      filter_data.sort((a, b) => b[1].slice(-1) - a[1].slice(-1))
+
+      filter_e_data = filter_e_data.filter(item => item[0] !== 'wikipedia')
+      filter_dd_data = filter_dd_data.filter(item => item[0] !== 'wikipedia')
+      filter_nd_data = filter_nd_data.filter(item => item[0] !== 'wikipedia')
+
+      filter_e_data.sort((a, b) => b[1].slice(-1) - a[1].slice(-1))
+
+      // 标准结构熵
+      let _opt = extendEchartsOpts({
+        title: {
+          text: `底数${this.option.logBase.select}  标准结构熵`
+        },
+        xAxis: {
+          name: 'Year',
+          type: 'category',
+          boundaryGap: false,
+          data: xData
+        },
+        yAxis: {
+          name: 'Count',
+          type: 'value',
+          axisLabel: {
+            formatter: value => formatNum(value)
           },
-          axisPointer: {
-            type: 'cross',
-            animation: true,
-            label: {
-              backgroundColor: '#505765'
-            }
-          },
-          formatter: function(params) {
-            params.sort((x, y) => {
-              return y.data[1] - x.data[1]
-            })
-            let showHtm = ` x: ${params[0].data[0]},<br>`
-            for (let i = 0; i < params.length; i++) {
-              const _text = params[i].seriesName
-              const _data = params[i].data
-              const _marker = params[i].marker
-              showHtm += `${_marker}${_text}：${_data[1]} <br>`
-            }
-            return showHtm
+          min: function(value) {
+            return Math.floor(value.min * 10) / 10
           }
         },
-        title: {
-          text: '幂律度分布'
-        },
-        legend: {
-          data: seriesList.map(item => {
-            return item.name
+        series: filter_data.map(item => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: item[1]
           })
-        },
-        xAxis: {
-          type: 'value',
-          // max: xmax,
-          name: this.option.islog.select === 1 ? 'log (degree)' : 'degree'
-        },
-        yAxis: {
-          type: 'value',
-          // max: ymax,
-          name: this.option.islog.select === 1 ? 'log (count)' : 'count'
-        },
-        series: seriesList
-      })
-      console.log(_opt)
-      return _opt
-    },
-    setOptions(data) {
-      // 设置
-      const seriesList = _.zip(data.legend, data.y).map(item => {
-        return extendLineSeries({
-          name: item[0],
-          type: 'line',
-          smooth: false,
-          data: item[1]
         })
       })
-      // 排序;
-      seriesList.sort((x, y) => {
-        return y.data.slice(-1)[0] - x.data.slice(-1)[0]
-      })
+      this.myChartObjs[0].setOption(_opt, true)
 
-      const _opt = extendEchartsOpts({
+      // 结构熵
+      _opt = extendEchartsOpts({
         title: {
-          text: '逐年的斜率分布'
-        },
-        legend: {
-          data: data.legend
+          text: `底数${this.option.logBase.select} 结构熵`
         },
         xAxis: {
+          name: 'Year',
           type: 'category',
-          // max: xmax,
-          name: 'date',
-          data: data.x
+          boundaryGap: false,
+          data: xData
         },
         yAxis: {
+          name: 'Count',
           type: 'value',
-          // max: ymax,
-          name: ''
+          axisLabel: {
+            formatter: value => formatNum(value)
+          },
+          min: function(value) {
+            return Math.floor(value.min * 10) / 10
+          }
         },
-        series: seriesList
+        series: filter_e_data.map(item => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: item[1]
+          })
+        })
       })
-      return _opt
-    }
+      this.myChartObjs[1].setOption(_opt, true)
+
+      // 有向网络密度
+      _opt = extendEchartsOpts({
+        title: {
+          text: `有向网络密度`
+        },
+        xAxis: {
+          name: 'Year',
+          type: 'category',
+          boundaryGap: false,
+          data: xData
+        },
+        yAxis: {
+          name: 'Density',
+          type: 'value',
+          axisLabel: {
+            formatter: value => formatNum(value)
+          },
+          min: function(value) {
+            return Math.floor(value.min * 10) / 10
+          }
+        },
+        series: filter_dd_data.map(item => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: item[1]
+          })
+        })
+      })
+      this.myChartObjs[2].setOption(_opt, true)
+
+      // 无向网络密度
+      _opt = extendEchartsOpts({
+        title: {
+          text: `无向网络密度`
+        },
+        xAxis: {
+          name: 'Year',
+          type: 'category',
+          boundaryGap: false,
+          data: xData
+        },
+        yAxis: {
+          name: 'Density',
+          type: 'value',
+          axisLabel: {
+            formatter: value => formatNum(value)
+          },
+          min: function(value) {
+            return Math.floor(value.min * 10) / 10
+          }
+        },
+        series: filter_nd_data.map(item => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: item[1]
+          })
+        })
+      })
+      this.myChartObjs[3].setOption(_opt, true)
+
+      this.loading = false
+    }, 2000)
   }
 }
 </script>
