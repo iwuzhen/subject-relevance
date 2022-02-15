@@ -215,7 +215,7 @@ export default {
             title: 'MAG 结构熵',
             text: '结构熵 度分布',
             to: '/mag2020/entropy',
-            update: '2022-01-14T09:43:03.429Z'
+            update: '2022-12-14T09:43:03.429Z'
           }],
           '学科相关度等': [
             {
