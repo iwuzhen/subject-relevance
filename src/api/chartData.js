@@ -3,7 +3,7 @@
  * @Author: ider
  * @Date: 2020-10-28 17:35:06
  * @LastEditors: ider
- * @LastEditTime: 2022-02-14 13:44:05
+ * @LastEditTime: 2022-03-02 11:26:11
  * @Description: 图表模板，自动化配置成图表，不用每个图表画一个Vue了
  */
 
@@ -1394,7 +1394,7 @@ ChartMap['wikipedia/RefSelfRate'] = {
   yAxisName: '自恋度'
 }
 
-ChartMap[ 'wikipedia/ArticlesTotalByCoreNew_v5'] = {
+ChartMap['wikipedia/ArticlesTotalByCoreNew_v5'] = {
   ChName: 'core_v5文章数links统计',
   componentName: 'PageTemplate',
   HandleResponseFunc: (responseData, ChartObj) => {
@@ -1607,7 +1607,7 @@ ChartMap['mag2020/topNLinksinByYear'] = {
   yAxisName: 'Count'
 }
 
-ChartMap[ 'wikipedia/WikiAndMagCountByYear'] = {
+ChartMap['wikipedia/WikiAndMagCountByYear'] = {
   ChName: 'wiki总文章和边数按年趋势',
   componentName: 'PageDynamicSelectTemplate',
   HandleResponseFunc: (responseData, ChartObj) => {
@@ -1905,6 +1905,94 @@ ChartMap['mag2020/MAG_PreCountByYear'] = {
   RangeSlider: [],
   xAxisName: 'Year',
   yAxisName: 'Count'
+}
+
+ChartMap['mag2020/LinksoutAvgAge'] = {
+  ChName: 'MAG 各学科linksout的论文的平均寿命',
+  componentName: 'PageTemplate',
+  HandleResponseFunc: (responseData, ChartObj) => {
+    const _opt = extendEchartsOpts({
+      title: {
+        text: responseData.data.title
+      },
+      legend: {
+        data: responseData.data.legend
+      },
+      xAxis: {
+        name: ChartObj.xAxisName,
+        type: 'category',
+        boundaryGap: false,
+        data: responseData.data.x
+      },
+      yAxis: {
+        name: ChartObj.yAxisName,
+        type: 'value'
+      },
+      series: zip(responseData.data.legend, responseData.data.y).map(
+        item => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: item[1]
+          })
+        }
+      )
+    })
+    return _opt
+  },
+  RequestFunc: async params => {
+    // 当年
+    const data = await requestWrap(
+      'mag/getLinksoutAvgAge',
+      'post',
+      params
+    )
+    return data
+  },
+  Select: [
+    {
+      name: 'cats',
+      default: SELECT_MAG_DATA_V1,
+      label: '目标学科',
+      multiple: true,
+      show: true,
+      cols: 8,
+      items: MAGCoreCategorys2020_V1
+    },
+    {
+      name: 'isNoRef',
+      default: 0,
+      label: '过滤器',
+      multiple: false,
+      cols: 2,
+      items: [
+        {
+          text: '全集',
+          value: 0
+        },
+        {
+          text: '去掉引用为0的',
+          value: 1
+        }
+      ]
+    }
+  ],
+  Slider: [],
+  RangeSlider: [
+    {
+      name: 'yearRange',
+      startName: 'from',
+      rangeDefault: [2000, 2020],
+      endName: 'to',
+      label: '目标学科年份范围',
+      cols: 12,
+      max: 2020,
+      min: 1900
+    }
+  ],
+  xAxisName: 'Year',
+  yAxisName: '衰减期'
 }
 
 ChartMap['wikipedia-build/ArticlesTotal'] = {

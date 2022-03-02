@@ -210,6 +210,12 @@ export default {
             text: 'MAG N年之后的文章所引用的文章的逐年趋势',
             to: '/mag2020/MAG_PreCountByYear',
             update: '2021-06-05T09:43:03.429Z'
+          },
+          {
+            title: 'MAG 各学科linksout的论文的平均寿命',
+            text: '各学科linksout的论文的平均寿命',
+            to: '/mag2020/LinksoutAvgAge',
+            update: '2022-06-05T09:43:03.429Z'
           }],
           '结构熵': [{
             title: 'MAG 结构熵',
