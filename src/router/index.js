@@ -154,6 +154,10 @@ const routes = [{
   name: 'MAGEntropy',
   component: () => import('@/pages/mag2020/entropy')
 }, {
+  path: '/mag2020/networkEntropy',
+  name: 'MAGNetworkEntropy',
+  component: () => import('@/pages/mag2020/networkEntropy')
+}, {
   path: '/explorer/MagFunnel',
   name: 'MagFunnel',
   component: () => import('@/pages/explorer/MagFunnel')
@@ -383,6 +387,10 @@ const routes = [{
   path: '/wikipedia-build/wikipediaEntropy',
   name: 'wikipediaEntropy',
   component: () => import('@/pages/wikipediaBuild/wikipediaEntropy')
+}, {
+  path: '/wikipedia-build/wikipediaNetworkEntropy',
+  name: 'wikipediaNetworkEntropy',
+  component: () => import('@/pages/wikipediaBuild/wikipediaNetworkEntropy')
 }
 ]
 // 自动化映入模板

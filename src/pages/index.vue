@@ -113,6 +113,30 @@ export default {
             }
           ]
         },
+        'Entropy': {
+          '熵': [{
+            title: 'MAG 结构熵',
+            text: '结构熵(节点重要性)',
+            to: '/mag2020/entropy',
+            update: '2022-12-14T09:43:03.429Z'
+          },
+          {
+            title: 'MAG 网络熵',
+            text: '网络熵(度序列分布)',
+            to: '/mag2020/networkEntropy',
+            update: '2022-12-14T09:43:03.429Z'
+          }, {
+            title: 'wikipedia 结构熵',
+            text: 'wikipedia 结构熵(节点重要性),网络密度',
+            to: '/wikipedia-build/wikipediaEntropy',
+            update: '2022-12-02T16:43:03.429Z'
+          }, {
+            title: 'wikipedia 网络熵',
+            text: 'wikipedia 网络熵(度序列分布)',
+            to: '/wikipedia-build/wikipediaNetworkEntropy',
+            update: '2022-12-02T16:43:03.429Z'
+          }]
+        },
         'MAG-2020': {
           '统计数据': [{
             title: 'MAG 统计学科数据',
@@ -217,12 +241,6 @@ export default {
             to: '/mag2020/LinksoutAvgAge',
             update: '2022-06-05T09:43:03.429Z'
           }],
-          '结构熵': [{
-            title: 'MAG 结构熵',
-            text: '结构熵 度分布',
-            to: '/mag2020/entropy',
-            update: '2022-12-14T09:43:03.429Z'
-          }],
           '学科相关度等': [
             {
               title: '2020 学科相关度',
@@ -317,12 +335,6 @@ export default {
             //   to: '/wikipedia-build/entropy',
             //   update: '2022-12-02T16:43:03.429Z'
             // },
-            {
-              title: 'wiki结构熵,网络密度',
-              text: 'wiki结构熵，网络密度',
-              to: '/wikipedia-build/wikipediaEntropy',
-              update: '2022-12-02T16:43:03.429Z'
-            },
             {
               title: 'wiki幂律度分布',
               text: 'wiki 幂律度分布',
