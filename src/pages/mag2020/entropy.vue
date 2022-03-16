@@ -384,7 +384,7 @@ export default {
       })
       const _opt = extendEchartsOpts({
         title: {
-          text: '标准结构熵 E',
+          text: '网络标准结构熵 E',
           left: '35%'
         },
         legend: {

@@ -121,7 +121,7 @@ export default {
             update: '2022-12-14T09:43:03.429Z'
           },
           {
-            title: 'MAG 网络熵',
+            title: 'MAG 度分布熵',
             text: '网络熵(度序列分布)',
             to: '/mag2020/networkEntropy',
             update: '2022-12-14T09:43:03.429Z'
@@ -131,7 +131,7 @@ export default {
             to: '/wikipedia-build/wikipediaEntropy',
             update: '2022-12-02T16:43:03.429Z'
           }, {
-            title: 'wikipedia 网络熵',
+            title: 'wikipedia 度分布熵',
             text: 'wikipedia 网络熵(度序列分布)',
             to: '/wikipedia-build/wikipediaNetworkEntropy',
             update: '2022-12-02T16:43:03.429Z'

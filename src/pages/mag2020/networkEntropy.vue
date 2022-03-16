@@ -45,7 +45,7 @@ export default {
       const legendName = ['in', 'out', 'all']
       const _opt = extendEchartsOpts({
         title: {
-          text: '网络熵',
+          text: '度分布熵',
           left: '35%'
         },
         legend: {

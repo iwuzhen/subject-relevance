@@ -152,7 +152,7 @@ export default {
       // 网络熵
       const _opt = extendEchartsOpts({
         title: {
-          text: `网络熵`
+          text: `度分布熵`
         },
         xAxis: {
           name: 'Year',
