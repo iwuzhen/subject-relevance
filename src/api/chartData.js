@@ -24,7 +24,7 @@ for (const year of _.range(2007, 2022)) {
     if (year === 2021 && session === 2) {
       break
     }
-    SessionXData.push(`${year}-S${session}`)
+    SessionXData.push(`${year}-Q${session}`)
   }
 }
 
@@ -3485,6 +3485,91 @@ ChartMap['wikipedia-build/articleLength'] = {
   Slider: [],
   RangeSlider: [],
   xAxisName: 'Range',
+  yAxisName: 'Count'
+}
+
+ChartMap['wikipedia-build/Xueke_words_linksout'] = {
+  ChName: 'wikipedia 各学科的总字数和linksout的一些规律',
+  componentName: 'PageDynamicSelectTemplate',
+  HandleResponseFunc: ([responseData, params], ChartObj) => {
+    console.log('responseData', responseData)
+    const _opt = extendEchartsOpts({
+      title: {
+        text: responseData.title
+      },
+      legend: {
+        data: responseData.legend
+      },
+      xAxis: {
+        name: ChartObj.xAxisName,
+        type: 'category',
+        // type: params.islog === true ? 'log' : 'value',
+        boundaryGap: false,
+        data: responseData.x
+      },
+      yAxis: {
+        name: 'count',
+        type: 'value',
+        // type: params.islog === true ? 'log' : 'value',
+        axisLabel: {
+          formatter: value => formatNum(value)
+        },
+        min: function(value) {
+          return Math.floor(value.min * 10) / 10
+        }
+      },
+      series: zip(responseData.legend, responseData.y).map(item => {
+        return extendLineSeries({
+          name: item[0],
+          type: 'line',
+          smooth: false,
+          data: item[1]
+        })
+      })
+    })
+    console.log('_opt', _opt)
+    return _opt
+  },
+  RequestFunc: async params => {
+    // console.log(wikipeida_direct_xueshu_lv2)
+    const data = await requestWrap(
+      'wiki/getXueke_words_linksout',
+      'post',
+      params
+    )
+    return [data.data, params]
+  },
+  Select: [
+    {
+      name: 'cats',
+      default: ['Biology', 'Chemistry', 'Computer science', 'Engineering disciplines', 'Environmental science', 'Geology',
+        'Materials science', 'Mathematics', 'Philosophy', 'Physics', 'Political science', 'Psychology', 'Sociology'],
+      label: '学科',
+      multiple: true,
+      show: true,
+      cols: 8,
+      items: ['Biology', 'Chemistry', 'Computer science', 'Engineering disciplines', 'Environmental science', 'Geology',
+        'Materials science', 'Mathematics', 'Philosophy', 'Physics', 'Political science', 'Psychology', 'Sociology']
+    },
+    {
+      name: 'type',
+      default: 2,
+      label: '数据维度',
+      multiple: false,
+      show: true,
+      cols: 2,
+      items: [
+        { text: '统计学科的linksout', value: 0 },
+        { text: '统计学科的平均linksout', value: 1 },
+        { text: '统计学科的总字数', value: 2 },
+        { text: '统计学科的平均字数', value: 3 },
+        { text: '统计学科的总字数/linksout', value: 4 }
+      ]
+    }
+  ],
+  Slider: [],
+  RangeSlider: [],
+  xAxisName: 'Date',
   yAxisName: 'Count'
 }
 

@@ -352,6 +352,12 @@ export default {
               text: 'wikipedai 文章长度',
               to: '/wikipedia-build/articleLength',
               update: '2022-02-25T09:43:03.429Z'
+            },
+            {
+              title: '各学科总字数等一些规律',
+              text: 'wikipedai 各学科的总字数和linksout的一些规律',
+              to: '/wikipedia-build/Xueke_words_linksout',
+              update: '2022-09-25T09:43:03.429Z'
             }
           ]
         },
