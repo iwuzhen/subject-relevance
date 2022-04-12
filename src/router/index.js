@@ -296,6 +296,10 @@ const routes = [{
   name: 'MagGraphPaperChart',
   component: () => import('@/pages/browser/MagGraphPaper')
 }, {
+  path: '/browser/MagGraphPaper_20220409',
+  name: 'MagGraphPaperChart',
+  component: () => import('@/pages/browser/MagGraphPaper_20220409')
+}, {
   path: '/browser/wikiGraphPaper',
   name: 'wikiGraphPaperChart',
   component: () => import('@/pages/browser/wikiGraphPaper')
@@ -375,6 +379,10 @@ const routes = [{
   path: '/browser/MagFosTree',
   name: 'MagFosTree',
   component: () => import('@/pages/browser/MagFosTree')
+}, {
+  path: '/mag2020/MAGSubjectEntropy',
+  name: 'MAGSubjectEntropy',
+  component: () => import('@/pages/mag2020/MAGSubjectEntropy')
 }, {
   path: '/mag2020/ZipfAndInnerzipfByYearV3',
   name: 'ZipfAndInnerzipfByYearV3',

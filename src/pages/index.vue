@@ -82,6 +82,11 @@ export default {
               to: '/browser/MagGraphPaper'
             },
             {
+              title: 'MagGraphPaper 2022',
+              text: 'MagGraph论文图',
+              to: '/browser/MagGraphPaper_20220409'
+            },
+            {
               title: 'wikiGraphPaper',
               text: 'wikiGraph论文图',
               to: '/browser/wikiGraphPaper'
@@ -115,6 +120,12 @@ export default {
         },
         'Entropy': {
           '熵': [{
+            title: 'MAG 分学科 熵',
+            text: '保护结构熵和度分布熵',
+            to: '/mag2020/MAGSubjectEntropy',
+            update: '2022-12-14T09:43:03.429Z'
+          },
+          {
             title: 'MAG 结构熵',
             text: '结构熵(节点重要性)',
             to: '/mag2020/entropy',
