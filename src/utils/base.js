@@ -42,7 +42,7 @@ export default {
   computed: {
     //  图的对象集合
     myChartObjs: function() {
-      return this.myChartIds.map(each => this.$echarts.init(document.getElementById(each)))
+      return this.myChartIds.map(each => this.$echarts.init(document.getElementById(each), null, { devicePixelRatio: 10, renderer: 'svg' }))
     }
   }
 }

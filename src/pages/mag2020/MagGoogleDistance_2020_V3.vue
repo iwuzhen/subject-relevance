@@ -30,6 +30,11 @@ v-container(fluid)
     v-col(col='12')
       v-card.mx-auto(outlined :loading='loading' height='70vh')
         v-container#masChart1(fluid fill-height)
+
+  v-row
+    article(size="A4")
+      v-card.mx-auto(outlined :loading='loading["masChart1"]' height='14.2cm')
+        v-container#masChart3(fluid fill-height)
   v-row
     v-col
       comment(storagekey='Mag_google_distance_Chart_2020_1')
@@ -42,13 +47,13 @@ v-container(fluid)
       comment(storagekey='Mag_google_distance_Chart_2020_2')
 
 </template>
-
 <script>
 
 import { getMasDatav2 } from '@/api/index'
 import { extendEchartsOpts, MAGCoreCategorys2020, extendLineSeries, SELECT_MAG_DATA } from '@/api/data'
 import Base from '@/utils/base'
 import comment from '@/components/comment'
+// import _ from 'lodash'
 
 export default {
   name: 'MagV3',
@@ -82,7 +87,7 @@ export default {
       bfValue: -1,
       bfOpt: [-1, 1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015],
       loading: false,
-      myChartIds: ['masChart1', 'masChart2'],
+      myChartIds: ['masChart1', 'masChart2', 'masChart3'],
       averageLinedata: { title: '平均逐年距离图', legend: [], x: [], y: [] },
       version: 'delete_noref_v3_node',
       versionOpt: [{
@@ -268,12 +273,167 @@ export default {
         },
         series: series
       })
+      this.setPaperOptions(data)
       return _opt
+    },
+    setPaperOptions(data) {
+      const chartOpt = extendEchartsOpts({
+        title: {
+          text: this.subjectTarget.replace('biology', 'Biology'),
+          textStyle: {
+            fontWeight: 'normal',
+            fontSize: 20
+          },
+          left: '30%'
+          // right: 'auto'
+        },
+        legend: {
+          type: 'scroll',
+          left: '70%',
+          right: 'left',
+          // top: 'middle',
+          top: '11%',
+          textStyle: {
+            fontSize: 12,
+            color: '#000'
+          },
+          orient: 'vertical'
+        },
+        xAxis: {
+          name: 'Year',
+          type: 'category',
+          boundaryGap: false,
+          data: data.x,
+          minorSplitLine: {
+            fontSize: 14
+          },
+          axisLabel: {
+            fontSize: 16,
+            // rotate: -90,
+            color: '#000',
+            interval: (index, value) => {
+              if (index === 0) {
+                return true
+              } else if (value === '1960') {
+                return false
+              }
+              if (Number(value) % 10 === 0) {
+                return true
+              }
+              return false
+            }
+          },
+          axisTick: {
+            show: true,
+            interval: 'auto'
+          },
+          nameLocation: 'middle',
+          nameGap: 50,
+          nameTextStyle: {
+            color: '#000',
+            align: 'center',
+            fontSize: 18,
+            verticalAlign: 'bottom'
+          }
+        },
+        yAxis: {
+          name: 'Knowledge Distance',
+          type: 'value',
+          // max: 1,
+          min: 0.2,
+          minorSplitLine: {
+            fontSize: 18
+          },
+          nameLocation: 'middle',
+          nameGap: 40,
+          nameTextStyle: {
+            align: 'center',
+            // fontWeight: 'bolder',
+            fontSize: 18,
+            color: '#000'
+          },
+          splitLine: {
+            show: false
+          },
+          interval: 0.1,
+          axisLabel: {
+            color: '#000',
+            fontSize: 16,
+            formatter: value => {
+              if ([0, 0.2, 0.5, 0.7, 0.9, 1].includes(value)) {
+                return value
+              } return ''
+            }
+          },
+          axisTick: {
+            show: true
+          }
+        },
+        grid: {
+          left: '5%',
+          right: '33%',
+          bottom: '8%',
+          containLabel: true
+        },
+        series: data.y.map((item, index) => {
+          return extendLineSeries({
+            name: data.legend[index].replace('engineer', 'Engineer').replace('science', 'Science').replace('intelli', 'Intelli').replace('editing', 'Editing'),
+            type: 'line',
+            smooth: false,
+            symbol: 'none',
+            symbolSize: 0,
+            data: item
+          })
+        })
+
+      //   series: _.zip(data.legend, data.y).map(item => {
+      //     return extendLineSeries({
+      //       name: item[0].replace('engineer', 'Engineer').replace('science', 'Science').replace('intelli', 'Intelli').replace('editing', 'Editing'),
+      //       type: 'line',
+      //       smooth: false,
+      //       symbol: 'none',
+      //       symbolSize: 0,
+      //       data: item[1]
+      //     })
+      //   })
+      })
+      chartOpt.series.push({
+        type: 'line',
+        markLine: {
+          symbol: ['none', 'none'],
+          label: {
+            show: false
+          },
+          lineStyle: {
+            color: 'grey',
+            width: 2
+          },
+          data: [
+            {
+              yAxis: 0.9
+            }, {
+              yAxis: 0.7
+            }, {
+              yAxis: 0.5
+            }
+          ]
+        }
+      })
+      console.log(chartOpt)
+      this.myChartObjs[2].setOption(chartOpt, true)
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-
+article[size="A4"] {
+  background: white;
+  width: 21cm;
+  height: 29.7cm;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 0.5cm;
+  box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+}
 </style>

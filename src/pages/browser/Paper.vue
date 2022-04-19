@@ -136,7 +136,7 @@ export default {
       const getSeries = data => {
         const series = data.y.map((item, index) => {
           return extendLineSeries({
-            name: data.legend[index],
+            name: data.legend[index].replace('science', 'Science'),
             type: 'line',
             smooth: false,
             symbol: 'none',
@@ -190,24 +190,26 @@ export default {
 
         const chartOpt = extendEchartsOpts({
           title: {
-            text: this.chart1.subjectTarget_4,
+            text: this.chart1.subjectTarget_4.replace('science', 'Science'),
             textStyle: {
               fontWeight: 'normal',
               fontSize: 20
-            }
+            },
+            // left: '30%'
+            right: 'auto'
           },
           legend: {
             type: 'scroll',
             left: '70%',
             right: 'left',
             // top: 'middle',
-            top: 0,
+            top: '11%',
             textStyle: {
-              fontSize: 18,
+              fontSize: 12,
               color: '#000'
             },
-            orient: 'vertical',
-            data: data.legend
+            orient: 'vertical'
+            // data: data.legend
           },
 
           xAxis: {

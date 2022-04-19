@@ -255,7 +255,7 @@ export default {
             const { fx, fy, fz } = vertuxArray.pop()
             return Object.assign(each, {
               id: each.id,
-              name: each.label,
+              name: each.label.replace('science', 'Science'),
               color: SubjectColorMap[each.label],
               value: ((5 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.5),
               fx,
@@ -265,7 +265,7 @@ export default {
           } else {
             return Object.assign(each, {
               id: each.id,
-              name: each.label,
+              name: each.label.replace('science', 'Science'),
               color: SubjectColorMap[each.label],
               value: ((5 * (Math.pow(Number(each.weight[yindex]), 1 / 3) - sizeMin)) / (sizeMax - sizeMin) + 0.5)
             })
@@ -324,9 +324,9 @@ export default {
         .cameraPosition({ x: 0, y: 0, z: 300 })
         // eslint-disable-next-line no-return-assign
         .onNodeHover(node => elem.style.cursor = node ? 'pointer' : null)
-        .linkWidth(link => {
-          return link.value
-        })
+        // .linkWidth(link => {
+        //   return link.value
+        // })
         .linkColor(() => '#808080')
         .linkOpacity(0.4)
         .linkWidth(1)

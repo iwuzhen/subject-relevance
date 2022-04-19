@@ -15,10 +15,17 @@ v-container(fluid)
           v-text-field.mt-0.pt-0(:value='years[1]' hide-details single-line type='number' style='width: 60px' @change='$set(years, 1, $event)')
     v-col(cols='2')
       v-select(v-model='methodValue' :items='methodOptions' dense label='条件' @change='getData' disabled)
-  v-row(v-for="chartid of myChartIds" :key="chartid")
+
+  v-row(v-for="chartid of myChartIds.slice(0,1)" :key="chartid")
     v-col(col='12')
       v-card(outlined :loading='loading[chartid]' height='70vh')
         v-container(:id="chartid" fluid fill-height)
+
+  v-row
+    article(size="A4")
+      v-card.mx-auto(outlined :loading='loading["masChart1"]' height='14.2cm')
+        v-container#masChart99(fluid fill-height)
+
   v-row
     v-col
       comment(storagekey='GooglePlantDistance_graph_1')
@@ -92,7 +99,8 @@ export default {
         masChart3: false,
         masChart4: false
       },
-      myChartIds: ['masChart1'],
+      paperChart: null,
+      myChartIds: ['masChart0'],
       dialog: {
         stats: false,
         pid: 0
@@ -127,6 +135,7 @@ export default {
       })
       this.activeSubLevel(142362112, 'Art')
     })
+    this.paperChart = this.$echarts.init(document.getElementById('masChart99'), null, { devicePixelRatio: 10, renderer: 'svg' })
   },
   methods: {
     // 将学科更新到表格
@@ -244,6 +253,7 @@ export default {
         }).join(',')
         const response = await getMasDatav2(opt)
         const options = this.setOptions(response.data)
+        this.setPaperOptions(response.data)
         this.myChartObjs[chartIndex].setOption(options, true)
         this.loading[`masChart${chartIndex}`] = false
         chartIndex += 1
@@ -316,6 +326,141 @@ export default {
         })
       })
       return _opt
+    },
+    setPaperOptions(data) {
+      const chartOpt = extendEchartsOpts({
+        title: {
+          text: data.title.replace('biology', 'Biology').split('和')[0],
+          textStyle: {
+            fontWeight: 'normal',
+            fontSize: 20
+          },
+          left: '30%'
+          // right: 'auto'
+        },
+        legend: {
+          type: 'scroll',
+          left: '70%',
+          right: 'left',
+          // top: 'middle',
+          top: '10%',
+          textStyle: {
+            fontSize: 12,
+            color: '#000'
+          },
+          orient: 'vertical'
+        },
+        xAxis: {
+          name: 'Year',
+          type: 'category',
+          boundaryGap: false,
+          data: data.x,
+          minorSplitLine: {
+            fontSize: 14
+          },
+          axisLabel: {
+            fontSize: 16,
+            // rotate: -90,
+            color: '#000',
+            interval: (index, value) => {
+              if (index === 0) {
+                return true
+              } else if (value === '1960') {
+                return false
+              }
+              if (Number(value) % 10 === 0) {
+                return true
+              }
+              return false
+            }
+          },
+          axisTick: {
+            show: true,
+            interval: 'auto'
+          },
+          nameLocation: 'middle',
+          nameGap: 50,
+          nameTextStyle: {
+            color: '#000',
+            align: 'center',
+            fontSize: 18,
+            verticalAlign: 'bottom'
+          }
+        },
+        yAxis: {
+          name: 'Knowledge Distance',
+          type: 'value',
+          // max: 1,
+          min: 0.2,
+          minorSplitLine: {
+            fontSize: 18
+          },
+          nameLocation: 'middle',
+          nameGap: 40,
+          nameTextStyle: {
+            align: 'center',
+            // fontWeight: 'bolder',
+            fontSize: 18,
+            color: '#000'
+          },
+          splitLine: {
+            show: false
+          },
+          interval: 0.1,
+          axisLabel: {
+            color: '#000',
+            fontSize: 16,
+            formatter: value => {
+              if ([0, 0.2, 0.5, 0.7, 0.9, 1].includes(value)) {
+                return value
+              } return ''
+            }
+          },
+          axisTick: {
+            show: true
+          }
+        },
+        grid: {
+          left: '5%',
+          right: '33%',
+          bottom: '8%',
+          containLabel: true
+        },
+        series: _.zip(data.legend, data.y).map(item => {
+          return extendLineSeries({
+            name: item[0].replace(' mining', '-mining').replace(' biology', ' Biology').replace(' engineer', ' Engineer').replace(' science', ' Science').replace(' intelli', ' Intelli').replace(' editing', ' Editing'),
+            type: 'line',
+            smooth: false,
+            symbol: 'none',
+            symbolSize: 0,
+            data: item[1]
+          })
+        })
+      })
+      chartOpt.series.push({
+        type: 'line',
+        markLine: {
+          symbol: ['none', 'none'],
+          label: {
+            show: false
+          },
+          lineStyle: {
+            color: 'grey',
+            width: 2
+          },
+          data: [
+            {
+              yAxis: 0.9
+            }, {
+              yAxis: 0.7
+            }, {
+              yAxis: 0.5
+            }
+          ]
+        }
+      })
+      console.log(chartOpt)
+      this.paperChart.setOption(chartOpt, true)
     }
   }
 }
@@ -329,5 +474,14 @@ export default {
     button {
       margin: 0 10px;
     }
+}
+article[size="A4"] {
+  background: white;
+  width: 21cm;
+  height: 29.7cm;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 0.5cm;
+  box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
 }
 </style>
