@@ -31,6 +31,25 @@ build:
     - yarn -v
     - yarn install
     - yarn run build
+
+  artifacts:
+    expire_in: 1 h
+    paths:
+      - dist
+
+deploy_master:
+  image: registry.cn-hangzhou.aliyuncs.com/ider/node:lts-alpine
+  stage: deploy
+  only:
+    - master
+  retry:
+    max: 2
+  tags:
+    - builder
+  script:
+#    - sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+#    - apk add --no-cache rsync openssh
+#    - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
