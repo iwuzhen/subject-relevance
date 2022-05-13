@@ -14,6 +14,8 @@ v-container(fluid  :style="cssVars")
       v-select(v-model='btype' :items='btypeOpt' dense label='数据范围' @change='Draw')
     v-col(cols='2')
       v-select(v-model='level' :items='levelOpt' dense label='level' @change='Draw')
+    v-col(cols='2')
+      v-text-field(v-model='chartTitle' dense label='chartTitle' @change='Draw')
     v-col(cols="2")
       v-switch(v-model="showText" :label="`节点展示文字: ${showText.toString()}`"  @change='liteDraw')
     v-col(cols="2")
@@ -90,6 +92,7 @@ export default {
       methodValue: 'linksin',
       methodOpt: ['linksin', 'linksout'],
       btype: 'v5_xueshu_node_newDB',
+      chartTitle: 'Wikipedia',
       btypeOpt: [
         {
           text: 'v5',
@@ -434,7 +437,7 @@ export default {
       const _opt = extendEchartsOpts({
         title: [
           {
-            text: 'Wikipedia',
+            text: this.chartTitle,
             left: 'center',
             textStyle: {
               fontWeight: 'normal',
