@@ -100,6 +100,12 @@ export default {
           ],
           'Explorer': [
             {
+              title: '网络特性归纳',
+              text: '',
+              to: '/explorer/NetworkFeture',
+              update: '2022-12-31T09:43:03.429Z'
+            },
+            {
               title: 'MAG 学科依赖层次',
               text: '学科依赖层次等 3 个表格，比引力图层次鲜明',
               to: '/explorer/DataSheet',

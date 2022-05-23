@@ -102,6 +102,10 @@ const routes = [{
   name: 'DataSheet',
   component: () => import('@/pages/explorer/DataSheet')
 }, {
+  path: '/explorer/NetworkFeture',
+  name: 'NetworkFeture',
+  component: () => import('@/pages/explorer/NetworkFeture')
+}, {
   path: '/mag2019v2/MagSankey',
   name: 'MAGSankey',
   component: () => import('@/pages/mag2019v2/MagSankey')
