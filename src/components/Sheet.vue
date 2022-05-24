@@ -50,7 +50,7 @@ function negativeValueRenderer(instance, td, row, col, prop, value, cellProperti
   }
   if (row === 7) {
     td.style['border-top-color'] = 'orange'
-    td.style['border-top-width'] = '4px'
+    td.style['border-top-width'] = '1px'
     td.style['border-top-style'] = 'solid'
   }
   if (!value || value === '') {
