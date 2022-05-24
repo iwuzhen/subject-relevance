@@ -7,7 +7,7 @@
           <v-card-title>
           </v-card-title>
           <v-card-text>
-            <Sheet v-if="NeStatus" title="网络特性" desc="通过 贸易度 距离得出的相关度关系。" :storagekey="gridkey2" :data="NeData2" @sheetSave="sheetSave" />
+            <Sheet v-if="NeStatus" title="网络特性" desc="" :storagekey="gridkey2" :data="NeData2" @sheetSave="sheetSave" />
             </v-card-text>
         </v-card>
       </v-col>
