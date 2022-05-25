@@ -12,7 +12,7 @@ v-container(fluid)
     v-col(cols='3')
       v-select(v-model='option.month.select', :items='option.month.opt', label='month', @change='switchYearMonth').
     v-col(cols='2')
-      v-select(v-model='option.islog.select', :items='option.islog.opt',disabled, label='是否取 log', @change='getData').
+      v-select(v-model='option.islog.select', :items='option.islog.opt', label='是否取 log', @change='getData').
     v-col(cols='4')
       v-select(v-model='option.mode.select', :items='option.mode.opt', label='展示模式', @change='getData').
   v-row
@@ -352,6 +352,9 @@ export default {
         },
         series: seriesList
       })
+      if (this.option.islog.select === 0) {
+        _opt.xAxis.max = 50
+      }
       console.log(_opt)
       return _opt
     },

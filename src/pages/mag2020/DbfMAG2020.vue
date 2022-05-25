@@ -10,7 +10,7 @@ v-container(fluid)
     v-col(cols='4')
       v-select(v-model='option.isNoRef.select', :items='option.isNoRef.opt', label='过滤器', @change='getData').
     v-col(cols='2')
-      v-select(v-model='option.islog.select', :items='option.islog.opt',disabled, label='幂律分布取 log', @change='getData').
+      v-select(v-model='option.islog.select', :items='option.islog.opt', label='幂律分布取 log', @change='getData').
     v-col(cols='4')
       v-select(v-model='option.mode.select', :items='option.mode.opt', label='展示模式', @change='getData').
   v-row
@@ -333,7 +333,12 @@ export default {
         },
         series: seriesList
       })
+      if (this.option.islog.select === 0) {
+        _opt.xAxis.max = 50
+      }
       console.log(_opt)
+      console.log(this.option.islog.select)
+
       return _opt
     },
     setOptions(data, yname) {
@@ -359,7 +364,7 @@ export default {
           data: data.legend
         },
         xAxis: {
-          type: 'category',
+          type: 'value',
           // max: xmax,
           name: 'date',
           data: data.x
