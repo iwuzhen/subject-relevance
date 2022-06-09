@@ -305,6 +305,12 @@ export default {
         'Wikipedia-历史重建': {
           '统计数据': [
             {
+              title: 'wiki 引用 MAG论文的滞后趋势',
+              text: 'wiki引用1995-2015年MAG论文的滞后趋势',
+              to: '/wikipedia-build/WikiRefTjData',
+              update: '2022-06-30T09:43:03.429Z'
+            },
+            {
               title: 'wiki 文章数',
               text: 'wiki 文章数查询',
               to: '/wikipedia-build/ArticlesTotal',

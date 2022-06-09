@@ -3573,6 +3573,88 @@ ChartMap['wikipedia-build/Xueke_words_linksout'] = {
   yAxisName: 'Count'
 }
 
+ChartMap['wikipedia-build/WikiRefTjData'] = {
+  ChName: 'wikipedia 各学科的总字数和linksout的一些规律',
+  componentName: 'PageDynamicSelectTemplate',
+  HandleResponseFunc: ([responseData, params], ChartObj) => {
+    console.log('responseData', responseData)
+    const _opt = extendEchartsOpts({
+      title: {
+        text: responseData.title
+      },
+      legend: {
+        data: responseData.legend
+      },
+      xAxis: {
+        name: ChartObj.xAxisName,
+        type: 'category',
+        // type: params.islog === true ? 'log' : 'value',
+        boundaryGap: false,
+        data: responseData.x
+      },
+      yAxis: {
+        name: 'count',
+        type: 'value',
+        // type: params.islog === true ? 'log' : 'value',
+        axisLabel: {
+          formatter: value => formatNum(value)
+        },
+        min: function(value) {
+          return Math.floor(value.min * 10) / 10
+        }
+      },
+      series: zip(responseData.legend, responseData.y).map(item => {
+        return extendLineSeries({
+          name: item[0],
+          type: 'line',
+          smooth: false,
+          data: item[1]
+        })
+      })
+    })
+    console.log('_opt', _opt)
+    return _opt
+  },
+  RequestFunc: async params => {
+    // console.log(wikipeida_direct_xueshu_lv2)
+    const data = await requestWrap(
+      'wiki/getWikiRefTjData',
+      'post',
+      params
+    )
+    return [data.data, params]
+  },
+  Select: [
+    {
+      name: 'cats',
+      default: ['Biology', 'Chemistry', 'Computer science', 'Engineering disciplines', 'Environmental science', 'Geology',
+        'Materials science', 'Mathematics', 'Philosophy', 'Physics', 'Political science', 'Psychology', 'Sociology'],
+      label: '学科',
+      multiple: true,
+      show: true,
+      cols: 8,
+      items: ['Biology', 'Chemistry', 'Computer science', 'Engineering disciplines', 'Environmental science', 'Geology',
+        'Materials science', 'Mathematics', 'Philosophy', 'Physics', 'Political science', 'Psychology', 'Sociology']
+    },
+    {
+      name: 'type',
+      default: 0,
+      label: '数据维度',
+      multiple: false,
+      show: true,
+      cols: 2,
+      items: [
+        { text: '趋势图', value: 0 },
+        { text: '滞后图', value: 1 }
+      ]
+    }
+  ],
+  Slider: [],
+  RangeSlider: [],
+  xAxisName: 'Date',
+  yAxisName: 'Count'
+}
+
 // ChartMap['wikipedia-build/smallworld_20211103'] = {
 //   ChName: 'wiki 学科小世界',
 //   componentName: 'PageDynamicSelectTemplate',
