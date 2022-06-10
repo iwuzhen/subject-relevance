@@ -3627,14 +3627,16 @@ ChartMap['wikipedia-build/WikiRefTjData'] = {
   Select: [
     {
       name: 'cats',
-      default: ['Biology', 'Chemistry', 'Computer science', 'Engineering disciplines', 'Environmental science', 'Geology',
-        'Materials science', 'Mathematics', 'Philosophy', 'Physics', 'Political science', 'Psychology', 'Sociology'],
+      default: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+        'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+        'History', 'Materials science', 'Engineering disciplines', 'Environmental science', 'Medicine'],
       label: '学科',
       multiple: true,
       show: true,
       cols: 8,
-      items: ['Biology', 'Chemistry', 'Computer science', 'Engineering disciplines', 'Environmental science', 'Geology',
-        'Materials science', 'Mathematics', 'Philosophy', 'Physics', 'Political science', 'Psychology', 'Sociology']
+      items: ['Geology', 'Geography', 'Psychology', 'Philosophy', 'Mathematics', 'Physics', 'Biology',
+        'Chemistry', 'Sociology', 'Economics', 'Political science', 'Linguistics', 'Computer science',
+        'History', 'Materials science', 'Engineering disciplines', 'Environmental science', 'Medicine']
     },
     {
       name: 'type',
