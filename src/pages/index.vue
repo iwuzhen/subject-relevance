@@ -100,6 +100,12 @@ export default {
           ],
           'Explorer': [
             {
+              title: 'wikipedia 演化',
+              text: '维基百科的演化 腾讯文档',
+              href: 'https://docs.qq.com/sheet/DWGNHVmVyZUVaR1JS',
+              update: '2022-12-31T09:43:03.429Z'
+            },
+            {
               title: '网络特性归纳',
               text: '',
               to: '/explorer/NetworkFeture',
