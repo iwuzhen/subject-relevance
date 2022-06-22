@@ -289,7 +289,7 @@ export default {
             name: `${ln}`,
             type: 'line',
             smooth: false,
-            data: this.sourceData[`count_${ln}`].map(v => Math.log(v))
+            data: this.sourceData[`count_${ln}`].map(v => Math.log2(v))
           })
         )
       }
@@ -330,7 +330,7 @@ export default {
             name: `${ln}`,
             type: 'line',
             smooth: false,
-            data: this.sourceData[`count_${ln}`].map(v => Math.log(4 * (v - 1)) / 2)
+            data: this.sourceData[`count_${ln}`].map(v => Math.log2(4 * (v - 1)) / 2)
           })
         )
       }
