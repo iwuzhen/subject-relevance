@@ -321,7 +321,7 @@ export default {
       this.myChartObjs[5].setOption(_opt, true)
     },
     drawChart_7() {
-      const links_name = ['all']
+      const links_name = ['in', 'out', 'all']
       const series = []
 
       for (const ln of links_name) {
