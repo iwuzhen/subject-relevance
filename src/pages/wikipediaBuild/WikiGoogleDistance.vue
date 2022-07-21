@@ -12,7 +12,7 @@ v-container(fluid)
     v-col(cols='2')
       v-select(v-model='option.version.select', :items='option.version.opt', dense, label='version', @change='getData').
     v-col(cols='2')
-      v-select(v-model='option.levelType.select', :items='option.levelType.select', dense, label='level type', @change='getData').
+      v-select(v-model='option.levelType.select', :items='option.levelType.opt', dense, label='level type', @change='getData').
     v-col(cols='2')
       v-btn(:color="showAve ? 'light-green' : 'lime'", @click='showAve = !showAve;getData();') {{ showAve ? "关闭平均距离" : "开启平均距离" }}
     v-col(cols='2')
@@ -139,7 +139,7 @@ export default {
         // to: this.years[1],
         type: this.option.type.select,
         level: -1,
-        levelType: this.levelTypeValue,
+        levelType: this.option.levelType.select,
         from: 2007,
         to: 2021
       }
