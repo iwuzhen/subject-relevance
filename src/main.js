@@ -7,14 +7,18 @@ import { createRouter } from './router'
 import * as echarts from 'echarts'
 // import ecStat from "echarts-stat";
 // import store from './store.js'
-import vuetify from './plugins/vuetify'
 import Notifications from 'vue-notification'
 import dayjs from 'dayjs'
 import { sync } from 'vuex-router-sync'
 import { createStore } from '@/store'
 import md5 from 'md5'
+import Vuetify from 'vuetify/lib'
 
 const store = createStore()
+
+Vue.use(Vuetify)
+const vuetify = new Vuetify({})
+
 const router = createRouter(vuetify, store)
 sync(store, router)
 
