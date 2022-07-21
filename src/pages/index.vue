@@ -314,6 +314,12 @@ export default {
         'Wikipedia-历史重建': {
           '统计数据': [
             {
+              title: 'wiki Google 中间距离',
+              text: 'wiki Google 中间距离',
+              to: { path: '/wikipedia-build/WikiGoogleDistance' },
+              update: '2022-11-18T09:43:03.429Z'
+            },
+            {
               title: 'wiki 引用 MAG论文的滞后趋势',
               text: 'wiki引用1995-2015年MAG论文的滞后趋势',
               to: '/wikipedia-build/WikiRefTjData',
