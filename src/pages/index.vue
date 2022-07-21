@@ -6,6 +6,9 @@ v-container
   v-main(style="padding:0")
     // Provides the application the proper gutter
     v-container(fluid="")
+      v-row
+        h1.v-heading.text-h4.text-sm-h4.mb-4 demo
+        iframe#v2frame(src="https://wiki.nikepai.com/v2")
       v-row.light-blue.lighten-5.mb-4
         aside Tip: 30 天内新增的图表标记为橘色
       .mb-5(v-for="(subitems, h1name) in indexObject" :id="getMd5Id(h1name)" :key="h1name")
@@ -558,6 +561,10 @@ export default {
   }
   a:not(:hover):not(:focus) {
     opacity: 0;
+  }
 }
+#v2frame {
+  height: 400px;
+  width: 100%;
 }
 </style>
