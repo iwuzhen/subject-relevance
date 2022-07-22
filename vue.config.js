@@ -11,7 +11,7 @@ const cdn = {
     'https://cdn.staticfile.org/vuetify/2.6.7/vuetify.min.css',
     'https://www.unpkg.com/handsontable@11.1.0/dist/handsontable.full.min.css',
     // 'https://www.unpkg.com/@ruangnazi/markdown-it-vue@1.1.6/dist/markdown-it-vue.css',
-    'https://www.unpkg.com/markdown-it-vue@1.1.7/dist/markdown-it-vue.css',
+    'https://www.unpkg.com/@ruangnazi/markdown-it-vue@1.1.7/dist/markdown-it-vue.css',
   ],
   js: [
     'https://cdn.staticfile.org/vue/2.7.7/vue.min.js',
@@ -32,7 +32,7 @@ const cdn = {
     'https://www.unpkg.com/handsontable@11.1.0/dist/handsontable.full.min.js',
     'https://www.unpkg.com/@handsontable/vue@11.1.0/dist/vue-handsontable.min.js',
     // 'https://www.unpkg.com/@ruangnazi/markdown-it-vue@1.1.6/dist/markdown-it-vue.umd.min.js',
-    'https://www.unpkg.com/markdown-it-vue@1.1.7/dist/markdown-it-vue.umd.min.js',
+    'https://www.unpkg.com/@ruangnazi/markdown-it-vue@1.1.7/dist/markdown-it-vue.umd.min.js',
     'https://www.unpkg.com/3d-force-graph@1.70.10/dist/3d-force-graph.min.js',
   ],
 };
