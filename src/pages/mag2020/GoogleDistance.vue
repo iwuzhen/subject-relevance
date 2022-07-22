@@ -14,16 +14,13 @@ v-container(fluid='')
   v-row
     v-col(cols='7')
       v-range-slider.align-center(v-model='years' :max='2020' :min='1955' dense='' hide-details='' hint='年份范围' @change='getData')
-        template(v-slot:prepend='')
+        template(v-slot:prepend)
           p(style='width: 100px') 年份范围
           v-text-field.mt-0.pt-0(:value='years[0]' hide-details='' single-line='' type='number' style='width: 60px' @change='$set(years, 0, $event)')
-        template(v-slot:append='')
+        template(v-slot:append)
           v-text-field.mt-0.pt-0(:value='years[1]' hide-details='' single-line='' type='number' style='width: 60px' @change='$set(years, 1, $event)')
     v-col(cols='1')
-      v-btn(:color="showAve ? 'light-green' : 'lime'" @click='\
-      showAve = !showAve;\
-      getData();\
-      ') {{ showAve ? "关闭平均距离" : "开启平均距离" }}
+      v-btn(:color="showAve ? 'light-green' : 'lime'" @click='showAve = !showAve;getData();') {{ showAve ? "关闭平均距离" : "开启平均距离" }}
     v-col(cols='1')
       v-btn(color='light-green' :disabled='currentAverageLine.name===null' @click='recordAveLine') 记录平均距离
     v-col(cols='1')
@@ -126,7 +123,7 @@ export default {
         strA: this.subjectTarget,
         strB: this.subjectRelevances
           .filter(item => {
-            if (item === this.subjectTarget && this.typeValue === 1) {
+            if (item === this.subjectTarget) {
               return false
             }
             return true
