@@ -69,7 +69,7 @@ export default {
     return {
       pageName: 'MAG Google 距离中间数据',
       typeValue: 1,
-      typeOptions: [{ text: '引用数', value: 0 }, { text: '引用交集数', value: 1 }],
+      typeOptions: [{ text: '引用数', value: 0 }, { text: '引用交集数', value: 1 }, { text: 'MAX/交集', value: 2 }],
       showAve: true,
       subjectTarget: '',
       subjectRelevances: SELECT_MAG_DATA,

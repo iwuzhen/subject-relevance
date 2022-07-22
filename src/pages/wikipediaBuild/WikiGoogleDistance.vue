@@ -75,7 +75,7 @@ export default {
         },
         type: {
           select: 0,
-          opt: [{ text: '引用数', value: 0 }, { text: '引用交集数', value: 1 }]
+          opt: [{ text: '引用数', value: 0 }, { text: '引用交集数', value: 1 }, { text: 'MAX/交集', value: 2 }]
         },
         levelType: {
           select: 2,
