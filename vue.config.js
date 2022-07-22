@@ -9,9 +9,9 @@ const cdn = {
     "https://cdn.staticfile.org/font-awesome/6.1.1/css/all.css",
     "//cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css",
     'https://cdn.staticfile.org/vuetify/2.6.7/vuetify.min.css',
-    // 'https://www.unpkg.com/handsontable@11.1.0/dist/handsontable.full.min.css',
+    'https://www.unpkg.com/handsontable@11.1.0/dist/handsontable.full.min.css',
     // 'https://www.unpkg.com/@ruangnazi/markdown-it-vue@1.1.6/dist/markdown-it-vue.css',
-    // 'https://www.unpkg.com/markdown-it-vue@1.1.7/dist/markdown-it-vue.css',
+    'https://www.unpkg.com/markdown-it-vue@1.1.7/dist/markdown-it-vue.css',
   ],
   js: [
     'https://cdn.staticfile.org/vue/2.7.7/vue.min.js',
@@ -29,10 +29,11 @@ const cdn = {
     "//lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/three.js/r125/three.min.js",
     "https://cdn.staticfile.org/echarts/5.3.3/echarts.min.js",
     "https://cdn.staticfile.org/axios/0.27.2/axios.min.js",
-    // 'https://www.unpkg.com/handsontable@11.1.0/dist/handsontable.full.min.js',
-    // 'https://www.unpkg.com/@handsontable/vue@11.1.0/dist/vue-handsontable.min.js',
+    'https://www.unpkg.com/handsontable@11.1.0/dist/handsontable.full.min.js',
+    'https://www.unpkg.com/@handsontable/vue@11.1.0/dist/vue-handsontable.min.js',
     // 'https://www.unpkg.com/@ruangnazi/markdown-it-vue@1.1.6/dist/markdown-it-vue.umd.min.js',
-    // 'https://www.unpkg.com/markdown-it-vue@1.1.7/dist/markdown-it-vue.umd.min.js',
+    'https://www.unpkg.com/markdown-it-vue@1.1.7/dist/markdown-it-vue.umd.min.js',
+    'https://www.unpkg.com/3d-force-graph@1.70.10/dist/3d-force-graph.min.js',
   ],
 };
 
@@ -51,14 +52,13 @@ const externals = {
   THREE: "three",
   vue: "Vue",
   "vue-router": "VueRouter",
-  // "@ruangnazi/markdown-it-vue":"markdown-it-vue",
-  // '@handsontable/vue':'@handsontable/vue',
-  // handsontable:'Handsontable',
+  "@ruangnazi/markdown-it-vue": 'window["markdown-it-vue"]',
+  handsontable:'Handsontable',
+  '@handsontable/vue':'Handsontable.vue',
   // vuex: "Vuex",
   axios: "axios",
-  // "vuetify": "Vuetify",
-  // vuetify: 'Vuetify',
-  'vuetify/lib': 'Vuetify',
+  "3d-force-graph": "ForceGraph3D",
+  vuetify: 'Vuetify',
   echarts: "echarts",
   lodash: "_",
   // diff2html: 'Diff2Html',
@@ -113,8 +113,5 @@ module.exports = {
     });
     //视为一个外部库，而不将它打包进来
     config.externals(externals);
-  },
-  "transpileDependencies": [
-    "vuetify"
-  ]
+  }
 }

@@ -12,7 +12,7 @@ import dayjs from 'dayjs'
 import { sync } from 'vuex-router-sync'
 import { createStore } from '@/store'
 import md5 from 'md5'
-import Vuetify from 'vuetify/lib'
+import Vuetify from 'vuetify'
 
 const store = createStore()
 

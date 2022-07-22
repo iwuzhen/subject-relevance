@@ -41,6 +41,7 @@
 
 <script>
 import MarkdownItVue from '@ruangnazi/markdown-it-vue'
+// const MarkdownItVue = require('@ruangnazi/markdown-it-vue')
 // import '@ruangnazi/markdown-it-vue/dist/markdown-it-vue.css'
 import { getStorage, createStorage } from '@/api/index'
 

@@ -32,7 +32,7 @@
 
 <script>
 import { HotTable } from '@handsontable/vue'
-import 'handsontable/dist/handsontable.full.css'
+// import 'handsontable/dist/handsontable.full.css'
 import Handsontable from 'handsontable'
 
 function firstRowRenderer(instance, td, row, col, prop, value, cellProperties) {
