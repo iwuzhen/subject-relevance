@@ -3418,43 +3418,78 @@ ChartMap['wikipedia-build/articleLength'] = {
   componentName: 'PageDynamicSelectTemplate',
   HandleResponseFunc: ([responseData, params], ChartObj) => {
     console.log('responseData', responseData)
-    const _opt = extendEchartsOpts({
-      title: {
-        text: responseData.title
-      },
-      xAxis: {
-        name: ChartObj.xAxisName,
-        type: 'value',
-        // type: params.islog === true ? 'log' : 'value',
-        boundaryGap: false
-        // data: responseData.x
-      },
-      yAxis: {
-        name: 'count',
-        type: 'value',
-        // type: params.islog === true ? 'log' : 'value',
-        axisLabel: {
-          formatter: value => formatNum(value)
+    let _opt
+    if (params.type !== undefined) {
+      _opt = extendEchartsOpts({
+        title: {
+          text: responseData.title
         },
-        min: function(value) {
-          return Math.floor(value.min * 10) / 10
-        }
-      },
-      series: extendLineSeries({
-        name: 'article word count',
-        type: 'line',
-        smooth: false,
-        data: params.islog === true ? _.zip(_.range(responseData.x.length).map(item => Math.log10(item + 1)), responseData.y) : _.zip(_.range(responseData.x.length), responseData.y)
-        // data: responseData.y
+        legend: {
+          data: responseData.legend
+        },
+        xAxis: {
+          name: 'number of words',
+          type: 'category',
+          // type: params.islog === true ? 'log' : 'value',
+          boundaryGap: false,
+          // data: responseData.x.map(item => Number(item))
+          data: responseData.x
+        },
+        yAxis: {
+          // name: 'count',
+          type: 'value',
+          name: params.type === 1 ? 'ratio' : 'quantity',
+          axisLabel: {
+            formatter: value => formatNum(value)
+          }
+        },
+        series: zip(responseData.legend, responseData.y).map(item => {
+          return extendLineSeries({
+            name: item[0],
+            type: 'line',
+            smooth: false,
+            data: item[1]
+          })
+        })
       })
-
-    })
-
-    console.log(_.zip(_.range(responseData.x.length).map(item => Math.log10(item)), responseData.y))
+    } else {
+      _opt = extendEchartsOpts({
+        title: {
+          text: responseData.title
+        },
+        xAxis: {
+          name: ChartObj.xAxisName,
+          type: 'value',
+          // type: params.islog === true ? 'log' : 'value',
+          boundaryGap: false
+        // data: responseData.x
+        },
+        yAxis: {
+          name: 'count',
+          type: 'value',
+          // type: params.islog === true ? 'log' : 'value',
+          axisLabel: {
+            formatter: value => formatNum(value)
+          },
+          min: function(value) {
+            return Math.floor(value.min * 10) / 10
+          }
+        },
+        series: extendLineSeries({
+          name: 'article word count',
+          type: 'line',
+          smooth: false,
+          data: params.islog === true ? _.zip(_.range(responseData.x.length).map(item => Math.log10(item + 1)), responseData.y) : _.zip(_.range(responseData.x.length), responseData.y)
+        // data: responseData.y
+        })
+      })
+    }
     return _opt
   },
   RequestFunc: async params => {
-    // console.log(wikipeida_direct_xueshu_lv2)
+    if (params.type === 9) {
+      delete (params.type)
+    }
     const data = await requestWrap(
       'wiki/getArtSizeDfd',
       'post',
@@ -3464,11 +3499,51 @@ ChartMap['wikipedia-build/articleLength'] = {
   },
   Select: [
     {
+      name: 'type',
+      default: 0,
+      label: '图表类型',
+      multiple: false,
+      show: true,
+      cols: 4,
+      items: [{
+        text: '对数正态统计数量',
+        value: 0
+      }, {
+        text: '对数正态统计比例',
+        value: 1
+      }, {
+        text: '区间统计数量',
+        value: 9
+      }],
+      func: that => {
+        if (that.options.type !== 9) {
+          for (const i in that.ChartObj.Select) {
+            if (that.ChartObj.Select[i].name === 'size') {
+              that.ChartObj.Select[i].show = false
+            }
+            if (that.ChartObj.Select[i].name === 'islog') {
+              that.ChartObj.Select[i].show = false
+            }
+          }
+        } else {
+          for (const i in that.ChartObj.Select) {
+            if (that.ChartObj.Select[i].name === 'size') {
+              that.ChartObj.Select[i].show = true
+            }
+            if (that.ChartObj.Select[i].name === 'islog') {
+              that.ChartObj.Select[i].show = true
+            }
+          }
+        }
+        that.getData()
+      }
+    },
+    {
       name: 'size',
       default: 50,
       label: '间隔大小',
       multiple: false,
-      show: true,
+      show: false,
       cols: 4,
       items: [5, 10, 20, 30, 40, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000]
     },
@@ -3477,7 +3552,7 @@ ChartMap['wikipedia-build/articleLength'] = {
       default: true,
       label: '是否取log',
       multiple: false,
-      show: true,
+      show: false,
       cols: 4,
       items: [true, false]
     }
