@@ -389,7 +389,7 @@ export default {
               title: 'article length',
               text: 'wikipedai 文章长度',
               to: '/wikipedia-build/articleLength',
-              update: '2022-02-25T09:43:03.429Z'
+              update: '2022-08-08T09:43:03.429Z'
             },
             {
               title: '各学科总字数等一些规律',

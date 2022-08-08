@@ -3512,6 +3512,12 @@ ChartMap['wikipedia-build/articleLength'] = {
         text: '对数正态统计比例',
         value: 1
       }, {
+        text: '总计数量(x轴放大10倍)',
+        value: 2
+      }, {
+        text: '统计比例(x轴放大10倍)',
+        value: 3
+      }, {
         text: '区间统计数量',
         value: 9
       }],
