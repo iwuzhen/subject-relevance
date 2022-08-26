@@ -101,7 +101,7 @@ export default {
         },
         mode: {
           select: '一年的幂率度分布',
-          opt: ['一年的幂率度分布', '逐年的斜率分布']
+          opt: ['一年的幂率度分布', '逐年的幂指数γ分布']
         },
         subject: {
           select: ['Biology', 'Physics', 'Chemistry', 'Political science', 'Computer science', 'Psychology', 'Sociology', 'Engineering disciplines', 'Environmental science', 'Geology', 'Materials science', 'Mathematics', 'Philosophy'],
@@ -256,7 +256,7 @@ export default {
         x_to: this.option.nodeRange[1],
         y_to: this.option.y_to
       }
-      if (this.option.mode.select === '逐年的斜率分布') {
+      if (this.option.mode.select === '逐年的幂指数γ分布') {
         opt.year = 'all'
       }
       try {
@@ -375,7 +375,7 @@ export default {
 
       const _opt = extendEchartsOpts({
         title: {
-          text: '逐年的斜率分布'
+          text: '逐年的幂指数γ分布'
         },
         legend: {
           data: data.legend

@@ -70,7 +70,7 @@ export default {
       option: {
         mode: {
           select: '一年的幂率度分布',
-          opt: ['一年的幂率度分布', '逐年的斜率分布']
+          opt: ['一年的幂率度分布', '逐年的幂指数γ分布']
         },
         y_to: 0.1,
         nodeRange: [100, 10000],
@@ -237,7 +237,7 @@ export default {
         x_to: this.option.nodeRange[1],
         y_to: this.option.y_to
       }
-      if (this.option.mode.select === '逐年的斜率分布') {
+      if (this.option.mode.select === '逐年的幂指数γ分布') {
         opt.year = 'all'
       }
       try {
@@ -246,6 +246,8 @@ export default {
           if (opt.year === 'all') {
             this.chartOpt = this.setOptions(res.data)
             this.myChartObjs[0].setOption(this.chartOpt, true)
+            console.log('data', res.data)
+            console.log('opt', this.chartOpt)
           } else {
             this.setSlope(res.xl)
             this.chartData = res.data
@@ -264,7 +266,6 @@ export default {
     setOptions_chart1(data) {
       // let ymax = Math.max(...[].concat(...data.y));
       // ymax = Math.ceil(ymax * 10) / 10;
-      console.log(data)
       // let xmax = Math.max(...data.x)
       // xmax = Math.ceil(xmax * 10) / 10
       // 设置
@@ -358,13 +359,13 @@ export default {
 
       const _opt = extendEchartsOpts({
         title: {
-          text: '逐年的斜率分布'
+          text: '逐年的幂指数γ分布'
         },
         legend: {
           data: data.legend
         },
         xAxis: {
-          type: 'value',
+          type: 'category',
           // max: xmax,
           name: 'date',
           data: data.x
