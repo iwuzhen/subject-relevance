@@ -17,7 +17,7 @@ v-container(fluid)
       v-select(v-model='option.mode.select', :items='option.mode.opt', label='展示模式', @change='getData').
   v-row
     v-col(cols='11')
-      v-range-slider.align-center(v-model='option.nodeRange' :max='40000' :min='1' dense hide-details hint='求斜率范围' @change='getData')
+      v-range-slider.align-center(v-model='option.nodeRange' :max='10000' :min='1' dense hide-details hint='求斜率范围' @change='getData')
         template(v-slot:prepend)
           p(style='width: 100px') 求斜率范围
           v-text-field.mt-0.pt-0(:value='option.nodeRange[0]' hide-details single-line type='number' style='width: 60px' @change='$set(option.nodeRange, 0, $event)')
