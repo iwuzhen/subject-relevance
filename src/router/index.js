@@ -70,6 +70,10 @@ const routes = [{
   name: 'MagGoogleDistance_2020_V3',
   component: () => import('@/pages/mag2020/MagGoogleDistance_2020_V3')
 }, {
+  path: '/wm/WMGoogleDistance_2020_V3',
+  name: 'WMGoogleDistance_2020_V3',
+  component: () => import('@/pages/wm/WMGoogleDistance_2020_V3')
+}, {
   path: '/mag2020/MagDirectNet',
   name: 'Mag2020DirectNet',
   component: () => import('@/pages/mag2020/MagDirectNet')
@@ -409,6 +413,20 @@ const routes = [{
   component: () => import('@/pages/wikipediaBuild/wikipediaNetworkEntropy')
 }
 ]
+
+// 自动读取views文件夹下的所有vue文件
+const files = require.context('@/pages', true, /\.vue$/)
+files.keys().map((item) => {
+  const path = item.slice(1).replace('.vue', '').toLowerCase()
+  // 获取组件信息
+  // const comp = files(item).default
+  routes.push({
+    path,
+    // name: comp.name.replace(/ /g, ''),
+    component: () => import('@/pages' + item.slice(1))
+  })
+})
+
 // 自动化映入模板
 for (const [k, v] of Object.entries(ChartMap)) {
   routes.push({

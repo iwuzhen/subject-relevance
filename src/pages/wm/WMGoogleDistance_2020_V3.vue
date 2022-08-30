@@ -41,7 +41,7 @@ v-container(fluid)
         v-container#masChart2(fluid fill-height)
   v-row
     v-col
-      comment(storagekey='Mag_google_distance_Chart_2020_2')
+      comment(storagekey='WM_google_distance_Chart_2020_2')
 
 </template>
 <script>
@@ -60,14 +60,9 @@ export default {
   extends: Base,
   data() {
     return {
-      pageName: 'MAG 学科相关度 2020（当时的距离）',
+      pageName: 'VM 学科相关度 2020（当时的距离）',
       qsValue: -1,
-      qsOptions: [{ text: '去掉引用为0的。按边', value: -100 },
-        { text: '不筛选,按边', value: -99 },
-        { text: '不筛选,按点', value: -1 },
-        { text: '去掉被引用为0的文章，剩余7000万+,按点', value: -2 },
-        { text: '引用top百分之十文章,按点', value: 10 },
-        { text: '引用top百分之三十文章,按点', value: 30 }],
+      qsOptions: [{ text: '不筛选,按点', value: -1 }],
       showAve: false,
       subjectTarget: '',
       subjectRelevances: SELECT_MAG_DATA,
@@ -82,29 +77,14 @@ export default {
       }]).sort((a, b) => a.text.localeCompare(b.text)),
       methodOptions: ['linksin', 'linksout'],
       bfValue: -1,
-      bfOpt: [-1, 1980, 1985, 1990, 1995, 2000, 2005, 2010, 2015],
+      bfOpt: [-1],
       loading: false,
       myChartIds: ['masChart1', 'masChart2', 'masChart3'],
       averageLinedata: { title: '平均逐年距离图', legend: [], x: [], y: [] },
-      version: 'delete_noref_v3_node',
+      version: 'vm_v0',
       versionOpt: [{
-        value: 'delete_noref_v3_node',
-        text: '文章的距离，去0，去Book和去Patent，按点'
-      }, {
-        value: 'delete_noref_v3_edge',
-        text: '文章的距离，去0，去Book和去Patent，按边'
-      }, {
-        value: 'tjart_only_noPatent_delete_noref_v3_node',
-        text: '文章的距离，去0，去Patent，按点'
-      }, {
-        value: 'tjart_only_noPatent_delete_noref_v3_edge',
-        text: '文章的距离，去0，去Patent，按边'
-      }, {
-        value: 'tjbook_only_noPatent_delete_noref_v3_node',
-        text: '书的距离，去0，去Patent，按点'
-      }, {
-        value: 'tjbook_only_noPatent_delete_noref_v3_edge',
-        text: '书的距离，去0，去Patent，按边'
+        value: 'vm_v0',
+        text: 'VM'
       }],
       currentAverageLine: { name: null, line: [] },
       count: 0
@@ -159,6 +139,7 @@ export default {
         from: this.years[0],
         to: this.years[1],
         qs: this.qsValue,
+        level: -1,
         version: this.version
       }
 

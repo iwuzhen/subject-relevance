@@ -1722,6 +1722,77 @@ ChartMap['wikipedia/WikiAndMagCountByYear'] = {
   yAxisName: 'Count'
 }
 
+ChartMap['vm/NodeEdgeCountByYear'] = {
+  ChName: 'VM总文章和边数按年趋势',
+  componentName: 'PageDynamicSelectTemplate',
+  HandleResponseFunc: (responseData, ChartObj) => {
+    const _opt = extendEchartsOpts({
+      title: {
+        text: responseData.data.title
+      },
+      xAxis: {
+        name: ChartObj.xAxisName,
+        type: 'category',
+        boundaryGap: false,
+        data: responseData.data.x
+      },
+      yAxis: {
+        name: ChartObj.yAxisName,
+        type: 'value'
+      },
+      series: extendLineSeries({
+        name: 'line',
+        type: 'line',
+        smooth: false,
+        data: responseData.data.y
+      })
+    })
+    return _opt
+  },
+  RequestFunc: async params => {
+    // 当年
+    const data = await requestWrap(
+      'wiki/getWikiAndMagCountByYear',
+      'post',
+      params
+    )
+    console.log(data)
+    return data
+  },
+  Select: [
+    {
+      name: 'db',
+      default: 'wm',
+      label: '数据库',
+      multiple: false,
+      show: true,
+      cols: 3,
+      items: [
+        'wm'
+      ]
+    },
+    {
+      name: 'type',
+      default: 'node',
+      label: '数据维度',
+      multiple: false,
+      show: true,
+      cols: 3,
+      items: [
+        'node',
+        'edge',
+        { text: '边数/点数', value: 'avg' },
+        'node_dx',
+        'edge_dx'
+      ]
+    }
+  ],
+  Slider: [],
+  RangeSlider: [],
+  xAxisName: 'Year',
+  yAxisName: 'Count'
+}
+
 ChartMap['mag2020/MAG_ZldByTopN_every5000'] = {
   ChName: 'MAG 学科topN 每隔5000的自恋度',
   componentName: 'PageDynamicSelectTemplate',
@@ -2671,6 +2742,68 @@ ChartMap['mag2019v2/AuthorsAndArticleInfoByYear'] = {
         {
           text: '作者数超过100的论文',
           value: 1
+        }
+      ]
+    }
+  ],
+  RangeSlider: [
+    {
+      name: 'yearRange',
+      startName: 'from',
+      rangeDefault: [1945, 2018],
+      endName: 'to',
+      label: '年份范围',
+      cols: 8,
+      max: 2020,
+      min: 1900
+    }
+  ],
+  xAxisName: 'Year',
+  yAxisName: 'Count'
+}
+
+ChartMap['wm/AuthorsAndArticleInfoByYear'] = {
+  ChName: 'WM 作者数逐年统计',
+  componentName: 'PageTemplate',
+  RequestFunc: async params => {
+    return await requestWrap(
+      'mag/getMagAuthorsAndArticleInfo_year_v2',
+      'post',
+      params
+    )
+  },
+  HandleResponseFunc: setChartOption_1,
+  Select: [
+    {
+      name: 'version',
+      default: 'wm',
+      multiple: false,
+      label: '数据',
+      cols: 2,
+      items: ['wm']
+    },
+    {
+      name: 'str',
+      default: defaultCategorySelect,
+      multiple: true,
+      label: '目标学科',
+      cols: 6,
+      items: magCategory
+    },
+    {
+      name: 'returnType',
+      default: 1,
+      multiple: false,
+      label: '过滤器',
+      cols: 2,
+      items: [
+        {
+          text: '逐年作者数(不去重)',
+          value: 1
+        },
+        {
+          text: '逐年作者数(不去重)/文章数',
+          value: 4
         }
       ]
     }

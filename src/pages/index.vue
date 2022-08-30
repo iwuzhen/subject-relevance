@@ -133,6 +133,34 @@ export default {
             }
           ]
         },
+        WM: {
+          status: [
+            // {
+            //   title: 'WM google 距离',
+            //   text: 'WM google 距离',
+            //   to: '/wm/WMGoogleDistance_2020_V3',
+            //   update: '2022-12-14T09:43:03.429Z'
+            // },
+            {
+              title: 'WM 点边趋势',
+              text: 'WM 点边趋势',
+              to: '/wm/nodeEdgeCountByYear',
+              update: '2022-12-14T09:43:03.429Z'
+            },
+            {
+              title: 'WM 作者统计',
+              text: 'WM 作者统计',
+              to: '/wm/AuthorsAndArticleInfoByYear',
+              update: '2022-12-14T09:43:03.429Z'
+            },
+            {
+              title: 'WM 度分布',
+              text: 'WM 度分布',
+              to: '/wm/dbfwm2020',
+              update: '2022-12-14T09:43:03.429Z'
+            }
+          ]
+        },
         'Entropy': {
           '熵': [{
             title: 'MAG 分学科 熵',
