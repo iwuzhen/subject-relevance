@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import scrollBehavior from './scroll-behavior'
-
+import { nanoid } from 'nanoid'
 import { ChartMap } from '@/api/chartData'
 
 Vue.use(Router)
@@ -423,6 +423,7 @@ files.keys().map((item) => {
   routes.push({
     path,
     // name: comp.name.replace(/ /g, ''),
+    name: nanoid(),
     component: () => import('@/pages' + item.slice(1))
   })
 })
@@ -441,6 +442,5 @@ export function createRouter(vuetify, store) {
     mode: 'history',
     routes: routes,
     scrollBehavior: (...args) => scrollBehavior(vuetify, store, ...args)
-
   })
 }
