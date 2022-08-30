@@ -1722,8 +1722,8 @@ ChartMap['wikipedia/WikiAndMagCountByYear'] = {
   yAxisName: 'Count'
 }
 
-ChartMap['vm/NodeEdgeCountByYear'] = {
-  ChName: 'VM总文章和边数按年趋势',
+ChartMap['wm/NodeEdgeCountByYear'] = {
+  ChName: 'WM总文章和边数按年趋势',
   componentName: 'PageDynamicSelectTemplate',
   HandleResponseFunc: (responseData, ChartObj) => {
     const _opt = extendEchartsOpts({
@@ -2800,6 +2800,10 @@ ChartMap['wm/AuthorsAndArticleInfoByYear'] = {
         {
           text: '逐年作者数(不去重)',
           value: 1
+        },
+        {
+          text: '逐年文章数(去掉无作者的)',
+          value: 2
         },
         {
           text: '逐年作者数(不去重)/文章数',

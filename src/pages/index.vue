@@ -144,7 +144,7 @@ export default {
             {
               title: 'WM 点边趋势',
               text: 'WM 点边趋势',
-              to: '/wm/nodeEdgeCountByYear',
+              to: '/wm/NodeEdgeCountByYear',
               update: '2022-12-14T09:43:03.429Z'
             },
             {
