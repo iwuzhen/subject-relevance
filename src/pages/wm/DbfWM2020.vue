@@ -4,11 +4,7 @@ v-container(fluid)
     v-col(cols='8')
       v-select(v-model='option.subject.select', :items='option.subject.opt', small-chips, multiple, deletable-chips, clearable, label='目标学科', @change='getData')
     v-col(cols='2')
-      v-select(v-model='option.type.select', :items='option.type.opt', label='世界类型', @change='getData').
-    v-col(cols='2')
       v-select(v-model='option.year.select', :items='option.year.opt', label='幂律分布指定年', @change='switchYearMonth').
-    v-col(cols='4')
-      v-select(v-model='option.isNoRef.select', :items='option.isNoRef.opt', label='过滤器', @change='getData').
     v-col(cols='2')
       v-select(v-model='option.islog.select', :items='option.islog.opt', label='幂律分布取 log', @change='getData').
     v-col(cols='4')
