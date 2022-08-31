@@ -2762,6 +2762,12 @@ ChartMap['mag2019v2/AuthorsAndArticleInfoByYear'] = {
   yAxisName: 'Count'
 }
 
+const magCategoryTmp = magCategory.concat()
+magCategoryTmp.unshift({
+  value: 'all',
+  text: 'all，不按学科分类'
+})
+
 ChartMap['wm/AuthorsAndArticleInfoByYear'] = {
   ChName: 'WM 作者数逐年统计',
   componentName: 'PageTemplate',
@@ -2788,7 +2794,7 @@ ChartMap['wm/AuthorsAndArticleInfoByYear'] = {
       multiple: true,
       label: '目标学科',
       cols: 6,
-      items: magCategory
+      items: magCategoryTmp
     },
     {
       name: 'returnType',
