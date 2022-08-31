@@ -73,6 +73,10 @@ const routes = [{
   name: 'WMGoogleDistance_2020_V3',
   component: () => import('@/pages/wm/WMGoogleDistance_2020_V3')
 }, {
+  path: '/wm/GoogleDistance',
+  name: 'WMGoogleDistance',
+  component: () => import('@/pages/wm/GoogleDistance')
+}, {
   path: '/wm/dbfwm2020',
   name: 'dbfwm2020',
   component: () => import('@/pages/wm/DbfWM2020')

@@ -135,12 +135,18 @@ export default {
         },
         WM: {
           status: [
-            // {
-            //   title: 'WM google 距离',
-            //   text: 'WM google 距离',
-            //   to: '/wm/WMGoogleDistance_2020_V3',
-            //   update: '2022-12-14T09:43:03.429Z'
-            // },
+            {
+              title: 'WM google 距离中间数据',
+              text: 'WM google 距离中间数据',
+              to: '/wm/GoogleDistance',
+              update: '2022-12-14T09:43:03.429Z'
+            },
+            {
+              title: 'WM google 距离',
+              text: 'WM google 距离',
+              to: '/wm/WMGoogleDistance_2020_V3',
+              update: '2022-12-14T09:43:03.429Z'
+            },
             {
               title: 'WM 点边趋势',
               text: 'WM 点边趋势',
