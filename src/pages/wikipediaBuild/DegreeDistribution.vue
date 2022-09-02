@@ -352,9 +352,9 @@ export default {
         },
         series: seriesList
       })
-      if (this.option.islog.select === 0) {
-        _opt.xAxis.max = 50
-      }
+      // if (this.option.islog.select === 0) {
+      //   _opt.xAxis.max = 50
+      // }
       console.log(_opt)
       return _opt
     },
