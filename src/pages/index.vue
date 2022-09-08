@@ -516,6 +516,10 @@ export default {
     scrolling: sync('pages/scrolling')
   },
   async mounted() {
+    var ifm = document.getElementById('v2frame')
+    ifm.height = document.documentElement.clientHeight
+    ifm.width = document.documentElement.clientWidth
+
     // toc
     this.$store.set('pages/page_name', '')
     // 最近更新的内容提醒
@@ -604,7 +608,6 @@ export default {
   }
 }
 #v2frame {
-  height: 400px;
   width: 100%;
 }
 </style>

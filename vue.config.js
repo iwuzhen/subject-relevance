@@ -71,7 +71,8 @@ const externals = {
 };
 
 module.exports = {
-  "devServer": {
+  devServer: {
+    port: 8081,
     "proxy": {
       "/api/": {
         "target": "https://wiki.lmd.knogen.com:10443/api/",
