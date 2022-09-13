@@ -517,7 +517,7 @@ export default {
   },
   async mounted() {
     var ifm = document.getElementById('v2frame')
-    ifm.height = document.documentElement.clientHeight
+    // ifm.height = document.documentElement.clientHeight
     ifm.width = document.documentElement.clientWidth
 
     // toc
@@ -609,5 +609,6 @@ export default {
 }
 #v2frame {
   width: 100%;
+  height: 400px;
 }
 </style>
