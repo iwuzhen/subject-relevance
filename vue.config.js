@@ -71,6 +71,7 @@ const externals = {
 };
 
 module.exports = {
+  publicPath: "/v1/",
   devServer: {
     port: 8081,
     "proxy": {

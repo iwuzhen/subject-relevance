@@ -447,6 +447,7 @@ for (const [k, v] of Object.entries(ChartMap)) {
 export function createRouter(vuetify, store) {
   return new Router({
     mode: 'history',
+    base: '/v1/',
     routes: routes,
     scrollBehavior: (...args) => scrollBehavior(vuetify, store, ...args)
   })
