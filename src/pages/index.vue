@@ -24,7 +24,7 @@ v-container
             v-divider
           v-row
             v-col(v-for="(item, index) in items" :key="index" cols="6" md="4" lg="3")
-              v-hover(v-slot:default="{ hover }" close-delay="200")
+              v-hover(v-slot:default="{ hover }" close-delay="200" v-if="item.visible!==false")
                 v-card.mx-auto(max-width="344" :elevation="hover ? 16 : 2" min-height="150" :to="item.to" :href="item.href" :class="(item.update!=null)&&(new Date().getTime()-new Date(item.update).getTime()<2497466968)?'orange':'white'")
                   v-card-title {{ item.title }}
                   v-card-subtitle(v-if="item.update!=null") {{ dayjs(item.update).locale('zh-cn').format('YYYY-MM-DD') }}
@@ -136,12 +136,14 @@ export default {
         WM: {
           status: [
             {
+              visible: false,
               title: 'WM google 距离中间数据',
               text: 'WM google 距离中间数据',
               to: '/wm/GoogleDistance',
               update: '2022-12-14T09:43:03.429Z'
             },
             {
+              visible: false,
               title: 'WM google 距离',
               text: 'WM google 距离',
               to: '/wm/WMGoogleDistance_2020_V3',
@@ -154,6 +156,7 @@ export default {
               update: '2022-12-14T09:43:03.429Z'
             },
             {
+              visible: false,
               title: 'WM 作者统计',
               text: 'WM 作者统计',
               to: '/wm/AuthorsAndArticleInfoByYear',
@@ -169,28 +172,33 @@ export default {
         },
         'Entropy': {
           '熵': [{
+            visible: false,
             title: 'MAG 分学科 熵',
             text: '保护结构熵和度分布熵',
             to: '/mag2020/MAGSubjectEntropy',
             update: '2022-12-14T09:43:03.429Z'
           },
           {
+            visible: false,
             title: 'MAG 结构熵',
             text: '结构熵(节点重要性)',
             to: '/mag2020/entropy',
             update: '2022-12-14T09:43:03.429Z'
           },
           {
+            visible: false,
             title: 'MAG 度分布熵',
             text: '网络熵(度序列分布)',
             to: '/mag2020/networkEntropy',
             update: '2022-12-14T09:43:03.429Z'
           }, {
+            visible: false,
             title: 'wikipedia 结构熵',
             text: 'wikipedia 结构熵(节点重要性),网络密度',
             to: '/wikipedia-build/wikipediaEntropy',
             update: '2022-12-02T16:43:03.429Z'
           }, {
+            visible: false,
             title: 'wikipedia 度分布熵',
             text: 'wikipedia 网络熵(度序列分布)',
             to: '/wikipedia-build/wikipediaNetworkEntropy',
@@ -260,6 +268,7 @@ export default {
             update: '2021-02-02T09:43:03.429Z'
           },
           {
+            visible: false,
             title: 'MAG google距离中间数据',
             text: 'MAG google距离中间数据',
             to: '/mag2020/GoogleDistance',
@@ -303,11 +312,13 @@ export default {
           }],
           '学科相关度等': [
             {
+              visible: false,
               title: '2020 学科相关度',
               text: '2020 学科相关度',
               to: '/mag2020/MagGoogleDistance_2020_V3',
               update: '2020-12-14T09:43:03.429Z'
             }, {
+              visible: false,
               title: '2020 二级学科相关度',
               text: '二级学科相关度',
               to: '/mag2020/MagPlantDistance',
@@ -318,6 +329,7 @@ export default {
               to: '/mag2020/BubbleDistance',
               update: '2021-01-06T09:43:03.429Z'
             }, {
+              visible: false,
               title: 'MAG 幂律及其随时间变化趋势',
               text: '包含 3 个图表',
               to: '/mag2020/ZipfAndInnerzipfByYearv3',
@@ -348,6 +360,7 @@ export default {
         'Wikipedia-历史重建': {
           '统计数据': [
             {
+              visible: false,
               title: 'wiki Google 中间距离',
               text: 'wiki Google 中间距离',
               to: { path: '/wikipedia-build/WikiGoogleDistance' },
@@ -360,12 +373,14 @@ export default {
               update: '2022-06-30T09:43:03.429Z'
             },
             {
+              visible: false,
               title: 'wiki 文章数',
               text: 'wiki 文章数查询',
               to: '/wikipedia-build/ArticlesTotal',
               update: '2021-06-30T09:43:03.429Z'
             },
             {
+              visible: false,
               title: 'wiki Core V5',
               text: '各 Core V5 学科的逐年相关度',
               to: { path: '/wikipedia/DisciplineCore', query: { version: 'v5_new' }},
@@ -396,6 +411,7 @@ export default {
               update: '2021-11-27T16:43:03.429Z'
             },
             {
+              visible: false,
               title: 'wiki幂律',
               text: 'wiki幂律',
               to: '/wikipedia-build/CoreZipfByNodes_wiki',
@@ -408,12 +424,14 @@ export default {
             //   update: '2022-12-02T16:43:03.429Z'
             // },
             {
+              visible: false,
               title: 'wiki幂律度分布',
               text: 'wiki 幂律度分布',
               to: '/wikipedia-build/DegreeDistribution',
               update: '2022-02-06T16:43:03.429Z'
             },
             {
+              visible: false,
               title: 'People in wiki',
               text: '人和人，学科的相关度',
               to: '/wikipedia-build/disciplinePeople',
@@ -426,6 +444,7 @@ export default {
               update: '2022-08-08T09:43:03.429Z'
             },
             {
+              visible: false,
               title: '各学科总字数等一些规律',
               text: 'wikipedai 各学科的总字数和linksout的一些规律',
               to: '/wikipedia-build/Xueke_words_linksout',
@@ -446,6 +465,7 @@ export default {
               to: '/wikipedia/TopArticles'
             },
             {
+              visible: false,
               title: '访问量&编辑量',
               text: 'wiki 访问量&编辑量',
               to: '/wikipedia/ViewAndEdits'
@@ -484,6 +504,7 @@ export default {
               update: '2021-02-05T16:43:03.429Z'
             },
             {
+              visible: false,
               title: 'wiki 总文章和边数按年趋势',
               text: 'wiki总文章和边数按年趋势',
               to: '/wikipedia/WikiAndMagCountByYear',
