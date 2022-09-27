@@ -157,7 +157,6 @@ const setChartOption_bar_2 = (retData, ChartObj) => {
       type: 'value'
     },
     series: _.zip(retData.legend, retData.y).map(item => {
-      console.log(_.zip(retData.x, item[1]))
       return extendLineSeries({
         name: item[0],
         type: 'line',
