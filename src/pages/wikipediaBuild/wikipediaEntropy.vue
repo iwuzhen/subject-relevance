@@ -195,7 +195,7 @@ export default {
       // 标准结构熵
       let _opt = extendEchartsOpts({
         title: {
-          text: `底数${this.option.logBase.select}  网络准结构熵`
+          text: `底数${this.option.logBase.select}  网络标准结构熵`
         },
         xAxis: {
           name: 'Year',
