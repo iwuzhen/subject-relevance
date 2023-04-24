@@ -49,6 +49,11 @@ import { extendEchartsOpts, MAGCoreCategorys2020_V1, extendLineSeries, SELECT_MA
 import Base from '@/utils/base'
 import comment from '@/components/comment'
 
+console.log('MAGCoreCategorys2020_V1', MAGCoreCategorys2020_V1)
+MAGCoreCategorys2020_V1.push({
+  text: 'Bioinformatics',
+  value: 'Bioinformatics'
+})
 export default {
   name: 'MagV3',
   components: {

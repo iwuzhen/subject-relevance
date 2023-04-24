@@ -1655,7 +1655,8 @@ ChartMap['wikipedia/WikiAndMagCountByYear'] = {
         'wiki',
         'mag',
         { text: 'wiki 两层学术圈', value: 'xueshu_lv2' },
-        { text: 'wiki 三层学术圈', value: 'xueshu_lv3' }
+        { text: 'wiki 三层学术圈', value: 'xueshu_lv3' },
+        { text: 'wm', value: 'wm' }
       ],
       func: that => {
         if (['xueshu_lv2', 'xueshu_lv3'].includes(that.options.db)) {

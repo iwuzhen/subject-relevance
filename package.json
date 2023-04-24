@@ -18,6 +18,7 @@
     "async-limiter": "^2.0.0",
     "axios": "^0.27.2",
     "core-js": "^3.19.3",
+    "d3-scale": "^4.0.2",
     "echarts": "^5.2.2",
     "echarts-stat": "^1.1.1",
     "graphology": "^0.23.1",

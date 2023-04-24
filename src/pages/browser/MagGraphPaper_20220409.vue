@@ -37,6 +37,9 @@ v-container(fluid :style="cssVars")
         v-btn(@click="style.fontLeft--") + 1
         v-btn(@click="style.fontLeft++") - 1
 
+    v-col(cols="2")
+      v-switch(v-model="fixed2DStatus" :label="`fixed 2D graph`"  @change='fixed2dHandle')
+
   v-row
     page(size="A2")
       //- div#3dgraph.box
@@ -48,7 +51,8 @@ v-container(fluid :style="cssVars")
 
   v-row.mt50
     page(size="A3")
-      v-card.mx-auto(outlined :loading='loading' height='24.2cm')
+      //- v-card.mx-auto(outlined :loading='loading' height='24.2cm')
+      v-card.mx-auto(outlined :loading='loading' height='80vh')
         v-container#subjectChart1(fluid fill-height)
 
   v-row
@@ -74,6 +78,7 @@ const Graph = require('graphology')
 import { connectedComponents } from 'graphology-components'
 
 import { getMasDatav2, requestWrap } from '@/api/index'
+import { scaleLinear } from 'd3-scale'
 // import anime from 'animejs/lib/anime.es.js'
 // import * as THREE from 'three'
 
@@ -84,7 +89,7 @@ import { CSS2DObject, CSS2DRenderer } from '@/utils/three/CSS2DRenderer'
 
 // const ColorPool = ['#ff461f', '#ff2d51', '#1685a9', '#065279', '#0aa344', '#ff2121', '#425066', '#8d4bbb', '#00e079', '#4c221b', '#003371', '#dc3023', '#3d3b4f', '#b25d25', '#392f41', '#ff0097', '#9b4400', '#bf242a', '#312520', '#7c4b00', '#424c50', '#622a1d', '#1bd1a5', '#00e500']
 const SubjectColorMap = {
-  'Medicine': '#91ca8c',
+  'Medicine': 'rgba(32, 191, 0, 1)',
   'Engineering': '#ff9f7f',
   'Biology': '#00FF00',
   'Chemistry': '#40E0D0',
@@ -99,11 +104,13 @@ const SubjectColorMap = {
   'Political science': '#c23531',
   'Environmental science': '#91c7ae',
   'Geology': '#c4ccd3',
-  'Geography': '#3cb371',
+  'Geography': 'rgba(28, 97, 154, 1)',
   'Art': '#E690D1',
   'History': '#eedd78',
   'Philosophy': '#96BFFF'
 }
+
+const EchartColor = ['rgba(255, 105, 180, 0.97)', 'rgba(152, 252, 65, 1)', 'rgba(238, 189, 254, 1)', '#db6917', 'rgba(128, 49, 231, 1)', 'rgba(216, 242, 186, 1)', 'rgba(146, 141, 150, 1)', 'rgba(124, 181, 234, 1)', 'rgba(66, 119, 182, 1)', 'rgba(232, 233, 72, 1)', 'rgba(166, 163, 110, 1)', 'rgba(130, 238, 255, 1)', 'rgba(186, 28, 48, 1)', 'rgba(32, 191, 0, 1)', 'rgba(153, 106, 152, 1)', 'rgba(255, 174, 2, 1)', 'rgba(254, 79, 79, 0.93)', 'rgba(223, 120, 244, 1)', 'rgba(255, 180, 161, 1)']
 
 export default {
   name: 'MagGraph',
@@ -118,6 +125,7 @@ export default {
       subjectOpt: MAGCoreCategorys2020_V1,
       subjectRelevances: SELECT_MAG_DATA_V1,
       version: 'delete_noref_v3_node',
+      fixed2DStatus: false,
       versionOpt: [{
         value: 'delete_noref_v3_node',
         text: '文章的距离，去0，去Book和去Patent，按点'
@@ -370,7 +378,7 @@ export default {
 
       links = this.GraphData.links.filter(x => x.value <= this.linkFilter)
       nodes = this.GraphData.nodes
-      this.echartDraw(nodes, links.concat())
+      this.echartDraw(nodes, _.concat(links))
       if (this.Graph === null) {
         this.draw3DForceGraph({ nodes, links })
       } else {
@@ -596,7 +604,7 @@ export default {
           name: 'Knowledge Distance',
           type: 'value',
           min: 0.3,
-          max: 0.8,
+          max: 0.7,
           minorSplitLine: {
             fontSize: 18
           },
@@ -639,79 +647,141 @@ export default {
       this.myChartObjs[0].setOption(_opt, true)
     },
     echartDraw(nodes, links) {
-      const nodemap = {}
-      const graphData = nodes.map(node => {
-        nodemap[node.id] = node.name
+      nodes = nodes.sort((a, b) => a.name.localeCompare(b.name))
+      const nodeIDDict = {}
+
+      const max = Math.max(...nodes.map((item) => Math.sqrt(item.value)))
+      const min = Math.min(...nodes.map((item) => Math.sqrt(item.value)))
+      const symbolSize_resize = scaleLinear().domain([min, max]).range([10, 20])
+      console.log('max,min', max, min)
+      const graphData = nodes.map((node, index) => {
+        nodeIDDict[node.id] = index
 
         return {
           name: node.name,
           category: node.name,
-          fixed: false,
+          fixed: this.fixed2DStatus,
           value: node.value,
-          symbolSize: node.value * 10
+          symbolSize: symbolSize_resize(Math.sqrt(node.value))
 
         }
       })
       const graphLink = links.map(link => {
         return {
-          source: nodemap[link.source],
-          target: nodemap[link.target],
+          source: nodeIDDict[link.source],
+          target: nodeIDDict[link.target],
           value: link.value
         }
       })
       const _opt = {
-        title: {
-          text: '2D 力引导图'
-        },
-        legend: [
-          {
-            left: '15%',
-            data: this.subjectRelevances
-          }
-        ],
+        // title: {
+        //   text: '2D 力引导图'
+        // },
+        // legend: [
+        //   {
+        //     left: '15%',
+        //     data: this.subjectRelevances
+        //   }
+        // ],
         animationDuration: 1500,
         animationEasingUpdate: 'quinticInOut',
         tooltip: {
           trigger: 'item'
         },
+        color: EchartColor,
         series: [
           {
-            name: 'Les Miserables',
+            name: 'subject revelotion',
             tooltip: { formatter: '{c0}' },
             type: 'graph',
             layout: 'force',
             zoom: 2.5,
             force: {
-              edgeLength: [20, 200]
+              // edgeLength: [20, 200]
               // layoutAnimation: false,
+              initLayout: 'circular',
+              edgeLength: [10, 20],
+              repulsion: 80,
+              gravity: 0.1,
+              layoutAnimation: true
             },
             draggable: true,
             data: graphData,
             links: graphLink,
-            roam: true,
+            roam: 'move',
             label: {
               show: true,
               color: '#000',
               position: 'top',
-              fontSize: 16
+              distance: -4,
+              fontSize: 10
+              // borderWidth: 1,
+              // backgroundColor: 'rgba(255, 255, 255, 1)'
+            },
+            itemStyle: {
+              borderColor: 'rgba(255, 255, 255, 1)',
+              // borderColor: "rgba(0, 0, 0, 0.5)",
+              borderWidth: 2
             },
             lineStyle: {
-              opacity: 0.7,
-              curveness: 0
+              curveness: 0.01,
+              width: 2,
+              opacity: 0.5
             },
-            categories: Array.from(new Set(this.subjectRelevances.concat(this.vertexSubjects))).map(each => {
-              return { name: each }
-            }),
+            // lineStyle: {
+            //   opacity: 0.7,
+            //   curveness: 0
+            // },
+            // categories: Array.from(new Set(this.subjectRelevances.concat(this.vertexSubjects))).map(each => {
+            //   return { name: each }
+            // }),
+            categories: graphData.map(item => { return { name: item.name } }),
             emphasis: {
               lineStyle: {
                 width: 2
               }
             }
           }
-        ]
+        ],
+        toolbox: {
+          right: 0,
+          top: 0,
+          orient: 'vertical',
+          feature: {
+            saveAsImage: {},
+            dataZoom: {
+              yAxisIndex: 'none'
+            },
+            dataView: { readOnly: false },
+            // magicType: { type: ['line', 'bar'] },
+            restore: {}
+          }
+        }
       }
+      console.log('echarts opt', _opt)
+      this.myChartObjs[1].setOption(_opt, false)
 
-      this.myChartObjs[1].setOption(_opt, true)
+      const chartsObj = this.myChartObjs[1]
+      chartsObj.on('mouseup', function(params) {
+        const option = chartsObj.getOption()
+        option.series[0].data[params.dataIndex].x = params.event.offsetX
+        option.series[0].data[params.dataIndex].y = params.event.offsetY
+        option.series[0].data[params.dataIndex].fixed = true
+        chartsObj.setOption(option)
+      })
+      chartsObj.on('dblclick', function(params) {
+        const option = chartsObj.getOption()
+        option.series[0].data[params.dataIndex].fixed = false
+        chartsObj.setOption(option)
+      })
+    },
+    fixed2dHandle() {
+      const option = this.myChartObjs[1].getOption()
+      for (const i in option.series[0].data) {
+        option.series[0].data[i].fixed = this.fixed2DStatus
+      }
+      console.log(option.series[0].data)
+      this.myChartObjs[1].setOption(option)
     }
   }
 }

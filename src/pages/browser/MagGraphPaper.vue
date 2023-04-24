@@ -69,6 +69,7 @@ import { extendEchartsOpts, extendLineSeries } from '@/api/data'
 const Graph = require('graphology')
 import { connectedComponents } from 'graphology-components'
 
+import { scaleLinear } from 'd3-scale'
 import { getMasDatav2, requestWrap } from '@/api/index'
 // import anime from 'animejs/lib/anime.es.js'
 // import * as THREE from 'three'
@@ -333,7 +334,7 @@ export default {
 
       links = this.GraphData.links.filter(x => x.value <= this.linkFilter)
       nodes = this.GraphData.nodes
-      this.echartDraw(nodes, links.concat())
+      this.echartsDraw(nodes, links.concat())
       if (this.Graph === null) {
         this.draw3DForceGraph({ nodes, links })
       } else {
@@ -385,7 +386,7 @@ export default {
       this.GraphData = this.parseGraphData(this.GraphData.nodes, links, this.selectYear - 1955)
       links = this.GraphData.links.filter(x => x.value <= this.linkFilter)
       const nodes = this.GraphData.nodes
-      this.echartDraw(nodes, links.concat())
+      this.echartsDraw(nodes, links.concat())
       if (this.Graph === null) {
         this.draw3DForceGraph({ nodes, links })
       } else {
@@ -600,24 +601,29 @@ export default {
       // console.log(_opt)
       this.myChartObjs[0].setOption(_opt, true)
     },
-    echartDraw(nodes, links) {
-      const nodemap = {}
+    echartsDraw(nodes, links) {
+      const nodeMap = {}
+
+      const max = Math.max(...nodes.map((item) => Math.sqrt(item.value)))
+      const min = Math.min(...nodes.map((item) => Math.sqrt(item.value)))
+      const symbolSize_resize = scaleLinear().domain([min, max]).range([10, 30])
+
       const graphData = nodes.map(node => {
-        nodemap[node.id] = node.name
+        nodeMap[node.id] = node.name
 
         return {
           name: node.name,
           category: node.name,
           fixed: false,
           value: node.value,
-          symbolSize: node.value * 10
+          symbolSize: symbolSize_resize(Math.sqrt(node.value))
 
         }
       })
       const graphLink = links.map(link => {
         return {
-          source: nodemap[link.source],
-          target: nodemap[link.target],
+          source: nodeMap[link.source],
+          target: nodeMap[link.target],
           value: link.value
         }
       })
@@ -644,7 +650,10 @@ export default {
             layout: 'force',
             zoom: 2.5,
             force: {
-              edgeLength: [20, 200]
+              edgeLength: [20, 100],
+              repulsion: 80,
+              gravity: 0.1,
+              layoutAnimation: true
               // layoutAnimation: false,
             },
             draggable: true,
@@ -659,7 +668,13 @@ export default {
             },
             lineStyle: {
               opacity: 0.7,
+              width: 0.3,
               curveness: 0
+            },
+            itemStyle: {
+              borderColor: 'rgba(255, 255, 255, 1)',
+              // borderColor: "rgba(0, 0, 0, 0.5)",
+              borderWidth: 2
             },
             categories: Array.from(new Set(this.subjectRelevances.concat(this.vertexSubjects))).map(each => {
               return { name: each }
