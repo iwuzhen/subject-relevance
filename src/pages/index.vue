@@ -434,7 +434,7 @@ export default {
               visible: false,
               title: 'People in wiki',
               text: '人和人，学科的相关度',
-              to: '/wikipedia-build/disciplinePeople',
+              to: '/wikipedia/disciplinePeople',
               update: '2021-12-25T09:43:03.429Z'
             },
             {
