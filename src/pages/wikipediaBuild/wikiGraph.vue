@@ -300,7 +300,7 @@ export default {
           graph.addEdge(obj.source, obj.target)
           const components = connectedComponents(graph)
           if (components.length < tmpLength && maxcompents >= components.length) {
-            tmpData.push([components.length, obj.weight[ weightId]])
+            tmpData.push([components.length, obj.weight[weightId]])
             tmpLength = components.length
           }
         }
@@ -308,11 +308,11 @@ export default {
       }
 
       // 转置矩阵
-      const retDataT = retData[0].map(function(col, i) {
-        return retData.map(function(row, j) {
+      const retDataT = retData[0].map(function (col, i) {
+        return retData.map(function (row, j) {
           const tmpRow = row[i]
           // tmpRow[0] = 2021 - j
-          tmpRow[0] = reverseSessionXData[j ]
+          tmpRow[0] = reverseSessionXData[j]
           return tmpRow
         })
       })
@@ -498,7 +498,7 @@ export default {
         .linkWidth(link => {
           return link.value
         })
-        .linkOpacity(0.6)
+        .linkOpacity(0.9)
         // eslint-disable-next-line no-return-assign
         .onNodeHover(node => elem.style.cursor = node ? 'pointer' : null)
         .onNodeClick(node => {
@@ -537,7 +537,7 @@ export default {
       }
     },
 
-    Draw: _.debounce(async function() {
+    Draw: _.debounce(async function () {
       this.loading = true
       let { nodes, links } = await this.getData()
       // console.log(links)
@@ -585,7 +585,7 @@ export default {
 
       return label
     },
-    liteDraw: _.debounce(async function() {
+    liteDraw: _.debounce(async function () {
       this.loading = true
       let { links } = await this.getData()
       this.GraphData = this.parseGraphData(this.GraphData.nodes, links, this.repYearRange.indexOf(String(this.selectYear)))
@@ -626,15 +626,15 @@ export default {
           graph.addEdge(obj.source, obj.target)
           const components = connectedComponents(graph)
           if (components.length < tmpLength && maxcompents >= components.length) {
-            tmpData.push([components.length, obj.weight[ weightId]])
+            tmpData.push([components.length, obj.weight[weightId]])
             tmpLength = components.length
           }
         }
         retData.push(tmpData)
       }
       // 转置矩阵
-      const retDataT = retData[0].map(function(col, i) {
-        return retData.map(function(row, j) {
+      const retDataT = retData[0].map(function (col, i) {
+        return retData.map(function (row, j) {
           const tmpRow = row[i]
           tmpRow[0] = 2021 - j
           // if (tmpRow[0] >= 2012) {
@@ -661,7 +661,7 @@ export default {
               backgroundColor: '#505765'
             }
           },
-          formatter: function(params) {
+          formatter: function (params) {
             params.sort((x, y) => {
               if (!x.data[1]) {
                 return 1
@@ -791,17 +791,15 @@ export default {
 </script>
 
 <style lang="scss">
-
 .loop {
-  width:20px;
-  height:20px;
+  width: 20px;
+  height: 20px;
   background-color: red;
 }
 
 .label {
-  text-shadow: -1px 1px 1px rgb(0,0,0);
+  text-shadow: -1px 1px 1px rgb(0, 0, 0);
   margin: var(--fontTop) 0 0 var(--fontLeft);
   font-size: var(--fontSize);
 }
-
 </style>
