@@ -82,6 +82,11 @@ import { getDistanceCore, requestWrap } from '@/api/index'
 // import SpriteText from 'three-spritetext'
 import { CSS2DObject, CSS2DRenderer } from '@/utils/three/CSS2DRenderer'
 
+function linearMap(value, inMin, inMax, outMin, outMax) {
+  // 线性映射公式
+  return outMax - ((value - inMin) * (outMax - outMin) / (inMax - inMin))
+}
+
 const SessionXData = []
 for (const year of _.range(2007, 2022)) {
   for (const session of _.range(1, 5)) {
@@ -484,6 +489,7 @@ export default {
       this.twoDRenderer.render(this.Graph.scene(), this.Graph.camera())
     },
     draw3DForceGraph(gData) {
+      const minLinkValue = Math.min(...gData.links.map(item => item.value))
       const elem = document.getElementById('3dgraph')
       const height = Math.floor(window.innerHeight * 0.9)
       const width = Math.floor(window.innerWidth) - 60
@@ -496,9 +502,12 @@ export default {
         .d3Force('center', null)
         .zoomToFit(100, 100, node => true)
         .linkWidth(link => {
-          return link.value
+          const maxLinkValue = Math.max(...gData.links.filter(item => item.value < this.linkFilter).map(item => item.value))
+          console.log('line width', linearMap(link.value, minLinkValue, maxLinkValue, 0, 6), maxLinkValue, this.linkFilter)
+          return linearMap(link.value, minLinkValue, maxLinkValue, 0, 6)
         })
-        .linkOpacity(0.9)
+        .linkOpacity(0.99)
+        .linkColor(() => 'rgba(211,211,211,0.9)')
         // eslint-disable-next-line no-return-assign
         .onNodeHover(node => elem.style.cursor = node ? 'pointer' : null)
         .onNodeClick(node => {
@@ -511,9 +520,11 @@ export default {
             3000 // ms transition duration
           )
         }).nodeThreeObjectExtend(true)
+
       Graph
         .d3Force('link')
         .strength(link => { return link.value })
+
       this.Graph = Graph
 
       // 初始化 2d css label

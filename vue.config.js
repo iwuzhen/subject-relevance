@@ -60,7 +60,7 @@ const externals = {
   // "3d-force-graph": "ForceGraph3D",
   vuetify: 'Vuetify',
   echarts: "echarts",
-  lodash: "_",
+  // lodash: "_",
   // diff: 'Diff',
   // localforage: 'localforage',
   // d3: 'd3',
